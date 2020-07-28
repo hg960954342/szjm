@@ -47,22 +47,17 @@ CREATE TABLE `port_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='port口资料表';
 
-DROP TABLE if exists `port_tems_info`;
-CREATE TABLE `port_tems_info` (
+DROP TABLE if exists `pick_station`;
+CREATE TABLE `pick_station` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `port_info_id` int NOT NULL COMMENT '外键port_info id',
-  `port_type` int NOT NULL COMMENT '出库口类型 （1暂存位）',
-  `task_type` int NOT NULL COMMENT '任务类型 （1人工） ',
-  `junction_port` varchar(50) COMMENT '出入口编号对应 eis sx_connection_rim entry_code',
-  `layer` int NOT NULL COMMENT '层',
-  `x` int NOT NULL COMMENT 'x',
-  `y` int NOT NULL COMMENT 'y',
-  `port_lock` int NOT NULL COMMENT '是否锁定 1锁定 2不锁定',
-  `task_lock` int NOT NULL COMMENT '任务锁 1锁定 2不锁定',
-  `remarks` varchar(255) NOT NULL COMMENT '是否锁定 1锁定 2不锁定',
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_sp_portinfoid` FOREIGN KEY (`port_info_id`) REFERENCES `port_info` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='port口暂存位资料表';
+  `station_no` int NOT NULL COMMENT '拣选站编号',
+  `port_type` int NOT NULL COMMENT '是否补给空托盘',
+  `io` int NOT NULL COMMENT '1 入库 2 出库',
+  `task_type` int NOT NULL COMMENT '1 订单 2 移库 3 （1+2）4空拖任务',
+  `lock` varchar(50) COMMENT '锁定 0不锁定 1锁定',
+  `remarks` varchar(255) NOT NULL COMMENT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='拣选站表';
 
 DROP TABLE if exists `stations_info`;
 CREATE TABLE `stations_info` (
@@ -73,90 +68,17 @@ CREATE TABLE `stations_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='叫料解包區资料表';
 
-DROP TABLE if exists `stations_port_configure`;
-CREATE TABLE `stations_port_configure` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `stations_id` int NOT NULL,
-  `port_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_sp_stationsid` FOREIGN KEY (`stations_id`) REFERENCES `stations_info` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `fk_sp_portid` FOREIGN KEY (`port_id`) REFERENCES `port_info` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='叫料解包區和port配置表';
-
-DROP TABLE if exists `device_junction_port`;
-CREATE TABLE `device_junction_port` (
-  `device_no` varchar(50) NOT NULL,
-  `entry_code` varchar(50) NOT NULL,
-  `layer` int NOT NULL COMMENT '层',
-  `x` int NOT NULL COMMENT 'x',
-  `y` int NOT NULL COMMENT 'y',
-  `port_lock` int NOT NULL COMMENT '是否锁定 1锁定 2不锁定',
-  `position` int NOT NULL COMMENT '位置 1 23楼需要发mcs前进指令的任务  0其他',
-  PRIMARY KEY (`device_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='设备接驳口';
-
-CREATE TABLE `led_message` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `port_id` int NOT NULL COMMENT 'port口id',
-  `read_state` int NOT NULL DEFAULT '0' COMMENT '是否读取 0未读 1已读',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `state_str` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '状态',
-  `message_type` int DEFAULT NULL COMMENT '信息类型 0正常 10报警 20异常',
-  `message` varchar(255) DEFAULT NULL COMMENT '信息',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='led消息';
-
-CREATE TABLE `layer_limit_high` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `layer` int NOT NULL COMMENT '层',
-  `limit_high` double NOT NULL COMMENT '限高',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='层限高';
-
-CREATE TABLE `layer_port_origin` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `entry_code` varchar(50) NOT NULL COMMENT '接驳点',
-  `layer` int NOT NULL COMMENT '层',
-  `origin_x` int NOT NULL COMMENT 'X原点',
-  `origin_y` int NOT NULL COMMENT 'Y原点',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='层原点';
-
-CREATE TABLE `factory_type_config` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `factory_type` varchar(50) NOT NULL COMMENT '厂别',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='厂别配置表';
-
-CREATE TABLE `cang_code_config` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cang_code` varchar(50) NOT NULL COMMENT '仓码',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='仓码配置表';
-
-CREATE TABLE `factory_name_config` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `factory_name` varchar(50) NOT NULL COMMENT '厂商',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='厂商配置表';
-
-CREATE TABLE `materiel_name_config` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `materiel_name` varchar(50) NOT NULL COMMENT '品名',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='品名配置表';
-
-CREATE TABLE `materiel_no_config` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `materiel_no` varchar(50) NOT NULL COMMENT '料号',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='料号配置表';
-
-CREATE TABLE `empty_case_config` (
-	`id` int NOT NULL AUTO_INCREMENT,
-	`layer` int NOT NULL COMMENT '层',
-	`min_count` int NOT NULL COMMENT '最小数量',
-	`sort_index` int NOT NULL COMMENT '排序值',
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='空箱入库配置表';
+drop table if exists `agv_storagelocation`;
+create table `agv_storagelocation` (
+  `id` int(11) not null comment '主键',
+  
+  `x` int(11) not null comment '坐标x',
+  `y` int(11) not null comment '坐标y',
+  `location_type` int(11) not null comment '位置类型 1存储位 2 缠膜机 3提升机 4叠托盘机 5拆盘机 6直入直出口',
+  `tally_code` varchar(50) null comment 'wms货位 可空',
+  `task_lock` int(11) not null comment '任务锁  0空闲 1锁定',
+  `status` int(11) not null comment '0禁用1启用',
+  `device_no` varchar(50) default null comment '设备编号',
+  primary key (`id`)
+) engine=innodb default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
 
