@@ -1,67 +1,100 @@
--- PRINT '------ 移库表------'
-CREATE TABLE WMS_BA_BINSTA_R
-(
-  WH_NO                       VARCHAR2(50) NOT NULL,        
-  AREA_NO                     VARCHAR2(50) NOT NULL,        
-  BIN_NO                      VARCHAR2(50) NOT NULL,            
-  PALLET_ID                   VARCHAR2(50) NOT NULL,          
-  FINISHED                    INT,                     
-  ERR_CODE                    VARCHAR2(50) NOT NULL,
-  ERR_MSG                     VARCHAR2(50) NOT NULL,             
-  FLAG                        VARCHAR2(50) NOT NULL,      
-  CREATE_TIME                 DATE NOT NULL              
-);
+DROP TABLE if exists `inbound_task`;
+CREATE TABLE `inbound_task` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `bill_no` varchar(255) NOT NULL COMMENT '入库单号',
+  `wms_push` int NOT NULL DEFAULT '0' COMMENT '是否wms下发，0不是，1是',
+  `reback` int NOT NULL DEFAULT '0' COMMENT '是否回传，0不回传，1回传',
+  `empty_container` int NOT NULL DEFAULT '0' COMMENT '0任务托  1空托',
+  `task_type` int DEFAULT NULL COMMENT '任务托暂未定    空托的情况 0空托垛入库  1空托碟',
+  `container_code` varchar(255) DEFAULT NULL COMMENT '母托盘编号',
+  `ceng` varchar(20) DEFAULT NULL COMMENT '入库楼层',
+  `agv_loc` varchar(255) DEFAULT NULL COMMENT 'Agv搬运点',
+  `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
+  `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms批号',
+  `ownerid` varchar(255) DEFAULT NULL COMMENT 'wms业主',
+  `qty` decimal DEFAULT NULL COMMENT '数量（重量）',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='入库任务表';
 
--- PRINT '------ 手动派车接口 ------'
-CREATE TABLE WMS_DISPATCHING_INTERFACE
-(
-       WH_NO                       VARCHAR2(50) NOT NULL,
-       AREA_NO                     VARCHAR2(50) NOT NULL,
-       PALLET_ID                   VARCHAR2(50) NOT NULL,
-       PRODUCT_ID                  VARCHAR2(50) NOT NULL,
-       FACTORY_NO                  VARCHAR2(50) NOT NULL,
-       MATERIEL_TYPE               VARCHAR2(50) NOT NULL,
-       MATERIEL_NAME               VARCHAR2(50) NOT NULL,
-       STATIONS                    VARCHAR2(50),
-       PORT                        VARCHAR2(50) NOT NULL,
-       FINISHED                    INT,
-       ERR_CODE                    INT,
-       ERR_MSG                     VARCHAR2(50),
-       FLAG                        VARCHAR2(50),
-       CREAT_TIME                  DATE
-);
+DROP TABLE if exists `inbound_task_history`;
+CREATE TABLE `inbound_task_history` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `bill_no` varchar(255) NOT NULL COMMENT '入库单号',
+  `wms_push` int NOT NULL DEFAULT '0' COMMENT '是否wms下发，0不是，1是',
+  `reback` int NOT NULL DEFAULT '0' COMMENT '是否回传，0不回传，1回传',
+  `empty_container` int NOT NULL DEFAULT '0' COMMENT '0任务托  1空托',
+  `task_type` int DEFAULT NULL COMMENT '任务托暂未定    空托的情况 0空托垛入库  1空托碟',
+  `container_code` varchar(255) DEFAULT NULL COMMENT '母托盘编号',
+  `ceng` varchar(20) DEFAULT NULL COMMENT '入库楼层',
+  `agv_loc` varchar(255) DEFAULT NULL COMMENT 'Agv搬运点',
+  `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
+  `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms批号',
+  `ownerid` varchar(255) DEFAULT NULL COMMENT 'wms业主',
+  `qty` decimal DEFAULT NULL COMMENT '数量（重量）',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='入库任务历史表';
 
---出入表
-CREATE TABLE WMS_RAW_TRK_INTERFACE
-(
-       TRK_DT                       VARCHAR2(50) NOT NULL,
-       GROUP_ID                     VARCHAR2(50) NOT NULL,
-       COMMAND_NO                   VARCHAR2(50) NOT NULL,
-       WH_NO                        VARCHAR2(50) NOT NULL,
-       AREA_NO                      VARCHAR2(50) NOT NULL,
-       DEV_NO                       VARCHAR2(50) NOT NULL,
-       BIN_NO                       VARCHAR2(50) NOT NULL,
-       EMERGE                       INT,
-       IO                           VARCHAR2(50) NOT NULL,
-       WMS_BACK                     INT NOT NULL,
-       WMS_ACTION                   VARCHAR2(50),
-       WMS_SERIAL_NO                VARCHAR2(50),
-       WMS_USER                     VARCHAR2(50),
-       WMS_FLAG                     VARCHAR2(50),
-       PALLET_ID                    VARCHAR2(50),
-       PALLET_SIZE                  VARCHAR2(50) NOT NULL,
-       WEIGHT                       number(10,3) NOT NULL,
-       STATUS                       INT NOT NULL,
-       FINISHED                     INT NOT NULL,
-       ERR_CODE                     VARCHAR2(50),
-       ERR_MSG                      VARCHAR2(50),
-       WMS_ERR_CODE                 VARCHAR2(50),
-       WMS_ERR_MSG                  VARCHAR2(50),
-       PRODUCT_ID                   VARCHAR2(50),
-       BOX_COUNT                    INT,
-       PORT                         VARCHAR2(50),
-       MAT_TYPE                     VARCHAR2(50) NOT NULL,
-       STATIONS                     VARCHAR2(50) NOT NULL,
-       TASK_TYPE                    VARCHAR2(50) NOT NULL,
-       VENDOR_CODE                  VARCHAR2(50)
-);
+DROP TABLE if exists `outbound_task`;
+CREATE TABLE `outbound_task` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `bill_no` varchar(255) NOT NULL COMMENT '出库单号',
+  `wms_push` int NOT NULL DEFAULT '0' COMMENT '是否wms下发，0不是，1是',
+  `reback` int NOT NULL DEFAULT '0' COMMENT '是否回传，0不回传，1回传',
+  `empty_container` int NOT NULL DEFAULT '0' COMMENT '0任务托  1空托',
+  `task_type` int DEFAULT NULL COMMENT 'eis内部暂定任务类型  1订单出库  2移库出库  3 盘点出库',
+  `sfreq` int NOT NULL DEFAULT '0' COMMENT '站点要求 0 无   1有',
+  `pick_code` varchar(20) DEFAULT NULL COMMENT '拣选站',
+  `owner_id` varchar(20) DEFAULT NULL COMMENT '货主',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='出库任务表';
+
+DROP TABLE if exists `outbound_task_history`;
+CREATE TABLE `outbound_task_history` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `bill_no` varchar(255) NOT NULL COMMENT '出库单号',
+  `wms_push` int NOT NULL DEFAULT '0' COMMENT '是否wms下发，0不是，1是',
+  `reback` int NOT NULL DEFAULT '0' COMMENT '是否回传，0不回传，1回传',
+  `task_type` int DEFAULT NULL COMMENT 'eis内部暂定任务类型  1订单出库  2移库出库  3 盘点出库 4空托出库',
+  `sfreq` int NOT NULL DEFAULT '0' COMMENT '站点要求 0 无   1有',
+  `pick_code` varchar(20) DEFAULT NULL COMMENT '拣选站',
+  `owner_id` varchar(20) DEFAULT NULL COMMENT '货主',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='出库任务表';
+
+DROP TABLE if exists `outbound_task_detail`;
+CREATE TABLE `outbound_task_detail` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `seqno` varchar(255) NOT NULL COMMENT '明细行号',
+  `ctreq` int NOT NULL DEFAULT '0' COMMENT '是否指定托盘 0不指定 1指定',
+  `container_code` int NOT NULL DEFAULT '0' COMMENT '0任务托  1空托',
+  `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
+  `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms批号',
+  `qty` decimal DEFAULT NULL COMMENT '数量（重量）',
+  `pick_code` varchar(20) DEFAULT NULL COMMENT '拣选站  指定拣选站  暂时移库出库用到 ',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='出库任务明细表';
+
+DROP TABLE if exists `outbound_task_detail_history`;
+CREATE TABLE `outbound_task_detail_history` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `seqno` varchar(255) NOT NULL COMMENT '明细行号',
+  `ctreq` int NOT NULL DEFAULT '0' COMMENT '是否指定托盘 0不指定 1指定',
+  `container_code` int NOT NULL DEFAULT '0' COMMENT '0任务托  1空托',
+  `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
+  `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms批号',
+  `qty` decimal DEFAULT NULL COMMENT '数量（重量）',
+  `pick_code` varchar(20) DEFAULT NULL COMMENT '拣选站  指定拣选站  暂时移库出库用到 ',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='出库任务明细表';
