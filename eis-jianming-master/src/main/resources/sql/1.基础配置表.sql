@@ -59,25 +59,16 @@ CREATE TABLE `pick_station` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='拣选站表';
 
-DROP TABLE if exists `stations_info`;
-CREATE TABLE `stations_info` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `wms_station_no` varchar(50) NOT NULL,
-  `remark` varchar(50) NOT NULL COMMENT '備註',
-  `sort_index` int NOT NULL COMMENT '排序值',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='叫料解包區资料表';
-
 drop table if exists `agv_storagelocation`;
 create table `agv_storagelocation` (
   `id` int(11) not null comment '主键',
-  
+  `ceng` int NOT NULL COMMENT '入库楼层',
   `x` int(11) not null comment '坐标x',
   `y` int(11) not null comment '坐标y',
-  `location_type` int(11) not null comment '位置类型 1存储位 2 缠膜机 3提升机 4叠托盘机 5拆盘机 6直入直出口',
+  `location_type` int(11) not null comment '位置类型 1存储位 2 输送线 3托盘作业位',
   `tally_code` varchar(50) null comment 'wms货位 可空',
   `task_lock` int(11) not null comment '任务锁  0空闲 1锁定',
-  `status` int(11) not null comment '0禁用1启用',
+  `lock` int(11) not null comment '0禁用1启用',
   `device_no` varchar(50) default null comment '设备编号',
   primary key (`id`)
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
