@@ -62,7 +62,7 @@ CREATE TABLE `pick_station` (
 drop table if exists `agv_storagelocation`;
 create table `agv_storagelocation` (
   `id` int(11) not null comment '主键',
-  `ceng` int NOT NULL COMMENT '入库楼层',
+  `ceng` int NOT NULL COMMENT '楼层',
   `x` int(11) not null comment '坐标x',
   `y` int(11) not null comment '坐标y',
   `location_type` int(11) not null comment '位置类型 1存储位 2 输送线 3整托托盘作业位 4非整托托盘作业位',
