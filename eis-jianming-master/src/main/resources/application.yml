@@ -25,11 +25,8 @@ spring:
       enabled: true
 
   datasource:
-    #url: jdbc:mysql://10.10.10.4:3306/qunchuang
-    url: jdbc:mysql://39.96.69.213:3306/qunchuang
-    #url: jdbc:mysql://39.96.69.213:3306/qunchuangtest
-    #url: jdbc:mysql://39.96.69.213:3306/qunchuangtest2
-    #url: jdbc:mysql://localhost:3306/zwy
+    #url: jdbc:mysql://127.0.0.1:3306/jianmin
+    url: jdbc:mysql://39.96.69.213:3306/jianmin
     username: root
     password: root 
     #password: 123456 
@@ -54,23 +51,15 @@ prolog:
     basePackage: com.prolog.eis
     description: 用户服务
     version: 1.0
-  applicationid:
-     id: 01
   rcs:
      ip: 127.0.0.1
      port: 80
-  gcs:
-     url: http://
-     port: 127.0.0.1:20317
   mcs:
      url: http://   
      port: 127.0.0.1:20318
   wms:
      url: 127.0.0.1
      port: 80
-     normalReturnMethod: method1
-     abnormalReturnMethod: method2
-     entranceReturnMethod: method3
   dao: 
     dialect: mysql
     pagehelper: #pagehelper分页插件配置
