@@ -65,10 +65,10 @@ create table `agv_storagelocation` (
   `ceng` int NOT NULL COMMENT '入库楼层',
   `x` int(11) not null comment '坐标x',
   `y` int(11) not null comment '坐标y',
-  `location_type` int(11) not null comment '位置类型 1存储位 2 输送线 3托盘作业位',
+  `location_type` int(11) not null comment '位置类型 1存储位 2 输送线 3整托托盘作业位 4非整托托盘作业位',
   `tally_code` varchar(50) null comment 'wms货位 可空',
   `task_lock` int(11) not null comment '任务锁  0空闲 1锁定',
-  `lock` int(11) not null comment '0禁用1启用',
+  `lock` int(11) not null comment '锁定 0不锁定 1锁定',
   `device_no` varchar(50) default null comment '设备编号',
   primary key (`id`)
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;

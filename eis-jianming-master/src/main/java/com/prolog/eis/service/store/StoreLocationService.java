@@ -1,11 +1,10 @@
 package com.prolog.eis.service.store;
 
+import java.util.List;
+
 import com.prolog.eis.dto.sxcsc.location.StoreLocationGroupDto;
 import com.prolog.eis.dto.sxcsc.location.VerticalLocationDto;
 import com.prolog.eis.model.store.SxStoreLocation;
-
-import java.util.Collection;
-import java.util.List;
 
 public interface StoreLocationService {
 
