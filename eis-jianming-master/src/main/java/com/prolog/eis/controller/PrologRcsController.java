@@ -26,7 +26,7 @@ public class PrologRcsController {
 	@Autowired
 	private AgvCallbackService agvCallbackService;
 	
-	@ApiOperation(value = "容器到达BCR", notes = "容器到达BCR")
+	@ApiOperation(value = "Rcs回告", notes = "Rcs回告")
 	@PostMapping("/agvCallback")
 	public void agvCallback(@RequestBody String json, HttpServletResponse response) throws Exception {
 		
