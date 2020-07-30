@@ -40,7 +40,7 @@ import net.sf.json.JSONObject;
 @RequestMapping("/api/v1/sxk/mcs")
 public class PrologMCSController {
 
-	/*@Autowired
+	@Autowired
 	private QcInBoundTaskService qcInBoundTaskService;
 	@Autowired
 	private McsInterfaceService mcsInterfaceService;
@@ -201,7 +201,7 @@ public class PrologMCSController {
 		jsonObject.put("code", code);
 		jsonObject.put("data", data);
 		return jsonObject.toString();
-	}*/
+	}
 
 	/*@ApiOperation(value = "MCS跨层任务回告", notes = "MCS跨层任务回告")
 	@PostMapping("/CrossLayerReport")
