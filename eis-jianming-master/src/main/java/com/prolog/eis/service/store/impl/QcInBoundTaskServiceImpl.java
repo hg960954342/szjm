@@ -2,6 +2,7 @@ package com.prolog.eis.service.store.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.prolog.eis.dao.base.SysParameMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
@@ -58,144 +59,144 @@ public class QcInBoundTaskServiceImpl {
 //	private EmptyCaseConfigService emptyCaseConfigService;
 
 	
-	/*@Override
-	@Transactional(rollbackFor = Exception.class)
-	public McsRequestTaskDto inBoundTask(InBoundRequest inBoundRequest) throws Exception {
+	//@Override
+//	@Transactional(rollbackFor = Exception.class)
+//	public McsRequestTaskDto inBoundTask(InBoundRequest inBoundRequest) throws Exception {
+//
+//		String containerNo = inBoundRequest.getStockId();
+//		String containerSubNo = inBoundRequest.getStockIdSub();
+//		String source = inBoundRequest.getSource();
+//		Coordinate coordinate = PrologCoordinateUtils.analysis(source);
+//		int sourceLayer = coordinate.getLayer();
+//		int sourceX = coordinate.getX();
+//		int sourceY = coordinate.getY();
+//		int detection = inBoundRequest.getDetection();
+//
+//		SysParame sysParame = sysParameMapper.findById("LIMIT_WEIGHT", SysParame.class);
+//		Double limitWeight = Double.valueOf(sysParame.getParameValue());
+//		//验证超重
+//		Double weight = 0d;
+//		if(!StringUtils.isEmpty(inBoundRequest.getWeight())) {
+//			weight = Double.valueOf(inBoundRequest.getWeight());
+//		}
+//		
+//		if(weight > limitWeight) {
+//			return this.addMcsTask(false,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重");
+//		}
+//		
+//		
+//		Double weight = 200d;
+//		
+//
+//		//校验重量
+//		List<SysParame> weightSysParame = sysParameMapper.findByMap(MapUtils.put("parameNo", "LIMIT_WEIGHT").getMap(),
+//				SysParame.class);
+//		Double limitWeight = Double.valueOf(weightSysParame.get(0).getParameValue());
+//
+//		// 找port口
+//		List<PortInfo> portInfos = portInfoMapper.findByMap(MapUtils.put("layer", sourceLayer).put("x", sourceX).put("y", sourceY).getMap(), PortInfo.class);
+//		if(portInfos.isEmpty()) {
+//			return null;
+//		}
+//
+//		//入庫驗證
+//		PortInfo portInfo = portInfos.get(0);
+//		int validateType = 2;
+//		if(portInfo.getTaskType() == 3) {
+//			validateType = 1;
+//		}
+//		InStoreValidateDto result = this.getValidateResult(portInfo.getDetection(),validateType,containerNo,containerSubNo,portInfo.getWmsPortNo(),portInfo.getJunctionPort(),detection);
+//		if(!result.isSuccess()){
+//			if(portInfo.getShowLed() == 1) {
+//				this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,result.getMsg());
+//			}
+//
+//			if(result.isDetection()) {
+//				//外观检测20的时候不做处理
+//				if(detection == 0 && portInfo.getReback() == 1) {
+//					return this.addMcsTask(false,containerNo,source,"-1",result.getMsg());
+//				}else {
+//					return null;
+//				}
+//			}else {
+//				if(portInfo.getReback() == 1) {
+//					return this.addMcsTask(false,containerNo,source,"-1",result.getMsg());
+//				}else {
+//					return null;
+//				}
+//			}
+//		}
+//
+//		//判斷是否添加空托入庫任務
+//		if(result.getResultType() == 1) {
+//			WmsInboundTask task = this.buildEmptyInboundTask(portInfo,containerNo);
+//			result.setWmsInboundTask(task);
+//		}
+//		
+//		//验证入库库存
+//		if(null != result.getWmsInboundTask()) {
+//			WmsInboundTask wmsInboundTask = result.getWmsInboundTask();
+//			Integer locationId = this.checkHuoWei("","",wmsInboundTask.getTaskType(),wmsInboundTask.getMatType(),containerNo,sourceLayer,detection,portInfo.getJunctionPort());
+//			if(null == locationId) {
+//				if(portInfo.getShowLed() == 1) {
+//					this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,"貨位不足！！！");
+//				}
+//				if(portInfo.getReback() == 1) {
+//					return this.addMcsTask(false,containerNo,source,"-1","貨位不足！！！");
+//				}
+//			}
+//		}
+//
+//		if(result.getResultType() == 2) {
+//			result.getWmsInboundTask().setWeight(weight);
+//
+//			wmsInboundTaskMapper.updateMapById(result.getWmsInboundTask().getId(), 
+//					MapUtils.put("weight", weight)
+//					.put("containerCode",containerNo)
+//					.put("detection", detection)
+//					.put("junctionPort", portInfo.getJunctionPort()).getMap(), WmsInboundTask.class);
+//		}
+//
+//		if(portInfo.getShowLed() == 1) {
+//			this.addLedMsg(portInfo.getId(),portInfo.getPortType(),0,containerSubNo + "入庫成功");
+//		}
+//
+//		if(portInfo.getPosition() == 1) {
+//			//西碼頭入庫需要給出前進到bcr指令
+//			return this.addMcsTask(true,containerNo,source,"0100360011","");
+//		}
+//
+//		if(result.getResultType() == 1) {
+//			//空托入庫
+//			ztckContainerMapper.deleteByMap(MapUtils.put("containerCode", containerNo).getMap(), ZtckContainer.class);
+//			this.inSxStore(result.getWmsInboundTask(),portInfo,containerNo,source,sourceLayer,sourceX,sourceY,detection);
+//			return null;
+//		}
+//
+//		if(result.getResultType() == 2) {
+//			// 质检口入库,清除质检等待状态的对应在途库存
+//			List<ZtckContainer> ztckContainers = ztckContainerMapper.findByMap(MapUtils.put("taskType", 70).put("containerSubCode", containerSubNo).getMap(), ZtckContainer.class);
+//			if(!ztckContainers.isEmpty()) {
+//				ztckContainerMapper.deleteById(ztckContainers.get(0).getContainerCode(), ZtckContainer.class);
+//			}
+//			ztckContainerMapper.deleteByMap(MapUtils.put("containerCode", containerNo).getMap(), ZtckContainer.class);
+//			ztckContainerMapper.deleteByMap(MapUtils.put("containerSubCode", containerSubNo).getMap(), ZtckContainer.class);
+//			//任務托入庫
+//			this.inSxStore(result.getWmsInboundTask(),portInfo,containerNo,source,sourceLayer,sourceX,sourceY,detection);
+//			return null;
+//		}
+//
+//		if(result.getResultType() == 3) {
+//			//借道
+//
+//
+//			return null;
+//		}
+//
+//		return null;
+//	}
 
-		String containerNo = inBoundRequest.getStockId();
-		String containerSubNo = inBoundRequest.getStockIdSub();
-		String source = inBoundRequest.getSource();
-		Coordinate coordinate = PrologCoordinateUtils.analysis(source);
-		int sourceLayer = coordinate.getLayer();
-		int sourceX = coordinate.getX();
-		int sourceY = coordinate.getY();
-		int detection = inBoundRequest.getDetection();
-
-		SysParame sysParame = sysParameMapper.findById("LIMIT_WEIGHT", SysParame.class);
-		Double limitWeight = Double.valueOf(sysParame.getParameValue());
-		//验证超重
-		Double weight = 0d;
-		if(!StringUtils.isEmpty(inBoundRequest.getWeight())) {
-			weight = Double.valueOf(inBoundRequest.getWeight());
-		}
-		
-		if(weight > limitWeight) {
-			return this.addMcsTask(false,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重");
-		}
-		
-		
-		Double weight = 200d;
-		
-
-		//校验重量
-		List<SysParame> weightSysParame = sysParameMapper.findByMap(MapUtils.put("parameNo", "LIMIT_WEIGHT").getMap(),
-				SysParame.class);
-		Double limitWeight = Double.valueOf(weightSysParame.get(0).getParameValue());
-
-		// 找port口
-		List<PortInfo> portInfos = portInfoMapper.findByMap(MapUtils.put("layer", sourceLayer).put("x", sourceX).put("y", sourceY).getMap(), PortInfo.class);
-		if(portInfos.isEmpty()) {
-			return null;
-		}
-
-		//入庫驗證
-		PortInfo portInfo = portInfos.get(0);
-		int validateType = 2;
-		if(portInfo.getTaskType() == 3) {
-			validateType = 1;
-		}
-		InStoreValidateDto result = this.getValidateResult(portInfo.getDetection(),validateType,containerNo,containerSubNo,portInfo.getWmsPortNo(),portInfo.getJunctionPort(),detection);
-		if(!result.isSuccess()){
-			if(portInfo.getShowLed() == 1) {
-				this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,result.getMsg());
-			}
-
-			if(result.isDetection()) {
-				//外观检测20的时候不做处理
-				if(detection == 0 && portInfo.getReback() == 1) {
-					return this.addMcsTask(false,containerNo,source,"-1",result.getMsg());
-				}else {
-					return null;
-				}
-			}else {
-				if(portInfo.getReback() == 1) {
-					return this.addMcsTask(false,containerNo,source,"-1",result.getMsg());
-				}else {
-					return null;
-				}
-			}
-		}
-
-		//判斷是否添加空托入庫任務
-		if(result.getResultType() == 1) {
-			WmsInboundTask task = this.buildEmptyInboundTask(portInfo,containerNo);
-			result.setWmsInboundTask(task);
-		}
-		
-		//验证入库库存
-		if(null != result.getWmsInboundTask()) {
-			WmsInboundTask wmsInboundTask = result.getWmsInboundTask();
-			Integer locationId = this.checkHuoWei("","",wmsInboundTask.getTaskType(),wmsInboundTask.getMatType(),containerNo,sourceLayer,detection,portInfo.getJunctionPort());
-			if(null == locationId) {
-				if(portInfo.getShowLed() == 1) {
-					this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,"貨位不足！！！");
-				}
-				if(portInfo.getReback() == 1) {
-					return this.addMcsTask(false,containerNo,source,"-1","貨位不足！！！");
-				}
-			}
-		}
-
-		if(result.getResultType() == 2) {
-			result.getWmsInboundTask().setWeight(weight);
-
-			wmsInboundTaskMapper.updateMapById(result.getWmsInboundTask().getId(), 
-					MapUtils.put("weight", weight)
-					.put("containerCode",containerNo)
-					.put("detection", detection)
-					.put("junctionPort", portInfo.getJunctionPort()).getMap(), WmsInboundTask.class);
-		}
-
-		if(portInfo.getShowLed() == 1) {
-			this.addLedMsg(portInfo.getId(),portInfo.getPortType(),0,containerSubNo + "入庫成功");
-		}
-
-		if(portInfo.getPosition() == 1) {
-			//西碼頭入庫需要給出前進到bcr指令
-			return this.addMcsTask(true,containerNo,source,"0100360011","");
-		}
-
-		if(result.getResultType() == 1) {
-			//空托入庫
-			ztckContainerMapper.deleteByMap(MapUtils.put("containerCode", containerNo).getMap(), ZtckContainer.class);
-			this.inSxStore(result.getWmsInboundTask(),portInfo,containerNo,source,sourceLayer,sourceX,sourceY,detection);
-			return null;
-		}
-
-		if(result.getResultType() == 2) {
-			// 质检口入库,清除质检等待状态的对应在途库存
-			List<ZtckContainer> ztckContainers = ztckContainerMapper.findByMap(MapUtils.put("taskType", 70).put("containerSubCode", containerSubNo).getMap(), ZtckContainer.class);
-			if(!ztckContainers.isEmpty()) {
-				ztckContainerMapper.deleteById(ztckContainers.get(0).getContainerCode(), ZtckContainer.class);
-			}
-			ztckContainerMapper.deleteByMap(MapUtils.put("containerCode", containerNo).getMap(), ZtckContainer.class);
-			ztckContainerMapper.deleteByMap(MapUtils.put("containerSubCode", containerSubNo).getMap(), ZtckContainer.class);
-			//任務托入庫
-			this.inSxStore(result.getWmsInboundTask(),portInfo,containerNo,source,sourceLayer,sourceX,sourceY,detection);
-			return null;
-		}
-
-		if(result.getResultType() == 3) {
-			//借道
-
-
-			return null;
-		}
-
-		return null;
-	}
-
-	*//**
+	/**
 	 * 入庫驗證
 	 * @param validateType  1 空托入庫驗證  2 字母托入庫驗證
 	 * @param containerNo

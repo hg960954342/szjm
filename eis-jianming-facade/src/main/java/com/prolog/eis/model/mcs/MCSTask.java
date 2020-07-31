@@ -25,6 +25,12 @@ public class MCSTask {
 	 */
 	@Column("type")
 	private int type;
+	
+	/**
+	 * 库编号
+	 */
+	@Column("bank_id")
+	private int bankId;
 	/**
 	 * 母托盘编号
 	 */
@@ -50,6 +56,12 @@ public class MCSTask {
 	 */
 	@Column("priority")
 	private int priority;
+	
+	/**
+	 * 任务状态 0- 正常 1-异常
+	 */
+	@Column("status")
+	private int status;
 	
 	/**
 	 * 任务状态(1.完成、2.失败)
@@ -93,6 +105,14 @@ public class MCSTask {
 		this.type = type;
 	}
 
+	public int getBankId() {
+		return bankId;
+	}
+
+	public void setBankId(int bankId) {
+		this.bankId = bankId;
+	}
+
 	public String getStockId() {
 		return stockId;
 	}
@@ -133,6 +153,14 @@ public class MCSTask {
 		this.priority = priority;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	public int getTaskState() {
 		return taskState;
 	}
@@ -149,19 +177,19 @@ public class MCSTask {
 		this.sendCount = sendCount;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
 	public String getErrMsg() {
 		return errMsg;
 	}
 
 	public void setErrMsg(String errMsg) {
 		this.errMsg = errMsg;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 }

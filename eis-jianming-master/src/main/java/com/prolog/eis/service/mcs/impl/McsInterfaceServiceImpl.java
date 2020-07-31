@@ -1,15 +1,32 @@
 package com.prolog.eis.service.mcs.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.prolog.eis.dao.mcs.MCSTaskMapper;
+import com.prolog.eis.dto.eis.mcs.McsSendTaskDto;
+import com.prolog.eis.dto.mcs.McsGroupDirectionDto;
+import com.prolog.eis.dto.mcs.McsHoistStatusDto;
+import com.prolog.eis.model.caracross.SxCarAcrossTask;
+import com.prolog.eis.model.mcs.MCSTask;
+import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.eis.util.PrologHttpUtils;
 import com.prolog.eis.util.PrologTaskIdUtils;
 
 @Service
-public class McsInterfaceServiceImpl  {
+public class McsInterfaceServiceImpl implements McsInterfaceService{
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -18,8 +35,9 @@ public class McsInterfaceServiceImpl  {
 
 	@Value("${prolog.mcs.port:}")
 	private String mcsPort;
-	/*@Autowired
+	@Autowired
 	private MCSTaskMapper mcsTaskMapper;
+	/*
 	@Autowired
 	private SxPathPlanningTaskService sxPathPlanningTaskService;
 	@Autowired
@@ -95,21 +113,23 @@ public class McsInterfaceServiceImpl  {
 		}
 	}*/
 
-	/*@Override
+	@Override
 	@Transactional
 	@Async
-	public String sendMcsTaskWithOutPathAsyc(int type, String stockId, String source, String target, String weight, int priority)
+	public String sendMcsTaskWithOutPathAsyc(int type, String containerNo, String source, String target, String weight, int priority,int state)
 			throws Exception {
 		List<McsSendTaskDto> mcsSendTaskDtos = new ArrayList<McsSendTaskDto>();
 		McsSendTaskDto mcsSendTaskDto = new McsSendTaskDto();
 		String taskId = PrologTaskIdUtils.getTaskId();
 		mcsSendTaskDto.setTaskId(taskId);
 		mcsSendTaskDto.setType(type);
-		mcsSendTaskDto.setStockId(stockId);
+		mcsSendTaskDto.setBankId(1);
+		mcsSendTaskDto.setContainerNo(containerNo);
+		mcsSendTaskDto.setAddress(source);
 		mcsSendTaskDto.setTarget(target);
-		mcsSendTaskDto.setSource(source);
 		mcsSendTaskDto.setPriority(priority);
 		mcsSendTaskDto.setWeight(weight);
+		mcsSendTaskDto.setStatus(state);
 		mcsSendTaskDtos.add(mcsSendTaskDto);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("carryList", mcsSendTaskDtos);
@@ -123,19 +143,21 @@ public class McsInterfaceServiceImpl  {
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 			Boolean sucssess = helper.getBoolean("ret");
 			String message = helper.getString("msg");
-			MCSTask mcsTask = new MCSTask();
-			mcsTask.setTaskId(taskId);
-			mcsTask.setPriority(priority);
-			mcsTask.setSource(source);
-			mcsTask.setStockId(stockId);
-			mcsTask.setTarget(target);
-			mcsTask.setType(type);
-			mcsTask.setWeight(weight);
-			mcsTask.setSendCount(1);
-			mcsTask.setCreateTime(PrologDateUtils.parseObject(new Date()));
-			if (sucssess) {
-				mcsTask.setTaskState(1);
-			} else {
+			
+			if (!sucssess) {
+				//失败记重发表
+				MCSTask mcsTask = new MCSTask();
+				mcsTask.setTaskId(taskId);
+				mcsTask.setBankId(1);
+				mcsTask.setPriority(priority);
+				mcsTask.setSource(source);
+				mcsTask.setStockId(containerNo);
+				mcsTask.setTarget(target);
+				mcsTask.setType(type);
+				mcsTask.setWeight(weight);
+				mcsTask.setStatus(state);
+				mcsTask.setSendCount(1);
+				mcsTask.setCreateTime(new Date());
 				mcsTask.setTaskState(2);
 				mcsTask.setErrMsg(message);
 				mcsTaskMapper.save(mcsTask);
@@ -145,20 +167,77 @@ public class McsInterfaceServiceImpl  {
 		} catch (Exception e) {
 			MCSTask mcsTask = new MCSTask();
 			mcsTask.setTaskId(taskId);
+			mcsTask.setBankId(1);
 			mcsTask.setPriority(priority);
 			mcsTask.setSource(source);
-			mcsTask.setStockId(stockId);
+			mcsTask.setStockId(containerNo);
 			mcsTask.setTarget(target);
 			mcsTask.setType(type);
 			mcsTask.setWeight(weight);
+			mcsTask.setStatus(state);
 			mcsTask.setSendCount(1);
-			mcsTask.setCreateTime(PrologDateUtils.parseObject(new Date()));
+			mcsTask.setCreateTime(new Date());
 			mcsTask.setTaskState(2);
 			mcsTask.setErrMsg(e.getMessage());
 			mcsTaskMapper.save(mcsTask);
 			return taskId;
 		}
-	}*/
+	}
+
+	@Override
+	public String sendMcsTask(int type, String stockId, String source, String target, String weight, int priority)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void recall(MCSTask mcsTask) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<MCSTask> findFailMCSTask() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean getExitStatus(String position) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public McsHoistStatusDto getHoistStatus(String hoistId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void firstFloorQcPort() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendMcsCarAcrossPush(SxCarAcrossTask sxCarAcrossTask) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public McsGroupDirectionDto selectDirectionByExist(String coord) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean updatePlcVariableByCoord(String coord, int direction) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	/*
 	@Override

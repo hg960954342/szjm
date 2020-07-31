@@ -9,16 +9,16 @@ import com.prolog.eis.model.mcs.MCSTask;
 
 public interface McsInterfaceService {
 
-	public String sendMcsTask(int type,String stockId,String source,String target,String weight,int priority)throws Exception;
+	String sendMcsTask(int type,String stockId,String source,String target,String weight,int priority)throws Exception;
 
-	public String sendMcsTaskWithOutPathAsyc(int type, String stockId, String source, String target, String weight, int priority)
+	String sendMcsTaskWithOutPathAsyc(int type, String containerNo, String source, String target, String weight, int priority,int state)
 			throws Exception;
 	
-	public void recall(MCSTask mcsTask)throws Exception;
+	void recall(MCSTask mcsTask)throws Exception;
 	
-	public List<MCSTask> findFailMCSTask()throws Exception;
+	List<MCSTask> findFailMCSTask()throws Exception;
 	
-	public boolean getExitStatus(String position) throws Exception;
+	boolean getExitStatus(String position) throws Exception;
 	
 	/**
 	 * 提升机状态确认
@@ -26,9 +26,9 @@ public interface McsInterfaceService {
 	 * @return
 	 * @throws Exception
 	 */
-	public McsHoistStatusDto getHoistStatus(String hoistId) throws Exception;
+	McsHoistStatusDto getHoistStatus(String hoistId) throws Exception;
 	
-	public void firstFloorQcPort()throws Exception;
+	void firstFloorQcPort()throws Exception;
 
 	/**
 	 * 提升机状态确认
@@ -52,10 +52,10 @@ public interface McsInterfaceService {
 	/**
 	 * 查询提升机方向
 	 */
-	public McsGroupDirectionDto selectDirectionByExist(String coord) throws Exception;
+	McsGroupDirectionDto selectDirectionByExist(String coord) throws Exception;
 
 	/**
 	 * 编辑PLC出入库方向
 	 */
-	public boolean updatePlcVariableByCoord(String coord, int direction) throws Exception;
+	boolean updatePlcVariableByCoord(String coord, int direction) throws Exception;
 }

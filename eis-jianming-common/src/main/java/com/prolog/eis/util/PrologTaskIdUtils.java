@@ -5,10 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.prolog.framework.utils.StringUtils;
-
-import net.bytebuddy.asm.Advice.This;
-
 public class PrologTaskIdUtils {
 
 	private static Map<String, Object> map = new HashMap<String, Object>();

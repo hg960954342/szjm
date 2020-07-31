@@ -91,11 +91,11 @@ public class PrologMCSController {
 
 			//给mcs发指令
 			for (McsRequestTaskDto mcsRequestTaskDto : sendList) {
-				mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+				/*mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
 						mcsRequestTaskDto.getStockId(), 
 						mcsRequestTaskDto.getSource(),
 						mcsRequestTaskDto.getTarget(),
-						"", 99);
+						"", 99);*/
 			}
 
 			//检查一次wcs指令

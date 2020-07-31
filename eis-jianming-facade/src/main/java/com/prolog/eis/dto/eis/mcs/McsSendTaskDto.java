@@ -10,14 +10,19 @@ public class McsSendTaskDto {
 	 * 任务类型：1：入库:2：出库
 	 */
 	private int type;
+	
+	/**
+	 * 库编号
+	 */
+	private int bankId;
 	/**
 	 * 母托盘编号
 	 */
-	private String stockId;
+	private String containerNo;
 	/**
 	 * 请求位置:原坐标
 	 */
-	private String source;
+	private String address;
 	/**
 	 * 目的位置：目的坐标
 	 */
@@ -30,6 +35,10 @@ public class McsSendTaskDto {
 	 * 任务优先级,0-99,0优先级最大
 	 */
 	private int priority;
+	/**
+	 * 任务优先级,0-99,0优先级最大
+	 */
+	private int status;
 	public String getTaskId() {
 		return taskId;
 	}
@@ -42,17 +51,23 @@ public class McsSendTaskDto {
 	public void setType(int type) {
 		this.type = type;
 	}
-	public String getStockId() {
-		return stockId;
+	public int getBankId() {
+		return bankId;
 	}
-	public void setStockId(String stockId) {
-		this.stockId = stockId;
+	public void setBankId(int bankId) {
+		this.bankId = bankId;
 	}
-	public String getSource() {
-		return source;
+	public String getContainerNo() {
+		return containerNo;
 	}
-	public void setSource(String source) {
-		this.source = source;
+	public void setContainerNo(String containerNo) {
+		this.containerNo = containerNo;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	public String getTarget() {
 		return target;
@@ -72,24 +87,10 @@ public class McsSendTaskDto {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	public McsSendTaskDto(String taskId, int type, String stockId, String source, String target, String weight,
-			int priority) {
-		super();
-		this.taskId = taskId;
-		this.type = type;
-		this.stockId = stockId;
-		this.source = source;
-		this.target = target;
-		this.weight = weight;
-		this.priority = priority;
+	public int getStatus() {
+		return status;
 	}
-	public McsSendTaskDto() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	@Override
-	public String toString() {
-		return "McsSendTaskDto [taskId=" + taskId + ", type=" + type + ", stockId=" + stockId + ", source=" + source
-				+ ", target=" + target + ", weight=" + weight + ", priority=" + priority + "]";
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }
