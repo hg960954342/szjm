@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 
 import com.prolog.eis.dto.eis.SxStoreDto;
 import com.prolog.eis.dto.eis.YiWeiCountDto;
-import com.prolog.eis.model.store.SxStore;
+import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.framework.dao.mapper.BaseMapper;
 
 public interface QcSxStoreMapper extends BaseMapper<SxStore>{

@@ -1,14 +1,11 @@
 package com.prolog.eis.service.gcs;
 
 import java.util.List;
-import java.util.concurrent.Future;
 
 import com.prolog.eis.dto.gcs.GcsAlarmReqDto;
 import com.prolog.eis.dto.gcs.GcsOrderReportReqDto;
 import com.prolog.eis.model.caracross.SxCarAcrossTask;
 import com.prolog.eis.model.gcs.GcsTask;
-import com.prolog.eis.model.store.SxCar;
-import com.prolog.eis.model.store.SxCarAcross;
 
 public interface GcsInterfaceService {
 
@@ -87,8 +84,8 @@ public interface GcsInterfaceService {
 
 	/**
 	 * 发送gcs小车跨层任务
-	 */
-	void sendGcsCarAcrossPush(SxCarAcrossTask sxCarAcrossTask, SxCarAcross sxCarAcross) throws Exception;
+	 *//*
+	void sendGcsCarAcrossPush(SxCarAcrossTask sxCarAcrossTask, SxCarAcross sxCarAcross) throws Exception;*/
 
 	/**
 	 * GCS跨层任务回告

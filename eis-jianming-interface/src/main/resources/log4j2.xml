@@ -35,7 +35,7 @@
 
 		<!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
 
-		<RollingFile name="RollingFileInfo" fileName="D:/dev/tools/eis-zc/logs/info.log" filePattern="D:/dev/tools/eis-zc/logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+		<RollingFile name="RollingFileInfo" fileName="logs/info.log" filePattern="logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
 
 			<!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
 
@@ -53,7 +53,7 @@
 
 		</RollingFile>
 
-		<RollingFile name="RollingFileWarn" fileName="D:/dev/tools/eis-zc/logs/warn.log" filePattern="D:/dev/tools/eis-zc/logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
+		<RollingFile name="RollingFileWarn" fileName="logs/warn.log" filePattern="logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
 			<ThresholdFilter level="warn" onMatch="ACCEPT"
 				onMismatch="DENY" />
 			<PatternLayout
@@ -67,9 +67,9 @@
 		</RollingFile>
 
 		<RollingFile name="RollingFileError"
-			fileName="D:/dev/tools/eis-zc/logs/error.log"
+			fileName="logs/error.log"
 
-			filePattern="D:/dev/tools/eis-zc/logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+			filePattern="logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
 
 			<ThresholdFilter level="error" onMatch="ACCEPT"
 				onMismatch="DENY" />
@@ -87,7 +87,7 @@
 
 		</RollingFile>
 
-	<RollingFile name="RollingFileCustomer" fileName="D:/dev/tools/eis-zc/logs/customer.log"  filePattern="D:/dev/tools/eis-zc/logs/$${date:yyyy-MM}/customer-%d{yyyy-MM-dd}-%i.log">
+	<RollingFile name="RollingFileCustomer" fileName="logs/customer.log"  filePattern="logs/$${date:yyyy-MM}/customer-%d{yyyy-MM-dd}-%i.log">
  		<PatternLayout pattern="%m%n" />
 		<ThresholdFilter level="warn" onMatch="ACCEPT"
 				onMismatch="DENY" />
@@ -111,7 +111,7 @@
 		<logger name="org.apache" level="INFO"></logger>
 		<logger name="springfox.documentation" level="INFO"></logger>
 		<logger name="com.netflix" level="INFO"></logger>
-		<root level="WARN">
+		<root level="INFO">
 
 			<appender-ref ref="Console" />
 

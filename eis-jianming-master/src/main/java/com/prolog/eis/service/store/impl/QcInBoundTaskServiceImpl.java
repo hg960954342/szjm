@@ -1,52 +1,64 @@
 package com.prolog.eis.service.store.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.prolog.eis.dao.base.SysParameMapper;
+import com.prolog.eis.dao.sxk.SxStoreMapper;
+import com.prolog.eis.dto.base.Coordinate;
+import com.prolog.eis.dto.eis.mcs.InBoundRequest;
+import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
+import com.prolog.eis.model.base.SysParame;
+import com.prolog.eis.service.base.SysParameService;
+import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.framework.utils.StringUtils;
 
 @Service
 public class QcInBoundTaskServiceImpl {
 
-	/*@Autowired
-	private SxHoisterConfigMapper sxHoisterConfigMapper;
-	@Autowired
-	private WmsInboundTaskMapper wmsInboundTaskMapper;
-	@Autowired
-	private WmsOutboundTaskMapper wmsOutboundTaskMapper;
-	@Autowired
-	private SxStoreMapper sxStoreMapper;
-	@Autowired
-	private SxInStoreService sxInStoreService;
+//	@Autowired
+//	private SxHoisterConfigMapper sxHoisterConfigMapper;
+//	@Autowired
+//	private WmsInboundTaskMapper wmsInboundTaskMapper;
+//	@Autowired
+//	private WmsOutboundTaskMapper wmsOutboundTaskMapper;
+//	@Autowired
+//	private SxStoreMapper sxStoreMapper;
+//	@Autowired
+//	private SxInStoreService sxInStoreService;
 	@Autowired
 	private SysParameMapper sysParameMapper;
-	@Autowired
-	private SxStoreLocationMapper sxStoreLocationMapper;
-	@Autowired
-	private SxStoreLocationGroupMapper sxStoreLocationGroupMapper;
-	@Autowired
-	private SxStoreTaskFinishService sxStoreTaskFinishService;
-	@Autowired
-	private SxPathPlanningTaskService sxPathPlanningTaskService;
-	@Autowired
-	private PalletInfoMapper palletInfoMapper;
-	@Autowired
-	private PortInfoMapper portInfoMapper;
-	@Autowired
-	private ZtckContainerMapper ztckContainerMapper;
-	@Autowired
-	private LedMessageService ledMessageService;
-	@Autowired
-	private ZtContainerMsgService ztContainerMsgService;
-	@Autowired
-	private ThroughTaskMapper throughTaskMapper;
-	@Autowired
-	private QcInBoundReturnExcuteService qcInBoundReturnExcuteService;
-	@Autowired
-	private LayerPortOriginService layerPortOriginService;
+//	@Autowired
+//	private SxStoreLocationMapper sxStoreLocationMapper;
+//	@Autowired
+//	private SxStoreLocationGroupMapper sxStoreLocationGroupMapper;
+//	@Autowired
+//	private SxStoreTaskFinishService sxStoreTaskFinishService;
+//	@Autowired
+//	private SxPathPlanningTaskService sxPathPlanningTaskService;
+//	@Autowired
+//	private PalletInfoMapper palletInfoMapper;
+//	@Autowired
+//	private PortInfoMapper portInfoMapper;
+//	@Autowired
+//	private ZtckContainerMapper ztckContainerMapper;
+//	@Autowired
+//	private LedMessageService ledMessageService;
+//	@Autowired
+//	private ZtContainerMsgService ztContainerMsgService;
+//	@Autowired
+//	private ThroughTaskMapper throughTaskMapper;
+//	@Autowired
+//	private QcInBoundReturnExcuteService qcInBoundReturnExcuteService;
+//	@Autowired
+//	private LayerPortOriginService layerPortOriginService;
 	@Autowired
 	private SysParameService sysParameService;
-	@Autowired
-	private EmptyCaseConfigService emptyCaseConfigService;
+//	@Autowired
+//	private EmptyCaseConfigService emptyCaseConfigService;
 
-	@Override
+	
+	/*@Override
 	@Transactional(rollbackFor = Exception.class)
 	public McsRequestTaskDto inBoundTask(InBoundRequest inBoundRequest) throws Exception {
 
@@ -59,10 +71,21 @@ public class QcInBoundTaskServiceImpl {
 		int sourceY = coordinate.getY();
 		int detection = inBoundRequest.getDetection();
 
-		Double weight = 200d;
+		SysParame sysParame = sysParameMapper.findById("LIMIT_WEIGHT", SysParame.class);
+		Double limitWeight = Double.valueOf(sysParame.getParameValue());
+		//验证超重
+		Double weight = 0d;
 		if(!StringUtils.isEmpty(inBoundRequest.getWeight())) {
 			weight = Double.valueOf(inBoundRequest.getWeight());
 		}
+		
+		if(weight > limitWeight) {
+			return this.addMcsTask(false,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重");
+		}
+		
+		
+		Double weight = 200d;
+		
 
 		//校验重量
 		List<SysParame> weightSysParame = sysParameMapper.findByMap(MapUtils.put("parameNo", "LIMIT_WEIGHT").getMap(),

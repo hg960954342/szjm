@@ -1,29 +1,30 @@
 package com.prolog.eis;
 
+import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
+import com.prolog.framework.microservice.annotation.EnablePrologService;
+
+import java.nio.charset.StandardCharsets;
+
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
-
-import com.prolog.eis.config.DBConfigEis;
-import com.prolog.eis.config.DBConfigMiddle;
-import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
-import com.prolog.framework.microservice.annotation.EnablePrologService;
 
 @SpringBootApplication()
 @EnableTransactionManagement
 @EnableScheduling
 @EnablePrologService(loadBalanced=false)
 @EnablePrologEmptySecurityServer
+@MapperScan("com.prolog.eis.dao")
 @EnableAsync
 @EnableAspectJAutoProxy
-@EnableConfigurationProperties(value = {DBConfigEis.class, DBConfigMiddle.class})
 public class Application {
 	@Bean
 	public RestTemplate restTemplate() {
@@ -31,7 +32,9 @@ public class Application {
 		httpRequestFactory.setConnectionRequestTimeout(5000);
 		httpRequestFactory.setConnectTimeout(5000);
 		httpRequestFactory.setReadTimeout(5000);
-		return new RestTemplate(httpRequestFactory);
+		RestTemplate restTemplate = new RestTemplate(httpRequestFactory); 
+        restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 支持中文编码
+		return restTemplate;
 	}
 	
 	

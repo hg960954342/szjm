@@ -2,7 +2,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://127.0.0.1:8761/eureka/
+      defaultZone: http://39.96.69.213:8761/eureka/
   instance: 
     # 注册时使用ip而不是主机名
     preferIpAddress: true
@@ -11,34 +11,26 @@ eureka:
     # 状态地址为api地址
     statusPageUrlPath: /${server.servlet.contextpath:}/apidoc.html
 
-
 server: 
   ipAddress: 127.0.0.1
-  port: 19721
+  port: 20204 
   servlet: 
-    contextpath: 
-
-pool:
-  initialSize: 10
-
-transaction:
-  rollback-on-commit-failure: true
-
+    contextpath:    
+        
 spring:
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect #InnoDB才能支持事务
   application:
-    name: service-eis
+    name: service-eis-interface
   devtools: 
     restart: 
       enabled: true
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/qunchuang
+    url: jdbc:mysql://39.96.69.213:3306/jianmin
     username: root
-    password: root
+    password: eisalicloud
+    #password: 123456 
     driver-class-name: com.mysql.jdbc.Driver
     #初始化大小
-    initialSize: ${pool.initialSize}
+    initialSize: 0
     #最小空閒
     minIdle: 5
     #最大連接數
@@ -47,28 +39,22 @@ spring:
     maxWait: 60000
     #最小生存時間
     minEvictableIdleTimeMillis: 25200000
-  datasource2:
-    wmsDatasourceType: release/beta
-    url: jdbc:oracle:thin:@10.189.128.237:1521:thaws
-    username: ASRS_ITR1
-    password: ASRS_ITR1
-    driverClassName: oracle.jdbc.OracleDriver
-    #初始化大小
-    initialSize: ${pool.initialSize}
-    #最小空閒
-    minIdle: 5
-    #最大連接數
-    maxActive: 50
-    #最大等待時間
-    maxWait: 60000
-    #最小生存時間
-    minEvictableIdleTimeMillis: 25200000
-prolog:
+prolog: 
+  resend: 
+     resendcount: 10
+  debug: 
+     debugMode: 1
   apidoc: #api文档配置文件
     title: 用户服务
     basePackage: com.prolog.eis
     description: 用户服务
     version: 1.0
+  wms:
+     url: 127.0.0.1
+     port: 80
+     normalReturnMethod: method1
+     abnormalReturnMethod: method2
+     entranceReturnMethod: method3
   dao: 
     dialect: mysql
     pagehelper: #pagehelper分页插件配置
@@ -81,15 +67,11 @@ prolog:
     mybatis:
       typeAliasesPackage: com.prolog.eis.model
       mapperLocations: classpath:mappers/*.xml
-      mapUnderscoreToCamelCase: true
       
   web: 
     multipart:  #文件上传配置
       maxFileSize: 100MB
       maxRequestSize: 100MB
-      
-
-
   
       
   

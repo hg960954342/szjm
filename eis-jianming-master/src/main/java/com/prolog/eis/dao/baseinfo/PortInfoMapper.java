@@ -43,18 +43,6 @@ public interface PortInfoMapper extends BaseMapper<PortInfo>{
 			"where sx.layer = #{layer} and sx.x = #{x} and sx.y = #{y}")
 	List<PortInfo> getWmsPortByPosition(@Param("layer")int layer,@Param("x")int x,@Param("y")int y);
 	
-	@Select("select portT.port_no portNo,COUNT(*) taskCount from\r\n" + 
-			"(\r\n" + 
-			"select t.port_no from wms_outbound_task t where t.finished < 90 and t.finished > 0\r\n" + 
-			"UNION ALL\r\n" + 
-			"select tt.end_port from through_task tt where tt.finished < 90 and tt.finished > 0\r\n" + 
-			"UNION ALL\r\n" + 
-			"select zt.port_no from zt_ckcontainer zt\r\n" + 
-			") portT\r\n" + 
-			"where portT.port_no is not null\r\n" + 
-			"group by portT.port_no")
-	List<PortTaskCount> getPortCkTaskCount();
-	
 	@Update("update port_info t\r\n" + 
 			"set t.task_lock = 2\r\n" + 
 			"where t.layer = #{layer} and t.x = #{x} and t.y = #{y}")

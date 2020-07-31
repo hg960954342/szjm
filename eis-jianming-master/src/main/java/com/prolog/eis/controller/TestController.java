@@ -1,9 +1,6 @@
 package com.prolog.eis.controller;
 
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,12 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prolog.eis.dao.led.LedPortParamMapper;
 import com.prolog.eis.dto.eis.led.LedPortParamDto;
-import com.prolog.eis.dto.eis.mcs.TaskReturnInBoundRequestResponse;
-import com.prolog.eis.dto.gcs.GCSErrorDto;
-import com.prolog.eis.dto.gcs.GcsAlarmReqDto;
-import com.prolog.eis.dto.gcs.GcsOrderReportReqDto;
-import com.prolog.eis.service.TestService;
-import com.prolog.eis.service.gcs.GcsInterfaceService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.led.LedUtil;
@@ -35,7 +26,7 @@ import net.sf.json.JSONObject;
 public class TestController {
 	
 //	@Autowired
-	private TestService testService;
+	//private TestService testService;
 	
 	@Autowired
 	private LedPortParamMapper ledPortParamMapper;
@@ -151,7 +142,7 @@ public class TestController {
 			String containerSubNo = helper.getString("containerSubNo");
 			String binNo = helper.getString("binNo");
 			
-			testService.storeLocationMove(containerSubNo, binNo);
+			//testService.storeLocationMove(containerSubNo, binNo);
 			
 			JSONObject jsonObject = new JSONObject();
 

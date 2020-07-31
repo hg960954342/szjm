@@ -3,7 +3,10 @@ package com.prolog.eis.service.mcs.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+
+import com.prolog.eis.util.PrologTaskIdUtils;
 
 @Service
 public class McsInterfaceServiceImpl  {
@@ -90,9 +93,9 @@ public class McsInterfaceServiceImpl  {
 
 			return taskId;
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	@Transactional
 	@Async
 	public String sendMcsTaskWithOutPathAsyc(int type, String stockId, String source, String target, String weight, int priority)
@@ -155,8 +158,9 @@ public class McsInterfaceServiceImpl  {
 			mcsTaskMapper.save(mcsTask);
 			return taskId;
 		}
-	}
+	}*/
 
+	/*
 	@Override
 	public void recall(MCSTask mcsTask) throws Exception {
 		List<McsSendTaskDto> mcsSendTaskDtos = new ArrayList<McsSendTaskDto>();

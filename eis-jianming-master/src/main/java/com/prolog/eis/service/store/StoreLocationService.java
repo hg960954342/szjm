@@ -2,9 +2,8 @@ package com.prolog.eis.service.store;
 
 import java.util.List;
 
-import com.prolog.eis.dto.sxcsc.location.StoreLocationGroupDto;
-import com.prolog.eis.dto.sxcsc.location.VerticalLocationDto;
-import com.prolog.eis.model.store.SxStoreLocation;
+import com.prolog.eis.dto.sxk.StoreLocationGroupDto;
+import com.prolog.eis.model.sxk.SxStoreLocation;
 
 public interface StoreLocationService {
 
@@ -16,6 +15,6 @@ public interface StoreLocationService {
 	 * 导入垂直货位数据
 	 * @param verticalLocationDtos
 	 * @return
-	 */
-	List<VerticalLocationDto> importVerticalLocation(List<VerticalLocationDto> verticalLocationDtos) throws Exception;
+	 *//*
+	List<VerticalLocationDto> importVerticalLocation(List<VerticalLocationDto> verticalLocationDtos) throws Exception;*/
 }

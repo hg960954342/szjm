@@ -6,7 +6,6 @@ import com.prolog.eis.dto.mcs.McsGroupDirectionDto;
 import com.prolog.eis.dto.mcs.McsHoistStatusDto;
 import com.prolog.eis.model.caracross.SxCarAcrossTask;
 import com.prolog.eis.model.mcs.MCSTask;
-import com.prolog.eis.model.store.SxCarAcross;
 
 public interface McsInterfaceService {
 
@@ -34,8 +33,8 @@ public interface McsInterfaceService {
 	/**
 	 * 提升机状态确认
 	 * @throws Exception
-	 */
-	public boolean checkMcsStatus(SxCarAcrossTask sxCarAcrossTask, SxCarAcross sxCarAcross) throws Exception;
+	 *//*
+	public boolean checkMcsStatus(SxCarAcrossTask sxCarAcrossTask, SxCarAcross sxCarAcross) throws Exception;*/
 
 	/**
 	 * 发送提升机小车跨层任务

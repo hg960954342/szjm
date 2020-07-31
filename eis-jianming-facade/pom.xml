@@ -20,12 +20,6 @@
 			<groupId>com.prolog.framework</groupId>
 			<artifactId>plg-fx-core</artifactId>
 		</dependency>
-		<!-- 四向穿梭车实体 -->
-  		<dependency>
-			<groupId>com.prolog.eis</groupId>
-			<artifactId>prolog-eis-sxcsc-facade</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>

@@ -2,7 +2,7 @@ package com.prolog.eis.dto.sxk;
 
 import java.util.List;
 
-import com.prolog.eis.model.store.SxStoreLocation;
+import com.prolog.eis.model.sxk.SxStoreLocation;
 
 public class StoreLocationGroupDto {
 
