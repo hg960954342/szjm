@@ -7,5 +7,5 @@ public interface QcInBoundTaskService {
 
 	McsRequestTaskDto inBoundTask(InBoundRequest inBoundRequest) throws Exception;
 	
-	void taskReturn(InBoundRequest inBoundRequest) throws Exception;
+	//void taskReturn(InBoundRequest inBoundRequest) throws Exception;
 }

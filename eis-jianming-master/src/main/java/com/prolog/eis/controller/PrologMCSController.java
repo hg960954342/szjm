@@ -6,9 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.alibaba.fastjson.JSON;
-import com.prolog.eis.dto.eis.WcsPublicResponseDto;
-import com.prolog.eis.model.caracross.SxCarAcrossTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -129,7 +126,7 @@ public class PrologMCSController {
 
 			for(int i=0;i<inBoundRequests.size();i++) {
 				try {
-					qcInBoundTaskService.taskReturn(inBoundRequests.get(i));
+					//qcInBoundTaskService.taskReturn(inBoundRequests.get(i));
 				}
 				catch (Exception e) {
 					errorMsg = errorMsg + " " + e.getMessage();
