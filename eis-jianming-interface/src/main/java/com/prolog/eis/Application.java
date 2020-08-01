@@ -27,15 +27,15 @@ import org.springframework.web.client.RestTemplate;
 @EnableAspectJAutoProxy
 public class Application {
 	@Bean
-	public RestTemplate restTemplate() {
-		HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		httpRequestFactory.setConnectionRequestTimeout(5000);
-		httpRequestFactory.setConnectTimeout(5000);
-		httpRequestFactory.setReadTimeout(5000);
-		RestTemplate restTemplate = new RestTemplate(httpRequestFactory); 
+    public RestTemplate restTemplate() {
+        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        httpRequestFactory.setConnectionRequestTimeout(5000);
+        httpRequestFactory.setConnectTimeout(5000);
+        httpRequestFactory.setReadTimeout(5000);
+        RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
         restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 支持中文编码
-		return restTemplate;
-	}
+        return restTemplate;
+    }
 	
 	
 	public static void main( String[] args )

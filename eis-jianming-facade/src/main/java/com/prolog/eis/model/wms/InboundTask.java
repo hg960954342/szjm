@@ -11,32 +11,37 @@ import java.util.Date;
 @NoArgsConstructor
 public class InboundTask {
 
+    private int id;
 
-    private String billNo;
+    private String billno;
 
+    private int wmspush;
 
-    private String containerCode;
+    private int reback;
 
+    private int emptycontainer;
 
-    private String taskType;
-
-
-    private String itemId;
-
-
-    private Double qty;
+    private String containercode;
 
 
-    private String lotId;
+    private int tasktype;
+
+    private String itemid;
+
+
+    private float qty;
+
+
+    private String lotid;
 
 
     private String ceng;
 
 
-    private String agvLoc;
+    private String agvloc;
 
 
-    private String ownerId;
+    private String ownerid;
 
 
     private int taskState;
@@ -44,6 +49,9 @@ public class InboundTask {
 
     private Date createTime;
 
+    private Date startTime;
+
+    private Date rukuTime;
 
     private Date endTime;
 

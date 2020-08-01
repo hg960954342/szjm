@@ -11,9 +11,9 @@
 	<!--先定义所有的appender -->
 
 	<CustomLevels>
- 		<CustomLevel name="VERBOSE" intLevel="250" />
+		<CustomLevel name="VERBOSE" intLevel="250" />
 	</CustomLevels>
- 
+
 	<appenders>
 
 		<!--这个输出控制台的配置 -->
@@ -21,7 +21,7 @@
 		<console name="Console" target="SYSTEM_OUT">
 
 			<!--输出日志的格式 -->
-  			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %m%n" />
+			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %m%n" />
 
 		</console>
 
@@ -55,9 +55,9 @@
 
 		<RollingFile name="RollingFileWarn" fileName="logs/warn.log" filePattern="logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
 			<ThresholdFilter level="warn" onMatch="ACCEPT"
-				onMismatch="DENY" />
+							 onMismatch="DENY" />
 			<PatternLayout
-				pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+					pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
 			<Policies>
 				<TimeBasedTriggeringPolicy />
 				<SizeBasedTriggeringPolicy size="100 MB" />
@@ -67,15 +67,15 @@
 		</RollingFile>
 
 		<RollingFile name="RollingFileError"
-			fileName="logs/error.log"
+					 fileName="logs/error.log"
 
-			filePattern="logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+					 filePattern="logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
 
 			<ThresholdFilter level="error" onMatch="ACCEPT"
-				onMismatch="DENY" />
+							 onMismatch="DENY" />
 
 			<PatternLayout
-				pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+					pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
 
 			<Policies>
 
@@ -87,16 +87,16 @@
 
 		</RollingFile>
 
-	<RollingFile name="RollingFileCustomer" fileName="logs/customer.log"  filePattern="logs/$${date:yyyy-MM}/customer-%d{yyyy-MM-dd}-%i.log">
- 		<PatternLayout pattern="%m%n" />
-		<ThresholdFilter level="warn" onMatch="ACCEPT"
-				onMismatch="DENY" />
-		<Policies>
-			<TimeBasedTriggeringPolicy />
-			<SizeBasedTriggeringPolicy size="100 MB" />
-		</Policies>
-	</RollingFile>
-		
+		<RollingFile name="RollingFileCustomer" fileName="logs/customer.log"  filePattern="logs/$${date:yyyy-MM}/customer-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="%m%n" />
+			<ThresholdFilter level="warn" onMatch="ACCEPT"
+							 onMismatch="DENY" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+		</RollingFile>
+
 	</appenders>
 
 	<!--然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
@@ -120,9 +120,9 @@
 			<appender-ref ref="RollingFileWarn" />
 
 			<appender-ref ref="RollingFileError" />
-			
+
 			<appender-ref ref="RollingFileCustomer"/>
-			
+
 
 		</root>
 

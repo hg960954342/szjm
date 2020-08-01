@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Wms_Eis_Idempotent {
+public class WmsEisIdempotent {
 
 
     private String messageId;
