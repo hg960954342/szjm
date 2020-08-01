@@ -23,4 +23,16 @@ public class OutboundTestDataServiceImpl implements OutboundTestDataService {
 
         outboundTestDataMapper.insertOutboundTaskDetail(detail);
     }
+
+    @Override
+    public void insertMoveTaskDetail(OutboundTaskDetail detail) {
+
+        outboundTestDataMapper.insertMoveTaskDetail(detail);
+    }
+
+    @Override
+    public void insertMoveTask(OutboundTask datum) {
+
+        outboundTestDataMapper.insertMoveTask(datum);
+    }
 }
