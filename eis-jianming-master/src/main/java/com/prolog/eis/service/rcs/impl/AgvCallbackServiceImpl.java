@@ -81,6 +81,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 				containerTask.setSourceType("2");//设置当前位置为输送线
 				containerTaskService.update(containerTask);
 				//通知输送线运行
+				// TODO Auto-generated method stub
 
 			}
 			if (agvStorageLocation.getLocationType() != 2){//小车搬运后当前位置不在入库输送线口
