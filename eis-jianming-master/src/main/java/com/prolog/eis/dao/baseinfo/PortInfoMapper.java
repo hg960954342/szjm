@@ -124,4 +124,7 @@ public interface PortInfoMapper extends BaseMapper<PortInfo>{
 			"left join port_info p on spc.port_id = p.id\r\n" + 
 			"where p.area = 2 and p.port_lock = 2 and s.wms_station_no = #{station}")
 	List<PortInfoDto> getSxkStationPort(@Param("station")String station);
+
+	@Select("select * from port_info where task_type=#{task_type} and (port_type=1 or port_type=3)")
+	List<PortInfo> getPortInfoByTaskType(@Param("task_type")int task_type);
 }

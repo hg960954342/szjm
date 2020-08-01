@@ -3,6 +3,7 @@ package com.prolog.eis.scheduler;
 import com.prolog.eis.dto.rcs.RcsRequestResultDto;
 import com.prolog.eis.model.eis.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
+import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
@@ -18,61 +19,18 @@ import java.util.Map;
 @Component
 public class TimeTask {
 
+    @Autowired
+	InBoundTaskService inBoundTaskService;
+
+
 	/**
-	 * 获取四向库作业出库任务
-	 * 
-	 * @author yf
+	 * 定时处理入库任务
 	 * @throws Exception
 	 */
-	/*@Scheduled(initialDelay = 3000, fixedDelay = 5000)
-	public void buildCkTask() throws Exception {
-
-		try {
-			//获取wms下发过来的出库任务
-			List<WmsOutboundTask> outboundList = wmsOutboundTaskMapper.getSxkCkTask();
-
-			try {
-				//检查空托出库的
-				List<WmsOutboundTask> emptyTasks = ListHelper.where(outboundList, p->p.getTaskType() == 30 && p.getFinished() == 0 && p.getWmsPush() == 0);
-				if(!emptyTasks.isEmpty()) {
-					ckDispatchService.buildEmptyTask(emptyTasks);
-				}
-			}
-			catch (Exception e) {
-				// TODO: handle exception
-				FileLogHelper.WriteLog("buildEmptyTaskError", e.toString());
-			}
-
-			try {
-				//质检任务从暂存区到作业区
-				//质检任务单独处理
-				List<WmsOutboundTask> iqcTasks = ListHelper.where(outboundList, p->(p.getTaskType() == 20 || p.getTaskType() == 10) && p.getFinished() == 50);
-				List<TempPortZtTaskDto> tempPortZtTaskList = ztckContainerMapper.getTempPort();
-				if(!iqcTasks.isEmpty() && !tempPortZtTaskList.isEmpty()) {
-					ckDispatchService.iqcTask(iqcTasks,tempPortZtTaskList);
-				}
-			}catch (Exception e) {
-				// TODO: handle exception
-				FileLogHelper.WriteLog("iqcTaskError", e.toString());
-			}
-
-			List<WmsOutboundTask> taskList = ListHelper.where(outboundList, p->p.getTaskType() != 30 || (p.getTaskType() == 30 && p.getWmsPush() == 1));
-			if(taskList.isEmpty())
-				return;
-
-			try {
-				synchronized("kucun".intern()) {
-					ckCheckService.buildCkTask(taskList);	
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-				FileLogHelper.WriteLog("ckCheckBuildCkTaskError", e.toString());
-			}
-		}catch (Exception e) {
-			// TODO: handle exception
-			FileLogHelper.WriteLog("buildCkTask", e.toString());
-		}
-	}*/
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	public void buildCkTask() throws Exception  {
+		inBoundTaskService.inboundTask();
+	}
 
 	/*@Scheduled(initialDelay = 3000, fixedDelay = 8000)
 	public void sendWcsTask() throws Exception {
