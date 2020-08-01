@@ -9,4 +9,8 @@ public interface OutboundTestDataService {
     void insertOutboundTask(OutboundTask datum);
 
     void insertOutboundTaskDetail(OutboundTaskDetail detail);
+
+    void insertMoveTaskDetail(OutboundTaskDetail detail);
+
+    void insertMoveTask(OutboundTask datum);
 }
