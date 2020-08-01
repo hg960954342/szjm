@@ -1,4 +1,4 @@
-package com.prolog.eis.model.eis;
+package com.prolog.eis.model.wms;
 
 import com.prolog.framework.core.annotation.AutoKey;
 import com.prolog.framework.core.annotation.Column;
