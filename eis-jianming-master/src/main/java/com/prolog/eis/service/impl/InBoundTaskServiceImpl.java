@@ -45,7 +45,7 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
             InboundTask task = list.get(i);
             Integer empty_container = task.getEmptyContainer();
 
-            if (empty_container.equals(0)) { //任务托的情况
+
                 String agvLoc=task.getAgvLoc();
                 Coordinate CoordinateAgv=PrologCoordinateUtils.analysis(agvLoc);
                  //暂时定入库任务状态开始为0
@@ -86,6 +86,7 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
                 String target=PrologCoordinateUtils.splicingStr(distinPortInfo.getX(),distinPortInfo.getY(),distinPortInfo.getLayer());
                 containerTask.setTarget(target);
                 containerTask.setSource(agvLoc);
+
                 Date date=new Date();
                containerTask.setCreateTime(date);
                containerTask.setSendTime(date);
@@ -95,6 +96,7 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
 
                 containerTask.setTaskType(5);
                 containerTask.setTaskState("1");
+                containerTask.setSourceType("2");
                 String uuid = UUID.randomUUID().toString().replaceAll("-","");
                 containerTask.setTaskCode(uuid);
 
@@ -112,7 +114,7 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
 
 
 
-    }
+
 
 
 
