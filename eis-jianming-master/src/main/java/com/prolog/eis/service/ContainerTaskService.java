@@ -7,4 +7,6 @@ import java.util.List;
 public interface ContainerTaskService {
 
     List<ContainerTask> selectByTaskState(String taskState, String sourceType);
+
+    void updateSendTime(ContainerTask containerTask);
 }

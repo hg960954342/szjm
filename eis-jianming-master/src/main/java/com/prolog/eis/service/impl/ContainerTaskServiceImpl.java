@@ -22,4 +22,9 @@ public class ContainerTaskServiceImpl implements ContainerTaskService {
         Map<String, Object> map = MapUtils.put("task_state", taskState).put("source_type", sourceType).getMap();
         return containerTaskMapper.findByMap(map,ContainerTask.class);
     }
+
+    @Override
+    public void updateSendTime(ContainerTask containerTask) {
+        containerTaskMapper.update(containerTask);
+    }
 }
