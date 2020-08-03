@@ -44,6 +44,8 @@ public class OutboundTask {
     @ApiModelProperty("站点要求 0 无   1有")
     private int sfreq;
 
+    private float qty;
+
     @Column("pick_code")
     @ApiModelProperty("拣选站")
     private String pickcode;
