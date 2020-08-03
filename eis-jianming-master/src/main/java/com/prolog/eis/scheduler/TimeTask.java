@@ -1,7 +1,7 @@
 package com.prolog.eis.scheduler;
 
 import com.prolog.eis.dto.rcs.RcsRequestResultDto;
-import com.prolog.eis.model.eis.ContainerTask;
+import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.rcs.RcsRequestService;
@@ -73,7 +73,7 @@ public class TimeTask {
 	//定时给agv小车下分任务
 	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
 	public void sendTask2Rcs() throws Exception {
-		List<ContainerTask> containerTasks = containerTaskService.selectByTaskState("1", "2");
+		List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
 		if (!containerTasks.isEmpty() && containerTasks.size() > 0){
 			this.sendTask(containerTasks);
 		}
@@ -113,13 +113,15 @@ public class TimeTask {
 
 					String restJson = PrologApiJsonHelper.toJson(rcsRequestResultDto);
 					//添加日志文件
-					FileLogHelper.WriteLog("sendTask2RcsLog", "EIS->RCS返回：" + restJson);
+					FileLogHelper.WriteLog("sendTask2Rcs", "EIS->RCS返回：" + restJson);
 					String restCode = rcsRequestResultDto.getCode();
 
 					if (restCode.equals("0")) {
+						//更新发送给设备的时间
 						containerTask.setSendTime(new Date());
-						//设备接收成功,更新发送给设备的时间
-						containerTaskService.updateSendTime(containerTask);
+						//更新任务状态
+						containerTask.setTaskType(2);//已发送给下游设备
+						containerTaskService.update(containerTask);
 					}else {
 						//agv接收失败
 						FileLogHelper.WriteLog("sendToRcsErr","EIS->RCS错误："+restJson);
