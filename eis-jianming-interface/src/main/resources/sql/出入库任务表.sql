@@ -78,6 +78,7 @@ CREATE TABLE `outbound_task_history` (
 DROP TABLE if exists `outbound_task_detail`;
 CREATE TABLE `outbound_task_detail` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `bill_no` varchar(255) NOT NULL COMMENT '出库单号',
   `seqno` varchar(255) NOT NULL COMMENT '明细行号',
   `ctreq` int NOT NULL DEFAULT '0' COMMENT '是否指定托盘 0不指定 1指定',
   `container_code` int NOT NULL DEFAULT '0' COMMENT '容器号',
@@ -85,6 +86,7 @@ CREATE TABLE `outbound_task_detail` (
   `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
   `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms批号',
   `qty` decimal DEFAULT NULL COMMENT '数量（重量）',
+  `finish_qty` decimal DEFAULT NULL COMMENT '完成数量（重量）',
   `pick_code` varchar(20) DEFAULT NULL COMMENT '拣选站  指定拣选站  暂时移库出库用到 ',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `end_time` datetime DEFAULT NULL COMMENT '结束时间',
@@ -108,7 +110,7 @@ CREATE TABLE `outbound_task_detail_history` (
 
 DROP TABLE IF EXISTS `wms_eis_idempotent`;
 CREATE TABLE `wms_eis_idempotent`  (
-  `message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '唯一标识符',
+  `message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '幂等数',
   `rejson` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '返回json串数据',
   `loc_date` datetime(0) NULL DEFAULT NULL COMMENT '当前本地时间',
   PRIMARY KEY (`message_id`) USING BTREE
