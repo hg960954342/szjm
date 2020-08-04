@@ -1,17 +1,16 @@
 package com.prolog.eis.service.delet.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.prolog.eis.dao.base.SysUserMapper;
 import com.prolog.eis.dao.base.UserDeptMapper;
 import com.prolog.eis.model.base.SysUser;
 import com.prolog.eis.model.base.UserDept;
 import com.prolog.eis.service.delet.DeleteService;
 import com.prolog.framework.utils.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class DeleteServiceImpl implements DeleteService {

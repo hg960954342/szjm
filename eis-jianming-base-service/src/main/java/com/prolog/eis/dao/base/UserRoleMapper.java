@@ -1,10 +1,9 @@
 package com.prolog.eis.dao.base;
 
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-
 import com.prolog.eis.model.base.UserRole;
 import com.prolog.framework.dao.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public interface UserRoleMapper extends BaseMapper<UserRole> {
 

@@ -1,19 +1,16 @@
 package com.prolog.eis.util.led;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.image.BufferedImage;
-import java.awt.Graphics;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import javax.imageio.ImageIO;
 
 public class LEDSender2010 {
 

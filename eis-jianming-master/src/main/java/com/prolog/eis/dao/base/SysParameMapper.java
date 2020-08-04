@@ -1,11 +1,10 @@
 package com.prolog.eis.dao.base;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Select;
-
 import com.prolog.eis.model.base.SysParame;
 import com.prolog.framework.dao.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 public interface SysParameMapper extends BaseMapper<SysParame>{
 

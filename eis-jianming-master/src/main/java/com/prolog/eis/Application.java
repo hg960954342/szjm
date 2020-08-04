@@ -2,9 +2,6 @@ package com.prolog.eis;
 
 import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
 import com.prolog.framework.microservice.annotation.EnablePrologService;
-
-import java.nio.charset.StandardCharsets;
-
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +13,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
+
+import java.nio.charset.StandardCharsets;
 
 @SpringBootApplication()
 @EnableTransactionManagement

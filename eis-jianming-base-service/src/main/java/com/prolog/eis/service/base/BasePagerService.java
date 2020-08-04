@@ -1,8 +1,8 @@
 package com.prolog.eis.service.base;
 
-import java.util.List;
-
 import com.prolog.eis.dto.base.DataEntity;
+
+import java.util.List;
 
 public interface BasePagerService {
 	

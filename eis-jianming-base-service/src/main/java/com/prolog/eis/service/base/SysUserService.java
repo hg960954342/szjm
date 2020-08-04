@@ -1,12 +1,12 @@
 package com.prolog.eis.service.base;
 
-import java.util.List;
-
 import com.prolog.eis.dto.base.SysUserRespDto;
 import com.prolog.eis.dto.base.UserLoginRespDto;
 import com.prolog.eis.dto.base.UserPwdReqDto;
 import com.prolog.eis.model.base.SysUser;
 import com.prolog.eis.model.base.UserPicture;
+
+import java.util.List;
 
 public interface SysUserService {
 

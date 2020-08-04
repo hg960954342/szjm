@@ -1,14 +1,13 @@
 package com.prolog.eis.dao;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-
 import com.prolog.eis.dto.eis.SxStoreDto;
 import com.prolog.eis.dto.eis.YiWeiCountDto;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.framework.dao.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 

@@ -1,22 +1,8 @@
 package com.prolog.eis.controller;
 
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.prolog.eis.service.MCSLineService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.PrologApiJsonHelper;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
 
 @RestController
 @Api(tags = "输送线体和设备相关的接口")

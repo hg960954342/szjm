@@ -1,9 +1,9 @@
 package com.prolog.eis.service.store;
 
-import java.util.List;
-
 import com.prolog.eis.dto.sxk.StoreLocationGroupDto;
 import com.prolog.eis.model.sxk.SxStoreLocation;
+
+import java.util.List;
 
 public interface StoreLocationService {
 

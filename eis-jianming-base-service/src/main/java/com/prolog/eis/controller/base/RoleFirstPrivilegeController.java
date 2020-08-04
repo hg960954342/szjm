@@ -1,14 +1,5 @@
 package com.prolog.eis.controller.base;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.prolog.eis.dto.base.BasePagerDto;
 import com.prolog.eis.dto.base.DataEntity;
 import com.prolog.eis.dto.base.DataEntityCollectionDto;
@@ -17,9 +8,16 @@ import com.prolog.eis.service.base.BasePagerService;
 import com.prolog.eis.service.base.RoleFirstPrivilegeService;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.framework.common.message.RestMessage;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Api(tags = "权限服务")

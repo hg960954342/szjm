@@ -1,32 +1,22 @@
 package com.prolog.eis.service.base.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-import com.prolog.eis.dao.base.BaseSortIndexMapper;
-import com.prolog.eis.dao.base.FirstPrivilegeMapper;
-import com.prolog.eis.dao.base.RoleFirstPrivilegeMapper;
-import com.prolog.eis.dao.base.RoleSecondPrivilegeMapper;
-import com.prolog.eis.dao.base.SecondPrivilegeMapper;
-import com.prolog.eis.dao.base.UserFavouriteMapper;
-import com.prolog.eis.model.base.FirstPrivilege;
-import com.prolog.eis.model.base.RoleFirstPrivilege;
-import com.prolog.eis.model.base.RoleSecondPrivilege;
-import com.prolog.eis.model.base.SecondPrivilege;
-import com.prolog.eis.model.base.UserFavourite;
+import com.prolog.eis.dao.base.*;
+import com.prolog.eis.model.base.*;
 import com.prolog.eis.service.base.FirstPrivilegeService;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Order;
 import com.prolog.framework.core.restriction.Restrictions;
 import com.prolog.framework.utils.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class FirstPrivilegeServiceImpl implements FirstPrivilegeService {

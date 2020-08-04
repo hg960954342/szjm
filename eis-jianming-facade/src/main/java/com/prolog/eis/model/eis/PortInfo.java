@@ -3,11 +3,8 @@ package com.prolog.eis.model.eis;
 import com.prolog.framework.core.annotation.AutoKey;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
-import com.prolog.framework.core.annotation.Ignore;
 import com.prolog.framework.core.annotation.Table;
-
 import io.swagger.annotations.ApiModelProperty;
-import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 
 @Table("port_info")
 public class PortInfo {

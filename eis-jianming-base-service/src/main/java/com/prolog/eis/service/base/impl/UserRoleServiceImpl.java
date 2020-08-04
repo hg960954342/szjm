@@ -1,30 +1,20 @@
 package com.prolog.eis.service.base.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.prolog.eis.dao.base.*;
+import com.prolog.eis.dto.base.AllPrivilegeRespDto;
+import com.prolog.eis.dto.base.SecondPrivilegeDto;
+import com.prolog.eis.model.base.*;
+import com.prolog.eis.service.base.UserRoleService;
+import com.prolog.framework.core.restriction.Criteria;
+import com.prolog.framework.core.restriction.Order;
+import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.prolog.eis.dao.base.BaseSortIndexMapper;
-import com.prolog.eis.dao.base.RoleFirstPrivilegeMapper;
-import com.prolog.eis.dao.base.RoleSecondPrivilegeMapper;
-import com.prolog.eis.dao.base.SysUserMapper;
-import com.prolog.eis.dao.base.UserRoleMapper;
-import com.prolog.eis.dto.base.AllPrivilegeRespDto;
-import com.prolog.eis.dto.base.SecondPrivilegeDto;
-import com.prolog.eis.model.base.FirstPrivilege;
-import com.prolog.eis.model.base.RoleFirstPrivilege;
-import com.prolog.eis.model.base.RoleSecondPrivilege;
-import com.prolog.eis.model.base.SecondPrivilege;
-import com.prolog.eis.model.base.SysUser;
-import com.prolog.eis.model.base.UserRole;
-import com.prolog.eis.service.base.UserRoleService;
-import com.prolog.framework.core.restriction.Criteria;
-import com.prolog.framework.core.restriction.Order;
-import com.prolog.framework.utils.MapUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserRoleServiceImpl implements UserRoleService{

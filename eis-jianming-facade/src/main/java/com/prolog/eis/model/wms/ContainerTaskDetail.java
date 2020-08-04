@@ -1,10 +1,12 @@
 package com.prolog.eis.model.wms;
 
 import com.prolog.framework.core.annotation.Column;
+import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.sql.Date;
 
+@Table("outbound_task_detail")
 public class ContainerTaskDetail {
 
 

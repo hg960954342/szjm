@@ -1,16 +1,5 @@
 package com.prolog.eis.service.base.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import com.prolog.eis.dao.base.SysUserMapper;
 import com.prolog.eis.dao.base.UserPictureMapper;
 import com.prolog.eis.dto.base.AllPrivilegeRespDto;
@@ -26,6 +15,16 @@ import com.prolog.eis.service.base.UserRoleService;
 import com.prolog.eis.util.PrologDateUtils;
 import com.prolog.eis.util.PrologMd5Util;
 import com.prolog.framework.utils.MapUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {

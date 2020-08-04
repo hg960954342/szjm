@@ -1,10 +1,10 @@
 package com.prolog.eis.dao.base;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
+
+import java.util.List;
 
 public interface BatchSqlMapper {
 

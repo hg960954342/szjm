@@ -1,17 +1,11 @@
 package com.prolog.eis.dao.baseinfo;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-
 import com.prolog.eis.dto.eis.PortInfoDto;
-import com.prolog.eis.dto.eis.PortTaskCount;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.framework.dao.mapper.BaseMapper;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 public interface PortInfoMapper extends BaseMapper<PortInfo>{
 

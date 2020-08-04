@@ -1,12 +1,11 @@
 package com.prolog.eis.model.gcs;
 
-import java.util.Date;
-
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 @Table("gcs_task")
 public class GcsTask {

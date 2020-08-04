@@ -1,8 +1,8 @@
 package com.prolog.eis.vo;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 public class SxHoisterConfigVo {
 

@@ -1,10 +1,9 @@
 package com.prolog.eis.dao.base;
 
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
-
 import com.prolog.eis.model.base.EisClientConfig;
 import com.prolog.framework.dao.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 public interface EisClientConfigMapper extends BaseMapper<EisClientConfig>{
 

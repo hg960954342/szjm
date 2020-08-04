@@ -1,14 +1,13 @@
 package com.prolog.eis.service.base.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.prolog.eis.dao.base.BaseSortIndexMapper;
 import com.prolog.eis.model.base.BaseTreeModel;
 import com.prolog.eis.service.base.BaseTreeService;
 import com.prolog.eis.service.base.UserDeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserDeptServiceImpl implements UserDeptService{

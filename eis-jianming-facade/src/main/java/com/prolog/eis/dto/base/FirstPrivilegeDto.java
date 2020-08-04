@@ -1,8 +1,8 @@
 package com.prolog.eis.dto.base;
 
-import java.util.Map;
-
 import com.prolog.eis.model.base.FirstPrivilege;
+
+import java.util.Map;
 
 public class FirstPrivilegeDto extends FirstPrivilege{
 	private Map<String,Object> data;

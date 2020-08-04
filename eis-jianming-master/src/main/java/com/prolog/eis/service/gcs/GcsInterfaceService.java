@@ -1,11 +1,11 @@
 package com.prolog.eis.service.gcs;
 
-import java.util.List;
-
 import com.prolog.eis.dto.gcs.GcsAlarmReqDto;
 import com.prolog.eis.dto.gcs.GcsOrderReportReqDto;
 import com.prolog.eis.model.caracross.SxCarAcrossTask;
 import com.prolog.eis.model.gcs.GcsTask;
+
+import java.util.List;
 
 public interface GcsInterfaceService {
 

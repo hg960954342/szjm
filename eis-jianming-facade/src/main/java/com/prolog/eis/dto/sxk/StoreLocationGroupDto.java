@@ -1,8 +1,8 @@
 package com.prolog.eis.dto.sxk;
 
-import java.util.List;
-
 import com.prolog.eis.model.sxk.SxStoreLocation;
+
+import java.util.List;
 
 public class StoreLocationGroupDto {
 
