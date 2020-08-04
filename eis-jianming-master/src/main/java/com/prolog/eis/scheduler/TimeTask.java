@@ -4,6 +4,7 @@ import com.prolog.eis.dto.rcs.RcsRequestResultDto;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.service.OutBoundTaskService;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
@@ -22,7 +23,8 @@ public class TimeTask {
     @Autowired
 	InBoundTaskService inBoundTaskService;
 
-
+	@Autowired
+	OutBoundTaskService outBoundTaskService;
 	/**
 	 * 定时处理入库任务
 	 * @throws Exception
@@ -31,6 +33,22 @@ public class TimeTask {
 	public void buildCkTask() throws Exception  {
 		inBoundTaskService.inboundTask();
 	}
+
+
+
+	/**
+	 * 定时出库任务
+	 * @throws Exception
+	 */
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	public void buildUnTask() throws Exception  {
+		outBoundTaskService.unboundTask();
+
+	}
+
+
+
+
 
 	/*@Scheduled(initialDelay = 3000, fixedDelay = 8000)
 	public void sendWcsTask() throws Exception {
