@@ -1,14 +1,5 @@
 package com.prolog.eis.service.base.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.prolog.eis.dao.base.RoleFirstPrivilegeMapper;
 import com.prolog.eis.dao.base.RoleSecondPrivilegeMapper;
 import com.prolog.eis.dao.base.SecondPrivilegeMapper;
@@ -20,6 +11,14 @@ import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
 import com.prolog.framework.utils.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class RoleFirstPrivilegeServiceImpl implements RoleFirstPrivilegeService {

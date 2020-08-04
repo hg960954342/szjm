@@ -15,7 +15,7 @@ public class ContainerTask {
     @AutoKey(type = AutoKey.TYPE_IDENTITY)
     private int id;
 
-    @Column("command_code")
+    @Column("container_code")
     @ApiModelProperty("托盘号")
     private int containerCode;
 
@@ -225,5 +225,29 @@ public class ContainerTask {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ContainerTask{" +
+                "id=" + id +
+                ", containerCode=" + containerCode +
+                ", taskType=" + taskType +
+                ", source='" + source + '\'' +
+                ", sourceType='" + sourceType + '\'' +
+                ", target='" + target + '\'' +
+                ", targetType='" + targetType + '\'' +
+                ", taskState='" + taskState + '\'' +
+                ", taskCode='" + taskCode + '\'' +
+                ", itemId='" + itemId + '\'' +
+                ", lotId='" + lotId + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", qty=" + qty +
+                ", createTime=" + createTime +
+                ", sendTime=" + sendTime +
+                ", startTime=" + startTime +
+                ", moveTime=" + moveTime +
+                ", endTime=" + endTime +
+                '}';
     }
 }

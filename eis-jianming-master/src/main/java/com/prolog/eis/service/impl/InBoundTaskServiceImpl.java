@@ -5,16 +5,16 @@ import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.dao.InBoundTaskMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.dto.base.Coordinate;
-import com.prolog.eis.model.eis.*;
-import com.prolog.eis.model.eis.enums.TastState;
+import com.prolog.eis.model.eis.PortInfo;
+import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
 import org.springframework.beans.BeanUtils;
-import  org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -43,10 +43,9 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
         for (int i = 0; i < list.size(); i++) {
 
             InboundTask task = list.get(i);
-            Integer empty_container = task.getEmptyContainer();
 
 
-                String agvLoc=task.getAgvLoc();
+                String agvLoc=task.getAgvloc();
                 Coordinate CoordinateAgv=PrologCoordinateUtils.analysis(agvLoc);
                  //暂时定入库任务状态开始为0
 

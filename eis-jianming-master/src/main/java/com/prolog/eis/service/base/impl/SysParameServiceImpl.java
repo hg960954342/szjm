@@ -1,5 +1,7 @@
 package com.prolog.eis.service.base.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +16,20 @@ public class SysParameServiceImpl implements SysParameService {
 	private SysParameMapper sysParameMapper;
 	
 	@Override
-	public int getLayerReserveCount(int layer) {
+	public int getLayerReserveCount(List<Integer> layers) {
 		
-		String key = String.format("LAYER%s_RESERVE_COUNT", layer);
-		SysParame sysParame = sysParameMapper.findById(key, SysParame.class);
-		if(null == sysParame) {
-			return 10;
-		}else {
-			return Integer.valueOf(sysParame.getParameValue());
-		} 
+		int reserveCount = 0;
+		for (Integer layer : layers) {
+			String key = String.format("LAYER%s_RESERVE_COUNT", layer);
+			SysParame sysParame = sysParameMapper.findById(key, SysParame.class);
+			if(null == sysParame) {
+				reserveCount += 10;
+			}else {
+				int tem = Integer.valueOf(sysParame.getParameValue());
+				reserveCount += tem;
+			} 
+		}
+		
+		return reserveCount;
 	}
 }

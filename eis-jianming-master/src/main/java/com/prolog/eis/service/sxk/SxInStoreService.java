@@ -1,9 +1,9 @@
 package com.prolog.eis.service.sxk;
 
-import java.util.List;
-
 import com.prolog.eis.dto.sxk.AllInStoreLocationLayersDto;
 import com.prolog.eis.dto.sxk.AreaSortDto;
+
+import java.util.List;
 
 public interface SxInStoreService {
 

@@ -1,16 +1,10 @@
 package com.prolog.eis.dao.sxk;
 
-import java.util.List;
-
+import com.prolog.eis.dto.sxk.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import com.prolog.eis.dto.sxk.AllInStoreHoisterTaskCountDto;
-import com.prolog.eis.dto.sxk.AllInStoreInTaskCountDto;
-import com.prolog.eis.dto.sxk.AllInStoreLocationLayersDto;
-import com.prolog.eis.dto.sxk.AllInStoreOutTaskCountDto;
-import com.prolog.eis.dto.sxk.AllInStorePropertyCountDto;
-import com.prolog.eis.dto.sxk.InStoreLocationGroupDto;
+import java.util.List;
 
 public interface InStoreMapper {
 

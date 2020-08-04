@@ -2,14 +2,15 @@ package com.prolog.eis.scheduler;
 
 import com.prolog.eis.dto.rcs.RcsRequestResultDto;
 import com.prolog.eis.model.wms.ContainerTask;
-import com.prolog.eis.service.ContainerTaskService;
-import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.model.wms.RepeatReport;
+import com.prolog.eis.service.*;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +23,8 @@ public class TimeTask {
     @Autowired
 	InBoundTaskService inBoundTaskService;
 
-
+	@Autowired
+	OutBoundTaskService outBoundTaskService;
 	/**
 	 * 定时处理入库任务
 	 * @throws Exception
@@ -31,6 +33,22 @@ public class TimeTask {
 	public void buildCkTask() throws Exception  {
 		inBoundTaskService.inboundTask();
 	}
+
+
+
+	/**
+	 * 定时出库任务
+	 * @throws Exception
+	 */
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	public void buildUnTask() throws Exception  {
+		outBoundTaskService.unboundTask();
+
+	}
+
+
+
+
 
 	/*@Scheduled(initialDelay = 3000, fixedDelay = 8000)
 	public void sendWcsTask() throws Exception {
@@ -70,6 +88,11 @@ public class TimeTask {
 	@Autowired
 	private RcsRequestService rcsRequestService;
 
+	@Autowired
+	private RepeatReportService repeatReportService;
+	@Autowired
+	private EisCallbackService eisCallbackService;
+
 	//定时给agv小车下分任务
 	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
 	public void sendTask2Rcs() throws Exception {
@@ -79,6 +102,17 @@ public class TimeTask {
 		}
 	}
 
+	/**
+	 * 回告wms未成功 重复回告
+	 * @throws Exception
+	 */
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	public void resendReport()throws Exception{
+		List<RepeatReport> repeatReports = repeatReportService.findByState(0);
+		for (RepeatReport repeatReport : repeatReports) {
+			eisCallbackService.recall(repeatReport);
+		}
+	}
 	private void sendTask(List<ContainerTask> containerTasks) throws Exception {
 		for (ContainerTask containerTask : containerTasks) {
 			//获取参数
@@ -97,23 +131,20 @@ public class TimeTask {
 				map.put("target", target);
 
 				try {
-					//添加任务下发前日志
+					/*//添加任务下发前日志
 					String data = PrologApiJsonHelper.toJson(map);
-					FileLogHelper.WriteLog("sendTask2Rcs", "EIS->RCS任务：" + data);
+					FileLogHelper.WriteLog("sendTask2Rcs", "EIS->RCS任务：" + data);*/
 
 					RcsRequestResultDto rcsRequestResultDto = null;
 					//获取任务终点，判断小车任务模板
 					int targetType = Integer.parseInt(containerTask.getTargetType());
 					if (targetType == 1) {//目标地点位为 agv区域
 						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "01", "3");
-
 					} else {//目的地点位 为输送线
 						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "01", "3");
 					}
 
-					String restJson = PrologApiJsonHelper.toJson(rcsRequestResultDto);
-					//添加日志文件
-					FileLogHelper.WriteLog("sendTask2Rcs", "EIS->RCS返回：" + restJson);
+					/*String restJson = PrologApiJsonHelper.toJson(rcsRequestResultDto);*/
 					String restCode = rcsRequestResultDto.getCode();
 
 					if (restCode.equals("0")) {
@@ -122,15 +153,21 @@ public class TimeTask {
 						//更新任务状态
 						containerTask.setTaskType(2);//已发送给下游设备
 						containerTaskService.update(containerTask);
-					}else {
+					}/*else {
 						//agv接收失败
-						FileLogHelper.WriteLog("sendToRcsErr","EIS->RCS错误："+restJson);
+						String resultMsg = "EIS->RCS [RCSInterface] 返回JSON：[message]:" + restJson;
+						FileLogHelper.WriteLog("RCSRequestErr",resultMsg);
 
-					}
+					}*/
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
 	}
+
+
+
+
+
 }

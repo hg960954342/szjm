@@ -1,10 +1,12 @@
 package com.prolog.eis.model.wms;
 
 import com.prolog.framework.core.annotation.Column;
+import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.sql.Date;
 
+@Table("outbound_task_detail")
 public class ContainerTaskDetail {
 
 
@@ -16,7 +18,7 @@ public class ContainerTaskDetail {
 
     @Column("container_code")
     @ApiModelProperty("托盘编号")
-    private String  containeCode ;
+    private String  containerCode ;
 
 
     @Column("bill_no")
@@ -62,12 +64,12 @@ public class ContainerTaskDetail {
     }
 
 
-    public String getContaineCode() {
-        return containeCode;
+    public String getContainerCode() {
+        return containerCode;
     }
 
-    public void setContaineCode(String containeCode) {
-        this.containeCode = containeCode;
+    public void setContainerCode(String containerCode) {
+        this.containerCode = containerCode;
     }
 
     public String getBillNo() {

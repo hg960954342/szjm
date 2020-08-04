@@ -76,4 +76,6 @@ public class OutboundTaskDetail {
     @Column("end_time")
     @ApiModelProperty("结束时间")
     private Date endTime;
+
+
 }

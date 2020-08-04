@@ -5,7 +5,9 @@ import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.service.AgvStorageLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AgvStorageLocationServiceImpl implements AgvStorageLocationService {
     @Autowired
     private AgvStorageLocationMapper agvStorageLocationMapper;

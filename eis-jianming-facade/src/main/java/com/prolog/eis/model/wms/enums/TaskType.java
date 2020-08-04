@@ -4,15 +4,49 @@ package com.prolog.eis.model.wms.enums;
 /**
  * 任务类型
  */
-public  class TaskType {
+public interface TaskType {
 
-  static  enum IN
+
+
+
+
+      enum IN
   {
+
+
+
 
   };
-  static enum OUT
+
+
+
+
+    enum OUT
   {
 
+
+     orderBound(1);
+
+
+
+
+
+
+
+     private int bound;
+
+    public int getBound() {
+      return bound;
+    }
+
+    public void setBound(int bound) {
+      this.bound = bound;
+    }
+
+
+    OUT(int bound) {
+      this.bound = bound;
+    }
   }
 
 

@@ -1,12 +1,11 @@
 package com.prolog.eis.model.sxk;
 
-import java.util.Date;
-
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 @Table("SX_STORE")
 public class SxStore {
@@ -112,6 +111,22 @@ public class SxStore {
 	@ApiModelProperty("重量")
 	private Double weight;		//重量
 	
+	@Column("item_id")
+	@ApiModelProperty("WMS商品编码")
+	private String itemId;
+	
+	@Column("lot_id")
+	@ApiModelProperty("wms批号")
+	private String lotId;
+	
+	@Column("owner_id")
+	@ApiModelProperty("wms批号")
+	private String ownerId;
+	
+	@Column("qty")
+	@ApiModelProperty("数量")
+	private float qty;
+	
 	@Column("station_id")
 	@ApiModelProperty("站台Id")
 	private Integer stationId;	//站台Id
@@ -119,14 +134,6 @@ public class SxStore {
 	@Column("container_state")
 	@ApiModelProperty("容器状态 1，合格 2不合格")
 	private int containerState;
-
-	public int getContainerState() {
-		return containerState;
-	}
-
-	public void setContainerState(int containerState) {
-		this.containerState = containerState;
-	}
 
 	public int getId() {
 		return id;
@@ -296,32 +303,102 @@ public class SxStore {
 		this.createTime = createTime;
 	}
 
-	/**
-	 * @return the weight
-	 */
 	public Double getWeight() {
 		return weight;
 	}
 
-	/**
-	 * @param weight the weight to set
-	 */
 	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
 
-	/**
-	 * @return the stationId
-	 */
+	public String getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
+
+	public String getLotId() {
+		return lotId;
+	}
+
+	public void setLotId(String lotId) {
+		this.lotId = lotId;
+	}
+
+	public String getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	public float getQty() {
+		return qty;
+	}
+
+	public void setQty(float qty) {
+		this.qty = qty;
+	}
+
 	public Integer getStationId() {
 		return stationId;
 	}
 
-	/**
-	 * @param stationId the stationId to set
-	 */
 	public void setStationId(Integer stationId) {
 		this.stationId = stationId;
+	}
+
+	public int getContainerState() {
+		return containerState;
+	}
+
+	public void setContainerState(int containerState) {
+		this.containerState = containerState;
+	}
+
+	public SxStore(int id, String containerNo, String containerSubNo, Integer storeLocationId, int sxStoreType,
+			int taskType, String taskProperty1, String taskProperty2, String businessProperty1,
+			String businessProperty2, String businessProperty3, String businessProperty4, String businessProperty5,
+			int storeState, Date inStoreTime, String hoisterNo, String carNo, String taskId, Integer emptyPalletCount,
+			Integer sourceLocationId, Date createTime, Double weight, String itemId, String lotId, String ownerId,
+			float qty, Integer stationId, int containerState) {
+		super();
+		this.id = id;
+		this.containerNo = containerNo;
+		this.containerSubNo = containerSubNo;
+		this.storeLocationId = storeLocationId;
+		this.sxStoreType = sxStoreType;
+		this.taskType = taskType;
+		this.taskProperty1 = taskProperty1;
+		this.taskProperty2 = taskProperty2;
+		this.businessProperty1 = businessProperty1;
+		this.businessProperty2 = businessProperty2;
+		this.businessProperty3 = businessProperty3;
+		this.businessProperty4 = businessProperty4;
+		this.businessProperty5 = businessProperty5;
+		this.storeState = storeState;
+		this.inStoreTime = inStoreTime;
+		this.hoisterNo = hoisterNo;
+		this.carNo = carNo;
+		this.taskId = taskId;
+		this.emptyPalletCount = emptyPalletCount;
+		this.sourceLocationId = sourceLocationId;
+		this.createTime = createTime;
+		this.weight = weight;
+		this.itemId = itemId;
+		this.lotId = lotId;
+		this.ownerId = ownerId;
+		this.qty = qty;
+		this.stationId = stationId;
+		this.containerState = containerState;
+	}
+
+	public SxStore() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -335,12 +412,17 @@ public class SxStore {
 		result = prime * result + ((businessProperty5 == null) ? 0 : businessProperty5.hashCode());
 		result = prime * result + ((carNo == null) ? 0 : carNo.hashCode());
 		result = prime * result + ((containerNo == null) ? 0 : containerNo.hashCode());
+		result = prime * result + containerState;
 		result = prime * result + ((containerSubNo == null) ? 0 : containerSubNo.hashCode());
 		result = prime * result + ((createTime == null) ? 0 : createTime.hashCode());
 		result = prime * result + ((emptyPalletCount == null) ? 0 : emptyPalletCount.hashCode());
 		result = prime * result + ((hoisterNo == null) ? 0 : hoisterNo.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((inStoreTime == null) ? 0 : inStoreTime.hashCode());
+		result = prime * result + ((itemId == null) ? 0 : itemId.hashCode());
+		result = prime * result + ((lotId == null) ? 0 : lotId.hashCode());
+		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
+		result = prime * result + Float.floatToIntBits(qty);
 		result = prime * result + ((sourceLocationId == null) ? 0 : sourceLocationId.hashCode());
 		result = prime * result + ((stationId == null) ? 0 : stationId.hashCode());
 		result = prime * result + ((storeLocationId == null) ? 0 : storeLocationId.hashCode());
@@ -398,6 +480,8 @@ public class SxStore {
 				return false;
 		} else if (!containerNo.equals(other.containerNo))
 			return false;
+		if (containerState != other.containerState)
+			return false;
 		if (containerSubNo == null) {
 			if (other.containerSubNo != null)
 				return false;
@@ -424,6 +508,23 @@ public class SxStore {
 			if (other.inStoreTime != null)
 				return false;
 		} else if (!inStoreTime.equals(other.inStoreTime))
+			return false;
+		if (itemId == null) {
+			if (other.itemId != null)
+				return false;
+		} else if (!itemId.equals(other.itemId))
+			return false;
+		if (lotId == null) {
+			if (other.lotId != null)
+				return false;
+		} else if (!lotId.equals(other.lotId))
+			return false;
+		if (ownerId == null) {
+			if (other.ownerId != null)
+				return false;
+		} else if (!ownerId.equals(other.ownerId))
+			return false;
+		if (Float.floatToIntBits(qty) != Float.floatToIntBits(other.qty))
 			return false;
 		if (sourceLocationId == null) {
 			if (other.sourceLocationId != null)
@@ -467,54 +568,5 @@ public class SxStore {
 		} else if (!weight.equals(other.weight))
 			return false;
 		return true;
-	}
-
-	public SxStore(int id, String containerNo, String containerSubNo, Integer storeLocationId, int sxStoreType,
-			int taskType, String taskProperty1, String taskProperty2, String businessProperty1,
-			String businessProperty2, String businessProperty3, String businessProperty4, String businessProperty5,
-			int storeState, Date inStoreTime, String hoisterNo, String carNo, String taskId, Integer emptyPalletCount,
-			Integer sourceLocationId, Date createTime, Double weight, Integer stationId) {
-		super();
-		this.id = id;
-		this.containerNo = containerNo;
-		this.containerSubNo = containerSubNo;
-		this.storeLocationId = storeLocationId;
-		this.sxStoreType = sxStoreType;
-		this.taskType = taskType;
-		this.taskProperty1 = taskProperty1;
-		this.taskProperty2 = taskProperty2;
-		this.businessProperty1 = businessProperty1;
-		this.businessProperty2 = businessProperty2;
-		this.businessProperty3 = businessProperty3;
-		this.businessProperty4 = businessProperty4;
-		this.businessProperty5 = businessProperty5;
-		this.storeState = storeState;
-		this.inStoreTime = inStoreTime;
-		this.hoisterNo = hoisterNo;
-		this.carNo = carNo;
-		this.taskId = taskId;
-		this.emptyPalletCount = emptyPalletCount;
-		this.sourceLocationId = sourceLocationId;
-		this.createTime = createTime;
-		this.weight = weight;
-		this.stationId = stationId;
-	}
-
-	public SxStore() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public String toString() {
-		return "SxStore [id=" + id + ", containerNo=" + containerNo + ", containerSubNo=" + containerSubNo
-				+ ", storeLocationId=" + storeLocationId + ", sxStoreType=" + sxStoreType + ", taskType=" + taskType
-				+ ", taskProperty1=" + taskProperty1 + ", taskProperty2=" + taskProperty2 + ", businessProperty1="
-				+ businessProperty1 + ", businessProperty2=" + businessProperty2 + ", businessProperty3="
-				+ businessProperty3 + ", businessProperty4=" + businessProperty4 + ", businessProperty5="
-				+ businessProperty5 + ", storeState=" + storeState + ", inStoreTime=" + inStoreTime + ", hoisterNo="
-				+ hoisterNo + ", carNo=" + carNo + ", taskId=" + taskId + ", emptyPalletCount=" + emptyPalletCount
-				+ ", sourceLocationId=" + sourceLocationId + ", createTime=" + createTime + ", weight=" + weight
-				+ ", stationId=" + stationId + "]";
 	}
 }

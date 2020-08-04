@@ -3,7 +3,6 @@ package com.prolog.eis.model.eis;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
-
 import io.swagger.annotations.ApiModelProperty;
 
 @Table("device_junction_port")

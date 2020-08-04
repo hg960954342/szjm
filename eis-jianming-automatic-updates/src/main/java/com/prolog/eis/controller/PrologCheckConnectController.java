@@ -1,14 +1,12 @@
 package com.prolog.eis.controller;
 
+import com.prolog.framework.common.message.RestMessage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.prolog.framework.common.message.RestMessage;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 @Controller
 @Api(tags = "工具类，检查连接是否通畅")

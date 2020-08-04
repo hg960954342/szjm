@@ -1,14 +1,13 @@
 package com.prolog.eis.service.base.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.prolog.eis.dao.base.BatchSqlMapper;
+import com.prolog.eis.service.base.BatchSqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prolog.eis.dao.base.BatchSqlMapper;
-import com.prolog.eis.service.base.BatchSqlService;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BatchSqlServiceImpl implements BatchSqlService {

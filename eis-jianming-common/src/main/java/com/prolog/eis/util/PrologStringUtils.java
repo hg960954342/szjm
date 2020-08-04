@@ -1,15 +1,14 @@
 package com.prolog.eis.util;
 
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.UUID;
-
-import org.apache.commons.lang.StringEscapeUtils;
-
-import net.sf.json.JSONObject;
 
 public class PrologStringUtils {
 

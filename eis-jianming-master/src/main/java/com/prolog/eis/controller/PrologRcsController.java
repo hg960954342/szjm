@@ -1,22 +1,19 @@
 package com.prolog.eis.controller;
 
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.prolog.eis.service.rcs.AgvCallbackService;
+import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.util.PrologApiJsonHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prolog.eis.service.rcs.AgvCallbackService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.PrologApiJsonHelper;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 
 @RestController
 @Api(tags = "海康rcs接口")

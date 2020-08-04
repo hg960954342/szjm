@@ -1,5 +1,7 @@
 package com.prolog.eis.service.base;
 
+import java.util.List;
+
 public interface SysParameService {
 
 	/**
@@ -7,5 +9,5 @@ public interface SysParameService {
 	 * @param layer
 	 * @return
 	 */
-	int getLayerReserveCount(int layer);
+	int getLayerReserveCount(List<Integer> layer);
 }

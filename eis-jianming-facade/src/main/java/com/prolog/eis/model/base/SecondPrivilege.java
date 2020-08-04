@@ -1,8 +1,8 @@
 package com.prolog.eis.model.base;
+
 import com.prolog.framework.core.annotation.AutoKey;
 import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
-
 import io.swagger.annotations.ApiModelProperty;
 
 @Table("SECONDPRIVILEGE")

@@ -1,8 +1,8 @@
 package com.prolog.eis.service.config;
 
-import java.util.List;
-
 import com.prolog.eis.model.config.CangCodeConfig;
+
+import java.util.List;
 
 public interface CangCodeConfigService {
 

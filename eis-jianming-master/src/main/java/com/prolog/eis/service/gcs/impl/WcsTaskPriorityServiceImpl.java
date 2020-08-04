@@ -1,9 +1,14 @@
 package com.prolog.eis.service.gcs.impl;
 
+import com.prolog.eis.service.gcs.WcsTaskPriorityService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WcsTaskPriorityServiceImpl {
+public class WcsTaskPriorityServiceImpl implements WcsTaskPriorityService {
+    @Override
+    public void sendWcsTask() {
+
+    }
 
 	/*@Autowired
 	private SxPathPlanningTaskMxMapper sxPathPlanningTaskMxMapper;

@@ -1,20 +1,20 @@
 package com.prolog.eis;
 
 
+import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
+import com.prolog.framework.microservice.annotation.EnablePrologService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-//import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-//import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
-import com.prolog.framework.microservice.annotation.EnablePrologService;
+//import org.springframework.scheduling.TaskScheduler;
+//import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @SpringBootApplication()
 @EnableTransactionManagement
