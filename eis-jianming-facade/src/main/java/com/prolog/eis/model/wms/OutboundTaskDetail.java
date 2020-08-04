@@ -1,5 +1,6 @@
 package com.prolog.eis.model.wms;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,43 +22,52 @@ public class OutboundTaskDetail {
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    private String billno;
+    @JsonProperty("billno")
+    private String billNo;
 
     @Column("seqno")
     @ApiModelProperty("明细行号")
-    private String seqno;
+    @JsonProperty("seqno")
+    private String seqNo;
 
     @Column("ctreq")
     @ApiModelProperty("是否指定托盘 0不指定 1指定")
-    private int ctreq;
+    @JsonProperty("ctreq")
+    private int ctReq;
 
     @Column("container_code")
     @ApiModelProperty("母托盘编号")
-    private int containercode;
+    @JsonProperty("containercode")
+    private int containerCode;
 
     @Column("ownerid")
     @ApiModelProperty("wms业主")
-    private String ownerid;
+    @JsonProperty("ownerid")
+    private String ownerId;
 
     @Column("item_id")
     @ApiModelProperty("wms商品id")
-    private String itemid;
+    @JsonProperty("itemid")
+    private String itemId;
 
     @Column("lot_id")
     @ApiModelProperty("wms批号")
-    private String lotid;
+    @JsonProperty("lotid")
+    private String lotId;
 
     @Column("qty")
     @ApiModelProperty("数量（重量）")
+    @JsonProperty("qty")
     private float qty;
 
     @Column("finish_qty")
     @ApiModelProperty("完成数量（重量）")
-    private float finishqty;
+    private float finishQty;
 
     @Column("pick_code")
     @ApiModelProperty("拣选站  指定拣选站  暂时移库出库用到")
-    private String pickcode;
+    @JsonProperty("pickcode")
+    private String pickCode;
 
     @Column("create_time")
     @ApiModelProperty("创建时间")
