@@ -1,23 +1,17 @@
 package com.prolog.eis.model.wms;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Wms_Eis_Idempotent {
+public class OutboundTaskDto {
 
-
-    private String messageId;
-
-
-    private Date locDate;
-
-
-    private String rejson;
+    private List<OutboundTask> data;
+    private int size;
+    private String messageID;
 }

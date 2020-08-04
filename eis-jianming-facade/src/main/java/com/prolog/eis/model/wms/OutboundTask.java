@@ -8,12 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
-@Table("inbound_task")
+@Table("outbound_task")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InboundTask {
+public class OutboundTask {
 
     @Column("id")
     @ApiModelProperty("主键")
@@ -35,57 +36,36 @@ public class InboundTask {
     @ApiModelProperty("0任务托  1空托")
     private int emptycontainer;
 
-    @Column("container_code")
-    @ApiModelProperty("母托盘编号")
-    private String containercode;
-
     @Column("task_type")
     @ApiModelProperty("任务托暂未定   空托的情况 0空托垛入库  1空托碟")
     private int tasktype;
 
-    @Column("item_id")
-    @ApiModelProperty("wms商品id")
-    private String itemid;
+    @Column("sfreq")
+    @ApiModelProperty("站点要求 0 无   1有")
+    private int sfreq;
 
-    @Column("qty")
-    @ApiModelProperty("数量（重量）")
     private float qty;
 
-    @Column("lot_id")
-    @ApiModelProperty("wms批号")
-    private String lotid;
-
-    @Column("ceng")
-    @ApiModelProperty("入库楼层")
-    private String ceng;
-
-    @Column("agv_loc")
-    @ApiModelProperty("Agv搬运点")
-    private String agvloc;
+    @Column("pick_code")
+    @ApiModelProperty("拣选站")
+    private String pickcode;
 
     @Column("ownerid")
     @ApiModelProperty("wms业主")
     private String ownerid;
 
-    @Column("task_state")
-    @ApiModelProperty("0 创建 1开始 3扫码入库 4完成")
-    private int taskState;
+
+    private List<OutboundTaskDetail> details;
 
     @Column("create_time")
     @ApiModelProperty("创建时间")
     private Date createTime;
 
-    @Column("start_time")
-    @ApiModelProperty("开始时间")
-    private Date startTime;
-
-    @Column("ruku_time")
-    @ApiModelProperty("扫码入库时间")
-    private Date rukuTime;
-
     @Column("end_time")
     @ApiModelProperty("结束时间")
     private Date endTime;
+
+
 
 
 }

@@ -1,10 +1,14 @@
 package com.prolog.eis.service;
 
-import com.prolog.eis.model.eis.ContainerTask;
+import com.prolog.eis.model.wms.ContainerTask;
 
 import java.util.List;
 
 public interface ContainerTaskService {
 
-    List<ContainerTask> selectByTaskState(String taskState, String sourceType);
+    List<ContainerTask> selectByTaskStateAndSourceType(String taskState, String sourceType);
+
+    void update(ContainerTask containerTask);
+
+    ContainerTask selectByTaskCode(String taskCode);
 }
