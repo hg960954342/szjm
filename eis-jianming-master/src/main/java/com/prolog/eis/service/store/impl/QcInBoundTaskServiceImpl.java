@@ -26,8 +26,8 @@ import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.service.base.SysParameService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.sxk.SxInStoreService;
+import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.ListHelper;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.detetionlayer.DetetionLayerHelper;
 import com.prolog.framework.utils.MapUtils;
@@ -53,8 +53,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private SxStoreLocationMapper sxStoreLocationMapper;
 	@Autowired
 	private SxStoreLocationGroupMapper sxStoreLocationGroupMapper;
-	//@Autowired
-	//private SxStoreTaskFinishService sxStoreTaskFinishService;
+	@Autowired
+	private SxStoreTaskFinishService sxStoreTaskFinishService;
 //	@Autowired
 //	private SxPathPlanningTaskService sxPathPlanningTaskService;
 //	@Autowired
@@ -210,7 +210,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	
 	private void inSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
 
-		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,portInfo.getJunctionPort());
+		Integer locationId = this.checkHuoWei(inboundTask.getOwnerid() + "and" + inboundTask.getItemid(),inboundTask.getLotid(),containerNo,sourceLayer,detection,portInfo.getJunctionPort());
 		if(null == locationId) {
 			if(portInfo.getShowLed() == 1) {
 				//this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,"貨位不足！！！");
@@ -233,8 +233,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}*/
 		sxStore.setContainerNo(containerNo);
 		sxStore.setStoreState(10);
-		sxStore.setTaskProperty1(inboundTask.getOwnerId() + "and" + inboundTask.getItemId());
-		sxStore.setTaskProperty2(inboundTask.getLotId());
+		sxStore.setTaskProperty1(inboundTask.getOwnerid() + "and" + inboundTask.getItemid());
+		sxStore.setTaskProperty2(inboundTask.getLotid());
 		//sxStore.setBusinessProperty1(wmsInboundTask.getMaterielType());
 		//sxStore.setBusinessProperty2(wmsInboundTask.getMaterielName());
 		//sxStore.setBusinessProperty3(wmsInboundTask.getFactoryCode());
@@ -242,11 +242,15 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		//库存记录高度
 		//sxStore.setBusinessProperty5(String.valueOf(detection));
 
-		/*if(inboundTask.e == 30){
+		if(inboundTask.getEmptycontainer() == 1){
 			sxStore.setTaskType(-1);//空托盘
 		}else {
-			sxStore.setTaskType(wmsInboundTask.getTaskType());//暂不知道有什么意义
-		}*/
+			sxStore.setTaskType(1);//任务托
+		}
+		sxStore.setOwnerId(inboundTask.getOwnerid());
+		sxStore.setItemId(inboundTask.getItemid());
+		sxStore.setLotId(inboundTask.getLotid());
+		sxStore.setQty(inboundTask.getQty());
 		sxStore.setWeight(weight);
 		sxStore.setCreateTime(new Date());
 		sxStore.setInStoreTime(new Date());
@@ -254,9 +258,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		sxStoreLocationMapper.updateMapById(locationId, MapUtils.put("actualWeight", weight).getMap(), SxStoreLocation.class);
 		sxStoreLocationGroupMapper.updateMapById(sxStoreLocation.getStoreLocationGroupId(),
 				MapUtils.put("ascentLockState", 1).getMap(), SxStoreLocationGroup.class);
-		//sxStoreTaskFinishService.computeLocation(sxStore);
-
-		
+		sxStoreTaskFinishService.computeLocation(sxStore);
 	}
 
 	private Integer checkHuoWei(String liaohao,String lot,String containerNo,int sourceLayer,int detection,String entryCode) throws Exception {

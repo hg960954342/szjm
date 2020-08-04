@@ -126,7 +126,7 @@ public class SxStore {
 	
 	@Column("qty")
 	@ApiModelProperty("数量")
-	private Double qty;
+	private float qty;
 	
 	@Column("station_id")
 	@ApiModelProperty("站台Id")
@@ -336,11 +336,11 @@ public class SxStore {
 		this.ownerId = ownerId;
 	}
 
-	public Double getQty() {
+	public float getQty() {
 		return qty;
 	}
 
-	public void setQty(Double qty) {
+	public void setQty(float qty) {
 		this.qty = qty;
 	}
 
@@ -365,7 +365,7 @@ public class SxStore {
 			String businessProperty2, String businessProperty3, String businessProperty4, String businessProperty5,
 			int storeState, Date inStoreTime, String hoisterNo, String carNo, String taskId, Integer emptyPalletCount,
 			Integer sourceLocationId, Date createTime, Double weight, String itemId, String lotId, String ownerId,
-			Double qty, Integer stationId, int containerState) {
+			float qty, Integer stationId, int containerState) {
 		super();
 		this.id = id;
 		this.containerNo = containerNo;
@@ -423,7 +423,7 @@ public class SxStore {
 		result = prime * result + ((itemId == null) ? 0 : itemId.hashCode());
 		result = prime * result + ((lotId == null) ? 0 : lotId.hashCode());
 		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
-		result = prime * result + ((qty == null) ? 0 : qty.hashCode());
+		result = prime * result + Float.floatToIntBits(qty);
 		result = prime * result + ((sourceLocationId == null) ? 0 : sourceLocationId.hashCode());
 		result = prime * result + ((stationId == null) ? 0 : stationId.hashCode());
 		result = prime * result + ((storeLocationId == null) ? 0 : storeLocationId.hashCode());
@@ -525,10 +525,7 @@ public class SxStore {
 				return false;
 		} else if (!ownerId.equals(other.ownerId))
 			return false;
-		if (qty == null) {
-			if (other.qty != null)
-				return false;
-		} else if (!qty.equals(other.qty))
+		if (Float.floatToIntBits(qty) != Float.floatToIntBits(other.qty))
 			return false;
 		if (sourceLocationId == null) {
 			if (other.sourceLocationId != null)
