@@ -1,8 +1,8 @@
 package com.prolog.eis.service.config;
 
-import java.util.List;
-
 import com.prolog.eis.model.config.MaterielNoConfig;
+
+import java.util.List;
 
 public interface MaterielNoConfigService {
 

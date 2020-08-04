@@ -1,14 +1,13 @@
 package com.prolog.eis.dao;
 
-import java.util.List;
-
+import com.prolog.eis.dto.eis.EmptyCaseLayerDto;
+import com.prolog.eis.model.eis.EmptyCaseConfig;
+import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
-import com.prolog.eis.dto.eis.EmptyCaseLayerDto;
-import com.prolog.eis.model.eis.EmptyCaseConfig;
-import com.prolog.framework.dao.mapper.BaseMapper;
+import java.util.List;
 
 public interface EmptyCaseConfigMapper extends BaseMapper<EmptyCaseConfig>{
 

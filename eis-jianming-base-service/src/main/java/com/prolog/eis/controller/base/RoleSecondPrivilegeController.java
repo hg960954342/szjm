@@ -1,18 +1,16 @@
 package com.prolog.eis.controller.base;
 
+import com.prolog.eis.model.base.RoleFirstPrivilege;
+import com.prolog.eis.service.base.RoleSecondPrivilegeService;
+import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.framework.common.message.RestMessage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.prolog.eis.model.base.RoleFirstPrivilege;
-import com.prolog.eis.service.base.RoleSecondPrivilegeService;
-import com.prolog.eis.util.PrologApiJsonHelper;
-import com.prolog.framework.common.message.RestMessage;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 @Api(tags="权限服务")

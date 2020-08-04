@@ -1,8 +1,8 @@
 package com.prolog.eis.model.base;
 
-import java.util.Map;
-
 import com.prolog.framework.core.annotation.Ignore;
+
+import java.util.Map;
 
 public class BaseModel {
 	

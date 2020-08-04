@@ -1,13 +1,12 @@
 package com.prolog.eis.model.eis.led;
 
-import java.util.Date;
-
 import com.prolog.framework.core.annotation.AutoKey;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 @Table("led_message")
 public class LedMessage {

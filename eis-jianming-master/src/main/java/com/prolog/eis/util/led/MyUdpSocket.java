@@ -1,9 +1,11 @@
 package com.prolog.eis.util.led;
 
-import java.io.*;
-import java.net.*;
-import java.nio.*;
-import java.nio.channels.*;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.util.Set;
 
 public class MyUdpSocket {
@@ -15,15 +17,15 @@ public class MyUdpSocket {
 	ByteBuffer receive_buffer = ByteBuffer.allocate(MAX_SIZE);
   
 	public MyUdpSocket(int port) throws IOException {
-		channel=DatagramChannel.open();
-		selector=Selector.open();
+		channel= DatagramChannel.open();
+		selector= Selector.open();
 		try{
 			//调整此通道为非阻塞模式  
 			channel.configureBlocking(false);  
 			//获取与套接字通道关联的套接字，并将该套接字绑定到本机指定端口  
 			channel.socket().bind(new InetSocketAddress(port));
 			//为通道选择器注册通道，并指定操作的选择键集  
-			channel.register(selector, SelectionKey.OP_READ);  
+			channel.register(selector, SelectionKey.OP_READ);
 		}catch (IOException e) {
 			e.printStackTrace();
 		}

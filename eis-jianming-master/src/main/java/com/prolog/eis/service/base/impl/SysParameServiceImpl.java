@@ -1,11 +1,10 @@
 package com.prolog.eis.service.base.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.prolog.eis.dao.base.SysParameMapper;
 import com.prolog.eis.model.base.SysParame;
 import com.prolog.eis.service.base.SysParameService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SysParameServiceImpl implements SysParameService {

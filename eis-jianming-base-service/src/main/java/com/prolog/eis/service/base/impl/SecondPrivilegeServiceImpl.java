@@ -1,15 +1,5 @@
 package com.prolog.eis.service.base.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import com.prolog.eis.dao.base.BaseSortIndexMapper;
 import com.prolog.eis.dao.base.FirstPrivilegeMapper;
 import com.prolog.eis.dao.base.RoleSecondPrivilegeMapper;
@@ -24,6 +14,15 @@ import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Order;
 import com.prolog.framework.core.restriction.Restrictions;
 import com.prolog.framework.utils.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SecondPrivilegeServiceImpl implements SecondPrivilegeService{

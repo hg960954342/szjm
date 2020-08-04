@@ -1,22 +1,16 @@
 package com.prolog.eis.dao.sxk;
 
-import java.util.List;
-
+import com.prolog.eis.dto.sxk.*;
+import com.prolog.eis.model.sxk.SxStore;
+import com.prolog.eis.model.sxk.SxStoreLocationDto;
+import com.prolog.eis.model.sxk.SxStoreLocationGroup;
+import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.prolog.eis.dto.sxk.LayerTaskGroupSortDto;
-import com.prolog.eis.dto.sxk.SplitOutDto;
-import com.prolog.eis.dto.sxk.SxStoreDto;
-import com.prolog.eis.dto.sxk.SxStoreGroupDto;
-import com.prolog.eis.dto.sxk.SxStoreLock;
-import com.prolog.eis.dto.sxk.SxStoreLocksDto;
-import com.prolog.eis.model.sxk.SxStore;
-import com.prolog.eis.model.sxk.SxStoreLocationDto;
-import com.prolog.eis.model.sxk.SxStoreLocationGroup;
-import com.prolog.framework.dao.mapper.BaseMapper;
+import java.util.List;
 
 public interface SxStoreMapper extends BaseMapper<SxStore> {
 

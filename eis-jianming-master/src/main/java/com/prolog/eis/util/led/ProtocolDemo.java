@@ -1,7 +1,9 @@
 package com.prolog.eis.util.led;
-import java.awt.Color;
-//import java.util.Calendar;
+
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
+
+//import java.util.Calendar;
 
 public class ProtocolDemo {
 

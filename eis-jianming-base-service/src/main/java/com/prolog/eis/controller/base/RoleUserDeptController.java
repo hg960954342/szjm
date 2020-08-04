@@ -1,21 +1,19 @@
 package com.prolog.eis.controller.base;
 
-import java.util.List;
-
+import com.prolog.eis.model.base.BaseTreeModel;
+import com.prolog.eis.service.base.UserDeptService;
+import com.prolog.eis.service.delet.DeleteService;
+import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.framework.common.message.RestMessage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prolog.eis.model.base.BaseTreeModel;
-import com.prolog.eis.service.base.UserDeptService;
-import com.prolog.eis.service.delet.DeleteService;
-import com.prolog.eis.util.PrologApiJsonHelper;
-import com.prolog.framework.common.message.RestMessage;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import java.util.List;
 
 @RestController
 @Api(tags="用户服务")

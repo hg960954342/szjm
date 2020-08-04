@@ -1,8 +1,8 @@
 package com.prolog.eis.dto.eis;
 
-import java.util.Date;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 public class SxStoreDto {
 

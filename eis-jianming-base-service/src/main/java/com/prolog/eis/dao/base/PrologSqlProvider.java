@@ -1,11 +1,11 @@
 package com.prolog.eis.dao.base;
 
+import com.prolog.eis.util.PrologStringUtils;
+import com.prolog.framework.core.annotation.Column;
+
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
-
-import com.prolog.eis.util.PrologStringUtils;
-import com.prolog.framework.core.annotation.Column;
 
 public class PrologSqlProvider {
 

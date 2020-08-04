@@ -1,8 +1,8 @@
 package com.prolog.eis.dto.eis;
 
-import java.util.List;
-
 import com.prolog.eis.model.eis.PortInfo;
+
+import java.util.List;
 
 public class StationPortDto {
 
