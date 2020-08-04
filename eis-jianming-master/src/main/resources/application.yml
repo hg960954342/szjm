@@ -25,11 +25,12 @@ spring:
       enabled: true
 
   datasource:
-    #url: jdbc:mysql://127.0.0.1:3306/jianmin
-    url: jdbc:mysql://39.96.69.213:3306/jianmin
+    url: jdbc:mysql://127.0.0.1:3306/jianmin
+#    url: jdbc:mysql://39.96.69.213:3306/jianmin
     username: root
-    password: eisalicloud 
-    #password: 123456 
+#    password: eisalicloud
+    password: root
+    #password: 123456
     driver-class-name: com.mysql.jdbc.Driver
     #初始化大小
     initialSize: 0
@@ -77,6 +78,8 @@ prolog:
     multipart:  #文件上传配置
       maxFileSize: 100MB
       maxRequestSize: 100MB
-  
-      
+
+# 登录wms 用户名 密码
+userCode: root
+userPass: root
   
