@@ -22,7 +22,7 @@ public class ContainerTaskDetailServiceImpl implements ContainerTaskDetailServic
      * @return
      */
     @Override
-    public List<ContainerTaskDetail> selectByContainerCode(int containerCode) {
+    public List<ContainerTaskDetail> selectByContainerCode(String containerCode) {
         Map<String, Object> map = MapUtils.put("containerCode", containerCode).getMap();
         return containerTaskDetailMapper.findByMap(map,ContainerTaskDetail.class);
     }

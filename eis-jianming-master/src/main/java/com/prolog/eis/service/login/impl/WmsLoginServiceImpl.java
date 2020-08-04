@@ -15,10 +15,10 @@ import java.util.Map;
 @Service
 public class WmsLoginServiceImpl implements WmsLoginService {
 
-    @Value("${user.username}")
+    @Value("${userCode}")
     private String userCode;
 
-    @Value("${user.password}")
+    @Value("${userPass}")
     private String userPass;
 
     /**

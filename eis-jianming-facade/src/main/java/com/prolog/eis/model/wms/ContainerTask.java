@@ -17,7 +17,7 @@ public class ContainerTask {
 
     @Column("container_code")
     @ApiModelProperty("托盘号")
-    private int containerCode;
+    private String containerCode;
 
     @Column("task_type")
     @ApiModelProperty("任务类型")
@@ -91,11 +91,11 @@ public class ContainerTask {
         this.id = id;
     }
 
-    public int getContainerCode() {
+    public String getContainerCode() {
         return containerCode;
     }
 
-    public void setContainerCode(int containerCode) {
+    public void setContainerCode(String containerCode) {
         this.containerCode = containerCode;
     }
 

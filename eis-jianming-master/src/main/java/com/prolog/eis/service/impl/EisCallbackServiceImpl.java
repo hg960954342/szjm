@@ -22,6 +22,7 @@ import java.util.*;
 @Service
 public class EisCallbackServiceImpl implements EisCallbackService {
 
+    @Autowired
     private ContainerTaskService containerTaskService;
     @Autowired
     private ContainerTaskDetailService containerTaskDetailService;

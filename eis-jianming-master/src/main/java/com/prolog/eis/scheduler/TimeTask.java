@@ -117,7 +117,7 @@ public class TimeTask {
 		for (ContainerTask containerTask : containerTasks) {
 			//获取参数
 			String taskCode = containerTask.getTaskCode();
-			String containerCode = Integer.toString(containerTask.getContainerCode());
+			String containerCode = containerTask.getContainerCode();
 			String source = containerTask.getSource();
 			String target = containerTask.getTarget();
 
@@ -141,7 +141,7 @@ public class TimeTask {
 					if (targetType == 1) {//目标地点位为 agv区域
 						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "01", "3");
 					} else {//目的地点位 为输送线
-						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "01", "3");
+						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "02", "3");
 					}
 
 					/*String restJson = PrologApiJsonHelper.toJson(rcsRequestResultDto);*/

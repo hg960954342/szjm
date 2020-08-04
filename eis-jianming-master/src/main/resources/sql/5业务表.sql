@@ -1,6 +1,6 @@
 CREATE TABLE `container_task` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `container_code` int NOT NULL COMMENT '托盘号',
+  `container_code` varchar(255) NOT NULL COMMENT '托盘号',
   `task_type` int DEFAULT NULL COMMENT 'eis内部暂定任务类型  1订单出库  2移库出库  3 盘点出库 4空托出库',
   `source` varchar(50) NOT NULL COMMENT '当前位置',
   `source_type` varchar(50) NOT NULL COMMENT '当前托盘区域 1托盘库内 2agv区域',
@@ -22,7 +22,7 @@ CREATE TABLE `container_task` (
 
 CREATE TABLE `container_task_detail` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `container_code` int NOT NULL COMMENT '托盘号',
+  `container_code` varchar(255) NOT NULL COMMENT '托盘号',
   `bill_no` varchar(255) NOT NULL COMMENT '出库单号',
   `seqno` varchar(255) NOT NULL COMMENT '明细行号',
   `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
