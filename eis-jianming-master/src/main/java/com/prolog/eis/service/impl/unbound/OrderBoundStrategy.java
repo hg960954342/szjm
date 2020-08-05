@@ -104,18 +104,30 @@ public class OrderBoundStrategy implements UnBoundStragtegy {
                 ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
                 String uuid = UUID.randomUUID().toString().replaceAll("-","");
                 ordercontainerTask.setTaskCode(uuid);
+                ContainerTaskDetail containerTaskDetail=new ContainerTaskDetail();
+                BeanUtils.copyProperties(outboundTaskDetail,containerTaskDetail);
+                containerTaskDetail.setContainerCode((String)sxStore1.get("containerNo"));
+                ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
                 if(sxStoreAll<=last){  //出整托任务
                     ordercontainerTask.setQty(sxStoreAll);
                      if(LocationType==3 ||LocationType==5  ){
-                    //判断目标点是否存在任务
-                         if(!this.isExistTask(source))  containerTaskMapper.save(ordercontainerTask);
+                    //2.判断目标点是否存在任务
+                         if(!this.isExistTask(source))  {
+                             containerTaskMapper.save(ordercontainerTask);
+                             containerTaskDetail.setQty(sxStoreAll);
+                             containerTaskDetailMapperMapper.save(containerTaskDetail);
+                         }
                      }
 
                 }else{ //非整托任务
                     ordercontainerTask.setQty(sxStoreAll-last);
                     if(LocationType==4 ||LocationType==5  ){
-                        //判断目标点是否存在任务
-                        if(!this.isExistTask(source))  containerTaskMapper.save(ordercontainerTask);
+                        //2.判断目标点是否存在任务
+                        if(!this.isExistTask(source)) {
+                            containerTaskMapper.save(ordercontainerTask);
+                            containerTaskDetail.setQty(sxStoreAll);
+                            containerTaskDetailMapperMapper.save(containerTaskDetail);
+                        }
                     }
                 }
 
