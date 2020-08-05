@@ -46,7 +46,7 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
 
 
     public UnBoundStragtegy getUnBoundStragtegy(OutboundTask OutboundTask){
-        return strategyMap.get("taskType"+OutboundTask.getTasktype());
+        return strategyMap.get("taskType"+OutboundTask.getTaskType());
     }
 
     @Override

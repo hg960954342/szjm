@@ -63,25 +63,25 @@ public class OrderBoundStrategy implements UnBoundStragtegy {
 
     public void unBoundTask(OutboundTask outboundTask){
         Criteria criteria = Criteria.forClass(OutboundTaskDetail.class);
-        criteria.setRestriction(Restrictions.eq("billno", outboundTask.getBillno()));
+        criteria.setRestriction(Restrictions.eq("billno", outboundTask.getBillNo()));
         List<OutboundTaskDetail> outboundTaskDetailList = outBoundTaskDetailMapper.findByCriteria(criteria);
         for (int i = 0; i < outboundTaskDetailList.size(); i++) {
             OutboundTaskDetail outboundTaskDetail = outboundTaskDetailList.get(i);
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("billNo", outboundTaskDetail.getBillno());
-            map.put("seqNo", outboundTaskDetail.getSeqno());
-            map.put("itemId", outboundTaskDetail.getItemid());
-            map.put("lotid", outboundTaskDetail.getLotid());
-            map.put("ownerid", outboundTaskDetail.getOwnerid());
+            map.put("billNo", outboundTaskDetail.getBillNo());
+            map.put("seqNo", outboundTaskDetail.getSeqNo());
+            map.put("itemId", outboundTaskDetail.getItemId());
+            map.put("lotid", outboundTaskDetail.getLotId());
+            map.put("ownerid", outboundTaskDetail.getOwnerId());
             List<ContainerTaskDetail> list = containerTaskDetailMapperMapper.findByMap(map, ContainerTaskDetail.class);
             double qtyDouble = list.stream().mapToDouble((x) -> x.getQty()).sum();
-            double last = outboundTaskDetail.getQty() - qtyDouble-outboundTaskDetail.getFinishqty();
+            double last = outboundTaskDetail.getQty() - qtyDouble-outboundTaskDetail.getFinishQty();
 
             long sxStoreAll=0l;
             //根据出库明细找库存
-            List<Map<String,Object>> listSxStore=qcSxStoreMapper.getSxStoreByOrder(outboundTaskDetail.getItemid(),outboundTaskDetail.getLotid(),outboundTaskDetail.getOwnerid());
+            List<Map<String,Object>> listSxStore=qcSxStoreMapper.getSxStoreByOrder(outboundTaskDetail.getItemId(),outboundTaskDetail.getLotId(),outboundTaskDetail.getOwnerId());
             //1.目标拣选站是否有任务
-            String pickCode=outboundTaskDetail.getPickcode();
+            String pickCode=outboundTaskDetail.getPickCode();
             //查找点位
             Criteria CriteriaAgvStorageLocation=Criteria.forClass(AgvStorageLocation.class);
             CriteriaAgvStorageLocation.setRestriction(Restrictions.eq("deviceNo",pickCode));
@@ -127,7 +127,7 @@ public class OrderBoundStrategy implements UnBoundStragtegy {
 
             //加入订单池
             ContainerTaskDetailPool containerTaskDetailPool = new ContainerTaskDetailPool();
-            containerTaskDetailPool.setBillNo(outboundTaskDetail.getBillno());
+            containerTaskDetailPool.setBillNo(outboundTaskDetail.getBillNo());
             containerTaskDetailPool.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
             containerTaskDetailPoolMapper.save(containerTaskDetailPool);
 
@@ -194,9 +194,9 @@ public class OrderBoundStrategy implements UnBoundStragtegy {
     private long getPoolTask(OutboundTask OutboundTask) {
         long result;
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("billNo", OutboundTask.getBillno());
+        map.put("billNo", OutboundTask.getBillNo());
         long count = containerTaskDetailMapperMapper.findCountByMap(map, ContainerTaskDetail.class);
-        long billNoCount = containerTaskDetailPoolMapper.getContainerTaskDetailPoolCountByBillNo(OutboundTask.getBillno());
+        long billNoCount = containerTaskDetailPoolMapper.getContainerTaskDetailPoolCountByBillNo(OutboundTask.getBillNo());
         long poolCount = containerTaskDetailPoolMapper.findCountByCriteria(Criteria.forClass(ContainerTaskDetailPool.class));
         if (count >= poolCount) {
             result = billNoCount / count;
