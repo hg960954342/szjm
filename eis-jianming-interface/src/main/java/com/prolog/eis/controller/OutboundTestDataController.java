@@ -34,7 +34,7 @@ public class OutboundTestDataController {
 
         OutboundTaskDto outboundTaskDto = JSONObject.toJavaObject(jsStr, OutboundTaskDto.class);
 
-        String messageID = outboundTaskDto.getMessageID();
+        String messageID = outboundTaskDto.getMessageId();
 
         List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
@@ -63,10 +63,10 @@ public class OutboundTestDataController {
                     List<OutboundTaskDetail> details = datum.getDetails();
                     for (OutboundTaskDetail detail : details) {
 
-                        String ownerid = datum.getOwnerid();
-                        String pickcode = datum.getPickcode();
-                        detail.setOwnerid(ownerid);
-                        detail.setPickcode(pickcode);
+                        String ownerid = datum.getOwnerId();
+                        String pickcode = datum.getPickCode();
+                        detail.setOwnerId(ownerid);
+                        detail.setPickCode(pickcode);
 
                         long l1 = System.currentTimeMillis();
                         Date t1 = new Date(l1);
@@ -114,7 +114,7 @@ public class OutboundTestDataController {
         JSONObject jsStr = JSONObject.parseObject(str);
         OutboundTaskDto moveTaskData = JSONObject.toJavaObject(jsStr, OutboundTaskDto.class);
 
-        String messageID = moveTaskData.getMessageID();
+        String messageID = moveTaskData.getMessageId();
 
         List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
