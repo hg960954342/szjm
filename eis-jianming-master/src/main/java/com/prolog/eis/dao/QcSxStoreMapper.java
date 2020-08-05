@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 
@@ -88,4 +89,15 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"where s.STORE_STATE = 40\r\n" + 
 			"GROUP BY l.layer")
 	List<YiWeiCountDto> getLayerYiWeiCount();
+
+
+    @Select("select * from(select a.*,l.*,g.* from (SELECT * from SX_STORE st where st.item_id=#{itemId} \r\n" +
+			"and st.lot_id=#{lotId} and st.owner_id=#{ownerId} )a \r\n" +
+			"inner JOIN sx_store_location l on a.fk_store_location_id=l.id \r\n" +
+			"inner JOIN sx_store_location_group g on l.store_location_group_id=g.id \r\n" +
+			"where l.task_lock=0 and g.IS_LOCK=0 and a.STORE_STATE=20 \r\n" +
+			")x \r\n" +
+			"GROUP BY x.dept_num ASC ")
+	List<Map<String,Object>> getSxStoreByOrder(@Param("String") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
+
 }

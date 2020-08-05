@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.sql.Date;
 
-@Table("outbound_task_detail")
+@Table("container_task_detail")
 public class ContainerTaskDetail {
 
 
