@@ -45,7 +45,7 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
             InboundTask task = list.get(i);
 
 
-                String agvLoc=task.getAgvloc();
+                String agvLoc=task.getAgvLoc();
                 Coordinate CoordinateAgv=PrologCoordinateUtils.analysis(agvLoc);
                  //暂时定入库任务状态开始为0
 
