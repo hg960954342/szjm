@@ -55,7 +55,7 @@ public class OutboundTask {
     @JsonProperty("pickcode")
     private String pickCode;
 
-    @Column("ownerid")
+    @Column("owner_id")
     @ApiModelProperty("wms业主")
     @JsonProperty("ownerid")
     private String ownerId;

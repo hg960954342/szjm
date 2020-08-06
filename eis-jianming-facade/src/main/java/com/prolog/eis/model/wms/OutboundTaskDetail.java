@@ -40,7 +40,7 @@ public class OutboundTaskDetail {
     @JsonProperty("containercode")
     private int containerCode;
 
-    @Column("ownerid")
+    @Column("owner_id")
     @ApiModelProperty("wms业主")
     @JsonProperty("ownerid")
     private String ownerId;

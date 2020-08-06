@@ -42,7 +42,7 @@ public class ContainerTaskDetail {
     private String 	lotId ;
 
 
-    @Column("ownerid")
+    @Column("owner_id")
     @ApiModelProperty("wms业主")
     private String 	ownerId ;
 

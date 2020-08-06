@@ -22,9 +22,21 @@ public class ContainerTaskDetailServiceImpl implements ContainerTaskDetailServic
      * @return
      */
     @Override
-    public List<ContainerTaskDetail> selectByContainerCode(String containerCode) {
-        Map<String, Object> map = MapUtils.put("containerCode", containerCode).getMap();
-        return containerTaskDetailMapper.findByMap(map,ContainerTaskDetail.class);
+    public List<Map<String,Object>> getInBoundReportByContainerCode(String containerCode) {
+        return containerTaskDetailMapper.getInBoundReport(containerCode);
+    }
+
+    /**
+     * 根据托盘号查询托盘任务明细
+     * @param containerCode 托盘号
+     * @return
+     */
+    @Override
+//    public List<ContainerTaskDetail> selectByContainerCode(String containerCode) {
+    public List<Map<String,Object>> selectByContainerCode(String containerCode) {
+//        Map<String, Object> map = MapUtils.put("containerCode", containerCode).getMap();
+//        return containerTaskDetailMapper.findByMap(map,ContainerTaskDetail.class);
+        return containerTaskDetailMapper.getReportData(containerCode);
     }
 
     @Override

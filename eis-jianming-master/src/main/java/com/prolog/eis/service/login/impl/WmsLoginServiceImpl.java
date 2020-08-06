@@ -45,7 +45,7 @@ public class WmsLoginServiceImpl implements WmsLoginService {
             LoginWmsResponse.refreshToken = jwtData.getString("refresh_token");
 
         } catch (Exception e) {
-            FileLogHelper.WriteLog("EIS->WMS [WMSInterface] 登录失败：[message]:"+e.toString());
+            FileLogHelper.WriteLog("WMSLogin","EIS->WMS [WMSInterface] 登录失败：[message]:"+e.toString());
         }
     }
 

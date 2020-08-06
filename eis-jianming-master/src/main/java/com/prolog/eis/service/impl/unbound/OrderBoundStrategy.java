@@ -98,9 +98,9 @@ public class OrderBoundStrategy implements UnBoundStragtegy {
                 ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
                 ordercontainerTask.setTaskType(1);
                 ordercontainerTask.setSource(PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"),(Integer) sxStore1.get("y"),(Integer) sxStore1.get("layer")));
-                ordercontainerTask.setSourceType("1");
+                ordercontainerTask.setSourceType(1);
                 ordercontainerTask.setTarget(source);
-                ordercontainerTask.setTargetType("1");
+                ordercontainerTask.setTargetType(1);
                 ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
                 String uuid = UUID.randomUUID().toString().replaceAll("-","");
                 ordercontainerTask.setTaskCode(uuid);

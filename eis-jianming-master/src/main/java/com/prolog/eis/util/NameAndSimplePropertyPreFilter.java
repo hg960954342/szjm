@@ -9,6 +9,9 @@ public class NameAndSimplePropertyPreFilter extends SimplePropertyPreFilter impl
         if (name == null || name.length() == 0) {
             return name;
         }
+        if (name.equals("messageID")){
+            return name;
+        }
         String pascalName = name.toLowerCase();
         return pascalName;
     }

@@ -75,7 +75,7 @@ public class InboundTask {
     @JsonProperty("agvloc")
     private String agvLoc;
 
-    @Column("ownerid")
+    @Column("owner_id")
     @ApiModelProperty("wms业主")
     @JsonProperty("ownerid")
     private String ownerId;
