@@ -1,27 +1,29 @@
 package com.prolog.eis.controller;
 
-import com.prolog.eis.dto.eis.mcs.InBoundRequest;
-import com.prolog.eis.dto.eis.mcs.InBoundRequestResponse;
-import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
-import com.prolog.eis.dto.eis.mcs.TaskReturnInBoundRequestResponse;
-import com.prolog.eis.service.gcs.WcsTaskPriorityService;
-import com.prolog.eis.service.mcs.McsInterfaceService;
-import com.prolog.eis.service.store.QcInBoundTaskService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.PrologApiJsonHelper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import com.prolog.eis.dto.eis.mcs.InBoundRequest;
+import com.prolog.eis.dto.eis.mcs.InBoundRequestResponse;
+import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
+import com.prolog.eis.dto.eis.mcs.TaskReturnInBoundRequestResponse;
+import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.service.store.QcInBoundTaskService;
+import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.util.PrologApiJsonHelper;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONObject;
 
 /**
  * MCS接口
@@ -38,8 +40,6 @@ public class PrologMCSController {
 	private QcInBoundTaskService qcInBoundTaskService;
 	@Autowired
 	private McsInterfaceService mcsInterfaceService;
-	@Autowired
-	private WcsTaskPriorityService wcsTaskPriorityService;
 
 	@ApiOperation(value = "提升机请求", notes = "提升机请求")
 	@PostMapping("/mcsRequest")
@@ -50,7 +50,7 @@ public class PrologMCSController {
 		OutputStream out = response.getOutputStream();
 		PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
 		try {
-			FileLogHelper.WriteLog("mcsRequest", "MCS->EIS请求" + json);
+			FileLogHelper.WriteLog("McsInterface", "MCS->EIS请求" + json);
 
 			List<InBoundRequest> inBoundRequests = helper.getObjectList("carryList", InBoundRequest.class);
 
@@ -76,28 +76,26 @@ public class PrologMCSController {
 				}
 			}
 
-			String resultStr = getMcsValue(true,errorMsg,"200",new ArrayList<InBoundRequestResponse>());
+			String resultStr = getQcMcsValue(true,errorMsg,"200",new ArrayList<InBoundRequestResponse>());
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
 
-			FileLogHelper.WriteLog("mcsRequest", "MCS->EIS返回" + resultStr);
+			FileLogHelper.WriteLog("McsInterface", "MCS->EIS返回" + resultStr);
 
+			//int type, String containerNo, String address, String target, String weight, String priority,int state
 			//给mcs发指令
 			for (McsRequestTaskDto mcsRequestTaskDto : sendList) {
-				/*mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+				mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
 						mcsRequestTaskDto.getStockId(), 
 						mcsRequestTaskDto.getSource(),
 						mcsRequestTaskDto.getTarget(),
-						"", 99);*/
+						"", "99",0);
 			}
-
-			//检查一次wcs指令
-			wcsTaskPriorityService.sendWcsTask();
 		}catch (Exception e) {
 			// TODO: handle exception
-			FileLogHelper.WriteLog("mcsRequestError", "入库异常，错误信息：\n" + e.toString());
-			String resultStr = getMcsValue(false,e.toString(),"100",new ArrayList<InBoundRequestResponse>());
+			FileLogHelper.WriteLog("McsInterfaceError", "入库异常，错误信息：\n" + e.toString());
+			String resultStr = getQcMcsValue(false,e.toString(),"100",new ArrayList<InBoundRequestResponse>());
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
@@ -105,8 +103,66 @@ public class PrologMCSController {
 			FileLogHelper.WriteLog("mcsRequest", "MCS->EIS返回" + resultStr);
 		}
 	}
+	
+	/*@ApiOperation(value = "提升机任务回告", notes = "提升机任务回告")
+	@PostMapping("/taskReturn")
+	public void taskReturn(@RequestBody String json, HttpServletResponse response) throws Exception {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json; charset=utf-8");
+		OutputStream out = response.getOutputStream();
+		PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
 
-	@ApiOperation(value = "提升机任务回告", notes = "提升机任务回告")
+		try {
+			FileLogHelper.WriteLog("McsReturnInterface", "MCS->EIS传输" + json);
+
+			List<InBoundRequest> inBoundRequests = helper.getObjectList("carryList", InBoundRequest.class);
+			List<TaskReturnInBoundRequestResponse> errorList = new ArrayList<TaskReturnInBoundRequestResponse>();
+			String errorMsg = "";
+
+			for(int i=0;i<inBoundRequests.size();i++) {
+				try {
+					//qcInBoundTaskService.taskReturn(inBoundRequests.get(i));
+				}
+				catch (Exception e) {
+					errorMsg = errorMsg + " " + e.getMessage();
+					// TODO: handle exception
+					TaskReturnInBoundRequestResponse taskReturnInBoundRequestResponse = new TaskReturnInBoundRequestResponse();
+					taskReturnInBoundRequestResponse.setTaskId(inBoundRequests.get(i).getTaskId());
+					taskReturnInBoundRequestResponse.setErrMsg(e.getMessage());
+
+					errorList.add(taskReturnInBoundRequestResponse);
+				}
+			}
+
+			if(errorList.isEmpty()) {
+				String resultStr = getLhMcsValue(true,"操作成功","200",new ArrayList<TaskReturnInBoundRequestResponse>());
+				out.write(resultStr.getBytes("UTF-8"));
+				out.flush();
+				out.close();
+
+				FileLogHelper.WriteLog("mcstaskReturn", "EIS->MCS返回" + resultStr);
+			}else {
+				FileLogHelper.WriteLog("mcstaskReturnError", "入库异常，错误信息：\n" + errorMsg);
+				String resultStr = getLhMcsValue(true,errorMsg,"100",errorList);
+				out.write(resultStr.getBytes("UTF-8"));
+				out.flush();
+				out.close();
+
+				FileLogHelper.WriteLog("mcstaskReturn", "EIS->MCS返回" + resultStr);
+			}
+		} catch (Exception e) {
+
+			FileLogHelper.WriteLog("mcstaskReturnError", "mcs返回异常" + e.toString());
+			String resultStr = getLhMcsValue(false,e.toString(),"100",new ArrayList<TaskReturnInBoundRequestResponse>());
+			out.write(resultStr.getBytes("UTF-8"));
+			out.flush();
+			out.close();
+
+			FileLogHelper.WriteLog("mcstaskReturn", "EIS->MCS返回" + resultStr);
+		}
+	}*/
+
+	/*@ApiOperation(value = "提升机任务回告", notes = "提升机任务回告")
 	@PostMapping("/taskReturn")
 	public void taskReturn(@RequestBody String json, HttpServletResponse response) throws Exception {
 		response.setCharacterEncoding("utf-8");
@@ -162,9 +218,9 @@ public class PrologMCSController {
 
 			FileLogHelper.WriteLog("mcstaskReturn", "EIS->MCS返回" + resultStr);
 		}
-	}
+	}*/
 
-	@ApiOperation(value = "提升机故障回告", notes = "提升机故障回告")
+	/*@ApiOperation(value = "提升机故障回告", notes = "提升机故障回告")
 	@PostMapping("/breakdown")
 	public void breakdown(@RequestBody String json, HttpServletResponse response) throws Exception {
 
@@ -186,12 +242,21 @@ public class PrologMCSController {
 			out.flush();
 			out.close();
 		}
-	}
+	}*/
 
-	private <T> String getMcsValue(Boolean success,String msg,String code, List<T> data) {
+	private <T> String getQcMcsValue(Boolean success,String msg,String code, List<T> data) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("ret", success);
 		jsonObject.put("msg", msg);
+		jsonObject.put("code", code);
+		jsonObject.put("data", data);
+		return jsonObject.toString();
+	}
+	
+	private <T> String getLhMcsValue(Boolean success,String msg,String code, List<T> data) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("success", success);
+		jsonObject.put("message", msg);
 		jsonObject.put("code", code);
 		jsonObject.put("data", data);
 		return jsonObject.toString();

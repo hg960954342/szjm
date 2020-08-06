@@ -34,7 +34,7 @@ public class McsSendTaskDto {
 	/**
 	 * 任务优先级,0-99,0优先级最大
 	 */
-	private int priority;
+	private String priority;
 	/**
 	 * 任务优先级,0-99,0优先级最大
 	 */
@@ -81,10 +81,10 @@ public class McsSendTaskDto {
 	public void setWeight(String weight) {
 		this.weight = weight;
 	}
-	public int getPriority() {
+	public String getPriority() {
 		return priority;
 	}
-	public void setPriority(int priority) {
+	public void setPriority(String priority) {
 		this.priority = priority;
 	}
 	public int getStatus() {

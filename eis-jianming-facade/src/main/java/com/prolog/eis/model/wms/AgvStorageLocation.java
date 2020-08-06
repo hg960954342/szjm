@@ -31,6 +31,10 @@ public class AgvStorageLocation {
     @Column("location_type")
     @ApiModelProperty("位置类型")
     private int locationType;
+    
+    @Column("rcs_position_code")
+    @ApiModelProperty("rcs点位编号")
+    private String rcsPositionCode;
 
     @Column("tally_code")
     @ApiModelProperty("wms货位")
@@ -48,75 +52,83 @@ public class AgvStorageLocation {
     @ApiModelProperty("设备编号")
     private String deviceNo;
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public int getCeng() {
-        return ceng;
-    }
+	public int getCeng() {
+		return ceng;
+	}
 
-    public void setCeng(int ceng) {
-        this.ceng = ceng;
-    }
+	public void setCeng(int ceng) {
+		this.ceng = ceng;
+	}
 
-    public int getX() {
-        return x;
-    }
+	public int getX() {
+		return x;
+	}
 
-    public void setX(int x) {
-        this.x = x;
-    }
+	public void setX(int x) {
+		this.x = x;
+	}
 
-    public int getY() {
-        return y;
-    }
+	public int getY() {
+		return y;
+	}
 
-    public void setY(int y) {
-        this.y = y;
-    }
+	public void setY(int y) {
+		this.y = y;
+	}
 
-    public int getLocationType() {
-        return locationType;
-    }
+	public int getLocationType() {
+		return locationType;
+	}
 
-    public void setLocationType(int locationType) {
-        this.locationType = locationType;
-    }
+	public void setLocationType(int locationType) {
+		this.locationType = locationType;
+	}
 
-    public String getTallyCode() {
-        return tallyCode;
-    }
+	public String getRcsPositionCode() {
+		return rcsPositionCode;
+	}
 
-    public void setTallyCode(String tallyCode) {
-        this.tallyCode = tallyCode;
-    }
+	public void setRcsPositionCode(String rcsPositionCode) {
+		this.rcsPositionCode = rcsPositionCode;
+	}
 
-    public int getTaskLock() {
-        return taskLock;
-    }
+	public String getTallyCode() {
+		return tallyCode;
+	}
 
-    public void setTaskLock(int taskLock) {
-        this.taskLock = taskLock;
-    }
+	public void setTallyCode(String tallyCode) {
+		this.tallyCode = tallyCode;
+	}
 
-    public int getLock() {
-        return lock;
-    }
+	public int getTaskLock() {
+		return taskLock;
+	}
 
-    public void setLock(int lock) {
-        this.lock = lock;
-    }
+	public void setTaskLock(int taskLock) {
+		this.taskLock = taskLock;
+	}
 
-    public String getDeviceNo() {
-        return deviceNo;
-    }
+	public int getLock() {
+		return lock;
+	}
 
-    public void setDeviceNo(String deviceNo) {
-        this.deviceNo = deviceNo;
-    }
+	public void setLock(int lock) {
+		this.lock = lock;
+	}
+
+	public String getDeviceNo() {
+		return deviceNo;
+	}
+
+	public void setDeviceNo(String deviceNo) {
+		this.deviceNo = deviceNo;
+	}
 }

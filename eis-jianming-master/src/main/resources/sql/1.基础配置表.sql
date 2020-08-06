@@ -66,6 +66,7 @@ create table `agv_storagelocation` (
   `x` int(11) not null comment '坐标x',
   `y` int(11) not null comment '坐标y',
   `location_type` int(11) not null comment '位置类型 1存储位 2 输送线 3整托托盘作业位 4非整托托盘作业位 5通用托盘位',
+  `rcs_position_code` varchar(50) null comment 'rcs点位编号',
   `tally_code` varchar(50) null comment 'wms货位 可空',
   `task_lock` int(11) not null comment '任务锁  0空闲 1锁定',
   `lock` int(11) not null comment '锁定 0不锁定 1锁定',

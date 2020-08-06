@@ -77,8 +77,8 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务返回："+restJson);
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
-			Boolean sucssess = helper.getBoolean("ret");
-			String message = helper.getString("msg");
+			Boolean sucssess = helper.getBoolean("success");
+			String message = helper.getString("message");
 			MCSTask mcsTask = new MCSTask();
 			mcsTask.setTaskId(taskId);
 			mcsTask.setPriority(priority);
@@ -111,7 +111,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 	@Override
 	@Transactional
 	@Async
-	public String sendMcsTaskWithOutPathAsyc(int type, String containerNo, String source, String target, String weight, int priority,int state)
+	public String sendMcsTaskWithOutPathAsyc(int type, String containerNo, String address, String target, String weight, String priority,int state)
 			throws Exception {
 		List<McsSendTaskDto> mcsSendTaskDtos = new ArrayList<McsSendTaskDto>();
 		McsSendTaskDto mcsSendTaskDto = new McsSendTaskDto();
@@ -120,7 +120,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		mcsSendTaskDto.setType(type);
 		mcsSendTaskDto.setBankId(1);
 		mcsSendTaskDto.setContainerNo(containerNo);
-		mcsSendTaskDto.setAddress(source);
+		mcsSendTaskDto.setAddress(address);
 		mcsSendTaskDto.setTarget(target);
 		mcsSendTaskDto.setPriority(priority);
 		mcsSendTaskDto.setWeight(weight);
@@ -136,8 +136,8 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
-			Boolean sucssess = helper.getBoolean("ret");
-			String message = helper.getString("msg");
+			Boolean sucssess = helper.getBoolean("success");
+			String message = helper.getString("message");
 			
 			if (!sucssess) {
 				//失败记重发表
@@ -145,8 +145,8 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 				mcsTask.setTaskId(taskId);
 				mcsTask.setBankId(1);
 				mcsTask.setPriority(priority);
-				mcsTask.setSource(source);
-				mcsTask.setStockId(containerNo);
+				mcsTask.setAddress(address);
+				mcsTask.setContainerNo(containerNo);
 				mcsTask.setTarget(target);
 				mcsTask.setType(type);
 				mcsTask.setWeight(weight);
@@ -164,8 +164,8 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			mcsTask.setTaskId(taskId);
 			mcsTask.setBankId(1);
 			mcsTask.setPriority(priority);
-			mcsTask.setSource(source);
-			mcsTask.setStockId(containerNo);
+			mcsTask.setAddress(address);
+			mcsTask.setContainerNo(containerNo);
 			mcsTask.setTarget(target);
 			mcsTask.setType(type);
 			mcsTask.setWeight(weight);

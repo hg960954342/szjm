@@ -11,7 +11,7 @@ public interface McsInterfaceService {
 
 	String sendMcsTask(int type,String stockId,String source,String target,String weight,int priority)throws Exception;
 
-	String sendMcsTaskWithOutPathAsyc(int type, String containerNo, String source, String target, String weight, int priority,int state)
+	String sendMcsTaskWithOutPathAsyc(int type, String containerNo, String source, String target, String weight, String priority,int state)
 			throws Exception;
 	
 	void recall(MCSTask mcsTask)throws Exception;

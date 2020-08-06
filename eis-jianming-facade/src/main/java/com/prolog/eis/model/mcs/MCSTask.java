@@ -33,13 +33,13 @@ public class MCSTask {
 	/**
 	 * 母托盘编号
 	 */
-	@Column("stock_id")
-	private String stockId;
+	@Column("container_no")
+	private String containerNo;
 	/**
 	 * 请求位置:原坐标
 	 */
-	@Column("source")
-	private String source;
+	@Column("address")
+	private String address;
 	/**
 	 * 目的位置：目的坐标
 	 */
@@ -54,7 +54,7 @@ public class MCSTask {
 	 * 任务优先级,0-99,0优先级最大
 	 */
 	@Column("priority")
-	private int priority;
+	private String priority;
 	
 	/**
 	 * 任务状态 0- 正常 1-异常
@@ -112,20 +112,20 @@ public class MCSTask {
 		this.bankId = bankId;
 	}
 
-	public String getStockId() {
-		return stockId;
+	public String getContainerNo() {
+		return containerNo;
 	}
 
-	public void setStockId(String stockId) {
-		this.stockId = stockId;
+	public void setContainerNo(String containerNo) {
+		this.containerNo = containerNo;
 	}
 
-	public String getSource() {
-		return source;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setSource(String source) {
-		this.source = source;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getTarget() {
@@ -144,11 +144,11 @@ public class MCSTask {
 		this.weight = weight;
 	}
 
-	public int getPriority() {
+	public String getPriority() {
 		return priority;
 	}
 
-	public void setPriority(int priority) {
+	public void setPriority(String priority) {
 		this.priority = priority;
 	}
 

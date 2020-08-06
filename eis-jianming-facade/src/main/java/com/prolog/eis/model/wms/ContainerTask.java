@@ -15,7 +15,7 @@ public class ContainerTask {
     @AutoKey(type = AutoKey.TYPE_IDENTITY)
     private int id;
 
-    @Column("command_code")
+    @Column("container_code")
     @ApiModelProperty("托盘号")
     private int containerCode;
 
@@ -28,20 +28,20 @@ public class ContainerTask {
     private String source;
 
     @Column("source_type")
-    @ApiModelProperty("当前托盘区域")
-    private String sourceType;
+    @ApiModelProperty("当前托盘区域 1托盘库内 2agv区域")
+    private int sourceType;
 
     @Column("target")
     @ApiModelProperty("目的地")
     private String target;
 
     @Column("target_type")
-    @ApiModelProperty("目的地区域")
-    private String targetType;
+    @ApiModelProperty("目的地区域 1托盘库内 2agv区域")
+    private int targetType;
 
     @Column("task_state")
-    @ApiModelProperty("任务状态")
-    private String taskState;
+    @ApiModelProperty("任务状态 1 到位 2已发送给下游设备 3下游设备回告开始 4离开原存储位 后面可以扩充")
+    private int taskState;
 
     @Column("task_code")
     @ApiModelProperty("任务号")
@@ -83,147 +83,147 @@ public class ContainerTask {
     @ApiModelProperty("结束时间")
     private Date endTime;
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public int getContainerCode() {
-        return containerCode;
-    }
+	public int getContainerCode() {
+		return containerCode;
+	}
 
-    public void setContainerCode(int containerCode) {
-        this.containerCode = containerCode;
-    }
+	public void setContainerCode(int containerCode) {
+		this.containerCode = containerCode;
+	}
 
-    public int getTaskType() {
-        return taskType;
-    }
+	public int getTaskType() {
+		return taskType;
+	}
 
-    public void setTaskType(int taskType) {
-        this.taskType = taskType;
-    }
+	public void setTaskType(int taskType) {
+		this.taskType = taskType;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public String getSourceType() {
-        return sourceType;
-    }
+	public int getSourceType() {
+		return sourceType;
+	}
 
-    public void setSourceType(String sourceType) {
-        this.sourceType = sourceType;
-    }
+	public void setSourceType(int sourceType) {
+		this.sourceType = sourceType;
+	}
 
-    public String getTarget() {
-        return target;
-    }
+	public String getTarget() {
+		return target;
+	}
 
-    public void setTarget(String target) {
-        this.target = target;
-    }
+	public void setTarget(String target) {
+		this.target = target;
+	}
 
-    public String getTargetType() {
-        return targetType;
-    }
+	public int getTargetType() {
+		return targetType;
+	}
 
-    public void setTargetType(String targetType) {
-        this.targetType = targetType;
-    }
+	public void setTargetType(int targetType) {
+		this.targetType = targetType;
+	}
 
-    public String getTaskState() {
-        return taskState;
-    }
+	public int getTaskState() {
+		return taskState;
+	}
 
-    public void setTaskState(String taskState) {
-        this.taskState = taskState;
-    }
+	public void setTaskState(int taskState) {
+		this.taskState = taskState;
+	}
 
-    public String getTaskCode() {
-        return taskCode;
-    }
+	public String getTaskCode() {
+		return taskCode;
+	}
 
-    public void setTaskCode(String taskCode) {
-        this.taskCode = taskCode;
-    }
+	public void setTaskCode(String taskCode) {
+		this.taskCode = taskCode;
+	}
 
-    public String getItemId() {
-        return itemId;
-    }
+	public String getItemId() {
+		return itemId;
+	}
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
 
-    public String getLotId() {
-        return lotId;
-    }
+	public String getLotId() {
+		return lotId;
+	}
 
-    public void setLotId(String lotId) {
-        this.lotId = lotId;
-    }
+	public void setLotId(String lotId) {
+		this.lotId = lotId;
+	}
 
-    public String getOwnerId() {
-        return ownerId;
-    }
+	public String getOwnerId() {
+		return ownerId;
+	}
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
 
-    public double getQty() {
-        return qty;
-    }
+	public double getQty() {
+		return qty;
+	}
 
-    public void setQty(double qty) {
-        this.qty = qty;
-    }
+	public void setQty(double qty) {
+		this.qty = qty;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public Date getSendTime() {
-        return sendTime;
-    }
+	public Date getSendTime() {
+		return sendTime;
+	}
 
-    public void setSendTime(Date sendTime) {
-        this.sendTime = sendTime;
-    }
+	public void setSendTime(Date sendTime) {
+		this.sendTime = sendTime;
+	}
 
-    public Date getStartTime() {
-        return startTime;
-    }
+	public Date getStartTime() {
+		return startTime;
+	}
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
 
-    public Date getMoveTime() {
-        return moveTime;
-    }
+	public Date getMoveTime() {
+		return moveTime;
+	}
 
-    public void setMoveTime(Date moveTime) {
-        this.moveTime = moveTime;
-    }
+	public void setMoveTime(Date moveTime) {
+		this.moveTime = moveTime;
+	}
 
-    public Date getEndTime() {
-        return endTime;
-    }
+	public Date getEndTime() {
+		return endTime;
+	}
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
 }
