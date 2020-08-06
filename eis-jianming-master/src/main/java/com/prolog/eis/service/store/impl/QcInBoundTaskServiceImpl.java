@@ -215,7 +215,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 	private void inSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
 
-		Integer locationId = this.checkHuoWei(inboundTask.getOwnerid() + "and" + inboundTask.getItemid(),inboundTask.getLotid(),containerNo,sourceLayer,detection,portInfo.getJunctionPort());
+		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,portInfo.getJunctionPort());
 		if(null == locationId) {
 			if(portInfo.getShowLed() == 1) {
 				//this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,"貨位不足！！！");
@@ -231,24 +231,30 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		SxStore sxStore = new SxStore();
 		sxStore.setStoreLocationId(locationId);
 		//库存任务类型 1 wms库存 2 eis库存
-		if(inboundTask.getWmspush() == 0) {
+		if(inboundTask.getWmsPush() == 0) {
 			sxStore.setSxStoreType(2);
-		}else if(inboundTask.getWmspush() == 1) {
+		}else if(inboundTask.getWmsPush() == 1) {
 			sxStore.setSxStoreType(1);
 		}
 		sxStore.setContainerNo(containerNo);
 		sxStore.setStoreState(10);
-		sxStore.setTaskProperty1(inboundTask.getOwnerid() + "and" + inboundTask.getItemid());
-		sxStore.setTaskProperty2(inboundTask.getLotid());
+		sxStore.setTaskProperty1(inboundTask.getOwnerId() + "and" + inboundTask.getItemId());
+		sxStore.setTaskProperty2(inboundTask.getLotId());
+		//sxStore.setBusinessProperty1(wmsInboundTask.getMaterielType());
+		//sxStore.setBusinessProperty2(wmsInboundTask.getMaterielName());
+		//sxStore.setBusinessProperty3(wmsInboundTask.getFactoryCode());
+		//sxStore.setBusinessProperty4(wmsInboundTask.getBoxCount());
+		//库存记录高度
+		//sxStore.setBusinessProperty5(String.valueOf(detection));
 
-		if(inboundTask.getEmptycontainer() == 1){
+		if(inboundTask.getEmptyContainer() == 1){
 			sxStore.setTaskType(-1);//空托盘
 		}else {
 			sxStore.setTaskType(1);//任务托
 		}
-		sxStore.setOwnerId(inboundTask.getOwnerid());
-		sxStore.setItemId(inboundTask.getItemid());
-		sxStore.setLotId(inboundTask.getLotid());
+		sxStore.setOwnerId(inboundTask.getOwnerId());
+		sxStore.setItemId(inboundTask.getItemId());
+		sxStore.setLotId(inboundTask.getLotId());
 		sxStore.setQty(inboundTask.getQty());
 		sxStore.setWeight(weight);
 		sxStore.setCreateTime(new Date());

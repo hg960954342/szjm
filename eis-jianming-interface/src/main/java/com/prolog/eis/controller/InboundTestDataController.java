@@ -34,7 +34,7 @@ public class InboundTestDataController {
 
         InboundTaskDto inboundTaskDto = JSONObject.toJavaObject(jsStr, InboundTaskDto.class);
 
-        String messageID = inboundTaskDto.getMessageID();
+        String messageID = inboundTaskDto.getMessageId();
 
         List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 

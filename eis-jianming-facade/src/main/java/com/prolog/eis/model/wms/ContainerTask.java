@@ -17,7 +17,7 @@ public class ContainerTask {
 
     @Column("container_code")
     @ApiModelProperty("托盘号")
-    private int containerCode;
+    private String containerCode;
 
     @Column("task_type")
     @ApiModelProperty("任务类型")
@@ -90,12 +90,12 @@ public class ContainerTask {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public int getContainerCode() {
+    
+	public String getContainerCode() {
 		return containerCode;
 	}
 
-	public void setContainerCode(int containerCode) {
+	public void setContainerCode(String containerCode) {
 		this.containerCode = containerCode;
 	}
 
@@ -223,7 +223,31 @@ public class ContainerTask {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ContainerTask{" +
+                "id=" + id +
+                ", containerCode=" + containerCode +
+                ", taskType=" + taskType +
+                ", source='" + source + '\'' +
+                ", sourceType='" + sourceType + '\'' +
+                ", target='" + target + '\'' +
+                ", targetType='" + targetType + '\'' +
+                ", taskState='" + taskState + '\'' +
+                ", taskCode='" + taskCode + '\'' +
+                ", itemId='" + itemId + '\'' +
+                ", lotId='" + lotId + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", qty=" + qty +
+                ", createTime=" + createTime +
+                ", sendTime=" + sendTime +
+                ", startTime=" + startTime +
+                ", moveTime=" + moveTime +
+                ", endTime=" + endTime +
+                '}';
+    }
 }

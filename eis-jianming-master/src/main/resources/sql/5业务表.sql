@@ -1,6 +1,7 @@
+DROP TABLE IF EXISTS `container_task`;
 CREATE TABLE `container_task` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `container_code` int NOT NULL COMMENT '托盘号',
+  `container_code` varchar(255) NOT NULL COMMENT '托盘号',
   `task_type` int DEFAULT NULL COMMENT 'eis内部暂定任务类型  1订单出库  2移库出库  3 盘点出库 4空托出库',
   `source` varchar(50) NOT NULL COMMENT '当前位置',
   `source_type` int NOT NULL COMMENT '当前托盘区域 1托盘库内 2agv区域',
@@ -19,10 +20,10 @@ CREATE TABLE `container_task` (
   `end_time` datetime DEFAULT NULL COMMENT '结束时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='托盘任务表';
-
+DROP TABLE IF EXISTS `container_task_detail`;
 CREATE TABLE `container_task_detail` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `container_code` int NOT NULL COMMENT '托盘号',
+  `container_code` varchar(255) NOT NULL COMMENT '托盘号',
   `bill_no` varchar(255) NOT NULL COMMENT '出库单号',
   `seqno` varchar(255) NOT NULL COMMENT '明细行号',
   `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
@@ -33,3 +34,26 @@ CREATE TABLE `container_task_detail` (
   `end_time` datetime DEFAULT NULL COMMENT '结束时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='托盘任务表';
+DROP TABLE IF EXISTS `repeat_report`;
+CREATE TABLE `repeat_report` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `report_data` varchar(255) NOT NULL COMMENT '回告数据 json格式',
+  `report_type` int NOT NULL COMMENT '回告类型 1订单出库  2移库出库  3盘点出库 4空托出库 5订单入库',
+  `report_url` varchar(255) NOT NULL COMMENT '回告地址',
+  `message` varchar(255) NOT NULL COMMENT '返回信息',
+  `report_count` int NOT NULL COMMENT '回告次数',
+  `report_state` int DEFAULT 0 COMMENT '回告状态 0 未回告 1已回告 2取消回告',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `send_time` datetime DEFAULT NULL COMMENT '发送时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='回告重发表';
+DROP TABLE IF EXISTS `outbound_task_detail_pool`;
+CREATE TABLE `outbound_task_detail_pool` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `pick_code` varchar(20) COMMENT '拣选站  指定拣选站  暂时移库出库用到 ',
+  `create_time` datetime  COMMENT '创建时间',
+  `end_time` datetime COMMENT '结束时间',
+  `bill_no` varchar(255) not null COMMENT '出库单号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='订单池';

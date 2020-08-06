@@ -1,5 +1,6 @@
 package com.prolog.eis.model.wms;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,57 +16,67 @@ import java.util.Date;
 @NoArgsConstructor
 public class InboundTask {
 
+
     @Column("id")
     @ApiModelProperty("主键")
     private int id;
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    private String billno;
+    @JsonProperty("billno")
+    private String billNo;
 
     @Column("wms_push")
     @ApiModelProperty("是否wms下发，0不是，1是")
-    private int wmspush;
+    private int wmsPush;
 
     @Column("reback")
     @ApiModelProperty("是否回传，0不回传，1回传")
-    private int reback;
+    private int reBack;
 
     @Column("empty_container")
     @ApiModelProperty("0任务托  1空托")
-    private int emptycontainer;
+    private int emptyContainer;
 
     @Column("container_code")
     @ApiModelProperty("母托盘编号")
-    private String containercode;
+    @JsonProperty("containercode")
+    private String containerCode;
 
     @Column("task_type")
     @ApiModelProperty("任务托暂未定   空托的情况 0空托垛入库  1空托碟")
-    private int tasktype;
+    @JsonProperty("tasktype")
+    private int taskType;
 
     @Column("item_id")
     @ApiModelProperty("wms商品id")
-    private String itemid;
+    @JsonProperty("itemid")
+    private String itemId;
 
     @Column("qty")
     @ApiModelProperty("数量（重量）")
+    @JsonProperty("qty")
     private float qty;
 
     @Column("lot_id")
     @ApiModelProperty("wms批号")
-    private String lotid;
+    @JsonProperty("lotid")
+    private String lotId;
 
     @Column("ceng")
     @ApiModelProperty("入库楼层")
+    @JsonProperty("ceng")
     private String ceng;
 
     @Column("agv_loc")
     @ApiModelProperty("Agv搬运点")
-    private String agvloc;
+    @JsonProperty("agvloc")
+    private String agvLoc;
 
     @Column("ownerid")
     @ApiModelProperty("wms业主")
-    private String ownerid;
+    @JsonProperty("ownerid")
+    private String ownerId;
 
     @Column("task_state")
     @ApiModelProperty("0 创建 1开始 3扫码入库 4完成")

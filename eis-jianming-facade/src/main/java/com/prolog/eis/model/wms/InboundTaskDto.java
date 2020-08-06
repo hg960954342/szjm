@@ -1,13 +1,19 @@
 package com.prolog.eis.model.wms;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 
 public class InboundTaskDto {
 
     private List<InboundTask> data;
+
     private int size;
-    private String messageID;
+
+    @JsonProperty("messageID")
+    private String messageId;
 
     public List<InboundTask> getData() {
         return data;
@@ -25,11 +31,11 @@ public class InboundTaskDto {
         this.size = size;
     }
 
-    public String getMessageID() {
-        return messageID;
+    public String getMessageId() {
+        return messageId;
     }
 
-    public void setMessageID(String messageID) {
-        this.messageID = messageID;
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 }

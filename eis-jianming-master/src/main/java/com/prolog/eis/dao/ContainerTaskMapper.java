@@ -5,6 +5,7 @@ import com.prolog.framework.dao.mapper.BaseMapper;
 
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -38,4 +39,9 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
 	})
     @Select("select t.* from container_task t where t.container_code = {containerCode} and (t.task_state = 2 or t.task_state = 3 or t.task_state = 4)")
     ContainerTask selectStartTaskByContainerCode(String containerCode);
+
+
+    @Select("select * from container_task where source = #{source} and task_state='1' UNION all \r\n" +
+            "select * from container_task where target = #{source} and task_state='1' ")
+    List<ContainerTask> selectBySource(@Param("source") String source);
 }

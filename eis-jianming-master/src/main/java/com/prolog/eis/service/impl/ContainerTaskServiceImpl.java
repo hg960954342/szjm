@@ -24,7 +24,8 @@ public class ContainerTaskServiceImpl implements ContainerTaskService {
      */
     @Override
     public List<ContainerTask> selectByTaskStateAndSourceType(String taskState, String sourceType) {
-        Map<String, Object> map = MapUtils.put("task_state", taskState).put("source_type", sourceType).getMap();
+        Map<String, Object> map = MapUtils.put("taskState", taskState).put("sourceType", sourceType).getMap();
+
         return containerTaskMapper.findByMap(map,ContainerTask.class);
     }
 
@@ -43,7 +44,20 @@ public class ContainerTaskServiceImpl implements ContainerTaskService {
      * @return
      */
     @Override
-    public ContainerTask selectByTaskCode(String taskCode) {
-        return containerTaskMapper.selectByTaskCode(taskCode);
+    public List<ContainerTask> selectByTaskCode(String taskCode) {
+        Map<String, Object> map = MapUtils.put("taskCode", taskCode).getMap();
+        return containerTaskMapper.findByMap(map,ContainerTask.class);
+//        return containerTaskMapper.selectByTaskCode(taskCode);
+    }
+
+    /**
+     * 根据托盘号查询托盘任务
+     * @param containerCode 托盘号
+     * @return
+     */
+    @Override
+    public List<ContainerTask> selectByContainerCode(String containerCode) {
+        Map<String, Object> map = MapUtils.put("containerCode", containerCode).getMap();
+        return containerTaskMapper.findByMap(map,ContainerTask.class);
     }
 }

@@ -1,5 +1,6 @@
 package com.prolog.eis.model.wms;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,37 +23,42 @@ public class OutboundTask {
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    private String billno;
+    @JsonProperty("billno")
+    private String billNo;
 
     @Column("wms_push")
     @ApiModelProperty("是否wms下发，0不是，1是")
-    private int wmspush;
+    private int wmsPush;
 
     @Column("reback")
     @ApiModelProperty("是否回传，0不回传，1回传")
-    private int reback;
+    private int reBack;
 
     @Column("empty_container")
     @ApiModelProperty("0任务托  1空托")
-    private int emptycontainer;
+    private int emptyContainer;
 
     @Column("task_type")
     @ApiModelProperty("任务托暂未定   空托的情况 0空托垛入库  1空托碟")
-    private int tasktype;
+    @JsonProperty("tasktype")
+    private int taskType;
 
     @Column("sfreq")
     @ApiModelProperty("站点要求 0 无   1有")
-    private int sfreq;
+    @JsonProperty("sfreq")
+    private int sfReq;
 
     private float qty;
 
     @Column("pick_code")
     @ApiModelProperty("拣选站")
-    private String pickcode;
+    @JsonProperty("pickcode")
+    private String pickCode;
 
     @Column("ownerid")
     @ApiModelProperty("wms业主")
-    private String ownerid;
+    @JsonProperty("ownerid")
+    private String ownerId;
 
 
     private List<OutboundTaskDetail> details;

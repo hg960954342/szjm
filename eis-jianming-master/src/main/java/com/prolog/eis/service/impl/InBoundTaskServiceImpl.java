@@ -45,7 +45,7 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
             InboundTask task = list.get(i);
 
 
-                String agvLoc=task.getAgvloc();
+                String agvLoc=task.getAgvLoc();
                 Coordinate CoordinateAgv=PrologCoordinateUtils.analysis(agvLoc);
                  //暂时定入库任务状态开始为0
 
@@ -60,13 +60,10 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
                     int y=listPortInfotemp.getY();
                     int layer=listPortInfotemp.getLayer();
                     //查找当前点位是否有任务
-                    String source=PrologCoordinateUtils.splicingStr(x,y,layer);
-                    Criteria criteria=Criteria.forClass(ContainerTask.class);
-                    criteria.setRestriction((Restrictions.eq("source",source )));
-                    //criteria.setRestriction((Restrictions.eq("tastState", TastState.READY )));
-                    criteria.setRestriction((Restrictions.eq("taskType",5 )));
-                    long listContainerTaskCount= containerTaskMapper.findCountByCriteria(criteria);
-                    return listContainerTaskCount==0&&layer==CoordinateAgv.getLayer();
+                       String source=PrologCoordinateUtils.splicingStr(x,y,layer);
+                       List<ContainerTask> listContainerTask= containerTaskMapper.selectBySource(source);
+                       return (listContainerTask==null||listContainerTask!=null&&listContainerTask.size()==0)
+                               &&layer==CoordinateAgv.getLayer();
                 }).collect(Collectors.toList());
               //查找最近的入库口
                 PortInfo distinPortInfo=listPortInfo.stream().sorted((s1,s2)->{
