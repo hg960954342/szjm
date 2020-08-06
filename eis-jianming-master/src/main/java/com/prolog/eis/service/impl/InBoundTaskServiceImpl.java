@@ -91,8 +91,8 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
 
 
                 containerTask.setTaskType(5);
-                containerTask.setTaskState("1");
-                containerTask.setSourceType("2");
+                containerTask.setTaskState(1);
+                containerTask.setSourceType(2);
                 String uuid = UUID.randomUUID().toString().replaceAll("-","");
                 containerTask.setTaskCode(uuid);
 

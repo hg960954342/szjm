@@ -55,7 +55,7 @@ public class ContainerTask {
     @ApiModelProperty("wms批号")
     private String lotId;
 
-    @Column("ownerid")
+    @Column("owner_id")
     @ApiModelProperty("wms业主")
     private String ownerId;
 
