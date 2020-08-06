@@ -1,20 +1,17 @@
 package com.prolog.eis.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.prolog.eis.model.wms.ContainerTask;
-import com.prolog.eis.model.wms.ContainerTaskDetail;
-import com.prolog.eis.model.wms.LoginWmsResponse;
-import com.prolog.eis.model.wms.RepeatReport;
-import com.prolog.eis.service.ContainerTaskDetailService;
-import com.prolog.eis.service.ContainerTaskService;
-import com.prolog.eis.service.EisCallbackService;
-import com.prolog.eis.service.RepeatReportService;
+import com.prolog.eis.model.wms.*;
+import com.prolog.eis.service.*;
 import com.prolog.eis.service.login.WmsLoginService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.HttpUtils;
+import com.prolog.eis.util.NameAndSimplePropertyPreFilter;
 import com.prolog.eis.util.PrologApiJsonHelper;
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -23,7 +20,11 @@ import java.util.*;
 public class EisCallbackServiceImpl implements EisCallbackService {
 
     @Autowired
+    private InBoundTaskService inBoundTaskService;
+
+    @Autowired
     private ContainerTaskService containerTaskService;
+
     @Autowired
     private ContainerTaskDetailService containerTaskDetailService;
 
@@ -36,26 +37,35 @@ public class EisCallbackServiceImpl implements EisCallbackService {
     /**
      * 回告wms
      *
-     * @param containerTask
+     * @param containerCode
      * @throws Exception
      */
     @Override
-    public void inBoundReport(ContainerTask containerTask) throws Exception {
-        wmsLoginService.loginWms();
-        String token = LoginWmsResponse.accessToken;
+    public void inBoundReport(String containerCode) throws Exception {
+       /* wmsLoginService.loginWms();
+        String token = LoginWmsResponse.accessToken;*/
 
-        String url = "";
+        String url = "http://127.0.0.1:8095/api/v1/eis/eisInterface/inBoundReport";
+        InboundTask inboundTask = inBoundTaskService.selectByContainerCode(containerCode);
 
-        //封装入库回告数据
-        String json = this.inBoundReportData(containerTask);
-        String msg = "EIS->WMS [WMSInterface] 入库回告请求JSON：[message]:" + json;
-        FileLogHelper.WriteLog("WMSRequest", msg);
-        String restJson = HttpUtils.post(url, json);
-        String resultMsg = "EIS->WMS [WMSInterface] 入库回告返回JSON：[message]:" + restJson;
-        FileLogHelper.WriteLog("WMSRequest", resultMsg);
+        //判断是否需要回告wms
+        if (inboundTask.getReBack()==1){
+            //封装入库回告数据
+            String json = this.inBoundReportData(inboundTask);
+            String msg = "EIS->WMS [WMSInterface] 入库回告请求JSON：[message]:" + json;
+            FileLogHelper.WriteLog("WMSRequest", msg);
+            String restJson = HttpUtils.post(url, json);
+            String resultMsg = "EIS->WMS [WMSInterface] 入库回告返回JSON：[message]:" + restJson;
+            FileLogHelper.WriteLog("WMSRequest", resultMsg);
 
-        //判断回告结果
-        this.getWmsResponseData(json, restJson, url, containerTask.getTaskType());
+            //判断回告结果
+            this.getWmsResponseData(json, restJson, url, inboundTask.getTaskType());
+        }
+
+        inboundTask.setTaskState(4);
+        inboundTask.setEndTime(new Date());
+        inBoundTaskService.update(inboundTask);
+
     }
 
     /**
@@ -69,7 +79,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         wmsLoginService.loginWms();
         String token = LoginWmsResponse.accessToken;
 
-        String url = "";
+        String url = "http://127.0.0.1:8095/api/v1/eis/eisInterface/outBoundReport";
         String json = this.outBoundReportData(containerTask);
         String msg = "EIS->WMS [WMSInterface] 出库回告请求JSON：[message]:" + json;
         FileLogHelper.WriteLog("WMSRequest", msg);
@@ -88,10 +98,10 @@ public class EisCallbackServiceImpl implements EisCallbackService {
      */
     @Override
     public void moveBoundReport(ContainerTask containerTask) throws Exception {
-        wmsLoginService.loginWms();
-        String token = LoginWmsResponse.accessToken;
+       /* wmsLoginService.loginWms();
+        String token = LoginWmsResponse.accessToken;*/
 
-        String url = "";
+        String url = "http://127.0.0.1:8095/api/v1/eis/eisInterface/moveBoundReport";
         String json = this.moveBoundReportData(containerTask);
         String msg = "EIS->WMS [WMSInterface] 移库回告请求JSON：[message]:" + json;
         FileLogHelper.WriteLog("WMSRequest", msg);
@@ -104,16 +114,16 @@ public class EisCallbackServiceImpl implements EisCallbackService {
     /**
      * eis 盘点出库 回告 wms
      *
-     * @param containerTask
+     * @param billNo 单据号
      * @throws Exception
      */
     @Override
-    public void checkBoundReport(ContainerTask containerTask) throws Exception {
-        wmsLoginService.loginWms();
-        String token = LoginWmsResponse.accessToken;
+    public void checkBoundReport(String billNo) throws Exception {
+        /*wmsLoginService.loginWms();
+        String token = LoginWmsResponse.accessToken;*/
 
-        String url = "";
-        String json = this.checkBoundReportData(containerTask);
+        String url = "http://127.0.0.1:8095/api/v1/eis/eisInterface/checkBoundReport";
+        String json = this.checkBoundReportData(billNo);
         String msg = "EIS->WMS [WMSInterface] 盘点回告请求JSON：[message]:" + json;
         FileLogHelper.WriteLog("WMSRequest", msg);
 
@@ -121,7 +131,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
 
         String resultMsg = "EIS->WMS [WMSInterface] 盘点回告返回JSON：[message]:" + restJson;
         FileLogHelper.WriteLog("WMSRequest", resultMsg);
-        this.getWmsResponseData(json, restJson, url, containerTask.getTaskType());
+        this.getWmsResponseData(json, restJson, url,3);
     }
 
     /**
@@ -160,26 +170,22 @@ public class EisCallbackServiceImpl implements EisCallbackService {
     /**
      * 订单入库回告数据封装
      *
-     * @param containerTask
+     * @param inboundTask
      * @return
      * @throws Exception
      */
-    private String inBoundReportData(ContainerTask containerTask) throws Exception {
-        List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
-        List<Map<String, Object>> data = new ArrayList<>();
-        for (ContainerTaskDetail containerTaskDetail : containerTaskDetails) {
-            //封装
-            Map<String, Object> map = new HashMap<>();
-            map.put("billno", containerTaskDetail.getBillNo());
-            map.put("containercode", containerTask.getContainerCode());
-            map.put("tasktype", containerTask.getTaskType());
-            map.put("itemid", containerTask.getItemId());
-            map.put("ownerid", containerTask.getOwnerId());
+    private String inBoundReportData(InboundTask inboundTask) throws Exception {
+        List<InboundTask> data = new ArrayList<>();
+        data.add(inboundTask);
+        String[] str={"id","lotid","seqno","qty","agvloc"};
+        NameAndSimplePropertyPreFilter nameAndSimplePropertyPreFilter=new NameAndSimplePropertyPreFilter();
+        nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
+        Map<String,Object> map = new HashMap<>();
+        map.put("data",data);
+        map.put("size",data.size());
+        map.put("messageID",UUID.randomUUID().toString().replaceAll("-",""));
+       return JSONObject.toJSONString(map,nameAndSimplePropertyPreFilter);
 
-
-            data.add(map);
-        }
-        return PrologApiJsonHelper.toJson(data);
     }
 
 
@@ -191,24 +197,16 @@ public class EisCallbackServiceImpl implements EisCallbackService {
      * @throws Exception
      */
     private String outBoundReportData(ContainerTask containerTask) throws Exception {
-        List<Map<String, Object>> data = new ArrayList<>();
-        List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
-        for (ContainerTaskDetail containerTaskDetail : containerTaskDetails) {
-            //封装
-            Map<String, Object> map = new HashMap<>();
-            map.put("containercode", containerTaskDetail.getContainerCode());//容器
-            map.put("billno", containerTaskDetail.getBillNo());//单据号
-            map.put("tasktype", containerTask.getTaskType());//类型
-            map.put("ownerid", containerTaskDetail.getOwnerId());//货主
-            map.put("seqno", containerTaskDetail.getSeqNo());//行号
-            map.put("itemid", containerTaskDetail.getItemId());//商品id
-            map.put("qty", containerTaskDetail.getQty());//分摊数量
-            map.put("agvloc", containerTask.getSource());//agv点位
+        List<Map<String, Object>> reportData = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
+        String[] str={"lotid"};
+        NameAndSimplePropertyPreFilter nameAndSimplePropertyPreFilter=new NameAndSimplePropertyPreFilter();
+        nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
+        Map<String,Object> map = new HashMap<>();
+        map.put("data",reportData);
+        map.put("size",reportData.size());
+        map.put("messageID",UUID.randomUUID().toString().replaceAll("-",""));
+        return JSONObject.toJSONString(map,nameAndSimplePropertyPreFilter);
 
-            data.add(map);
-        }
-
-        return PrologApiJsonHelper.toJson(data);
     }
 
 
@@ -220,36 +218,28 @@ public class EisCallbackServiceImpl implements EisCallbackService {
      * @throws Exception
      */
     private String moveBoundReportData(ContainerTask containerTask) throws Exception {
-        List<Map<String, Object>> data = new ArrayList<>();
-        List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
-        for (ContainerTaskDetail containerTaskDetail : containerTaskDetails) {
-            //封装
-            Map<String, Object> map = new HashMap<>();
-            map.put("containercode", containerTaskDetail.getContainerCode());//容器
-            map.put("billno", containerTaskDetail.getBillNo());//单据号
-            map.put("tasktype", containerTask.getTaskType());//类型
-            map.put("seqno", containerTaskDetail.getSeqNo());//行号
-            map.put("itemid", containerTaskDetail.getItemId());//商品id
-            map.put("lotid", containerTaskDetail.getLotId());//批号
-            map.put("qty", containerTaskDetail.getQty());//分摊数量
-            map.put("agcloc", containerTask.getSource());//agv点位
+        List<Map<String, Object>> reportData = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
+        String[] str={"ownerid"};
+        NameAndSimplePropertyPreFilter nameAndSimplePropertyPreFilter=new NameAndSimplePropertyPreFilter();
+        nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
+        Map<String,Object> map = new HashMap<>();
+        map.put("data",reportData);
+        map.put("size",reportData.size());
+        map.put("messageID",UUID.randomUUID().toString().replaceAll("-",""));
+        return JSONObject.toJSONString(map,nameAndSimplePropertyPreFilter);
 
-            data.add(map);
-        }
-
-        return PrologApiJsonHelper.toJson(data);
     }
 
     /**
      * 盘点出库数据封装
      *
-     * @param containerTask
+     * @param billNo
      * @return
      * @throws Exception
      */
-    private String checkBoundReportData(ContainerTask containerTask) throws Exception {
+    private String checkBoundReportData(String billNo) throws Exception {
         //TODO Auto-generated method stub
-        List<Map<String,Object>> data = new ArrayList<>();
+        /*List<Map<String,Object>> data = new ArrayList<>();
         List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
         for (ContainerTaskDetail containerTaskDetail : containerTaskDetails) {
             //封装
@@ -270,20 +260,23 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             map.put("details",details);
             data.add(map);
         }
-        return PrologApiJsonHelper.toJson(data);
+        return PrologApiJsonHelper.toJson(data);*/
 
-        /*String billNo = "";
+      /*  String billNo = "";*/
         List<Map<String,Object>> data = new ArrayList<>();
+        Map<String,Object> reportData = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
+        //封装明细
+        List<Map<String,Object>> details = new ArrayList<>();
+        map.put("billno",billNo);//单据号
         List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByBillNo(billNo);
         for (ContainerTaskDetail containerTaskDetail : containerTaskDetails) {
             //封装
-            Map<String, Object> map = new HashMap<>();
-            map.put("billno", containerTaskDetail.getBillNo());//单据号
+//            map.put("billno",billNo);//单据号
 
             List<ContainerTask> containerTasks = containerTaskService.selectByContainerCode(containerTaskDetail.getContainerCode());
 
-            //封装明细
-            List<Map<String,Object>> details = new ArrayList<>();
+
             Map<String,Object> detail = new HashMap<>();
 
             for (ContainerTask task : containerTasks) {
@@ -294,11 +287,15 @@ public class EisCallbackServiceImpl implements EisCallbackService {
                 detail.put("containercode",task.getContainerCode());//容器
                 detail.put("qty",task.getQty());//分摊数量
             }
-            details.add(map);
+            details.add(detail);
             map.put("details",details);
-            data.add(map);
+
         }
-        return PrologApiJsonHelper.toJson(data);*/
+        data.add(map);
+        reportData.put("data",data);
+        reportData.put("size",data.size());
+        reportData.put("messageID",UUID.randomUUID().toString().replaceAll("-",""));
+        return JSONObject.toJSONString(reportData);
 
         /**
          * 封装

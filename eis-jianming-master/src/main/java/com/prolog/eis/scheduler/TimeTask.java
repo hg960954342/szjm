@@ -1,9 +1,11 @@
 package com.prolog.eis.scheduler;
 
+import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.dto.rcs.RcsRequestResultDto;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.RepeatReport;
 import com.prolog.eis.service.*;
+import com.prolog.eis.service.impl.EisCallbackServiceImpl;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
@@ -94,7 +96,7 @@ public class TimeTask {
 	private EisCallbackService eisCallbackService;
 
 	//定时给agv小车下分任务
-	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
 	public void sendTask2Rcs() throws Exception {
 		List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
 		if (!containerTasks.isEmpty() && containerTasks.size() > 0){
@@ -106,7 +108,7 @@ public class TimeTask {
 	 * 回告wms未成功 重复回告
 	 * @throws Exception
 	 */
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void resendReport()throws Exception{
 		List<RepeatReport> repeatReports = repeatReportService.findByState(0);
 		for (RepeatReport repeatReport : repeatReports) {
@@ -137,11 +139,11 @@ public class TimeTask {
 
 					RcsRequestResultDto rcsRequestResultDto = null;
 					//获取任务终点，判断小车任务模板
-					int targetType = (containerTask.getTargetType());
+					int targetType = containerTask.getTargetType();
 					if (targetType == 1) {//目标地点位为 agv区域
-						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "01", "3");
+						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "3");
 					} else {//目的地点位 为输送线
-						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "02", "3");
+						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F02", "3");
 					}
 
 					/*String restJson = PrologApiJsonHelper.toJson(rcsRequestResultDto);*/
@@ -165,8 +167,24 @@ public class TimeTask {
 			}
 		}
 	}
+	@Autowired
+	private AgvStorageLocationService agvStorageLocationService;
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	public void testReport()throws Exception{
+		ContainerTask containerTask = new ContainerTask();
+//		containerTask.setContainerCode("800011");
+//		containerTask.setContainerCode("800012");
+		containerTask.setContainerCode("700010");
+		/*containerTask.setTaskType(2);
+		containerTask.setItemId("SPH00001363");
+		containerTask.setOwnerId("008");*/
+		eisCallbackService.inBoundReport("6000002");
+//		eisCallbackService.outBoundReport(containerTask);
+//		eisCallbackService.moveBoundReport(containerTask);
+//		eisCallbackService.checkBoundReport("PDC00000101");
 
 
+	}
 
 
 

@@ -3,7 +3,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://39.96.69.213:8761/eureka/
-  instance: 
+  instance:
     # 注册时使用ip而不是主机名
     preferIpAddress: true
     instanceId: ${server.ipAddress}:${server.port}
@@ -11,22 +11,22 @@ eureka:
     # 状态地址为api地址
     statusPageUrlPath: /${server.servlet.contextpath:}/apidoc.html
 
-server: 
+server:
   ipAddress: 127.0.0.1
-  port: 20203 
-  servlet: 
-    contextpath:    
-        
+  port: 20203
+  servlet:
+    contextpath:
+
 spring:
   application:
     name: service-eis-master
-  devtools: 
-    restart: 
+  devtools:
+    restart:
       enabled: true
   datasource:
     url: jdbc:mysql://localhost:3306/zwy
     username: root
-    password: 888888 
+    password: 888888
     driver-class-name: com.mysql.jdbc.Driver
     #初始化大小
     initialSize: 0
@@ -39,10 +39,10 @@ spring:
     #最小生存時間
     minEvictableIdleTimeMillis: 25200000
 
-prolog: 
-  resend: 
+prolog:
+  resend:
      resendcount: 10
-  debug: 
+  debug:
      debugMode: 1
   apidoc: #api文档配置文件
     title: 用户服务
@@ -52,7 +52,7 @@ prolog:
   rcs:
      ip:127.0.0.1
      port:80
-  dao: 
+  dao:
     dialect: mysql
     pagehelper: #pagehelper分页插件配置
       helperDialect: ${prolog.dao.dialect}
@@ -64,11 +64,10 @@ prolog:
     mybatis:
       typeAliasesPackage: com.prolog.eis.model
       mapperLocations: classpath:mappers/*.xml
-      
-  web: 
+
+  web:
     multipart:  #文件上传配置
       maxFileSize: 100MB
       maxRequestSize: 100MB
-  
-      
-  
+
+

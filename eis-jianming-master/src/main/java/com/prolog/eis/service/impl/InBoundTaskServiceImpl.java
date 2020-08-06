@@ -108,10 +108,15 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
 
         }
 
+    @Override
+    public InboundTask selectByContainerCode(String containerCode) {
+        return inBoundTaskMapper.getReportData(containerCode);
+    }
 
-
-
-
+    @Override
+    public void update(InboundTask inboundTask) {
+    inBoundTaskMapper.update(inboundTask);
+    }
 
 
 }
