@@ -3,21 +3,19 @@ package com.prolog.eis.dao;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.framework.dao.mapper.BaseMapper;
 
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
+	@ResultMap("ContainerTask")
     @Select("select * from container_task where task_state = #{taskState}")
     List<ContainerTask> selectByTaskState(String taskState);
-
+	@ResultMap("ContainerTask")
     @Select("select * from container_task where task_code= #{taskCode}")
     ContainerTask selectByTaskCode(String taskCode);
     
-    @Results({
+    @Results(id="ContainerTask" ,value={
 		@Result(property = "id",  column = "id"),
 		@Result(property = "containerCode",  column = "container_code"),
 		@Result(property = "taskType",  column = "task_type"),
@@ -40,7 +38,7 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
     @Select("select t.* from container_task t where t.container_code = {containerCode} and (t.task_state = 2 or t.task_state = 3 or t.task_state = 4)")
     ContainerTask selectStartTaskByContainerCode(String containerCode);
 
-
+   @ResultMap("ContainerTask")
     @Select("select * from container_task where source = #{source} and task_state='1' UNION all \r\n" +
             "select * from container_task where target = #{source} and task_state='1' ")
     List<ContainerTask> selectBySource(@Param("source") String source);

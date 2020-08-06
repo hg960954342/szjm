@@ -51,7 +51,7 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
 
 
 
-                 int taskType=6; //定义出入口的类型为6
+                 int taskType=1; //定义任务类型 （1任务托 2包材 3 空拖 4质检 ）
                 //获取所有的入库口
                 List<PortInfo> listPortInfo=portInfoMapper.getPortInfoByTaskType(taskType);
                 //查找同一楼层没有任务占用的入库口集合

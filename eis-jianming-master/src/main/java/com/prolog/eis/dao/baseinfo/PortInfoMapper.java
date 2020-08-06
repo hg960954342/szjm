@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PortInfoMapper extends BaseMapper<PortInfo>{
 
-	@Results({
+	@Results(id="PortInfo" ,value={
 		@Result(property = "id",  column = "id"),
 		@Result(property = "portType",  column = "port_type"),
 		@Result(property = "taskType",  column = "task_type"),
@@ -119,6 +119,7 @@ public interface PortInfoMapper extends BaseMapper<PortInfo>{
 			"where p.area = 2 and p.port_lock = 2 and s.wms_station_no = #{station}")
 	List<PortInfoDto> getSxkStationPort(@Param("station")String station);
 
+	@ResultMap(value="PortInfo")
 	@Select("select * from port_info where task_type=#{task_type} and (port_type=1 or port_type=3)")
 	List<PortInfo> getPortInfoByTaskType(@Param("task_type")int task_type);
 
