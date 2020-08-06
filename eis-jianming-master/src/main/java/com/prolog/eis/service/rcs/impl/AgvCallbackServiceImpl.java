@@ -48,21 +48,21 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 			//判断小车状态
 			if (method.equals("start")){
 				//小车任务开始
-				containerTask.setTaskState("3");//设置下游设备回告开始
+				containerTask.setTaskState(3);//设置下游设备回告开始
 				containerTask.setStartTime(new Date());
 				containerTaskService.update(containerTask);
 
 			}
 			if (method.equals("outbin")){
 				//小车离开原存储位
-				containerTask.setTaskState("4");//设置下游设备离开原存储位
+				containerTask.setTaskState(4);//设置下游设备离开原存储位
 				containerTask.setMoveTime(new Date());
 				containerTaskService.update(containerTask);
 
 			}
 			if (method.equals("end")){
 				//小车任务结束
-				containerTask.setTaskState("1");//设置托盘到位
+				containerTask.setTaskState(1);//设置托盘到位
 				containerTask.setEndTime(new Date());//设置小车结束时间
 				//获取target坐标
 				String target = containerTask.getTarget();
@@ -73,7 +73,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 				if (agvStorageLocation.getLocationType() == 2){
 					//小车搬运后当前位置在入库输送线口
 					//设置当前位置为输送线
-					containerTask.setSourceType("2");
+					containerTask.setSourceType(2);
 					containerTaskService.update(containerTask);
 					//通知输送线运行
 					// TODO Auto-generated method stub

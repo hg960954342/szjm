@@ -137,7 +137,7 @@ public class TimeTask {
 
 					RcsRequestResultDto rcsRequestResultDto = null;
 					//获取任务终点，判断小车任务模板
-					int targetType = Integer.parseInt(containerTask.getTargetType());
+					int targetType = (containerTask.getTargetType());
 					if (targetType == 1) {//目标地点位为 agv区域
 						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "01", "3");
 					} else {//目的地点位 为输送线
