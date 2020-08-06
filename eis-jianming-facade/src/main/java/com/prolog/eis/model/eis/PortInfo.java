@@ -20,7 +20,7 @@ public class PortInfo {
 	private int portType;
 	
 	@Column("task_type")
-	@ApiModelProperty("任务类型 （1任务托 2包材 3 空拖 4质检 ）")
+	@ApiModelProperty("任务类型 （1任务托 2包材 3 空托 4质检 ）")
 	private int taskType;
 	
 	@Column("work_type")

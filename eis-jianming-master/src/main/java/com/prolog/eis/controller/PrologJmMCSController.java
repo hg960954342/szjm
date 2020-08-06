@@ -66,7 +66,7 @@ public class PrologJmMCSController {
 			}catch (Exception e) {
 				// TODO: handle exception
 				
-				FileLogHelper.WriteLog("mcstaskReturnError", "mcs返回异常" + e.toString());
+				FileLogHelper.WriteLog("McsInterfaceCallbackError", "mcs返回异常" + e.toString());
 				String resultStr = getLhMcsValue(false,e.toString(),"100",new ArrayList<TaskReturnInBoundRequestResponse>());
 				out.write(resultStr.getBytes("UTF-8"));
 				out.flush();

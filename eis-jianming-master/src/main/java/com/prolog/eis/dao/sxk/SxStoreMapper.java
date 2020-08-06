@@ -33,20 +33,26 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
      * @param containerNo
      * @return
      */
-    @Select("select\n" + 
-    		" sl.ascent_lock_state as ascentLockStat,\n" + 
-    		" sslp.ascent_lock_state as ascentGroupLockState,\n" + 
-    		" sslp.is_lock as isLock,\n" + 
-    		" sl.dept_num as deptNum\n" + 
-    		"from\n" + 
-    		" sx_store ss\n" + 
-    		"left join sx_store_location sl on\n" + 
-    		" sl.id = ss.store_location_id\n" + 
-    		"left join sx_store_location_group sslp on\n" + 
-    		" sl.store_location_group_id = sslp.id\n" + 
-    		"where\n" + 
-    		" ss.container_no =\n" + 
-    		" #{containerNo}")
+    @Select("select \n" + 
+    		"ss.id as storeId,\n" + 
+    		"sl.id as locationId,\n" + 
+    		"sl.ascent_lock_state as ascentLockState, \n" + 
+    		"sslp.ascent_lock_state as ascentGroupLockState, \n" + 
+    		"sslp.is_lock as isLock, \n" + 
+    		"sl.dept_num as deptNum, \n" + 
+    		"ss.store_state as storeState, \n" + 
+    		"sl.layer, \n" + 
+    		"sl.x, \n" + 
+    		"sl.y \n" + 
+    		"from \n" + 
+    		"sx_store ss \n" + 
+    		"left join sx_store_location sl on \n" + 
+    		"sl.id = ss.store_location_id \n" + 
+    		"left join sx_store_location_group sslp on \n" + 
+    		"sl.store_location_group_id = sslp.id\n" + 
+    		"where \n" + 
+    		"ss.container_no =  \n" + 
+    		"#{containerNo}")
     SxStoreLock findSxStoreLock(@Param("containerNo") String containerNo);
     
     /**

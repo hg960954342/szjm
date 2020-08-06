@@ -1,21 +1,24 @@
 package com.prolog.eis.scheduler;
 
-import com.prolog.eis.dto.rcs.RcsRequestResultDto;
-import com.prolog.eis.model.wms.ContainerTask;
-import com.prolog.eis.model.wms.RepeatReport;
-import com.prolog.eis.service.*;
-import com.prolog.eis.service.rcs.RcsRequestService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.PrologApiJsonHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.prolog.eis.dto.rcs.RcsRequestResultDto;
+import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.model.wms.RepeatReport;
+import com.prolog.eis.service.ContainerTaskService;
+import com.prolog.eis.service.EisCallbackService;
+import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.service.OutBoundTaskService;
+import com.prolog.eis.service.RepeatReportService;
+import com.prolog.eis.service.rcs.RcsRequestService;
+import com.prolog.eis.util.FileLogHelper;
 
 @Component
 public class TimeTask {
@@ -46,7 +49,19 @@ public class TimeTask {
 
 	}
 
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	public void buildSxCkTask() throws Exception {
 
+		try {
+			synchronized("kucun".intern()) {
+				
+			}
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			FileLogHelper.WriteLog("buildCkTask", e.toString());
+		}
+	}
 
 
 

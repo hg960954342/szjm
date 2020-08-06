@@ -1,6 +1,7 @@
 package com.prolog.eis.model.wms;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.prolog.framework.core.annotation.AutoKey;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,6 +20,7 @@ public class InboundTask {
 
     @Column("id")
     @ApiModelProperty("主键")
+    @AutoKey(type = AutoKey.TYPE_IDENTITY)
     private int id;
 
     @Column("bill_no")

@@ -5,7 +5,7 @@ public class SxStoreLock {
 	/**
 	 * 货位升位锁
 	 */
-	private Integer ascentLockStat;
+	private Integer ascentLockState;
 	
 	/**
 	 * 货位组升位锁
@@ -28,6 +28,15 @@ public class SxStoreLock {
 	private int storeId;
 	
 	/**
+	 * 货位Id
+	 */
+	private int locationId;
+	
+	/**
+	 * 库存状态(10：入库中、 20：已上架、 30：出库中、31:待出库、40：移位中)
+	 */
+	private int storeState;
+	/**
 	 * 层
 	 */
 	private int layer;
@@ -42,30 +51,12 @@ public class SxStoreLock {
 	 */
 	private int y;
 
-	public SxStoreLock() {
-		super();
-		// TODO Auto-generated constructor stub
+	public Integer getAscentLockState() {
+		return ascentLockState;
 	}
 
-	public SxStoreLock(Integer ascentLockStat, Integer ascentGroupLockState, Integer isLock, int deptNum, int storeId,
-			int layer, int x, int y) {
-		super();
-		this.ascentLockStat = ascentLockStat;
-		this.ascentGroupLockState = ascentGroupLockState;
-		this.isLock = isLock;
-		this.deptNum = deptNum;
-		this.storeId = storeId;
-		this.layer = layer;
-		this.x = x;
-		this.y = y;
-	}
-
-	public Integer getAscentLockStat() {
-		return ascentLockStat;
-	}
-
-	public void setAscentLockStat(Integer ascentLockStat) {
-		this.ascentLockStat = ascentLockStat;
+	public void setAscentLockState(Integer ascentLockState) {
+		this.ascentLockState = ascentLockState;
 	}
 
 	public Integer getAscentGroupLockState() {
@@ -100,6 +91,22 @@ public class SxStoreLock {
 		this.storeId = storeId;
 	}
 
+	public int getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
+	}
+
+	public int getStoreState() {
+		return storeState;
+	}
+
+	public void setStoreState(int storeState) {
+		this.storeState = storeState;
+	}
+
 	public int getLayer() {
 		return layer;
 	}
@@ -122,64 +129,5 @@ public class SxStoreLock {
 
 	public void setY(int y) {
 		this.y = y;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((ascentGroupLockState == null) ? 0 : ascentGroupLockState.hashCode());
-		result = prime * result + ((ascentLockStat == null) ? 0 : ascentLockStat.hashCode());
-		result = prime * result + deptNum;
-		result = prime * result + ((isLock == null) ? 0 : isLock.hashCode());
-		result = prime * result + layer;
-		result = prime * result + storeId;
-		result = prime * result + x;
-		result = prime * result + y;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SxStoreLock other = (SxStoreLock) obj;
-		if (ascentGroupLockState == null) {
-			if (other.ascentGroupLockState != null)
-				return false;
-		} else if (!ascentGroupLockState.equals(other.ascentGroupLockState))
-			return false;
-		if (ascentLockStat == null) {
-			if (other.ascentLockStat != null)
-				return false;
-		} else if (!ascentLockStat.equals(other.ascentLockStat))
-			return false;
-		if (deptNum != other.deptNum)
-			return false;
-		if (isLock == null) {
-			if (other.isLock != null)
-				return false;
-		} else if (!isLock.equals(other.isLock))
-			return false;
-		if (layer != other.layer)
-			return false;
-		if (storeId != other.storeId)
-			return false;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "SxStoreLock [ascentLockStat=" + ascentLockStat + ", ascentGroupLockState=" + ascentGroupLockState
-				+ ", isLock=" + isLock + ", deptNum=" + deptNum + ", storeId=" + storeId + ", layer=" + layer + ", x="
-				+ x + ", y=" + y + "]";
 	}
 }
