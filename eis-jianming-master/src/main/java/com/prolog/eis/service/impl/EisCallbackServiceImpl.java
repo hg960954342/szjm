@@ -47,6 +47,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
 
         String url = "http://127.0.0.1:8095/api/v1/eis/eisInterface/inBoundReport";
         InboundTask inboundTask = inBoundTaskService.selectByContainerCode(containerCode);
+        if(null==inboundTask) return;
 
         //判断是否需要回告wms
         if (inboundTask.getReBack()==1){

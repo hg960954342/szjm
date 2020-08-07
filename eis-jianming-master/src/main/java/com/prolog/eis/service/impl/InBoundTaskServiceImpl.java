@@ -62,10 +62,12 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
                     //查找当前点位是否有任务
                        String source=PrologCoordinateUtils.splicingStr(x,y,layer);
                        List<ContainerTask> listContainerTask= containerTaskMapper.selectBySource(source);
-                       return (listContainerTask==null||listContainerTask!=null&&listContainerTask.size()==0)
+                       return (listContainerTask.size()==0)
                                &&layer==CoordinateAgv.getLayer();
                 }).collect(Collectors.toList());
-              //查找最近的入库口
+
+               if(listPortInfo.size()==0) continue ;
+                 //查找最近的入库口
                 PortInfo distinPortInfo=listPortInfo.stream().sorted((s1,s2)->{
                      double _x1 = Math.abs(CoordinateAgv.getX()- s1.getX());
                     double _y1 = Math.abs(CoordinateAgv.getY()- s1.getY());

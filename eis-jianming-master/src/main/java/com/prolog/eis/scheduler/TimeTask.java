@@ -224,8 +224,9 @@ public class TimeTask {
 		container.setData(list);
 		container.setMessageID("");
 		container.setSize(list.size());
-		JSON.toJSONString(container,new NameAndSimplePropertyPreFilter(),
+		String srt=JSON.toJSONString(container,new NameAndSimplePropertyPreFilter(),
 				SerializerFeature.DisableCircularReferenceDetect);
+		System.out.println(srt+"-----------------------");
 
 	}
 
