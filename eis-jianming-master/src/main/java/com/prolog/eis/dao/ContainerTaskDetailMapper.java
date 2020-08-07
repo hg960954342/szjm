@@ -39,7 +39,7 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
     @Results({
             @Result(property = "billno", column = "bill_no"),
             @Result(property = "tasktype", column = "task_type"),
-            @Result(property = "details", column = "bill_no,task_type",
+            @Result(property = "details", column = "bill_no=bill_no,task_type=task_type",
                     many = @Many(select = "com.prolog.eis.dao.ContainerTaskDetailMapper.getCheckDetail")),
     })
     @Select("select  x.bill_no,x.task_type from (\n" +
