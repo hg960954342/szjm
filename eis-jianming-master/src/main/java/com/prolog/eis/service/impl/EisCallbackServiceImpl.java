@@ -238,6 +238,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
      * @throws Exception
      */
     private String checkBoundReportData(String billNo) throws Exception {
+
         //TODO Auto-generated method stub
         /*List<Map<String,Object>> data = new ArrayList<>();
         List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
@@ -263,12 +264,22 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         return PrologApiJsonHelper.toJson(data);*/
 
       /*  String billNo = "";*/
-        List<Map<String,Object>> data = new ArrayList<>();
-        Map<String,Object> reportData = new HashMap<>();
-        Map<String, Object> map = new HashMap<>();
-        //封装明细
-        List<Map<String,Object>> details = new ArrayList<>();
-        map.put("billno",billNo);//单据号
+     /*   List<ResultContainer.DataBean> dataBeans = containerTaskDetailService.selectByBillNo(billNo);
+        ResultContainer resultData = new ResultContainer();
+        resultData.setData(dataBeans);
+        resultData.setSize(dataBeans.size());
+        resultData.setMessageID(UUID.randomUUID().toString().replaceAll("-",""));
+        return JSONObject.toJSONString(resultData);*/
+        EisReportDto eisReportDto = new EisReportDto();
+        List<EisReport> datas= new ArrayList<>();
+
+        List<ReportDateil> dateils = new ArrayList<>();
+//        ReportDateil dateil = new ReportDateil();
+        /*//封装明细
+        List<Map<String,Object>> details = new ArrayList<>();*/
+        EisReport data = new EisReport();
+        data.setBillNo(billNo);
+//        map.put("billno",billNo);//单据号
         List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByBillNo(billNo);
         for (ContainerTaskDetail containerTaskDetail : containerTaskDetails) {
             //封装
@@ -277,25 +288,39 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             List<ContainerTask> containerTasks = containerTaskService.selectByContainerCode(containerTaskDetail.getContainerCode());
 
 
-            Map<String,Object> detail = new HashMap<>();
+//            Map<String,Object> detail = new HashMap<>();
+            ReportDateil dateil = new ReportDateil();
 
             for (ContainerTask task : containerTasks) {
-                map.put("tasktype",task.getTaskType());
-                detail.put("seqno",containerTaskDetail.getSeqNo());//行号
+//                map.put("tasktype",task.getTaskType());
+               /* detail.put("seqno",containerTaskDetail.getSeqNo());//行号
                 detail.put("itemid",task.getItemId());//商品id
                 detail.put("lotid",task.getLotId());//批号
                 detail.put("containercode",task.getContainerCode());//容器
-                detail.put("qty",task.getQty());//分摊数量
+                detail.put("qty",task.getQty());//分摊数量*/
+                data.setTaskType(task.getTaskType()+"");
+                dateil.setItemId(task.getItemId());
+                dateil.setLotId(task.getLotId());
+                dateil.setContainerCode(task.getContainerCode());
+                dateil.setQty(task.getQty());
+                dateils.add(dateil);
             }
-            details.add(detail);
-            map.put("details",details);
+            /*details.add(detail);
+            map.put("details",details);*/
+
 
         }
-        data.add(map);
+        datas.add(data);
+        eisReportDto.setData(datas);
+        eisReportDto.setSize(datas.size());
+        eisReportDto.setMessageID(UUID.randomUUID().toString().replaceAll("-",""));
+        return JSONObject.toJSONString(eisReportDto,new NameAndSimplePropertyPreFilter());
+       /* data.add(map);
         reportData.put("data",data);
         reportData.put("size",data.size());
         reportData.put("messageID",UUID.randomUUID().toString().replaceAll("-",""));
-        return JSONObject.toJSONString(reportData);
+        return JSONObject.toJSONString(reportData);*/
+
 
         /**
          * 封装

@@ -6,6 +6,7 @@ import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
 	@ResultMap("ContainerTask")
@@ -27,7 +28,7 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
 		@Result(property = "taskCode",  column = "task_code"),
 		@Result(property = "itemId",  column = "item_id"),
 		@Result(property = "lotId",  column = "lot_id"),
-		@Result(property = "ownerId",  column = "ownerid"),
+		@Result(property = "ownerId",  column = "owner_id"),
 		@Result(property = "qty",  column = "qty"),
 		@Result(property = "createTime",  column = "create_time"),
 		@Result(property = "sendTime",  column = "send_time"),
@@ -42,4 +43,11 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
     @Select("select * from container_task where source = #{source} and task_state='1' UNION all \r\n" +
             "select * from container_task where target = #{source} and task_state='1' ")
     List<ContainerTask> selectBySource(@Param("source") String source);
+
+
+    @Results({
+			@Result(property = "containerCode",  column = "container_code"),
+	})
+	@Select("select * from container_task t, container_task_detail d where container_code=#{containerCode}; ")
+	List<Map<String,Object>> getData(@Param("containerCode") String containerCode);
 }

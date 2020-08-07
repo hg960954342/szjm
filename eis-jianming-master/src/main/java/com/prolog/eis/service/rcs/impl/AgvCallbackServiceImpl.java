@@ -1,6 +1,7 @@
 package com.prolog.eis.service.rcs.impl;
 
 import com.prolog.eis.dto.base.Coordinate;
+import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.ContainerTaskService;
@@ -33,9 +34,11 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 
 		//agv 回告 method ：start : 任务开始、outbin : 走出储位、end : 任务结束
 
+
 		//根据任务号 查询 托盘任务
 		List<ContainerTask> containerTasks = containerTaskService.selectByTaskCode(taskCode);
 		for (ContainerTask containerTask : containerTasks) {
+
 			//判断小车状态
 			if (method.equals("start")){
 				//小车任务开始
@@ -49,6 +52,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 				containerTask.setTaskState(4);//设置下游设备离开原存储位
 				containerTask.setMoveTime(new Date());
 				containerTaskService.update(containerTask);
+
 
 			}
 			if (method.equals("end")){

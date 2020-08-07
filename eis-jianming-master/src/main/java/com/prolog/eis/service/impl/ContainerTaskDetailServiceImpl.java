@@ -43,5 +43,6 @@ public class ContainerTaskDetailServiceImpl implements ContainerTaskDetailServic
     public List<ContainerTaskDetail> selectByBillNo(String billNo) {
         Map<String, Object> map = MapUtils.put("billNo", billNo).getMap();
         return containerTaskDetailMapper.findByMap(map,ContainerTaskDetail.class);
+//      return containerTaskDetailMapper.getCheckReportData(billNo);
     }
 }
