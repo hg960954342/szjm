@@ -24,6 +24,11 @@ public class AgvStorageLocationServiceImpl implements AgvStorageLocationService 
         return agvStorageLocationMapper.findByCoord(layer,x,y);
     }
 
+    @Override
+    public AgvStorageLocation findByRcs(String location) {
+        return agvStorageLocationMapper.findByRcs(location);
+    }
+
     /*public static void main(String[] args) {
         String coord = "0300010002";
 

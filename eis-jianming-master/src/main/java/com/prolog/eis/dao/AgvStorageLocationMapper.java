@@ -3,6 +3,7 @@ package com.prolog.eis.dao;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
@@ -18,4 +19,8 @@ public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation>
             @Result(property = "deviceNo",  column = "device_no")    })
     @Select("select * from agv_storagelocation where ceng=#{layer} and x=#{x] and y=#{y}")
     AgvStorageLocation findByCoord(int layer, int x, int y);
+
+    @ResultMap(value = "AgvStorageLocation")
+    @Select("select * from agv_storagelocation where rcs_position_code=#{location}")
+    AgvStorageLocation findByRcs(String location);
 }

@@ -5,4 +5,6 @@ import com.prolog.eis.model.wms.AgvStorageLocation;
 
 public interface AgvStorageLocationService {
     AgvStorageLocation findByCoord(Coordinate coordinate);
+
+    AgvStorageLocation findByRcs(String location);
 }
