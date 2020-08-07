@@ -22,42 +22,42 @@ public class OutboundTaskDetail {
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    @JsonProperty("billno")
+    @JsonProperty("BILLNO")
     private String billNo;
 
     @Column("seqno")
     @ApiModelProperty("明细行号")
-    @JsonProperty("seqno")
+    @JsonProperty("SEQNO")
     private String seqNo;
 
     @Column("ctreq")
     @ApiModelProperty("是否指定托盘 0不指定 1指定")
-    @JsonProperty("ctreq")
+    @JsonProperty("CTREQ")
     private int ctReq;
 
     @Column("container_code")
     @ApiModelProperty("母托盘编号")
-    @JsonProperty("containercode")
+    @JsonProperty("CONTAINERCODE")
     private int containerCode;
 
     @Column("owner_id")
     @ApiModelProperty("wms业主")
-    @JsonProperty("ownerid")
+    @JsonProperty("CONSIGNOR")
     private String ownerId;
 
     @Column("item_id")
     @ApiModelProperty("wms商品id")
-    @JsonProperty("itemid")
+    @JsonProperty("ITEMID")
     private String itemId;
 
     @Column("lot_id")
     @ApiModelProperty("wms批号")
-    @JsonProperty("lotid")
+    @JsonProperty("LOTID")
     private String lotId;
 
     @Column("qty")
     @ApiModelProperty("数量（重量）")
-    @JsonProperty("qty")
+    @JsonProperty("QTY")
     private float qty;
 
     @Column("finish_qty")
@@ -66,7 +66,7 @@ public class OutboundTaskDetail {
 
     @Column("pick_code")
     @ApiModelProperty("拣选站  指定拣选站  暂时移库出库用到")
-    @JsonProperty("pickcode")
+    @JsonProperty("PICKCODE")
     private String pickCode;
 
     @Column("create_time")

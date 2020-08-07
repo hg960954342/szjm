@@ -25,7 +25,7 @@ public class InboundTask {
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    @JsonProperty("billno")
+    @JsonProperty("BILLNO")
     private String billNo;
 
     @Column("wms_push")
@@ -42,42 +42,42 @@ public class InboundTask {
 
     @Column("container_code")
     @ApiModelProperty("母托盘编号")
-    @JsonProperty("containercode")
+    @JsonProperty("CONTAINERCODE")
     private String containerCode;
 
     @Column("task_type")
     @ApiModelProperty("任务托暂未定   空托的情况 0空托垛入库  1空托碟")
-    @JsonProperty("tasktype")
+    @JsonProperty("TASKTYPE")
     private int taskType;
 
     @Column("item_id")
     @ApiModelProperty("wms商品id")
-    @JsonProperty("itemid")
+    @JsonProperty("ITEMID")
     private String itemId;
 
     @Column("qty")
     @ApiModelProperty("数量（重量）")
-    @JsonProperty("qty")
+    @JsonProperty("QTY")
     private float qty;
 
     @Column("lot_id")
     @ApiModelProperty("wms批号")
-    @JsonProperty("lotid")
+    @JsonProperty("LOTID")
     private String lotId;
 
     @Column("ceng")
     @ApiModelProperty("入库楼层")
-    @JsonProperty("ceng")
+    @JsonProperty("CENG")
     private String ceng;
 
     @Column("agv_loc")
     @ApiModelProperty("Agv搬运点")
-    @JsonProperty("agvloc")
+    @JsonProperty("AGVLOC")
     private String agvLoc;
 
     @Column("owner_id")
     @ApiModelProperty("wms业主")
-    @JsonProperty("ownerid")
+    @JsonProperty("CONSIGNOR")
     private String ownerId;
 
     @Column("task_state")

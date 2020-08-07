@@ -23,7 +23,7 @@ public class OutboundTask {
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    @JsonProperty("billno")
+    @JsonProperty("BILLNO")
     private String billNo;
 
     @Column("wms_push")
@@ -40,24 +40,24 @@ public class OutboundTask {
 
     @Column("task_type")
     @ApiModelProperty("任务托暂未定   空托的情况 0空托垛入库  1空托碟")
-    @JsonProperty("tasktype")
+    @JsonProperty("TYPE")
     private int taskType;
 
     @Column("sfreq")
     @ApiModelProperty("站点要求 0 无   1有")
-    @JsonProperty("sfreq")
+    @JsonProperty("SFREQUIREMENT")
     private int sfReq;
 
     private float qty;
 
     @Column("pick_code")
     @ApiModelProperty("拣选站")
-    @JsonProperty("pickcode")
+    @JsonProperty("PICKCODE")
     private String pickCode;
 
     @Column("owner_id")
     @ApiModelProperty("wms业主")
-    @JsonProperty("ownerid")
+    @JsonProperty("CONSIGNOR")
     private String ownerId;
 
 
@@ -70,8 +70,6 @@ public class OutboundTask {
     @Column("end_time")
     @ApiModelProperty("结束时间")
     private Date endTime;
-
-
 
 
 }
