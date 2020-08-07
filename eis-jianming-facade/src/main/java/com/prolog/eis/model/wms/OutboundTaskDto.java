@@ -16,6 +16,6 @@ public class OutboundTaskDto {
 
     private int size;
 
-    @JsonProperty("messageID")
+    @JsonProperty("MessageID")
     private String messageId;
 }

@@ -12,7 +12,7 @@ public class InboundTaskDto {
 
     private int size;
 
-    @JsonProperty("messageID")
+    @JsonProperty("MessageID")
     private String messageId;
 
     public List<InboundTask> getData() {
