@@ -1,5 +1,6 @@
 package com.prolog.eis.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.EisIdempotentService;
 import com.prolog.eis.service.OutboundDataService;
@@ -28,8 +29,8 @@ public class OutboundDataController {
     private OutboundDataService outboundDataService;
 
     @ApiOperation(value = "出库任务数据生成", notes = "出库任务数据生成")
-    @PostMapping("/outBoundTaskInterface")
-    public String outboundTaskPush(@RequestBody String str) throws Exception {
+    @PostMapping("/outboundtask")
+    public JsonResult outboundTaskPush(@RequestBody String str) throws Exception {
 
         PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
@@ -41,10 +42,13 @@ public class OutboundDataController {
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
-            String rejson = "";
+            JsonResult rejson = new JsonResult();
+            String string= "";
 
             if(wmsEisIdempotents.size() != 0){
-                rejson = wmsEisIdempotents.get(0).getRejson();
+                string = wmsEisIdempotents.get(0).getRejson();
+                PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
+                rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             }else{
                 List<OutboundTask> data = outboundTaskDto.getData();
@@ -87,7 +91,8 @@ public class OutboundDataController {
 
                     }catch (Exception e){
 
-                        rejson+=("code : -1 ,message : false");
+                        rejson.setCode("-1");
+                        rejson.setMessage("false");
 
                         WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                         wmsEisIdempotent.setMessageId(messageID);
@@ -95,7 +100,8 @@ public class OutboundDataController {
                         Date t = new Date(l);
                         java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
                         wmsEisIdempotent.setLocDate(ltime);
-                        wmsEisIdempotent.setRejson(rejson);
+                        string = JSONObject.toJSONString(rejson);
+                        wmsEisIdempotent.setRejson(string);
                         eisIdempotentService.insertReport(wmsEisIdempotent);
 
                         FileLogHelper.WriteLog("WmsOutStockTask", "WMS->EIS出库返回" + rejson);
@@ -105,7 +111,8 @@ public class OutboundDataController {
                     }
                 }
 
-                rejson+=("code : 0 ,message : success");
+                rejson.setCode("0");
+                rejson.setMessage("true");
 
                 WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                 wmsEisIdempotent.setMessageId(messageID);
@@ -113,7 +120,8 @@ public class OutboundDataController {
                 Date t = new Date(l);
                 java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
                 wmsEisIdempotent.setLocDate(ltime);
-                wmsEisIdempotent.setRejson(rejson);
+                string = JSONObject.toJSONString(rejson);
+                wmsEisIdempotent.setRejson(string);
                 eisIdempotentService.insertReport(wmsEisIdempotent);
 
                 FileLogHelper.WriteLog("WmsOutStockTask", "WMS->EIS出库返回" + rejson);
@@ -123,7 +131,9 @@ public class OutboundDataController {
 
         }catch (Exception e){
             FileLogHelper.WriteLog("WmsOutStockTaskError", "出库异常，错误信息：\n" + e.toString());
-            String resultStr ="code : -1 ,message : false";
+            JsonResult resultStr =new JsonResult();
+            resultStr.setCode("-1");
+            resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsOutStockTask", "WMS->EIS返回" + resultStr);
 
             return resultStr;
@@ -133,8 +143,8 @@ public class OutboundDataController {
 
 
     @ApiOperation(value = "移库出库任务数据生成", notes = "移库出库任务数据生成")
-    @PostMapping("/moveTaskInterface")
-    public String moveTaskPush(@RequestBody String str) throws Exception {
+    @PostMapping("/movestocktask")
+    public JsonResult moveTaskPush(@RequestBody String str) throws Exception {
 
         PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
@@ -146,10 +156,13 @@ public class OutboundDataController {
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
-            String rejson = "";
+            JsonResult rejson = new JsonResult();
+            String string= "";
 
             if(wmsEisIdempotents.size() != 0){
-                rejson = wmsEisIdempotents.get(0).getRejson();
+                string = wmsEisIdempotents.get(0).getRejson();
+                PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
+                rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             }else{
                 List<OutboundTask> data = moveTaskData.getData();
@@ -189,7 +202,8 @@ public class OutboundDataController {
 
                     }catch (Exception e){
 
-                        rejson+=("code : -1 ,message : false");
+                        rejson.setCode("-1");
+                        rejson.setMessage("false");
 
                         WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                         wmsEisIdempotent.setMessageId(messageID);
@@ -197,7 +211,8 @@ public class OutboundDataController {
                         Date t = new Date(l);
                         java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
                         wmsEisIdempotent.setLocDate(ltime);
-                        wmsEisIdempotent.setRejson(rejson);
+                        string = JSONObject.toJSONString(rejson);
+                        wmsEisIdempotent.setRejson(string);
                         eisIdempotentService.insertReport(wmsEisIdempotent);
 
                         FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS移库返回" + rejson);
@@ -207,7 +222,8 @@ public class OutboundDataController {
                     }
                 }
 
-                rejson+=("code : 0 ,message : success");
+                rejson.setCode("0");
+                rejson.setMessage("true");
 
                 WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                 wmsEisIdempotent.setMessageId(messageID);
@@ -215,7 +231,8 @@ public class OutboundDataController {
                 Date t = new Date(l);
                 java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
                 wmsEisIdempotent.setLocDate(ltime);
-                wmsEisIdempotent.setRejson(rejson);
+                string = JSONObject.toJSONString(rejson);
+                wmsEisIdempotent.setRejson(string);
                 eisIdempotentService.insertReport(wmsEisIdempotent);
                 FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS移库返回" + rejson);
 
@@ -223,7 +240,9 @@ public class OutboundDataController {
             }
         }catch (Exception e){
             FileLogHelper.WriteLog("WmsMoveStockTaskError", "移库异常，错误信息：\n" + e.toString());
-            String resultStr ="code : -1 ,message : false";
+            JsonResult resultStr =new JsonResult();
+            resultStr.setCode("-1");
+            resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS返回" + resultStr);
 
             return resultStr;
@@ -231,8 +250,8 @@ public class OutboundDataController {
     }
 
     @ApiOperation(value = "盘点出库任务数据生成", notes = "盘点出库任务数据生成")
-    @PostMapping("/checkOutTaskInterface")
-    public String checkOutTaskPush(@RequestBody String str) throws Exception {
+    @PostMapping("/checkouttask")
+    public JsonResult checkOutTaskPush(@RequestBody String str) throws Exception {
 
         PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
@@ -244,10 +263,13 @@ public class OutboundDataController {
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
-            String rejson = "";
+            JsonResult rejson = new JsonResult();
+            String string= "";
 
             if(wmsEisIdempotents.size() != 0){
-                rejson = wmsEisIdempotents.get(0).getRejson();
+                string = wmsEisIdempotents.get(0).getRejson();
+                PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
+                rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             }else{
                 List<OutboundTask> data = outboundTaskDto.getData();
@@ -285,7 +307,8 @@ public class OutboundDataController {
 
                     }catch (Exception e){
 
-                        rejson+=("code : -1 ,message : false");
+                        rejson.setCode("-1");
+                        rejson.setMessage("false");
 
                         WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                         wmsEisIdempotent.setMessageId(messageID);
@@ -293,7 +316,8 @@ public class OutboundDataController {
                         Date t = new Date(l);
                         java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
                         wmsEisIdempotent.setLocDate(ltime);
-                        wmsEisIdempotent.setRejson(rejson);
+                        string = JSONObject.toJSONString(rejson);
+                        wmsEisIdempotent.setRejson(string);
                         eisIdempotentService.insertReport(wmsEisIdempotent);
                         FileLogHelper.WriteLog("WmsCheckOutTask", "WMS->EIS盘库返回" + rejson);
 
@@ -302,7 +326,8 @@ public class OutboundDataController {
                     }
                 }
 
-                rejson+=("code : 0 ,message : success");
+                rejson.setCode("0");
+                rejson.setMessage("true");
 
                 WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                 wmsEisIdempotent.setMessageId(messageID);
@@ -310,7 +335,8 @@ public class OutboundDataController {
                 Date t = new Date(l);
                 java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
                 wmsEisIdempotent.setLocDate(ltime);
-                wmsEisIdempotent.setRejson(rejson);
+                string = JSONObject.toJSONString(rejson);
+                wmsEisIdempotent.setRejson(string);
                 eisIdempotentService.insertReport(wmsEisIdempotent);
                 FileLogHelper.WriteLog("WmsCheckOutTask", "WMS->EIS盘库返回" + rejson);
 
@@ -318,7 +344,9 @@ public class OutboundDataController {
             }
         }catch (Exception e){
             FileLogHelper.WriteLog("WmsCheckOutTaskError", "盘库异常，错误信息：\n" + e.toString());
-            String resultStr ="code : -1 ,message : false";
+            JsonResult resultStr =new JsonResult();
+            resultStr.setCode("-1");
+            resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsCheckOutTask", "WMS->EIS返回" + resultStr);
 
             return resultStr;
@@ -326,8 +354,8 @@ public class OutboundDataController {
     }
 
     @ApiOperation(value = "空托出库任务数据生成", notes = "空托出库任务数据生成")
-    @PostMapping("/emptyBoxOutStockTaskInterface")
-    public String emptyBoxOutStockTask(@RequestBody String str) throws Exception {
+    @PostMapping("/emptyboxoutstocktask")
+    public JsonResult emptyBoxOutStockTask(@RequestBody String str) throws Exception {
 
         PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
@@ -339,10 +367,13 @@ public class OutboundDataController {
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
-            String rejson = "";
+            JsonResult rejson = new JsonResult();
+            String string= "";
 
             if(wmsEisIdempotents.size() != 0){
-                rejson = wmsEisIdempotents.get(0).getRejson();
+                string = wmsEisIdempotents.get(0).getRejson();
+                PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
+                rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             }else{
                 List<OutboundTask> data = outboundTaskDto.getData();
@@ -384,7 +415,8 @@ public class OutboundDataController {
 
                     }catch (Exception e){
 
-                        rejson+=("code : -1 ,message : false");
+                        rejson.setCode("-1");
+                        rejson.setMessage("false");
 
                         WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                         wmsEisIdempotent.setMessageId(messageID);
@@ -392,7 +424,8 @@ public class OutboundDataController {
                         Date t = new Date(l);
                         java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
                         wmsEisIdempotent.setLocDate(ltime);
-                        wmsEisIdempotent.setRejson(rejson);
+                        string = JSONObject.toJSONString(rejson);
+                        wmsEisIdempotent.setRejson(string);
                         eisIdempotentService.insertReport(wmsEisIdempotent);
                         FileLogHelper.WriteLog("WmsEmptyBoxOutStockTask", "WMS->EIS空托出库返回" + rejson);
 
@@ -401,7 +434,8 @@ public class OutboundDataController {
                     }
                 }
 
-                rejson+=("code : 0 ,message : success");
+                rejson.setCode("0");
+                rejson.setMessage("true");
 
                 WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                 wmsEisIdempotent.setMessageId(messageID);
@@ -409,7 +443,8 @@ public class OutboundDataController {
                 Date t = new Date(l);
                 java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
                 wmsEisIdempotent.setLocDate(ltime);
-                wmsEisIdempotent.setRejson(rejson);
+                string = JSONObject.toJSONString(rejson);
+                wmsEisIdempotent.setRejson(string);
                 eisIdempotentService.insertReport(wmsEisIdempotent);
                 FileLogHelper.WriteLog("WmsEmptyBoxOutStockTask", "WMS->EIS空托出库返回" + rejson);
 
@@ -417,14 +452,13 @@ public class OutboundDataController {
             }
         }catch (Exception e){
             FileLogHelper.WriteLog("WmsEmptyBoxOutStockTaskError", "空托出库异常，错误信息：\n" + e.toString());
-            String resultStr ="code : -1 ,message : false";
+            JsonResult resultStr =new JsonResult();
+            resultStr.setCode("-1");
+            resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsEmptyBoxOutStockTask", "WMS->EIS返回" + resultStr);
 
             return resultStr;
         }
-
-
-
     }
 
 }
