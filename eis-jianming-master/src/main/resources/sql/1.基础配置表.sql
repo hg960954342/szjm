@@ -50,7 +50,7 @@ CREATE TABLE `port_info` (
 DROP TABLE if exists `pick_station`;
 CREATE TABLE `pick_station` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `station_no` int NOT NULL COMMENT '拣选站编号',
+  `station_no` varchar(20) NOT NULL COMMENT '拣选站编号',
   `auto_supply` int NOT NULL COMMENT '是否自动补给空托盘',
   `io` int NOT NULL COMMENT '1 入库 2 出库 3(1+2)',
   `task_type` int NOT NULL COMMENT '1 订单 2 移库 3 （1+2）4空拖任务 5 (1+4) 6(2+4) 7(1+2+4)',

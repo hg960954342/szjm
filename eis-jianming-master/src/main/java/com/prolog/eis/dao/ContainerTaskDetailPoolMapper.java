@@ -19,8 +19,8 @@ public interface ContainerTaskDetailPoolMapper extends BaseMapper<ContainerTaskD
      * @return
      */
     @Select(
-           " SELECT \r\n"+
-           " count(*) \r\n" +
+           "select IFNULL(x.c,0) from(SELECT \r\n"+
+           " count(*) c \r\n" +
     "FROM \r\n"+
     "(\r\n"+
             "SELECT \r\n"+
@@ -34,7 +34,7 @@ public interface ContainerTaskDetailPoolMapper extends BaseMapper<ContainerTaskD
                    " )a \r\n"+
                    "GROUP BY \r\n"+
                    " a.item_id, \r\n"+
-                   "a.lot_id"
+                   "a.lot_id)x right join (select 0)y on 1=1"
            )
     long getContainerTaskDetailPoolCountByBillNo(@Param("billNo") String billNo);
 
