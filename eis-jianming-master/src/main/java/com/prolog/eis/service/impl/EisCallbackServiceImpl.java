@@ -1,6 +1,8 @@
 package com.prolog.eis.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.*;
 import com.prolog.eis.service.login.WmsLoginService;
@@ -239,105 +241,69 @@ public class EisCallbackServiceImpl implements EisCallbackService {
      * @throws Exception
      */
     private String checkBoundReportData(String billNo) throws Exception {
+        /**
+         * 封装
+         * {
+         * data:[{
+         *      billno---单据号
+         *      tasktype---任务类型
+         *      details：（明细）
+         *          [{
+         *              seqno---行号
+         *              itemid---商品id
+         *              lotid---批号
+         *              containercode---托盘
+         *              qty---称重数量
+         *          }]
+         *  }],
+         *  size:
+         *  messageID:
+         *  }
+         */
 
         //TODO Auto-generated method stub
-        /*List<Map<String,Object>> data = new ArrayList<>();
-        List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
-        for (ContainerTaskDetail containerTaskDetail : containerTaskDetails) {
-            //封装
-            Map<String,Object> map =new HashMap<>();
-            map.put("billno",containerTaskDetail.getBillNo());//单据号
-            map.put("tasktype",containerTask.getTaskType());//类型
 
-            //封装明细
-            List<Map<String,Object>> details = new ArrayList<>();
-            Map<String,Object> detail = new HashMap<>();
-            detail.put("seqno",containerTaskDetail.getSeqNo());//行号
-            detail.put("itemid",containerTaskDetail.getItemId());//商品id
-            detail.put("lotid",containerTaskDetail.getLotId());//批号
-            detail.put("containercode",containerTaskDetail.getContainerCode());//容器
-            detail.put("qty",containerTaskDetail.getQty());//分摊数量
-
-            details.add(map);
-            map.put("details",details);
-            data.add(map);
-        }
-        return PrologApiJsonHelper.toJson(data);*/
-
-      /*  String billNo = "";*/
-     /*   List<ResultContainer.DataBean> dataBeans = containerTaskDetailService.selectByBillNo(billNo);
-        ResultContainer resultData = new ResultContainer();
-        resultData.setData(dataBeans);
-        resultData.setSize(dataBeans.size());
-        resultData.setMessageID(UUID.randomUUID().toString().replaceAll("-",""));
-        return JSONObject.toJSONString(resultData);*/
-        EisReportDto eisReportDto = new EisReportDto();
+       /* EisReportDto eisReportDto = new EisReportDto();
         List<EisReport> datas= new ArrayList<>();
-
-        List<ReportDateil> dateils = new ArrayList<>();
-//        ReportDateil dateil = new ReportDateil();
-        /*//封装明细
-        List<Map<String,Object>> details = new ArrayList<>();*/
+        //按订单封装
         EisReport data = new EisReport();
-        data.setBillNo(billNo);
-//        map.put("billno",billNo);//单据号
+        //封装明细
+        List<ReportDateil> dateils = new ArrayList<>();
+
+        data.setBillNo(billNo);//单据号
         List<ContainerTaskDetail> containerTaskDetails = containerTaskDetailService.selectByBillNo(billNo);
         for (ContainerTaskDetail containerTaskDetail : containerTaskDetails) {
-            //封装
-//            map.put("billno",billNo);//单据号
 
             List<ContainerTask> containerTasks = containerTaskService.selectByContainerCode(containerTaskDetail.getContainerCode());
 
-
-//            Map<String,Object> detail = new HashMap<>();
             ReportDateil dateil = new ReportDateil();
 
             for (ContainerTask task : containerTasks) {
-//                map.put("tasktype",task.getTaskType());
-               /* detail.put("seqno",containerTaskDetail.getSeqNo());//行号
-                detail.put("itemid",task.getItemId());//商品id
-                detail.put("lotid",task.getLotId());//批号
-                detail.put("containercode",task.getContainerCode());//容器
-                detail.put("qty",task.getQty());//分摊数量*/
-                data.setTaskType(task.getTaskType()+"");
-                dateil.setItemId(task.getItemId());
-                dateil.setLotId(task.getLotId());
-                dateil.setContainerCode(task.getContainerCode());
-                dateil.setQty(task.getQty());
+                data.setTaskType(task.getTaskType()+"");//类型
+                dateil.setSeqNo(containerTaskDetail.getSeqNo());//行号
+                dateil.setItemId(task.getItemId());//商品id
+                dateil.setLotId(task.getLotId());//批号
+                dateil.setContainerCode(task.getContainerCode());//托盘
+                dateil.setQty(task.getQty());//称重
                 dateils.add(dateil);
             }
-            /*details.add(detail);
-            map.put("details",details);*/
-
-
         }
+        data.setDateils(dateils);
         datas.add(data);
         eisReportDto.setData(datas);
         eisReportDto.setSize(datas.size());
         eisReportDto.setMessageID(UUID.randomUUID().toString().replaceAll("-",""));
-        return JSONObject.toJSONString(eisReportDto,new NameAndSimplePropertyPreFilter());
-       /* data.add(map);
-        reportData.put("data",data);
-        reportData.put("size",data.size());
-        reportData.put("messageID",UUID.randomUUID().toString().replaceAll("-",""));
-        return JSONObject.toJSONString(reportData);*/
+        return JSONObject.toJSONString(eisReportDto,new NameAndSimplePropertyPreFilter());*/
+
+        List<ResultContainer.DataBean> list=containerTaskDetailService.getCheckReportData(billNo);
+        ResultContainer container=new ResultContainer();
+        container.setData(list);
+        container.setSize(list.size());
+        container.setMessageID(UUID.randomUUID().toString().replaceAll("-",""));
+        return JSON.toJSONString(container,new NameAndSimplePropertyPreFilter(), SerializerFeature.DisableCircularReferenceDetect);
 
 
-        /**
-         * 封装
-         *  {
-         *  billno---单据号
-         *  tasktype---任务类型
-         *  details：（明细）
-         *     [{
-         *          seqno---行号
-         *          itemid---商品id
-         *          lotid---批号
-         *          containercode---托盘
-         *          qty---称重数量
-         *      }]
-         *  }
-         */
+
 
     }
 

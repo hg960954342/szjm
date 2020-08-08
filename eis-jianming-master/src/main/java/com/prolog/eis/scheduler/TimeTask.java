@@ -3,8 +3,10 @@ package com.prolog.eis.scheduler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.dto.rcs.RcsRequestResultDto;
+import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.RepeatReport;
 import com.prolog.eis.model.wms.ResultContainer;
@@ -13,6 +15,8 @@ import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.NameAndSimplePropertyPreFilter;
 import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.framework.core.restriction.Criteria;
+import com.prolog.framework.core.restriction.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -110,8 +114,11 @@ public class TimeTask {
 	@Autowired
 	private EisCallbackService eisCallbackService;
 
+	@Autowired
+	private AgvStorageLocationMapper agvStorageLocationMapper;
+
 	//定时给agv小车下分任务
-//	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
+	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
 	public void sendTask2Rcs() throws Exception {
 		List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
 		if (!containerTasks.isEmpty() && containerTasks.size() > 0){
@@ -140,12 +147,17 @@ public class TimeTask {
 
 			//判断目的地位置不为空
 			if (!containerTask.getTarget().equals("") && containerTask.getTarget() != null) {
-				//封装参数
+				/*//封装参数
 				Map<Object, Object> map = new HashMap<>();
 				map.put("task_code", taskCode);
 				map.put("container_code", containerCode);
 				map.put("source", source);
-				map.put("target", target);
+				map.put("target", target);*/
+
+				//获取目标点位
+				Criteria criteria=Criteria.forClass(AgvStorageLocation.class);
+				criteria.setRestriction(Restrictions.eq("rcsPositionCode",containerTask.getTarget()));
+				AgvStorageLocation targetPosition = agvStorageLocationMapper.findByCriteria(criteria).get(0);
 
 				try {
 					/*//添加任务下发前日志
@@ -168,8 +180,11 @@ public class TimeTask {
 						//更新发送给设备的时间
 						containerTask.setSendTime(new Date());
 						//更新任务状态
-						containerTask.setTaskType(2);//已发送给下游设备
+						containerTask.setTaskState(2);//已发送给下游设备
 						containerTaskService.update(containerTask);
+						//更新点位状态 为 任务锁定
+						targetPosition.setTaskLock(1);
+						agvStorageLocationMapper.update(targetPosition);
 					}else {
 						//agv接收失败
 						String resultMsg = "EIS->RCS [RCSInterface] 返回JSON：[message]:" + restJson;
@@ -178,6 +193,9 @@ public class TimeTask {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+					//任务下发失败
+					String resultMsg = "EIS->RCS [RCSInterface] 任务下发 rcs 失败：请求rcs失败";
+					FileLogHelper.WriteLog("RCSRequestErr",resultMsg);
 				}
 			}
 		}
@@ -186,8 +204,6 @@ public class TimeTask {
 	/**
 	 * 补空托托盘
 	 */
-	@Autowired
-	private AgvStorageLocationService agvStorageLocationService;
 	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void replenishContainer()throws Exception{
 		//agv_storagelocation 楼层为 3， 位置类型为 存储位 ，task_lock 为空闲， lock 为不锁定
@@ -200,7 +216,7 @@ public class TimeTask {
 	@Autowired
 	ContainerTaskDetailMapper containerTaskDetailMapper;
 
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void testReport()throws Exception{
 		ContainerTask containerTask = new ContainerTask();
 //		containerTask.setContainerCode("800011");
@@ -212,21 +228,21 @@ public class TimeTask {
 //		eisCallbackService.inBoundReport("6000002");
 //		eisCallbackService.outBoundReport(containerTask);
 //		eisCallbackService.moveBoundReport(containerTask);
-//		eisCallbackService.checkBoundReport("PDC00000101");
+		eisCallbackService.checkBoundReport("PDC00000101");
 		/*containerTaskDetailMapper.getData("700010");
 		JSONObject js=new JSONObject();
 		js.put("data",containerTaskDetailMapper.getData("700010"));
 		js.put("size",containerTaskDetailMapper.getData("700010").size());
 		js.put("messageID","jhxvshvhv");
 		JSONObject.toJSONString(js,new NameAndSimplePropertyPreFilter());*/
-		List<ResultContainer.DataBean> list=containerTaskDetailMapper.getCheckReportData("PDC00000101");
+		/*List<ResultContainer.DataBean> list=containerTaskDetailMapper.getCheckReportData("PDC00000101");
 		ResultContainer container=new ResultContainer();
 		container.setData(list);
 		container.setMessageID("");
 		container.setSize(list.size());
 		String srt=JSON.toJSONString(container,new NameAndSimplePropertyPreFilter(),
 				SerializerFeature.DisableCircularReferenceDetect);
-		System.out.println(srt+"-----------------------");
+		System.out.println(srt+"-----------------------");*/
 
 	}
 

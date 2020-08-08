@@ -1,5 +1,6 @@
 package com.prolog.eis.service.rcs.impl;
 
+import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
@@ -7,6 +8,8 @@ import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.framework.core.restriction.Criteria;
+import com.prolog.framework.core.restriction.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +26,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 	private ContainerTaskService containerTaskService;
 
 	@Autowired
-	private AgvStorageLocationService agvStorageLocationService;
+	private AgvStorageLocationMapper agvStorageLocationMapper;
 
 	@Autowired
 	private EisCallbackService eisCallbackService;
@@ -39,6 +42,11 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 		List<ContainerTask> containerTasks = containerTaskService.selectByTaskCode(taskCode);
 		for (ContainerTask containerTask : containerTasks) {
 
+			Criteria criteria=Criteria.forClass(AgvStorageLocation.class);
+			criteria.setRestriction(Restrictions.eq("rcsPositionCode",containerTask.getSource()));
+			AgvStorageLocation currentPosition = agvStorageLocationMapper.findByCriteria(criteria).get(0);
+			criteria.setRestriction(Restrictions.eq("rcsPositionCode",containerTask.getTarget()));
+			AgvStorageLocation targetPosition = agvStorageLocationMapper.findByCriteria(criteria).get(0);
 			//判断小车状态
 			if (method.equals("start")){
 				//小车任务开始
@@ -52,6 +60,10 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 				containerTask.setTaskState(4);//设置下游设备离开原存储位
 				containerTask.setMoveTime(new Date());
 				containerTaskService.update(containerTask);
+				//更新点位状态
+				currentPosition.setTaskLock(0);
+				currentPosition.setLock(0);
+				agvStorageLocationMapper.update(currentPosition);
 
 
 			}
@@ -63,17 +75,15 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 				containerTask.setSourceType(containerTask.getTargetType());//修改当前位置区域
 				containerTask.setTarget("");//设置目的位置
 				containerTaskService.update(containerTask);
-				//获取target坐标
-				/*String target = containerTask.getTarget();*/
-				/*Coordinate analysis = PrologCoordinateUtils.analysis(target);*/
-
-				/*	AgvStorageLocation agvStorageLocation = agvStorageLocationService.findByCoord(analysis);*/
 				//判断托盘到位 区域
 				if (containerTask.getTargetType() == 1){
 					//托盘当前在 agv 区域
 					if (containerTask.getTaskType() == 1){
-						//出库
+						//出库完成 回告
 						eisCallbackService.outBoundReport(containerTask);
+						//锁定拣选站
+						targetPosition.setLock(1);
+						agvStorageLocationMapper.update(targetPosition);
 					}
 
 

@@ -2,6 +2,7 @@ package com.prolog.eis.service.impl;
 
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.model.wms.ContainerTaskDetail;
+import com.prolog.eis.model.wms.ResultContainer;
 import com.prolog.eis.service.ContainerTaskDetailService;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,10 @@ public class ContainerTaskDetailServiceImpl implements ContainerTaskDetailServic
     public List<ContainerTaskDetail> selectByBillNo(String billNo) {
         Map<String, Object> map = MapUtils.put("billNo", billNo).getMap();
         return containerTaskDetailMapper.findByMap(map,ContainerTaskDetail.class);
-//      return containerTaskDetailMapper.getCheckReportData(billNo);
+    }
+
+    @Override
+    public List<ResultContainer.DataBean> getCheckReportData(String billNo) {
+        return containerTaskDetailMapper.getCheckReportData(billNo);
     }
 }
