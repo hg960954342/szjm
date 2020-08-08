@@ -1,30 +1,31 @@
 package com.prolog.eis.scheduler;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.prolog.eis.dao.AgvStorageLocationMapper;
-import com.prolog.eis.dao.ContainerTaskDetailMapper;
-import com.prolog.eis.dto.rcs.RcsRequestResultDto;
-import com.prolog.eis.model.wms.AgvStorageLocation;
-import com.prolog.eis.model.wms.ContainerTask;
-import com.prolog.eis.model.wms.RepeatReport;
-import com.prolog.eis.model.wms.ResultContainer;
-import com.prolog.eis.service.*;
-import com.prolog.eis.service.rcs.RcsRequestService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.NameAndSimplePropertyPreFilter;
-import com.prolog.eis.util.PrologApiJsonHelper;
-import com.prolog.framework.core.restriction.Criteria;
-import com.prolog.framework.core.restriction.Restrictions;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.dao.ContainerTaskDetailMapper;
+import com.prolog.eis.dto.rcs.RcsRequestResultDto;
+import com.prolog.eis.model.mcs.MCSTask;
+import com.prolog.eis.model.wms.AgvStorageLocation;
+import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.model.wms.RepeatReport;
+import com.prolog.eis.service.ContainerTaskService;
+import com.prolog.eis.service.EisCallbackService;
+import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.service.OutBoundTaskService;
+import com.prolog.eis.service.RepeatReportService;
+import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.service.rcs.RcsRequestService;
+import com.prolog.eis.service.sxk.SxStoreCkService;
+import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.framework.core.restriction.Criteria;
+import com.prolog.framework.core.restriction.Restrictions;
 
 @Component
 public class TimeTask {
@@ -34,6 +35,10 @@ public class TimeTask {
 
 	@Autowired
 	OutBoundTaskService outBoundTaskService;
+	@Autowired
+	private McsInterfaceService mcsInterfaceService;
+	@Autowired
+	private SxStoreCkService sxStoreCkService;
 	/**
 	 * 定时处理入库任务
 	 * @throws Exception
@@ -56,16 +61,16 @@ public class TimeTask {
 	}
 
 	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
-	public void buildSxCkTask() throws Exception {
+	public void buildAndSendSxCkTask() throws Exception {
 
 		try {
 			synchronized("kucun".intern()) {
-				
+				sxStoreCkService.buildSxCkTask();
 			}
-			
+			sxStoreCkService.sendSxCkTask();
 		}catch (Exception e) {
 			// TODO: handle exception
-			FileLogHelper.WriteLog("buildCkTask", e.toString());
+			FileLogHelper.WriteLog("生成四向库出库任务错误", e.toString());
 		}
 	}
 
@@ -77,7 +82,7 @@ public class TimeTask {
 		synchronized ("sendwcstask".intern()) {
 			wcsTaskPriorityService.sendWcsTask();
 		}
-	}
+	}*/
 
 	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void resendMcsTask()throws Exception{
@@ -91,7 +96,7 @@ public class TimeTask {
 		}
 	}
 
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	/*@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void resendGcsTask()throws Exception{
 		List<GcsTask> gcsTasks = gcsInterfaceService.findRecallGCSTask();
 		for (GcsTask gcsTask : gcsTasks) {

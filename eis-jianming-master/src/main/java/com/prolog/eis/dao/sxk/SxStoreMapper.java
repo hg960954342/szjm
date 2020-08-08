@@ -52,7 +52,8 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
     		"sl.store_location_group_id = sslp.id\n" + 
     		"where \n" + 
     		"ss.container_no =  \n" + 
-    		"#{containerNo}")
+    		"#{containerNo}\n" + 
+    		"order by sl.dept_num")
     SxStoreLock findSxStoreLock(@Param("containerNo") String containerNo);
     
     /**

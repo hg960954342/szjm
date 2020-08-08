@@ -1,5 +1,6 @@
 package com.prolog.eis.dao;
 
+import com.prolog.eis.dto.eis.CkContainerTaskDto;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.framework.dao.mapper.BaseMapper;
 
@@ -50,4 +51,12 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
 	})
 	@Select("select * from container_task t, container_task_detail d where container_code=#{containerCode}; ")
 	List<Map<String,Object>> getData(@Param("containerCode") String containerCode);
+    
+    @Select("select l.x,l.y,l.layer,t.container_code containerCode,t.target,t.target_type targetType,t.task_code taskCode\r\n" + 
+    		"from container_task t\r\n" + 
+    		"left join sx_store s on t.container_code = s.CONTAINER_NO\r\n" + 
+    		"left join sx_store_location l on s.STORE_LOCATION_ID\r\n" + 
+    		"left join sx_store_location_group g on l.store_location_group_id = g.ID\r\n" + 
+    		"where t.source_type = 1 and t.task_state = 1 and t.task_code is not null")
+    List<CkContainerTaskDto> getCkTask();
 }

@@ -17,45 +17,4 @@ public interface McsInterfaceService {
 	void recall(MCSTask mcsTask)throws Exception;
 	
 	List<MCSTask> findFailMCSTask()throws Exception;
-	
-	boolean getExitStatus(String position) throws Exception;
-	
-	/**
-	 * 提升机状态确认
-	 * @param hoistId
-	 * @return
-	 * @throws Exception
-	 */
-	McsHoistStatusDto getHoistStatus(String hoistId) throws Exception;
-	
-	void firstFloorQcPort()throws Exception;
-
-	/**
-	 * 提升机状态确认
-	 * @throws Exception
-	 *//*
-	public boolean checkMcsStatus(SxCarAcrossTask sxCarAcrossTask, SxCarAcross sxCarAcross) throws Exception;*/
-
-	/**
-	 * 发送提升机小车跨层任务
-	 * @param sxCarAcrossTask
-	 */
-	void sendMcsCarAcrossPush(SxCarAcrossTask sxCarAcrossTask);
-
-
-	/**N
-	 * MCS跨层任务回告
-	 * @param sxCarAcrossTask
-	 */
-	//void crossLayerReport(SxCarAcrossTask sxCarAcrossTask) throws Exception;
-
-	/**
-	 * 查询提升机方向
-	 */
-	McsGroupDirectionDto selectDirectionByExist(String coord) throws Exception;
-
-	/**
-	 * 编辑PLC出入库方向
-	 */
-	boolean updatePlcVariableByCoord(String coord, int direction) throws Exception;
 }
