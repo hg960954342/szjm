@@ -9,7 +9,7 @@ public interface InBoundTaskService {
 
     public void inboundTask() ;
 
-    InboundTask selectByContainerCode(String containerCode);
+    List<InboundTask> selectByContainerCode(String containerCode);
 
     void update(InboundTask inboundTask);
 }

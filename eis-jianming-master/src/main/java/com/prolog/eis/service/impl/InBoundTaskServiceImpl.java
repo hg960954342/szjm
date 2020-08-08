@@ -17,6 +17,7 @@ import com.prolog.eis.service.impl.unbound.UnBoundStragtegy;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
+import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,8 +67,10 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
         }
 
     @Override
-    public InboundTask selectByContainerCode(String containerCode) {
-        return inBoundTaskMapper.getReportData(containerCode);
+    public List<InboundTask> selectByContainerCode(String containerCode) {
+        Map<String, Object> map = MapUtils.put("containerCode", containerCode).getMap();
+        return inBoundTaskMapper.findByMap(map,InboundTask.class);
+        /*return inBoundTaskMapper.getReportData(containerCode);*/
     }
 
     @Override

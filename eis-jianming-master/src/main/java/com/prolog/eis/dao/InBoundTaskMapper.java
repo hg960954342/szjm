@@ -3,10 +3,7 @@ package com.prolog.eis.dao;
 import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.dao.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +40,11 @@ public interface InBoundTaskMapper  extends BaseMapper<InboundTask>{
             "\r\n" +
             "order by t.create_time desc")
      List<InboundTask> getListInboundTask();
+
+   /* @Update("update inbound_task set bill_no=#{inboundTask.billNo},wms_push=#{inboundTask.wmsPush},reback=#{inboundTask.reBack},container_code=#{inboundTask.containerCode}," +
+            "empty_container=#{inboundTask.emptyContainer},task_type=#{inboundTask.taskType},item_id=#{inboundTask.itemId},qty=#{inboundTask.qty},lot_id=#{inboundTask.lotId},ceng=#{inboundTask.ceng}," +
+            "agv_loc=#{inboundTask.agvLoc},owner_id=#{inboundTask.ownerId},task_state=#{inboundTask.taskState},create_time=#{inboundTask.createTime},start_time=#{inboundTask.startTime},ruku_time=#{inboundTask.rukuTime},end_time=#{inboundTask.endTime} where id= #{inboundTask.id}")
+    long update(@Param("inboundTask")InboundTask inboundTask);*/
 
     @ResultMap("inboundTask")
     @Select("select * from inbound_task where container_code=#{containerCode}")

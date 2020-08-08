@@ -123,7 +123,7 @@ public class TimeTask {
 	private AgvStorageLocationMapper agvStorageLocationMapper;
 
 	//定时给agv小车下分任务
-	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
 	public void sendTask2Rcs() throws Exception {
 		List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
 		if (!containerTasks.isEmpty() && containerTasks.size() > 0){
@@ -138,8 +138,10 @@ public class TimeTask {
 //	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void resendReport()throws Exception{
 		List<RepeatReport> repeatReports = repeatReportService.findByState(0);
-		for (RepeatReport repeatReport : repeatReports) {
-			eisCallbackService.recall(repeatReport);
+		if (repeatReports != null && repeatReports.size()>0) {
+			for (RepeatReport repeatReport : repeatReports) {
+				eisCallbackService.recall(repeatReport);
+			}
 		}
 	}
 	private void sendTask(List<ContainerTask> containerTasks) throws Exception {
@@ -218,36 +220,20 @@ public class TimeTask {
 
 	}
 
-	@Autowired
-	ContainerTaskDetailMapper containerTaskDetailMapper;
 
-//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void testReport()throws Exception{
 		ContainerTask containerTask = new ContainerTask();
 //		containerTask.setContainerCode("800011");
 //		containerTask.setContainerCode("800012");
-		containerTask.setContainerCode("700010");
+//		containerTask.setContainerCode("700010");
 		/*containerTask.setTaskType(2);
 		containerTask.setItemId("SPH00001363");
 		containerTask.setOwnerId("008");*/
-//		eisCallbackService.inBoundReport("6000002");
+		eisCallbackService.inBoundReport("6000002");
 //		eisCallbackService.outBoundReport(containerTask);
 //		eisCallbackService.moveBoundReport(containerTask);
-		eisCallbackService.checkBoundReport("PDC00000101");
-		/*containerTaskDetailMapper.getData("700010");
-		JSONObject js=new JSONObject();
-		js.put("data",containerTaskDetailMapper.getData("700010"));
-		js.put("size",containerTaskDetailMapper.getData("700010").size());
-		js.put("messageID","jhxvshvhv");
-		JSONObject.toJSONString(js,new NameAndSimplePropertyPreFilter());*/
-		/*List<ResultContainer.DataBean> list=containerTaskDetailMapper.getCheckReportData("PDC00000101");
-		ResultContainer container=new ResultContainer();
-		container.setData(list);
-		container.setMessageID("");
-		container.setSize(list.size());
-		String srt=JSON.toJSONString(container,new NameAndSimplePropertyPreFilter(),
-				SerializerFeature.DisableCircularReferenceDetect);
-		System.out.println(srt+"-----------------------");*/
+//		eisCallbackService.checkBoundReport("PDC00000101");
 
 	}
 

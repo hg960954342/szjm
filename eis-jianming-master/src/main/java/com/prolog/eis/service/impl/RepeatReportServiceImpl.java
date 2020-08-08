@@ -25,4 +25,9 @@ public class RepeatReportServiceImpl implements RepeatReportService {
         Map<String, Object> map = MapUtils.put("reportState", state).getMap();
         return repeatReportMapper.findByMap(map,RepeatReport.class);
     }
+
+    @Override
+    public void update(RepeatReport repeatReport) {
+        repeatReportMapper.update(repeatReport);
+    }
 }
