@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS `sx_ceng_lock`;
+CREATE TABLE `sx_ceng_lock` (
+  `LAYER` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='层锁表';
+
 DROP TABLE IF EXISTS `sx_store_location_group`;
 CREATE TABLE `sx_store_location_group` (
   `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '货位组ID',

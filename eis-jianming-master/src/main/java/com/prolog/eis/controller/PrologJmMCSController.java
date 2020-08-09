@@ -156,7 +156,7 @@ public class PrologJmMCSController {
 	
 	private <T> String getJmMcsValue(Boolean success,String msg,String code, List<T> data) {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("ref", success);
+		jsonObject.put("ret", success);
 		jsonObject.put("msg", msg);
 		jsonObject.put("code", code);
 		jsonObject.put("data", data);

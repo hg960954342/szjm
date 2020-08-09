@@ -290,6 +290,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		sxStoreLocationGroupMapper.updateMapById(sxStoreLocation.getStoreLocationGroupId(),
 				MapUtils.put("ascentLockState", 1).getMap(), SxStoreLocationGroup.class);
 		sxStoreTaskFinishService.computeLocation(sxStore);
+		
+		inboundTaskMapper.updateMapById(inboundTask.getId(), MapUtils.put("taskState", 3).put("rukuTime", new Date()).getMap(), InboundTask.class);
 	}
 
 	private Integer checkHuoWei(String itemId,String lot,String containerNo,int sourceLayer,int detection,String entryCode,int minLayer,int maxLayer) throws Exception {
@@ -297,8 +299,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 		//查找货位
 		Integer locationId = null;
-		SysParame pOriginX = sysParameMapper.findById("originX", SysParame.class);
-		SysParame pOriginY = sysParameMapper.findById("originY", SysParame.class);
+		SysParame pOriginX = sysParameMapper.findById("ORIGINX", SysParame.class);
+		SysParame pOriginY = sysParameMapper.findById("ORIGINY", SysParame.class);
 
 		int originX = Integer.valueOf(pOriginX.getParameValue());
 		int originY = Integer.valueOf(pOriginY.getParameValue());

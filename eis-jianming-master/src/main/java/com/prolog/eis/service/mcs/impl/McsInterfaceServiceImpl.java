@@ -139,8 +139,8 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
-			Boolean sucssess = helper.getBoolean("success");
-			String message = helper.getString("message");
+			Boolean sucssess = helper.getBoolean("ret");
+			String message = helper.getString("msg");
 			
 			if (!sucssess) {
 				//失败记重发表

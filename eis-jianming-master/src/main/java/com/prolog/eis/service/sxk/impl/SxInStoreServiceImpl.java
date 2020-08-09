@@ -41,12 +41,18 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 					throws Exception {
 
 		try {
-			//List<AreaSortDto> areaSortDtos = PrologTypeSortHelper.getAreaSort(reservedLocation);
+			List<Integer> types = new ArrayList<>();
+			types.add(1);
+			
 			List<AreaSortDto> areaSortDtos = new ArrayList<>();
-			if (areaSortDtos.size() == 0) {
+			AreaSortDto areaSortDto = new AreaSortDto();
+			areaSortDto.setSortIndex(1);
+			areaSortDto.setTypes(types);
+			areaSortDtos.add(areaSortDto);
+			/*if (areaSortDtos.size() == 0) {
 				throw new Exception("货位类型无法获取");
 				//return null;
-			}
+			}*/
 			Integer locationId = null;
 			long startTime = System.currentTimeMillis();
 			// step2 再找货位组(找出离原点最近的货位组)
@@ -416,8 +422,8 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 		// 找出层的出库任务总数
 		List<AllInStoreOutTaskCountDto> allInStoreOutTaskCountDtos = inStoreMapper.findOutTaskLayer(layersStr);
 		// 找出提升机的层任务总数
-		List<AllInStoreHoisterTaskCountDto> allInStoreHoisterTaskCountDtos = inStoreMapper
-				.findHoisterTaskLayer(hoisterId, layersStr);
+		/*List<AllInStoreHoisterTaskCountDto> allInStoreHoisterTaskCountDtos = inStoreMapper
+				.findHoisterTaskLayer(hoisterId, layersStr);*/
 		// 拼接
 		for (AllInStoreLocationLayersDto allInStoreLocationDto : allInStoreLocationDtos) {
 			// 放入属性相同的容器数
@@ -439,11 +445,11 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 				}
 			}
 			// 提升机的层任务总数
-			for (AllInStoreHoisterTaskCountDto allInStoreHoisterTaskCountDto : allInStoreHoisterTaskCountDtos) {
+			/*for (AllInStoreHoisterTaskCountDto allInStoreHoisterTaskCountDto : allInStoreHoisterTaskCountDtos) {
 				if (allInStoreHoisterTaskCountDto.getLayer() == allInStoreLocationDto.getLayer()) {
 					allInStoreLocationDto.setHoisterTaskCount(allInStoreHoisterTaskCountDto.getTaskCount());
 				}
-			}
+			}*/
 		}
 
 		// step5 排序
