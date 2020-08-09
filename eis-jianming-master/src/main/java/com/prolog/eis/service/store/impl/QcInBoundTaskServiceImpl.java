@@ -122,12 +122,12 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			//入库成功，删除agv区域的托盘
 			clearAgvLocationComtainer(containerNo);
 			//生成库存并入库
-			this.taskContainerInSxStore(result.getInboundTask(),weight,portInfo,containerNo,source,sourceLayer,sourceX,sourceY,detection);
-			return null;
+			McsRequestTaskDto mcsRequestTaskDto = this.taskContainerInSxStore(result.getInboundTask(),weight,portInfo,containerNo,source,sourceLayer,sourceX,sourceY,detection);
+			return mcsRequestTaskDto;
 		}else if(result.getResultType() == 1){
 			//生成库存并入库
-			this.emptyContainerInSxStore(result.getInboundTask(),weight,portInfo,containerNo,source,sourceLayer,sourceX,sourceY,detection);
-			return null;
+			McsRequestTaskDto mcsRequestTaskDto = this.emptyContainerInSxStore(result.getInboundTask(),weight,portInfo,containerNo,source,sourceLayer,sourceX,sourceY,detection);
+			return mcsRequestTaskDto;
 		}
 
 		return null;
@@ -223,7 +223,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		containerTaskMapper.deleteByMap(MapUtils.put("containerCode", containerNo).getMap(), ContainerTask.class);
 	}
 
-	private void emptyContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
+	private McsRequestTaskDto emptyContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
 		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,portInfo.getJunctionPort(),1,1);
 		if(null == locationId) {
 			if(portInfo.getShowLed() == 1) {
@@ -232,14 +232,18 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			if(portInfo.getReback() == 1) {
 				this.addMcsTask(false,containerNo,source,"-1","貨位不足！！！");
 			}
-			return;
+			return null;
 		}
 
 		//生成入库库存
 		this.buildRuKuSxStore(locationId,inboundTask,containerNo,weight);
+		
+		SxStoreLocation sxStoreLocation = sxStoreLocationMapper.findById(locationId, SxStoreLocation.class);
+		String target = PrologCoordinateUtils.splicingStr(sxStoreLocation.getX(), sxStoreLocation.getY(), sxStoreLocation.getLayer());
+		return this.addMcsTask(true,containerNo,source,target,"");
 	}
 
-	private void taskContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
+	private McsRequestTaskDto taskContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
 
 		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,portInfo.getJunctionPort(),1,3);
 		if(null == locationId) {
@@ -249,11 +253,15 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			if(portInfo.getReback() == 1) {
 				this.addMcsTask(false,containerNo,source,"-1","貨位不足！！！");
 			}
-			return;
+			return null;
 		}
 
 		//生成入库库存
 		this.buildRuKuSxStore(locationId,inboundTask,containerNo,weight);
+		
+		SxStoreLocation sxStoreLocation = sxStoreLocationMapper.findById(locationId, SxStoreLocation.class);
+		String target = PrologCoordinateUtils.splicingStr(sxStoreLocation.getX(), sxStoreLocation.getY(), sxStoreLocation.getLayer());
+		return this.addMcsTask(true,containerNo,source,target,"");
 	}
 
 	private void buildRuKuSxStore(Integer locationId,InboundTask inboundTask,String containerNo,Double weight) throws Exception {
@@ -371,7 +379,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private void containerRuKu(String containerCode,int targetLayer,int targetX,int targetY,String address) throws Exception {
 		//检查到位的托盘
 		SxStoreLocation sxStoreLocation = getStoreLocation(targetLayer,targetX,targetY);
-		if(null == sxStoreLocation) {
+		if(null != sxStoreLocation) {
 			//检查有无入库库存
 			List<InboundTask> inboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), InboundTask.class);
 			if(inboundTasks.isEmpty()) {
@@ -380,10 +388,9 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				return;
 			}
 
-			//调用回告入库的方法
-			//eisCallbackService
-
 			rukuSxStore(containerCode);
+			//调用回告入库的方法
+			eisCallbackService.inBoundReport(containerCode);
 		}else {
 			FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("点位%s不是托盘库货位", address));
 
