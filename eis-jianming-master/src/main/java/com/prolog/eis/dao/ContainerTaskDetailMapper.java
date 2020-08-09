@@ -11,8 +11,18 @@ import java.util.Map;
 public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetail> {
 
 
-    @Select("select d.bill_no billno,d.lot_id lotid,d.seqno,d.item_id itemid,d.ownerid,d.qty,t.container_code " +
-            "containercode,task_type tasktype,t.source agvloc from container_task_detail d ,container_task t " +
+    @Results({
+            @Result(property = "containerCode", column = "container_code"),
+            @Result(property = "billNo", column = "bill_no"),
+            @Result(property = "taskType", column = "task_type"),
+            @Result(property = "ownerId", column = "owner_id"),
+            @Result(property = "seqNo", column = "seqno"),
+            @Result(property = "itemId", column = "item_id"),
+            @Result(property = "lotId", column = "lot_id"),
+            @Result(property = "qty", column = "qty"),
+            @Result(property = "agvLoc", column = "source")
+    })
+    @Select("select d.*,t.task_type,t.source from container_task_detail d ,container_task t " +
             "where d.container_code=t.container_code and t.container_code=#{containerCode}; ")
     List<Map<String, Object>> getReportData(@Param("containerCode") String containerCode);
 

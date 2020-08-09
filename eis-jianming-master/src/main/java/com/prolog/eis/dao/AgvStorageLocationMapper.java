@@ -2,10 +2,7 @@ package com.prolog.eis.dao;
 
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.framework.dao.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation> {
     @Results(id="AgvStorageLocation" , value= {
@@ -23,4 +20,10 @@ public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation>
     @ResultMap(value = "AgvStorageLocation")
     @Select("select * from agv_storagelocation where rcs_position_code=#{location}")
     AgvStorageLocation findByRcs(String location);
+
+    @ResultMap(value = "AgvStorageLocation")
+    @Select("select * from agv_storagelocation  WHERE device_no=#{deviceCode} and task_lock=#{taskLock} and 'lock'=#{lock} limit 1 ")
+    AgvStorageLocation findByPickCodeAndLock(@Param("deviceCode") String deviceCode, @Param("lock") int lock,@Param("taskLock") int taskLock);
+
+
 }

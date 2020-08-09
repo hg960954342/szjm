@@ -5,6 +5,8 @@ import com.prolog.eis.dto.eis.YiWeiCountDto;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -90,14 +92,101 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"GROUP BY l.layer")
 	List<YiWeiCountDto> getLayerYiWeiCount();
 
-
-    @Select("select * from(select a.*,l.*,g.* from (SELECT * from SX_STORE st where st.item_id=#{itemId} \r\n" +
-			"and st.lot_id=#{lotId} and st.owner_id=#{ownerId} )a \r\n" +
-			"inner JOIN sx_store_location l on a.fk_store_location_id=l.id \r\n" +
-			"inner JOIN sx_store_location_group g on l.store_location_group_id=g.id \r\n" +
-			"where l.task_lock=0 and g.IS_LOCK=0 and a.STORE_STATE=20 \r\n" +
-			")x \r\n" +
-			"GROUP BY x.dept_num ASC ")
-	List<Map<String,Object>> getSxStoreByOrder(@Param("String") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
+	@Results(id="SxStore" , value= {
+			@Result(property = "containerNo",  column = "CONTAINER_NO"),
+			@Result(property = "containerSubNo",  column = "CONTAINER_SUB_NO"),
+			@Result(property = "storeLocationId",  column = "STORE_LOCATION_ID"),
+			@Result(property = "sxStoreType",  column = "SX_STORE_TYPE"),
+			@Result(property = "taskType",  column = "TASK_TYPE"),
+			@Result(property = "taskProperty1",  column = "TASK_PROPERTY1"),
+			@Result(property = "taskProperty2",  column = "TASK_PROPERTY2"),
+			@Result(property = "businessProperty1",  column = "BUSINESS_PROPERTY1"),
+			@Result(property = "businessProperty2",  column = "BUSINESS_PROPERTY2"),
+			@Result(property = "businessProperty3",  column = "BUSINESS_PROPERTY3"),
+			@Result(property = "businessProperty4",  column = "BUSINESS_PROPERTY4"),
+			@Result(property = "businessProperty5",  column = "BUSINESS_PROPERTY5"),
+			@Result(property = "storeState",  column = "STORE_STATE"),
+			@Result(property = "inStoreTime",  column = "IN_STORE_TIME"),
+			@Result(property = "hoisterNo",  column = "HOISTER_NO"),
+			@Result(property = "carNo",  column = "CAR_NO"),
+			@Result(property = "taskId",  column = "task_id"),
+			@Result(property = "emptyPalletCount",  column = "EMPTY_PALLET_COUNT"),
+			@Result(property = "sourceLocationId",  column = "source_location_id"),
+			@Result(property = "createTime",  column = "CREATE_TIME"),
+			@Result(property = "weight",  column = "WEIGHT"),
+			@Result(property = "itemId",  column = "item_id"),
+			@Result(property = "lotId",  column = "lot_id"),
+			@Result(property = "ownerId",  column = "owner_id"),
+			@Result(property = "qty",  column = "qty"),
+			@Result(property = "stationId",  column = "station_id"),
+			@Result(property = "containerState",  column = "container_state"),
+			@Result(property = "storeNo",  column = "store_no"),
+			@Result(property = "storeLocationGroupId",  column = "STORE_LOCATION_GROUP_ID"),
+			@Result(property = "layer",  column = "LAYER"),//返回的是sx_store_location.layer
+			@Result(property = "x",  column = "X"),//返回的是sx_store_location.x
+			@Result(property = "y",  column = "Y"),//返回的是sx_store_location.y
+			@Result(property = "storeLocationId1",  column = "STORE_LOCATION_ID1"),
+			@Result(property = "storeLocationId2",  column = "STORE_LOCATION_ID2"),
+			@Result(property = "ascentLockState",  column = "ASCENT_LOCK_STATE"),
+			@Result(property = "locationIndex",  column = "LOCATION_INDEX"),
+			@Result(property = "deptNum",  column = "dept_num"),
+			@Result(property = "depth",  column = "depth"),
+			@Result(property = "createTime",  column = "CREATE_TIME"),
+			@Result(property = "verticalLocationGroupId",  column = "vertical_location_group_id"),
+			@Result(property = "actualWeight",  column = "actual_weight"),
+			@Result(property = "limitWeight",  column = "limit_weight"),
+			@Result(property = "isInBoundLocation",  column = "is_inBound_location"),
+			@Result(property = "wmsStoreNo",  column = "wms_store_no"),
+			@Result(property = "taskLock",  column = "task_lock"),
+			@Result(property = "groupNo",  column = "GROUP_NO"),
+			@Result(property = "entrance",  column = "ENTRANCE"),
+			@Result(property = "inOutNum",  column = "IN_OUT_NUM"),
+			@Result(property = "isLock",  column = "IS_LOCK"),
+			@Result(property = "ascentLockState",  column = "ASCENT_LOCK_STATE"),
+			@Result(property = "readyOutLock",  column = "READY_OUT_LOCK"),
+			@Result(property = "locationNum",  column = "location_num"),
+			@Result(property = "entrance1Property1",  column = "entrance1_property1"),
+			@Result(property = "entrance1Property2",  column = "entrance1_property2"),
+			@Result(property = "entrance2Property1",  column = "entrance2_property1"),
+			@Result(property = "entrance2Property2",  column = "entrance2_property2"),
+			@Result(property = "reservedLocation",  column = "reserved_location"),
+			@Result(property = "belongArea",  column = "belong_area"),
+			@Result(property = "createTime",  column = "CREATE_TIME")
+	})
+    @Select("SELECT\n" +
+			"\t* from (\n" +
+			"\t\tSELECT\n" +
+			"\t\t\t*\n" +
+			"\t\tFROM\n" +
+			"\t\t\t(\n" +
+			"\t\t\t\tSELECT\n" +
+			"\t\t\t\t\ta.id,\n" +
+			"\t\t\t\t\tl.dept_num as dept_num_\n" +
+			"\t\t\t\tFROM\n" +
+			"\t\t\t\t\t(\n" +
+			"\t\t\t\t\t\tSELECT\n" +
+			"\t\t\t\t\t\t\t*\n" +
+			"\t\t\t\t\t\tFROM\n" +
+			"\t\t\t\t\t\t\tSX_STORE st\n" +
+			"\t\t\t\t\t\tWHERE\n" +
+			"\t\t\t\t\t\t\tst.item_id = #{itemId}\n" +
+			"\t\t\t\t\t\tAND st.lot_id = #{lotId}\n" +
+			"\t\t\t\t\t\tAND st.owner_id = #{ownerId}\n" +
+			"\t\t\t\t\t) a\n" +
+			"\t\t\t\tINNER JOIN sx_store_location l ON a.store_location_id = l.id\n" +
+			"\t\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id\n" +
+			"\t\t\t\tWHERE\n" +
+			"\t\t\t\t\tl.task_lock = 0\n" +
+			"\t\t\t\tAND g.IS_LOCK = 0\n" +
+			"\t\t\t\tAND a.STORE_STATE = 20\n" +
+			"\t\t\t) x\n" +
+			"\t\tGROUP BY\n" +
+			"\t\t\tx.dept_num_,\n" +
+			"\t\t\tx.id\n" +
+			"\t) y\n" +
+			"LEFT JOIN SX_STORE sx ON sx.id = y.id\n" +
+			"LEFT JOIN sx_store_location l ON l.id = sx.store_location_id\n" +
+			"LEFT JOIN sx_store_location_group g ON l.store_location_group_id = g.id")
+	List<Map<String,Object>> getSxStoreByOrder(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
 
 }

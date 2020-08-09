@@ -3,13 +3,16 @@ package com.prolog.eis.service.impl;
 import com.prolog.eis.dao.*;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.OutBoundTaskService;
+import com.prolog.eis.service.impl.unbound.OutBoundType;
 import com.prolog.eis.service.impl.unbound.UnBoundStragtegy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -46,7 +49,7 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
 
 
     public UnBoundStragtegy getUnBoundStragtegy(OutboundTask OutboundTask){
-        return strategyMap.get("taskType"+OutboundTask.getTaskType());
+        return strategyMap.get(OutBoundType.TASK_TYPE+OutboundTask.getTaskType());
     }
 
     @Override
@@ -55,7 +58,10 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
         List<OutboundTask> outboundTaskList=outBoundTaskMapper.getListOutboundTask();
         for (int i = 0; i <outboundTaskList.size() ; i++) {
             OutboundTask OutboundTask=outboundTaskList.get(i);
-            this.getUnBoundStragtegy(OutboundTask).unbound(OutboundTask);
+            UnBoundStragtegy unBoundStragtegy=this.getUnBoundStragtegy(OutboundTask);
+            if(null!=unBoundStragtegy){
+            unBoundStragtegy.unbound(OutboundTask);
+            }
         }
 
 
