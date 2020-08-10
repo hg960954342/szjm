@@ -16,11 +16,11 @@ public class PortInfo {
 	private int id;
 	
 	@Column("port_type")
-	@ApiModelProperty("出库口类型 （1入库口 2出库口）")
+	@ApiModelProperty("出库口类型 （1入库口 2出库口 3出入库口）")
 	private int portType;
 	
 	@Column("task_type")
-	@ApiModelProperty("任务类型 （1任务托 2包材 3 空托 4质检 ）")
+	@ApiModelProperty("任务类型 （1任务托 2包材 3 空托剁 4空托盘 5质检")
 	private int taskType;
 	
 	@Column("work_type")

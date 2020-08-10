@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `container_task`;
 CREATE TABLE `container_task` (
   `id` int NOT NULL AUTO_INCREMENT,
   `container_code` varchar(255) NOT NULL COMMENT '托盘号',
-  `task_type` int DEFAULT NULL COMMENT 'eis内部暂定任务类型  1订单出库  2移库出库  3 盘点出库 4空托出库',
+  `task_type` int DEFAULT NULL COMMENT 'eis内部暂定任务类型  1订单出库  2移库出库  3 盘点出库 4空托出库 5托盘入库,6空托补给',
   `source` varchar(50) NOT NULL COMMENT '当前位置',
   `source_type` int NOT NULL COMMENT '当前托盘区域 1托盘库内 2agv区域',
   `target` varchar(50) NOT NULL COMMENT '目的地 可能是agv区域坐标，也可能是入库提升机',

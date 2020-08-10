@@ -17,6 +17,7 @@ import com.prolog.eis.model.wms.RepeatReport;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.service.OutBoundTaskService;
 import com.prolog.eis.service.RepeatReportService;
 import com.prolog.eis.service.mcs.McsInterfaceService;
@@ -32,13 +33,15 @@ public class TimeTask {
 
     @Autowired
 	InBoundTaskService inBoundTaskService;
-
 	@Autowired
 	OutBoundTaskService outBoundTaskService;
 	@Autowired
 	private McsInterfaceService mcsInterfaceService;
 	@Autowired
 	private SxStoreCkService sxStoreCkService;
+	@Autowired
+	private MCSLineService mcsLineService;
+	
 	/**
 	 * 定时处理入库任务
 	 * @throws Exception
@@ -218,6 +221,19 @@ public class TimeTask {
 			//判断是否有空托盘
 				//生成容器任务container_task 托盘号uuid,task_type 待定，source....
 
+	}
+	
+	/**
+	 * 检查3楼空托盘补给位是否存在托盘,创建托盘补给
+	 * @throws Exception
+	 */
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+	public void buildEmptyContainerSupply()throws Exception{
+		try {
+			mcsLineService.buildEmptyContainerSupply();
+		}catch (Exception e) {
+			FileLogHelper.WriteLog("buildEmptyContainerSupplyError", e.toString());
+		}
 	}
 
 

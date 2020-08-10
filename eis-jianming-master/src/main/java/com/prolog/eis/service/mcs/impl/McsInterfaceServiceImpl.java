@@ -35,81 +35,6 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 	private String mcsPort;
 	@Autowired
 	private MCSTaskMapper mcsTaskMapper;
-	/*
-	@Autowired
-	private SxPathPlanningTaskService sxPathPlanningTaskService;
-	@Autowired
-	private MCSTaskHisotoryMapper mCSTaskHisotoryMapper;
-	@Autowired
-	private ZtckContainerMapper ztckContainerMapper;
-	@Autowired
-	private PortInfoMapper portInfoMapper;
-	@Autowired
-	private StationsInfoMapper stationsInfoMapper;
-	@Autowired
-	private WmsInboundTaskMapper wmsInboundTaskMapper;
-	@Autowired
-	private SxCarAcrossTaskMapper sxCarAcrossTaskMapper;
-	//@Autowired
-	//private CarAcrossLayerService carAcrossLayerService;
-	@Autowired
-	private SxCarAcrossMapper sxCarAcrossMapper;
-
-	@Override
-	@Transactional
-	public String sendMcsTask(int type, String stockId, String source, String target, String weight, int priority)
-			throws Exception {
-		List<McsSendTaskDto> mcsSendTaskDtos = new ArrayList<McsSendTaskDto>();
-		McsSendTaskDto mcsSendTaskDto = new McsSendTaskDto();
-		String taskId = PrologTaskIdUtils.getTaskId();
-		mcsSendTaskDto.setTaskId(taskId);
-		mcsSendTaskDto.setType(type);
-		mcsSendTaskDto.setStockId(stockId);
-		mcsSendTaskDto.setTarget(target);
-		mcsSendTaskDto.setSource(source);
-		mcsSendTaskDto.setPriority(priority);
-		mcsSendTaskDto.setWeight(weight);
-		mcsSendTaskDtos.add(mcsSendTaskDto);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("carryList", mcsSendTaskDtos);
-		String data = PrologApiJsonHelper.toJson(map);
-		String restJson = "";
-		try {
-			String postUrl = String.format("%s%s%s", mcsUrl, mcsPort, "Interface/Request");
-			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务："+data);
-			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
-			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务返回："+restJson);
-			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
-			Boolean sucssess = helper.getBoolean("success");
-			String message = helper.getString("message");
-			MCSTask mcsTask = new MCSTask();
-			mcsTask.setTaskId(taskId);
-			mcsTask.setPriority(priority);
-			mcsTask.setSource(source);
-			mcsTask.setStockId(stockId);
-			mcsTask.setTarget(target);
-			mcsTask.setType(type);
-			mcsTask.setWeight(weight);
-			mcsTask.setSendCount(1);
-			mcsTask.setCreateTime(PrologDateUtils.parseObject(new Date()));
-			if (sucssess) {
-				List<TaskReturnInBoundRequestResponse> resultData = helper.getObjectList("data",TaskReturnInBoundRequestResponse.class);
-				if(resultData.isEmpty()) {
-					sxPathPlanningTaskService.createPathMxTaskID(stockId, taskId);
-				}else {
-					FileLogHelper.WriteLog("sendMcsException","reason:"+ message);	
-				}
-			} else {
-				FileLogHelper.WriteLog("sendMcsException","reason:"+message);
-			}
-
-			return taskId;
-		} catch (Exception e) {
-			FileLogHelper.WriteLog("sendMcsException","reason:"+e.toString());
-
-			return taskId;
-		}
-	}*/
 
 	@Override
 	@Transactional
@@ -182,12 +107,12 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		}
 	}
 
-	@Override
+	/*@Override
 	public String sendMcsTask(int type, String stockId, String source, String target, String weight, int priority)
 			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 	@Override
 	public List<MCSTask> findFailMCSTask() throws Exception {
@@ -235,6 +160,42 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			mcsTask.setTaskState(2);
 			mcsTask.setErrMsg(e.getMessage());
 			mcsTaskMapper.update(mcsTask);
+		}
+	}
+	
+	@Override
+	public boolean getExitStatus(String position) throws Exception {
+
+		List<Map<String, Object>> coord = new ArrayList<Map<String, Object>>();
+		coord.add(MapUtils.put("coord", position).getMap());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("carryList", coord);
+		String requestData = PrologApiJsonHelper.toJson(map);
+		String restJson = "";
+		try {
+			String postUrl = String.format("%s%s%s", mcsUrl, mcsPort, "Interface/getExitStatus");
+
+			FileLogHelper.WriteLog("getExitStatus", "EIS->MCS接驳口状态查询，请求参数："+requestData);
+			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(requestData), String.class);
+			FileLogHelper.WriteLog("getExitStatus", "EIS->MCS接驳口状态查询，返回参数："+restJson);
+
+			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
+			Boolean sucssess = helper.getBoolean("ret");
+			String message = helper.getString("msg");
+			List<Map> data = helper.getObjectList("data", Map.class);
+			
+			if (sucssess && !data.isEmpty()) {
+				Map<String, Object> m = data.get(0);
+				// isEmpty：Boolean【是否为空 true为空，false 不为空】
+				boolean isEmpty = (boolean) m.get("empty");
+				return isEmpty;
+			}else {
+				FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，响应失败："+message);
+				return false;
+			}
+		} catch (Exception e) {
+			FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，接口调用异常："+e.getMessage());
+			return false;
 		}
 	}
 }

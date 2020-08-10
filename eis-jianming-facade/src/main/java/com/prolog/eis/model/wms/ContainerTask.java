@@ -20,7 +20,7 @@ public class ContainerTask {
     private String containerCode;
 
     @Column("task_type")
-    @ApiModelProperty("任务类型")
+    @ApiModelProperty("eis内部暂定任务类型  1订单出库  2移库出库  3 盘点出库 4空托出库 5托盘入库,6空托补给")
     private int taskType;
 
     @Column("source")

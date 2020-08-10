@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prolog.eis.dto.eis.mcs.InBoundRequest;
 import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
 import com.prolog.eis.dto.eis.mcs.TaskReturnInBoundRequestResponse;
+import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.util.FileLogHelper;
@@ -33,6 +34,8 @@ public class PrologJmMCSController {
 	private QcInBoundTaskService qcInBoundTaskService;
 	@Autowired
 	private McsInterfaceService mcsInterfaceService;
+	@Autowired
+	private MCSLineService mcsLineService;
 
 	@ApiOperation(value = "提升机请求", notes = "提升机请求")
 	@PostMapping("/mcsRequest")
@@ -151,6 +154,38 @@ public class PrologJmMCSController {
 			out.close();
 
 			FileLogHelper.WriteLog("McsInterfaceCallback", "EIS->MCS返回" + resultStr);
+		}
+	}
+	
+	@ApiOperation(value = "WCS-EIS拆盘机为空请求出库", notes = "WCS-EIS拆盘机为空请求出库")
+	@PostMapping("/splitOutBound")
+	public void splitOutBound(@RequestBody String json, HttpServletResponse response) throws Exception {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json; charset=utf-8");
+		OutputStream out = response.getOutputStream();
+		try {
+			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
+			FileLogHelper.WriteLog("mcssplitOutBound", "MCS->EIS请求" + json);
+
+			String deviceNo = helper.getString("deviceNo");
+
+			mcsLineService.splitOutBound(deviceNo);
+			
+			String resultStr = getJmMcsValue(true,"操作成功","200",null);
+			out.write(resultStr.getBytes("UTF-8"));
+			out.flush();
+			out.close();
+			
+			FileLogHelper.WriteLog("mcssplitOutBound", "MCS->EIS请求返回" + resultStr);
+		}catch (Exception e) {
+			// TODO: handle exception
+			FileLogHelper.WriteLog("mcssplitOutBoundError", "MCS->EIS返回" + e.toString());
+
+			String resultStr = this.getJmMcsValue(true,"执行失败" + e.getMessage(),"100",null);
+			
+			out.write(resultStr.getBytes("UTF-8"));
+			out.flush();
+			out.close();
 		}
 	}
 	

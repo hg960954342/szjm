@@ -27,7 +27,7 @@ public class SxStoreDto {
 			"    		\"70.MIT入二楼理货台(原点下(有预留货位))\\r\\n\" + \n" + 
 			"    		\"80.MIT到暂存区(原点下(有预留货位))\\r\\n\" + \n" + 
 			"    		\"90.MIT入库并出库\\r\\n\")")
-	private int taskType;		
+	private int taskType;	
 	
 	@ApiModelProperty("任务属性1（路由）")
 	private String taskProperty1;		//任务属性1（路由）
@@ -82,6 +82,8 @@ public class SxStoreDto {
 	private int x;
 	
 	private int y;
+	
+	private int deptNum;
 
 	public int getId() {
 		return id;
@@ -267,11 +269,19 @@ public class SxStoreDto {
 		this.y = y;
 	}
 
+	public int getDeptNum() {
+		return deptNum;
+	}
+
+	public void setDeptNum(int deptNum) {
+		this.deptNum = deptNum;
+	}
+
 	public SxStoreDto(int id, String containerNo, String containerSubNo, Integer storeLocationId, int taskType,
 			String taskProperty1, String taskProperty2, String businessProperty1, String businessProperty2,
 			String businessProperty3, String businessProperty4, String businessProperty5, int storeState,
 			Date inStoreTime, String hoisterNo, String carNo, String taskId, Integer emptyPalletCount,
-			Integer sourceLocationId, Date createTime, int layer, int x, int y) {
+			Integer sourceLocationId, Date createTime, int layer, int x, int y, int deptNum) {
 		super();
 		this.id = id;
 		this.containerNo = containerNo;
@@ -296,6 +306,7 @@ public class SxStoreDto {
 		this.layer = layer;
 		this.x = x;
 		this.y = y;
+		this.deptNum = deptNum;
 	}
 
 	public SxStoreDto() {

@@ -89,3 +89,15 @@ CREATE TABLE `sx_store` (
   KEY `fk_store_location_id_id` (`STORE_LOCATION_ID`) USING BTREE,
   CONSTRAINT `fk_store_location_id` FOREIGN KEY (`STORE_LOCATION_ID`) REFERENCES `sx_store_location` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='箱库库存表';
+
+DROP TABLE if exists `device_junction_port`;
+CREATE TABLE `device_junction_port` (
+  `device_no` varchar(50) NOT NULL,
+  `entry_code` varchar(50) NOT NULL,
+  `layer` int NOT NULL COMMENT '层',
+  `x` int NOT NULL COMMENT 'x',
+  `y` int NOT NULL COMMENT 'y',
+  `port_lock` int NOT NULL COMMENT '是否锁定 1锁定 2不锁定',
+  `position` int NOT NULL COMMENT '位置 健民暂时没用',
+  PRIMARY KEY (`device_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='设备接驳口';
