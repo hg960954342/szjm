@@ -10,12 +10,14 @@ public class CkContainerTaskDto {
 	
 	private String containerCode;
 	
+	private int containerTaskId;
+	
 	private String target;
 	
 	private int targetType;
 	
 	private String taskCode;
-
+	
 	public int getX() {
 		return x;
 	}
@@ -46,6 +48,14 @@ public class CkContainerTaskDto {
 
 	public void setContainerCode(String containerCode) {
 		this.containerCode = containerCode;
+	}
+
+	public int getContainerTaskId() {
+		return containerTaskId;
+	}
+
+	public void setContainerTaskId(int containerTaskId) {
+		this.containerTaskId = containerTaskId;
 	}
 
 	public String getTarget() {

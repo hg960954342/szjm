@@ -8,7 +8,7 @@ CREATE TABLE `container_task` (
   `target` varchar(50) NOT NULL COMMENT '目的地 可能是agv区域坐标，也可能是入库提升机',
   `target_type` int NOT NULL COMMENT '1 agv区域 2输送线',
   `task_state` int NOT NULL COMMENT '1 到位 2已发送给下游设备 3下游设备回告开始 4离开原存储位 后面可以扩充',
-  `task_code` varchar(50) NOT NULL COMMENT '任务号',
+  `task_code` varchar(50) NULL COMMENT '任务号',
   `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
   `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms批号',
   `owner_id` varchar(255) DEFAULT NULL COMMENT 'wms业主',

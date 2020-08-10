@@ -44,9 +44,9 @@ public class AgvStorageLocation {
     @ApiModelProperty("任务锁")
     private int taskLock;
 
-    @Column("lock")
-    @ApiModelProperty("锁定")
-    private int lock;
+    @Column("location_lock")
+    @ApiModelProperty("锁定 0不锁定 1锁定")
+    private int locationLock;
 
     @Column("device_no")
     @ApiModelProperty("设备编号")
@@ -116,12 +116,12 @@ public class AgvStorageLocation {
 		this.taskLock = taskLock;
 	}
 
-	public int getLock() {
-		return lock;
+	public int getLocationLock() {
+		return locationLock;
 	}
 
-	public void setLock(int lock) {
-		this.lock = lock;
+	public void setLocationLock(int locationLock) {
+		this.locationLock = locationLock;
 	}
 
 	public String getDeviceNo() {

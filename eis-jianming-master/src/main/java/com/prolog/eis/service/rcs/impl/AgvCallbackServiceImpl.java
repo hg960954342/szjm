@@ -62,7 +62,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 				containerTaskService.update(containerTask);
 				//更新点位状态
 				currentPosition.setTaskLock(0);
-				currentPosition.setLock(0);
+				currentPosition.setLocationLock(0);
 				agvStorageLocationMapper.update(currentPosition);
 
 
@@ -82,7 +82,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService{
 						//出库完成 回告
 						eisCallbackService.outBoundReport(containerTask);
 						//锁定拣选站
-						targetPosition.setLock(1);
+						targetPosition.setLocationLock(1);
 						agvStorageLocationMapper.update(targetPosition);
 					}
 

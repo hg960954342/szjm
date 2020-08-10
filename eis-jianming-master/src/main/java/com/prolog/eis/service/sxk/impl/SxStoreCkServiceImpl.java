@@ -128,6 +128,9 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 			mcsTask.setTaskState(2);
 			mcsTask.setErrMsg("");
 			mcsTaskMapper.save(mcsTask);
+			
+			//修改容器任务
+			containerTaskMapper.updateMapById(ckContainerTask.getContainerTaskId(), MapUtils.put("taskState", 2).put("sendTime", new Date()).getMap(), ContainerTask.class);
 		}
 	}
 

@@ -435,6 +435,10 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			containerTask.setLotId(sxStore.getLotId());
 			containerTask.setOwnerId(sxStore.getOwnerId());
 			containerTask.setQty(sxStore.getQty());
+			containerTask.setCreateTime(new Date());
+			containerTask.setStartTime(null);
+			containerTask.setMoveTime(null);
+			containerTask.setEndTime(null);
 			containerTaskMapper.update(containerTask);
 		}else {
 			//非agv的出库口到位
