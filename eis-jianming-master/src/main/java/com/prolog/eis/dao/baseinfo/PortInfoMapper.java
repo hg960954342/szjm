@@ -120,7 +120,7 @@ public interface PortInfoMapper extends BaseMapper<PortInfo>{
 	List<PortInfoDto> getSxkStationPort(@Param("station")String station);
 
 	@ResultMap(value="PortInfo")
-	@Select("select * from port_info where task_type=#{task_type} and (port_type=1 or port_type=3)")
+	@Select("select * from port_info where task_type=#{task_type} and (port_type=1 or port_type=3) and position=1")
 	List<PortInfo> getPortInfoByTaskType(@Param("task_type")int task_type);
 
 
