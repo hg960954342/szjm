@@ -3,6 +3,10 @@ package com.prolog.eis.dto.eis.mcs;
 public class McsRequestTaskDto {
 
 	/**
+	 * mcs任务类型
+	 */
+	private int type;
+	/**
 	 * 母托盘编号
 	 */
 	private String stockId;
@@ -10,6 +14,7 @@ public class McsRequestTaskDto {
 	 * 请求位置:原坐标
 	 */
 	private String source;
+	
 	/**
 	 * 目的位置：目的坐标
 	 */
@@ -18,6 +23,14 @@ public class McsRequestTaskDto {
 	private boolean success;
 	
 	private String errorMessage;
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	public String getStockId() {
 		return stockId;
@@ -59,8 +72,10 @@ public class McsRequestTaskDto {
 		this.errorMessage = errorMessage;
 	}
 
-	public McsRequestTaskDto(String stockId, String source, String target, boolean success, String errorMessage) {
+	public McsRequestTaskDto(int type, String stockId, String source, String target, boolean success,
+			String errorMessage) {
 		super();
+		this.type = type;
 		this.stockId = stockId;
 		this.source = source;
 		this.target = target;

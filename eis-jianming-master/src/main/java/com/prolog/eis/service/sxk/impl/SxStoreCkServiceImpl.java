@@ -107,7 +107,7 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 			//需要给mcs发送任务
 			//往mcs重发表里写一条重发数据
 			String targetPosiion = ckContainerTask.getTarget();
-			if(ckContainerTask.getTargetType() == 2) {
+			if(ckContainerTask.getTargetType() == 1) {
 				targetPosiion = PrologCoordinateUtils.splicingStr(ckPortInfo.getX(), ckPortInfo.getY(), ckPortInfo.getLayer());
 			}
 

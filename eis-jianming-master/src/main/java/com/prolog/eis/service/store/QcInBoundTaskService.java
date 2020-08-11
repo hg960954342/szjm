@@ -18,4 +18,11 @@ public interface QcInBoundTaskService {
 	 * @throws Exception
 	 */
 	void taskReturn(String taskId,int status,int type,String containerNo,String rgvId,String address) throws Exception;
+	
+	/**
+	 *agv到达输送线点位，发送mcs前进消息
+	 * @param containerCode 容器号
+	 * @param agvLocationId agv区域点位
+	 */
+	void rcsCompleteForward(String containerCode,int agvLocationId) throws Exception;
 }

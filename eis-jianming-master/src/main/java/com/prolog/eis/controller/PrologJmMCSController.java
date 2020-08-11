@@ -82,7 +82,7 @@ public class PrologJmMCSController {
 			//int type, String containerNo, String address, String target, String weight, String priority,int state
 			//给mcs发指令
 			for (McsRequestTaskDto mcsRequestTaskDto : sendList) {
-				mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+				mcsInterfaceService.sendMcsTaskWithOutPathAsyc(mcsRequestTaskDto.getType(), 
 						mcsRequestTaskDto.getStockId(), 
 						mcsRequestTaskDto.getSource(),
 						mcsRequestTaskDto.getTarget(),

@@ -29,7 +29,7 @@ CREATE TABLE `port_info` (
   `dir_mode` int NOT NULL COMMENT '0 不允许切换方向  1自动切换方向 2手动切换方向',
   `call_car` int NOT NULL COMMENT '是否呼叫agv小车 1呼叫  0 不呼叫',
   `detection` int NOT NULL COMMENT '0 不进行高度检测 1进行高度检测',
-  `position` int NOT NULL COMMENT '记录位置 建民暂时没用',
+  `position` int NOT NULL COMMENT '0 输送线中间点位 1 输送线最前端点位',
   `area` int NOT NULL COMMENT '区域 （1 料箱库 2四向库）建民暂时没用到',
   `default_weight` double COMMENT '默认重量',
   `wms_port_no` varchar(50) NOT NULL COMMENT 'WMS出库口号',
