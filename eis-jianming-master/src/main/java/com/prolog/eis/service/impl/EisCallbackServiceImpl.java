@@ -58,7 +58,13 @@ public class EisCallbackServiceImpl implements EisCallbackService {
                 String json = this.inBoundReportData(inboundTask);
                 String msg = "EIS->WMS [WMSInterface] 入库回告请求JSON：[message]:" + json;
                 FileLogHelper.WriteLog("WMSRequest", msg);
-                String restJson = HttpUtils.post(url, json);
+                String restJson = null;
+                try {
+                    restJson = HttpUtils.post(url, json);
+                } catch (IOException e) {
+                    String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+                    FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
+                }
                 String resultMsg = "EIS->WMS [WMSInterface] 入库回告返回JSON：[message]:" + restJson;
                 FileLogHelper.WriteLog("WMSRequest", resultMsg);
 
@@ -88,7 +94,13 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         String json = this.outBoundReportData(containerTask);
         String msg = "EIS->WMS [WMSInterface] 出库回告请求JSON：[message]:" + json;
         FileLogHelper.WriteLog("WMSRequest", msg);
-        String restJson = HttpUtils.post(url, json);
+        String restJson = null;
+        try {
+            restJson = HttpUtils.post(url, json);
+        } catch (IOException e) {
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+            FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
+        }
         String resultMsg = "EIS->WMS [WMSInterface] 出库回告返回JSON：[message]:" + restJson;
         FileLogHelper.WriteLog("WMSRequest", resultMsg);
         //判断回告结果
@@ -110,7 +122,13 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         String json = this.moveBoundReportData(containerTask);
         String msg = "EIS->WMS [WMSInterface] 移库回告请求JSON：[message]:" + json;
         FileLogHelper.WriteLog("WMSRequest", msg);
-        String restJson = HttpUtils.post(url, json);
+        String restJson = null;
+        try {
+            restJson = HttpUtils.post(url, json);
+        } catch (IOException e) {
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+            FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
+        }
         String resultMsg = "EIS->WMS [WMSInterface] 移库回告返回JSON：[message]:" + restJson;
         FileLogHelper.WriteLog("WMSRequest", resultMsg);
         this.getWmsResponseData(json, restJson, url, containerTask.getTaskType());
@@ -152,7 +170,13 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         String url = repeatReport.getReportUrl();
         String json = repeatReport.getReportData();
 
-        String restJson = HttpUtils.post(url, json);
+        String restJson = null;
+        try {
+            restJson = HttpUtils.post(url, json);
+        } catch (IOException e) {
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+            FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
+        }
         repeatReport.setSendTime(new Date());
         PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 
