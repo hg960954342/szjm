@@ -52,14 +52,14 @@ prolog:
     description: 用户服务
     version: 1.0
   rcs:
-     ip: 127.0.0.1
-     port: 80
+     ip: 10.5.90.211
+     port: 8902
   mcs:
      url: http://   
      port: 127.0.0.1:20318
   wms:
-     url: 127.0.0.1
-     port: 80
+     url: 192.168.30.151
+     port: 8091
   dao: 
     dialect: mysql
     pagehelper: #pagehelper分页插件配置

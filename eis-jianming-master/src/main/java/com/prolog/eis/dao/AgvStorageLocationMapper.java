@@ -22,7 +22,7 @@ public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation>
     AgvStorageLocation findByRcs(String location);
 
     @ResultMap(value = "AgvStorageLocation")
-    @Select("select * from agv_storagelocation  WHERE device_no=#{deviceCode} and task_lock=#{taskLock} and 'lock'=#{lock} limit 1 ")
+    @Select("select * from agv_storagelocation  WHERE device_no=#{deviceCode} and task_lock=#{taskLock} and location_lock=#{lock} limit 1 ")
     AgvStorageLocation findByPickCodeAndLock(@Param("deviceCode") String deviceCode, @Param("lock") int lock,@Param("taskLock") int taskLock);
 
 
