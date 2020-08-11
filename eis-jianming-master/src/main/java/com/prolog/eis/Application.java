@@ -28,9 +28,9 @@ public class Application {
 	@Bean
 	public RestTemplate restTemplate() {
 		HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		httpRequestFactory.setConnectionRequestTimeout(5000);
-		httpRequestFactory.setConnectTimeout(5000);
-		httpRequestFactory.setReadTimeout(5000);
+		httpRequestFactory.setConnectionRequestTimeout(60000);
+		httpRequestFactory.setConnectTimeout(60000);
+		httpRequestFactory.setReadTimeout(60000);
 		RestTemplate restTemplate = new RestTemplate(httpRequestFactory); 
         restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 支持中文编码
 		return restTemplate;
