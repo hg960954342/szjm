@@ -2,6 +2,7 @@ package com.prolog.eis.scheduler;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -46,7 +47,7 @@ public class TimeTask {
 	 * 定时处理入库任务
 	 * @throws Exception
 	 */
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void buildCkTask() throws Exception  {
 		inBoundTaskService.inboundTask();
 	}
@@ -57,13 +58,13 @@ public class TimeTask {
 	 * 定时出库任务
 	 * @throws Exception
 	 */
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void buildUnTask() throws Exception  {
 		outBoundTaskService.unboundTask();
 
 	}
 
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void buildAndSendSxCkTask() throws Exception {
 
 		try {
@@ -87,7 +88,7 @@ public class TimeTask {
 		}
 	}*/
 
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void resendMcsTask()throws Exception{
 		List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();
 		for (MCSTask mcsTask : mcsTasks) {
@@ -126,7 +127,7 @@ public class TimeTask {
 	private AgvStorageLocationMapper agvStorageLocationMapper;
 
 	//定时给agv小车下分任务
-//	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
+	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
 	public void sendTask2Rcs() throws Exception {
 		List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
 		if (!containerTasks.isEmpty() && containerTasks.size() > 0){
@@ -150,7 +151,7 @@ public class TimeTask {
 	private void sendTask(List<ContainerTask> containerTasks) throws Exception {
 		for (ContainerTask containerTask : containerTasks) {
 			//获取参数
-			String taskCode = containerTask.getTaskCode();
+			String taskCode = UUID.randomUUID().toString().replaceAll("-","");
 			String containerCode = containerTask.getContainerCode();
 			String source = containerTask.getSource();
 			String target = containerTask.getTarget();
@@ -177,10 +178,16 @@ public class TimeTask {
 					RcsRequestResultDto rcsRequestResultDto = null;
 					//获取任务终点，判断小车任务模板
 					int targetType = containerTask.getTargetType();
+//					rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "M10", "3");
 					if (targetType == 1) {//目标地点位为 agv区域
-						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "3");
+						if (containerTask.getTaskType()==6){
+							//补空托
+							rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "4");
+						}else {
+							rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "3");
+						}
 					} else {//目的地点位 为输送线
-						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F02", "3");
+						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "M10", "3");
 					}
 
 					String restJson = PrologApiJsonHelper.toJson(rcsRequestResultDto);
@@ -189,6 +196,7 @@ public class TimeTask {
 					if (restCode.equals("0")) {
 						//更新发送给设备的时间
 						containerTask.setSendTime(new Date());
+						containerTask.setTaskCode(taskCode);
 						//更新任务状态
 						containerTask.setTaskState(2);//已发送给下游设备
 						containerTaskService.update(containerTask);
@@ -213,10 +221,35 @@ public class TimeTask {
 	/**
 	 * 补空托托盘
 	 */
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void replenishContainer()throws Exception{
-		//agv_storagelocation 楼层为 3， 位置类型为 存储位 ，task_lock 为空闲， lock 为不锁定
+
+		//agv_storagelocation 楼层为 3， 位置类型为 存储位 ，task_lock 为空闲， locationLock 为不锁定
+		Criteria criteria=Criteria.forClass(AgvStorageLocation.class);
+		criteria.setRestriction(Restrictions.eq("ceng",3));
+		criteria.setRestriction(Restrictions.eq("locationType",1));
+		criteria.setRestriction(Restrictions.eq("taskLock",0));
+		criteria.setRestriction(Restrictions.eq("locationLock",0));
+		List<AgvStorageLocation> agvStorageLocations = agvStorageLocationMapper.findByCriteria(criteria);
+
 		//判断是否需要补空托盘
+		if (agvStorageLocations !=null && agvStorageLocations.size()>0){
+			for (AgvStorageLocation agvStorageLocation : agvStorageLocations) {
+				//判断是否有空托盘
+				List<ContainerTask> containerTasks = containerTaskService.selectByTaskCode("6");
+				if (containerTasks != null && containerTasks.size()>0){
+					//生成容器任务container_task 托盘号uuid,task_type 待定，source....
+					ContainerTask containerTask = containerTasks.get(0);
+					containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
+					containerTask.setTargetType(1);
+					containerTaskService.update(containerTask);
+				}
+				//发送任务
+				this.sendTask(containerTasks);
+			}
+
+
+		}
 			//判断是否有空托盘
 				//生成容器任务container_task 托盘号uuid,task_type 待定，source....
 
@@ -226,7 +259,7 @@ public class TimeTask {
 	 * 检查3楼空托盘补给位是否存在托盘,创建托盘补给
 	 * @throws Exception
 	 */
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void buildEmptyContainerSupply()throws Exception{
 		try {
 			mcsLineService.buildEmptyContainerSupply();
@@ -236,7 +269,7 @@ public class TimeTask {
 	}
 
 
-	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
 	public void testReport()throws Exception{
 		ContainerTask containerTask = new ContainerTask();
 //		containerTask.setContainerCode("800011");
