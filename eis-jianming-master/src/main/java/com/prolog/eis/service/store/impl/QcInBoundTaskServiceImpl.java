@@ -338,7 +338,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		return locationId;
 	}
 
-
+	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void taskReturn(String taskId,int status,int type,String containerNo,String rgvId,String address) throws Exception{
 
 		if("-1".equals(address) || "1".equals(address)) {
