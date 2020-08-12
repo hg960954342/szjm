@@ -28,6 +28,12 @@ public class OutboundDataController {
     @Autowired
     private OutboundDataService outboundDataService;
 
+    /**
+     * 业务出库 推送eis
+     * @param str json串
+     * @return JsonResult json串
+     * @throws Exception
+     */
     @ApiOperation(value = "出库任务数据生成", notes = "出库任务数据生成")
     @PostMapping("/outboundtask")
     public JsonResult outboundTaskPush(@RequestBody String str) throws Exception {
@@ -142,6 +148,12 @@ public class OutboundDataController {
     }
 
 
+    /**
+     * 业务移库 推送eis
+     * @param str json串
+     * @return JsonResult json串
+     * @throws Exception
+     */
     @ApiOperation(value = "移库出库任务数据生成", notes = "移库出库任务数据生成")
     @PostMapping("/movestocktask")
     public JsonResult moveTaskPush(@RequestBody String str) throws Exception {
@@ -249,6 +261,12 @@ public class OutboundDataController {
         }
     }
 
+    /**
+     * 业务盘点 推送eis
+     * @param str json串
+     * @return JsonResult json串
+     * @throws Exception
+     */
     @ApiOperation(value = "盘点出库任务数据生成", notes = "盘点出库任务数据生成")
     @PostMapping("/checkouttask")
     public JsonResult checkOutTaskPush(@RequestBody String str) throws Exception {
@@ -353,6 +371,12 @@ public class OutboundDataController {
         }
     }
 
+    /**
+     * 业务空托出库 推送eis
+     * @param str json串
+     * @return JsonResult json串
+     * @throws Exception
+     */
     @ApiOperation(value = "空托出库任务数据生成", notes = "空托出库任务数据生成")
     @PostMapping("/emptyboxoutstocktask")
     public JsonResult emptyBoxOutStockTask(@RequestBody String str) throws Exception {

@@ -4,6 +4,7 @@ import com.prolog.eis.dao.*;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.util.BeanUtil;
 import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.eis.util.PrologLocationUtils;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
 import org.springframework.beans.BeanUtils;
@@ -88,7 +89,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
             AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(pickCode,0,0);
             int LocationType=agvStorageLocation.getLocationType();
-            String source= PrologCoordinateUtils.splicingStr(agvStorageLocation.getX(),agvStorageLocation.getY(),agvStorageLocation.getCeng());
+            String source= PrologLocationUtils.splicingXYStr(PrologCoordinateUtils.splicingStr(agvStorageLocation.getX(),agvStorageLocation.getY(),agvStorageLocation.getCeng())) ;
             for(Map<String,Object> sxStore1:listSxStore){
                 float sxQty=(Float) sxStore1.get("qty");
                 sxStoreAll+=sxQty;
@@ -97,7 +98,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 ordercontainerTask.setContainerCode((String)sxStore1.get("containerNo"));
                 ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
                 ordercontainerTask.setTaskType(1);
-                ordercontainerTask.setSource(PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"),(Integer) sxStore1.get("y"),(Integer) sxStore1.get("layer")));
+                ordercontainerTask.setSource(PrologLocationUtils.splicingXYStr(PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"),(Integer) sxStore1.get("y"),(Integer) sxStore1.get("layer"))));
                 ordercontainerTask.setSourceType(1);
                 ordercontainerTask.setTarget(source);
                 ordercontainerTask.setTargetType(1);
