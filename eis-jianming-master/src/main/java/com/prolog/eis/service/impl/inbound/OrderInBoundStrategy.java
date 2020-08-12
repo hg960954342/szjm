@@ -9,6 +9,7 @@ import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.eis.util.PrologLocationUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -69,9 +70,10 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
                 //写托盘任务
                 ContainerTask containerTask=new ContainerTask();
                 BeanUtils.copyProperties(task,containerTask);
-                String target=PrologCoordinateUtils.splicingStr(distinPortInfo.getX(),distinPortInfo.getY(),distinPortInfo.getLayer());
+                String target= PrologLocationUtils.splicingXYStr(PrologCoordinateUtils.splicingStr(distinPortInfo.getX(),distinPortInfo.getY(),distinPortInfo.getLayer()));
+
                 containerTask.setTarget(target);
-                containerTask.setSource(agvLoc);
+                containerTask.setSource(PrologLocationUtils.splicingXYStr(agvLoc));
 
                 Date date=new Date();
                 containerTask.setCreateTime(date);

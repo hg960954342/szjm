@@ -5,17 +5,17 @@ import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.OutBoundTaskService;
 import com.prolog.eis.service.impl.unbound.OutBoundType;
 import com.prolog.eis.service.impl.unbound.UnBoundStragtegy;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 
 @Service
+@Slf4j
 public class OutBoundTaskServiceImpl implements OutBoundTaskService {
 
 
@@ -60,6 +60,7 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
             OutboundTask OutboundTask=outboundTaskList.get(i);
             UnBoundStragtegy unBoundStragtegy=this.getUnBoundStragtegy(OutboundTask);
             if(null!=unBoundStragtegy){
+                log.info(unBoundStragtegy.getClass().getName());
             unBoundStragtegy.unbound(OutboundTask);
             }
         }
