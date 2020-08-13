@@ -7,6 +7,7 @@ import com.prolog.eis.service.impl.unbound.DetailDataBean;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -143,7 +144,82 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
             "\t\tAND t.item_id = y.item_id\n" +
             "\t\tAND t.owner_id = y.owner_id\n" +
             "\t\tAND t.lot_id = y.lot_id")
-    List<ContainerTaskDetail> getOutBoundContainerTaskDetail(String billNoString);
+    List<ContainerTaskDetail> getOutBoundContainerTaskDetail(@Param("bill_no_string") String billNoString);
+
+    /**
+     * 获取订单池中的商品总数
+     * @param billNoString
+     * @return
+     */
+  @Select("SELECT\n" +
+          "\tsum(count)\n" +
+          "FROM\n" +
+          "\t(\n" +
+          "\t\tSELECT\n" +
+          "\t\t\towner_id,\n" +
+          "\t\t\titem_id,\n" +
+          "\t\t\tlot_id,\n" +
+          "\t\t\tcount(*) count\n" +
+          "\t\tFROM\n" +
+          "\t\t\toutbound_task_detail\n" +
+          "\t\tWHERE\n" +
+          "\t\t\tbill_no IN (#{bill_no_string})\n" +
+          "\t\tGROUP BY\n" +
+          "\t\t\towner_id,\n" +
+          "\t\t\titem_id,\n" +
+          "\t\t\tlot_id\n" +
+          "\t)")
+    float getPoolItemCount(@Param("bill_no_string") String billNoString);
+    /**
+     * 获取给定订单的和订单池比较 相同的商品总数目
+     * @param billNoString
+     * @param billNo
+     * @return
+     */
+ @Select("SELECT\n" +
+         "\tsum(z.count) count\n" +
+         "FROM\n" +
+         "\t(\n" +
+         "\t\tSELECT\n" +
+         "\t\t\ty.item_id,\n" +
+         "\t\t\ty.owner_id,\n" +
+         "\t\t\ty.lot_id,\n" +
+         "\t\t\tcount(*) count\n" +
+         "\t\tFROM\n" +
+         "\t\t\t(\n" +
+         "\t\t\t\tSELECT\n" +
+         "\t\t\t\t\td.item_id,\n" +
+         "\t\t\t\t\td.lot_id,\n" +
+         "\t\t\t\t\td.owner_id\n" +
+         "\t\t\t\tFROM\n" +
+         "\t\t\t\t\toutbound_task_detail d,\n" +
+         "\t\t\t\t\t(\n" +
+         "\t\t\t\t\t\tSELECT\n" +
+         "\t\t\t\t\t\t\towner_id,\n" +
+         "\t\t\t\t\t\t\titem_id,\n" +
+         "\t\t\t\t\t\t\tlot_id,\n" +
+         "\t\t\t\t\t\t\tcount(*) count\n" +
+         "\t\t\t\t\t\tFROM\n" +
+         "\t\t\t\t\t\t\toutbound_task_detail\n" +
+         "\t\t\t\t\t\tWHERE\n" +
+         "\t\t\t\t\t\t\tbill_no IN (#{bill_no_string})\n" +
+         "\t\t\t\t\t\tGROUP BY\n" +
+         "\t\t\t\t\t\t\towner_id,\n" +
+         "\t\t\t\t\t\t\titem_id,\n" +
+         "\t\t\t\t\t\t\tlot_id\n" +
+         "\t\t\t\t\t) x\n" +
+         "\t\t\t\tWHERE\n" +
+         "\t\t\t\t\td.bill_no =#{bill_no}\n" +
+         "\t\t\t\tAND x.owner_id = d.owner_id\n" +
+         "\t\t\t\tAND x.lot_id = d.lot_id\n" +
+         "\t\t\t\tAND x.item_id = d.item_id\n" +
+         "\t\t\t) y\n" +
+         "\t\tGROUP BY\n" +
+         "\t\t\ty.item_id,\n" +
+         "\t\t\ty.owner_id,\n" +
+         "\t\t\ty.lot_id\n" +
+         "\t)z\n")
+ float getPoolSameItemCount(@Param("bill_no_string") String billNoString, @Param("bill_no")String billNo);
 
 
 
