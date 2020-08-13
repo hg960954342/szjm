@@ -17,11 +17,11 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 public class SimilarityDataEntityListLoad {
 
 
-    public Set<String> currentBillNoList=new HashSet<>(); //当前执行的billNoString
-    public final int  maxSize=5; //订单池处理最大数量
+    public  Set<String> currentBillNoList=new HashSet<>(); //当前执行的billNoString
+    public  int  maxSize=5; //订单池处理最大数量
 
-    private Set<String> billNoPickCodeList=new HashSet<>();
-    private Set<String> billNoList=new HashSet<>();
+    private Set<String> billNoPickCodeList=Collections.synchronizedSet(new HashSet<>());
+    private Set<String> billNoList=Collections.synchronizedSet(new HashSet<>());
 
 
     @Autowired
@@ -36,17 +36,17 @@ public class SimilarityDataEntityListLoad {
 
 
 
-    public int getCurrentSize() {
-        return currentBillNoList.size();
-    }
 
-    public void addOutboundTask(OutboundTask outboundTask) {
+    public int addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==0){
              billNoList.add("'"+outboundTask.getBillNo()+"'");
+             return billNoList.size();
           }
         if(billNoPickCodeList.size()<=maxSize&&outboundTask.getSfReq()==1){
             billNoPickCodeList.add("'"+outboundTask.getBillNo()+"'");
+            return billNoPickCodeList.size();
         }
+        return 0;
     }
 
 
