@@ -39,8 +39,6 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
 
 
-    @Autowired
-    SimilarityDataEntityLoad similarityDataEntityLoad;
 
     @Autowired
     QcSxStoreMapper qcSxStoreMapper;

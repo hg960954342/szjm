@@ -40,8 +40,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
 
 
-    @Autowired
-    SimilarityDataEntityLoad similarityDataEntityLoad;
+
 
     @Autowired
     SimilarityDataEntityListLoad similarityDataEntityListLoad;

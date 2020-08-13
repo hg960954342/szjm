@@ -1,18 +1,21 @@
 package com.prolog.eis.service.impl.unbound;
 
-import com.prolog.eis.dao.*;
-import com.prolog.eis.model.wms.*;
-import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.dao.ContainerTaskDetailMapper;
+import com.prolog.eis.dao.ContainerTaskMapper;
+import com.prolog.eis.dao.PickStationMapper;
+import com.prolog.eis.model.wms.AgvStorageLocation;
+import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.model.wms.OutboundTask;
+import com.prolog.eis.model.wms.PickStation;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -31,8 +34,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     @Autowired
     ContainerTaskMapper containerTaskMapper;
 
-    @Autowired
-    SimilarityDataEntityLoad similarityDataEntityLoad;
+
 
 
 
