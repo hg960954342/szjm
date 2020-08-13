@@ -5,6 +5,7 @@ import com.prolog.eis.model.wms.*;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  *  * IF_PICKCODE_EXISTS 是否指定拣选站 1指定 0不指定
  */
 @Component("taskType1")
+@Slf4j
 public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
 
     @Autowired
@@ -51,6 +53,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     public void unbound(OutboundTask outboundTask) {
         DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy=this.getDefaultOutBoundPickCodeStrategy(outboundTask);
         if(null!=defaultOutBoundPickCodeStrategy){
+            log.info(defaultOutBoundPickCodeStrategy.getClass().getName());
         defaultOutBoundPickCodeStrategy.unbound(outboundTask);}
 
     }

@@ -30,6 +30,13 @@ public class InboundDataController {
     @Autowired
     private EisIdempotentService eisIdempotentService;
 
+
+    /**
+     *业务入库 推送eis
+     * @param str json串
+     * @return JsonResult json串
+     * @throws Exception
+     */
     @ApiOperation(value = "入库任务数据生成", notes = "入库任务数据生成")
     @PostMapping("/inboundtask")
     public JsonResult inboundTaskPush(@RequestBody String str) throws Exception {
@@ -122,6 +129,12 @@ public class InboundDataController {
 
     }
 
+    /**
+     * 业务空托入库 推送eis
+     * @param str json串
+     * @return JsonResult json串
+     * @throws Exception
+     */
     @ApiOperation(value = "空托入库任务数据生成", notes = "空托入库任务数据生成")
     @PostMapping("/emptyboxinstocktask")
     public JsonResult emptyBoxInStockTask(@RequestBody String str) throws Exception {

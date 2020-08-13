@@ -4,6 +4,7 @@ import com.prolog.eis.dao.*;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.util.BeanUtil;
 import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.eis.util.PrologLocationUtils;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,7 @@ import java.util.UUID;
  *
  */
 @Component(OutBoundType.TASK_TYPE+1+OutBoundType.IF_SfReq+1)
+@SuppressWarnings("all")
 public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
     //订单超时处理时间默认值 半个小时 单位为min
@@ -106,9 +108,9 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                 ordercontainerTask.setContainerCode((String)sxStore1.get("containerNo"));
                 ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
                 ordercontainerTask.setTaskType(1);
-                ordercontainerTask.setSource(PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"),(Integer) sxStore1.get("y"),(Integer) sxStore1.get("layer")));
+                ordercontainerTask.setSource(PrologLocationUtils.splicingXYStr(PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"),(Integer) sxStore1.get("y"),(Integer) sxStore1.get("layer"))));
                 ordercontainerTask.setSourceType(1);
-                ordercontainerTask.setTarget(source);
+                ordercontainerTask.setTarget(PrologLocationUtils.splicingXYStr(source));
                 ordercontainerTask.setTargetType(1);
                 String uuid = UUID.randomUUID().toString().replaceAll("-","");
                 ordercontainerTask.setTaskCode(uuid);
