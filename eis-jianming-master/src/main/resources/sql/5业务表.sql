@@ -48,12 +48,3 @@ CREATE TABLE `repeat_report` (
   `end_time` datetime DEFAULT NULL COMMENT '结束时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='回告重发表';
-DROP TABLE IF EXISTS `outbound_task_detail_pool`;
-CREATE TABLE `outbound_task_detail_pool` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `pick_code` varchar(20) COMMENT '拣选站  指定拣选站  暂时移库出库用到 ',
-  `create_time` datetime  COMMENT '创建时间',
-  `end_time` datetime COMMENT '结束时间',
-  `bill_no` varchar(255) not null COMMENT '出库单号',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='订单池';

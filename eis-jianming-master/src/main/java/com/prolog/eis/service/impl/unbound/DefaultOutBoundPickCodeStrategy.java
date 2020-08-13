@@ -1,17 +1,21 @@
 package com.prolog.eis.service.impl.unbound;
 
-import com.prolog.eis.dao.*;
-import com.prolog.eis.model.wms.*;
-import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.dao.ContainerTaskDetailMapper;
+import com.prolog.eis.dao.ContainerTaskMapper;
+import com.prolog.eis.dao.PickStationMapper;
+import com.prolog.eis.model.wms.AgvStorageLocation;
+import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.model.wms.OutboundTask;
+import com.prolog.eis.model.wms.PickStation;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
  *  * IF_PICKCODE_EXISTS 是否指定拣选站 1指定 0不指定
  */
 @Component("taskType1")
+@Slf4j
 public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
 
     @Autowired
@@ -29,15 +34,15 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     @Autowired
     ContainerTaskMapper containerTaskMapper;
 
-    @Autowired
-    SimilarityDataEntityLoad similarityDataEntityLoad;
 
 
-    @Autowired
-    ContainerTaskDetailPoolMapper containerTaskDetailPoolMapper;
+
+
 
     @Autowired
     ContainerTaskDetailMapper containerTaskDetailMapperMapper;
+    @Autowired
+    SimilarityDataEntityListLoad similarityDataEntityListLoad;
 
     @Autowired
     private  Map<String, DefaultOutBoundPickCodeStrategy> strategyMap  ;
@@ -51,7 +56,10 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     public void unbound(OutboundTask outboundTask) {
         DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy=this.getDefaultOutBoundPickCodeStrategy(outboundTask);
         if(null!=defaultOutBoundPickCodeStrategy){
-        defaultOutBoundPickCodeStrategy.unbound(outboundTask);}
+            log.info(defaultOutBoundPickCodeStrategy.getClass().getName());
+            if(similarityDataEntityListLoad.addOutboundTask(outboundTask)==similarityDataEntityListLoad.maxSize)
+            defaultOutBoundPickCodeStrategy.unbound(outboundTask);
+        }
 
     }
 
@@ -92,12 +100,12 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         return false;
     }
 
-    /**
+  /*  *//**
      * 获取相邻订单的相似度高的任务
      *
      * @param outboundTask
      * @return
-     */
+     *//*
     public OutboundTask getSimilarityResult(OutboundTask outboundTask) {
         long similarity = similarityDataEntityLoad.getSimilarity();
         if (similarity != 0) {
@@ -119,14 +127,14 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
             return outboundTask;
         }
     }
+*/
 
-
-    /**
+   /* *//**
      * 获取当前订单相似度的计算
      *
      * @param OutboundTask
      * @return
-     */
+     *//*
     public long getPoolTask(OutboundTask OutboundTask) {
         long result;
         Map<String, Object> map = new HashMap<String, Object>();
@@ -146,5 +154,5 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         return result;
 
 
-    }
+    }*/
 }

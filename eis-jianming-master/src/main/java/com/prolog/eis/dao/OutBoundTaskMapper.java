@@ -1,11 +1,8 @@
 package com.prolog.eis.dao;
 
-import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.framework.dao.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -32,7 +29,14 @@ public interface OutBoundTaskMapper extends BaseMapper<OutboundTask>{
      List<OutboundTask> getListOutboundTask();
 
 
-
+     @ResultMap("OutboundTask")
+    /**
+     * 获取所有超时出库订单 按降序排序
+     * @return
+     */
+    @Select("select * from (select TIMESTAMPDIFF(MINUTE,NOW(),t.create_time) overtime,t.* from outbound_task t where t.task_type=1 )a \r\n"+
+            "WHERE a.overtime>#{overTime} ORDER BY a.overtime")
+    List<OutboundTask> getOutBoudTaskOverTime(@Param("overTime") long overTime);
 
 
 

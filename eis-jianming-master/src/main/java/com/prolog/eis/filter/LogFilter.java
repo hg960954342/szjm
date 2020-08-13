@@ -1,9 +1,7 @@
 package com.prolog.eis.filter;
 
 import com.prolog.framework.authority.core.interceptor.RestTemplateInterceptor;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;

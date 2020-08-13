@@ -1,9 +1,9 @@
 package com.prolog.eis;
 
-import com.prolog.eis.filter.LogFilter;
-import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
-import com.prolog.framework.authority.core.interceptor.RestTemplateInterceptor;
-import com.prolog.framework.microservice.annotation.EnablePrologService;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,9 +18,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import com.prolog.eis.filter.LogFilter;
+import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
+import com.prolog.framework.microservice.annotation.EnablePrologService;
 
 @SpringBootApplication()
 @EnableTransactionManagement
@@ -43,9 +43,10 @@ public class Application {
 	@Bean
 	public RestTemplate restTemplate() {
 		HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		httpRequestFactory.setConnectionRequestTimeout(5000);
-		httpRequestFactory.setConnectTimeout(5000);
-		httpRequestFactory.setReadTimeout(5000);
+
+		httpRequestFactory.setConnectionRequestTimeout(60000);
+		httpRequestFactory.setConnectTimeout(60000);
+		httpRequestFactory.setReadTimeout(60000);
 		RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
 		List<ClientHttpRequestInterceptor> interceptors =new ArrayList<>();
 		//interceptors.add(new LogFilter());

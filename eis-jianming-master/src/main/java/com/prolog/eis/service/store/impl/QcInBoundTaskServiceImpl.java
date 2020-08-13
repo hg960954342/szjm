@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.ContainerTaskMapper;
+import com.prolog.eis.dao.DeviceJunctionPortMapper;
 import com.prolog.eis.dao.base.SysParameMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
@@ -20,6 +21,7 @@ import com.prolog.eis.dto.eis.InStoreValidateDto;
 import com.prolog.eis.dto.eis.mcs.InBoundRequest;
 import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
 import com.prolog.eis.model.base.SysParame;
+import com.prolog.eis.model.eis.DeviceJunctionPort;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
@@ -69,6 +71,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private EisCallbackService eisCallbackService;
 	@Autowired
 	private McsInterfaceService mcsInterfaceService;
+	@Autowired
+	private DeviceJunctionPortMapper deviceJunctionPortMapper;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -178,7 +182,9 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			inboundTask.setEmptyContainer(0);
 			inboundTask.setContainerCode(PrologStringUtils.newGUID());
 			inboundTask.setTaskType(0);
+			inboundTask.setOwnerId("空托");
 			inboundTask.setItemId("空托");
+			inboundTask.setLotId("空托");
 			inboundTask.setQty(0);
 			inboundTask.setTaskState(3);
 			inboundTask.setCreateTime(new Date());
@@ -211,24 +217,86 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}
 	}
 
-	private McsRequestTaskDto addMcsTask(boolean success,int mcsType,String stockId,String source,String target,String errorMessage) {
-		McsRequestTaskDto mcsSendTaskDto = new McsRequestTaskDto();
-		mcsSendTaskDto.setSuccess(success);
-		mcsSendTaskDto.setType(mcsType);
-		mcsSendTaskDto.setStockId(stockId);
-		mcsSendTaskDto.setTarget(target);
-		mcsSendTaskDto.setSource(source);
-		mcsSendTaskDto.setErrorMessage(errorMessage);
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void foldInBound(String deviceNo,String containerNo) throws Exception {
+		DeviceJunctionPort deviceJunctionPort = deviceJunctionPortMapper.findById(deviceNo, DeviceJunctionPort.class);
+		if(null == deviceJunctionPort) {	
+			FileLogHelper.WriteLog("mcsfoldInBoundError", String.format("设备编号%s未配置", deviceNo));
+			return;
+		}
 
-		return mcsSendTaskDto;
-	}
+		String source = PrologCoordinateUtils.splicingStr(deviceJunctionPort.getX(), deviceJunctionPort.getY(), deviceJunctionPort.getLayer());
+
+		//验证
+		List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(), SxStore.class);
+		if(!sxStores.isEmpty()) {
+			FileLogHelper.WriteLog("mcsfoldInBoundError", String.format("容器%s存在库存", containerNo));
+
+			mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+					containerNo, 
+					source,
+					"-1",
+					"0", "99",0);
+			return;
+		}
+
+		String emptyContainNo = PrologStringUtils.newGUID();
+		//直接入库，但是优先入当前层，建民碟盘机
+		InboundTask inboundTask = new InboundTask();
+		inboundTask.setBillNo(PrologStringUtils.newGUID());
+		inboundTask.setWmsPush(0);
+		inboundTask.setReBack(0);
+		inboundTask.setEmptyContainer(0);
+		inboundTask.setContainerCode(emptyContainNo);
+		inboundTask.setTaskType(0);
+		inboundTask.setOwnerId("空托");
+		inboundTask.setItemId("空托");
+		inboundTask.setLotId("空托");
+		inboundTask.setQty(1);
+		inboundTask.setTaskState(3);
+		inboundTask.setCreateTime(new Date());
+		inboundTask.setStartTime(new Date());
+		inboundTask.setRukuTime(new Date());
+		inboundTaskMapper.save(inboundTask);
+
+		//优先找1层
+		Integer locationId = checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),emptyContainNo,deviceJunctionPort.getLayer(),1,3,1,1);
+		if(null == locationId) {
+			locationId = checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),emptyContainNo,deviceJunctionPort.getLayer(),1,3,1,3);
+		}
+
+		if(null == locationId) {
+			FileLogHelper.WriteLog("mcsfoldInBoundError", String.format("货位不足"));
+
+			mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+					containerNo, 
+					source,
+					"-1",
+					"0", "99",0);
+			return;
+		}
+
+		//生成入库库存
+		this.buildRuKuSxStore(locationId,inboundTask,emptyContainNo,200d);
+
+		//发送指令
+		SxStoreLocation sxStoreLocation = sxStoreLocationMapper.findById(locationId, SxStoreLocation.class);
+		String target = PrologCoordinateUtils.splicingStr(sxStoreLocation.getX(), sxStoreLocation.getY(), sxStoreLocation.getLayer());
+
+		mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+				emptyContainNo,
+				source,
+				target,
+				"0", "99",0);
+	}	
 
 	private void clearAgvLocationComtainer(String containerNo) {
 		containerTaskMapper.deleteByMap(MapUtils.put("containerCode", containerNo).getMap(), ContainerTask.class);
 	}
 
 	private McsRequestTaskDto emptyContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
-		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,portInfo.getJunctionPort(),1,1);
+		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,3,1,1);
 		if(null == locationId) {
 			if(portInfo.getShowLed() == 1) {
 				//this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,"貨位不足！！！");
@@ -241,7 +309,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 		//生成入库库存
 		this.buildRuKuSxStore(locationId,inboundTask,containerNo,weight);
-		
+
 		SxStoreLocation sxStoreLocation = sxStoreLocationMapper.findById(locationId, SxStoreLocation.class);
 		String target = PrologCoordinateUtils.splicingStr(sxStoreLocation.getX(), sxStoreLocation.getY(), sxStoreLocation.getLayer());
 		return this.addMcsTask(true,1,containerNo,source,target,"");
@@ -249,7 +317,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 	private McsRequestTaskDto taskContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
 
-		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,portInfo.getJunctionPort(),1,3);
+		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,null,1,3);
 		if(null == locationId) {
 			if(portInfo.getShowLed() == 1) {
 				//this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,"貨位不足！！！");
@@ -262,7 +330,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 		//生成入库库存
 		this.buildRuKuSxStore(locationId,inboundTask,containerNo,weight);
-		
+
 		SxStoreLocation sxStoreLocation = sxStoreLocationMapper.findById(locationId, SxStoreLocation.class);
 		String target = PrologCoordinateUtils.splicingStr(sxStoreLocation.getX(), sxStoreLocation.getY(), sxStoreLocation.getLayer());
 		return this.addMcsTask(true,1,containerNo,source,target,"");
@@ -302,11 +370,11 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		sxStoreLocationGroupMapper.updateMapById(sxStoreLocation.getStoreLocationGroupId(),
 				MapUtils.put("ascentLockState", 1).getMap(), SxStoreLocationGroup.class);
 		sxStoreTaskFinishService.computeLocation(sxStore);
-		
+
 		inboundTaskMapper.updateMapById(inboundTask.getId(), MapUtils.put("taskState", 3).put("rukuTime", new Date()).getMap(), InboundTask.class);
 	}
 
-	private Integer checkHuoWei(String itemId,String lot,String containerNo,int sourceLayer,int detection,String entryCode,int minLayer,int maxLayer) throws Exception {
+	private Integer checkHuoWei(String itemId,String lot,String containerNo,int sourceLayer,int detection,Integer defaultReserveCount,int minLayer,int maxLayer) throws Exception {
 		List<List<Integer>> layerGroups = DetetionLayerHelper.getLayers(detection,minLayer,maxLayer);
 
 		//查找货位
@@ -323,7 +391,10 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 					continue;
 				}
 
-				int reserveCount = sysParameService.getLayerReserveCount(layers);
+				Integer reserveCount = defaultReserveCount;
+				if(null == reserveCount) {
+					reserveCount = sysParameService.getLayerReserveCount(layers);	
+				}
 
 				Integer findLayer = sxInStoreService.findLayer(0,layers, reserveCount, "", "");
 
@@ -381,10 +452,10 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			}
 		}
 	}
-	
+
 	@Override
 	public void rcsCompleteForward(String containerCode,int agvLocationId) throws Exception {
-		
+
 		//根据agv点位，找到四向库入库口
 		AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findById(agvLocationId, AgvStorageLocation.class);
 		if(null != agvStorageLocation) {
@@ -392,7 +463,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			if(!portInfos.isEmpty()) {
 				PortInfo portInfo = portInfos.get(0);
 				String source = PrologCoordinateUtils.splicingStr(portInfo.getX(), portInfo.getY(), portInfo.getLayer());
-				
+
 				mcsInterfaceService.sendMcsTaskWithOutPathAsyc(4, 
 						containerCode, 
 						source,
@@ -454,7 +525,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 			//清除托盘库库存
 			SxStore sxStore = this.clearSxStore(containerCode);
-			
+
 			containerTask.setSource(agvStorageLocations.get(0).getRcsPositionCode());
 			containerTask.setSourceType(2);
 			containerTask.setTaskState(1);
@@ -567,5 +638,17 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}else {
 			return list.get(0);
 		}
+	}
+
+	private McsRequestTaskDto addMcsTask(boolean success,int mcsType,String stockId,String source,String target,String errorMessage) {
+		McsRequestTaskDto mcsSendTaskDto = new McsRequestTaskDto();
+		mcsSendTaskDto.setSuccess(success);
+		mcsSendTaskDto.setType(mcsType);
+		mcsSendTaskDto.setStockId(stockId);
+		mcsSendTaskDto.setTarget(target);
+		mcsSendTaskDto.setSource(source);
+		mcsSendTaskDto.setErrorMessage(errorMessage);
+
+		return mcsSendTaskDto;
 	}
 }
