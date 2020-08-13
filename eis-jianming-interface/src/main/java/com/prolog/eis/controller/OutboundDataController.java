@@ -65,6 +65,7 @@ public class OutboundDataController {
                         datum.setReBack(1);
                         datum.setEmptyContainer(0);
                         datum.setTaskType(1);
+                        datum.setTaskState(0);
                         long l = System.currentTimeMillis();
                         Date t = new Date(l);
                         java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
@@ -185,6 +186,7 @@ public class OutboundDataController {
                         datum.setReBack(1);
                         datum.setEmptyContainer(0);
                         datum.setTaskType(2);
+                        datum.setTaskState(0);
 
                         long l = System.currentTimeMillis();
                         Date t = new Date(l);
@@ -298,6 +300,7 @@ public class OutboundDataController {
                         datum.setReBack(1);
                         datum.setEmptyContainer(0);
                         datum.setTaskType(3);
+                        datum.setTaskState(0);
 
                         long l = System.currentTimeMillis();
                         Date t = new Date(l);
@@ -408,6 +411,7 @@ public class OutboundDataController {
                         datum.setReBack(0);
                         datum.setEmptyContainer(1);
                         datum.setTaskType(4);
+                        datum.setTaskState(0);
 
                         long l = System.currentTimeMillis();
                         Date t = new Date(l);

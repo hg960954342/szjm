@@ -46,6 +46,10 @@ public class OutboundTask {
     @JsonProperty("TYPE")
     private int taskType;
 
+    @Column("task_state")
+    @ApiModelProperty("任务状态")
+    private int taskState;
+
     @Column("sfreq")
     @ApiModelProperty("站点要求 0 无   1有")
     @JsonProperty("SFREQUIREMENT")
