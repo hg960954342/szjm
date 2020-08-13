@@ -86,7 +86,7 @@ public class PrologJmMCSController {
 						mcsRequestTaskDto.getStockId(), 
 						mcsRequestTaskDto.getSource(),
 						mcsRequestTaskDto.getTarget(),
-						"", "99",0);
+						"0", "99",0);
 			}
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -186,6 +186,44 @@ public class PrologJmMCSController {
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
+		}
+	}
+	
+	@ApiOperation(value = "WCS-EIS叠盘机叠满请求入库", notes = "WCS-EIS叠盘机叠满请求入库")
+	@PostMapping("/foldInBound")
+	public void foldInBound(@RequestBody String json, HttpServletResponse response) throws Exception {
+
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json; charset=utf-8");
+		OutputStream out = response.getOutputStream();
+		try {
+			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
+
+			FileLogHelper.WriteLog("mcsfoldInBound", "MCS->EIS请求" + json);
+
+			String deviceNo = helper.getString("deviceNo");
+			String containerNo = helper.getString("containerNo");
+
+			//生成空托盘入库任务
+			qcInBoundTaskService.foldInBound(deviceNo, containerNo);
+			
+			String resultStr = this.getJmMcsValue(true,"请求成功","200",null);
+
+			out.write(resultStr.getBytes("UTF-8"));
+			out.flush();
+			out.close();
+			
+			FileLogHelper.WriteLog("mcsfoldInBound", "MCS->EIS" + resultStr);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			String resultStr = this.getJmMcsValue(true,"执行失败:" + e.getMessage(),"200",null);
+
+			out.write(resultStr.getBytes("UTF-8"));
+			out.flush();
+			out.close();
+			
+			FileLogHelper.WriteLog("mcsfoldInBoundError", "MCS->EIS返回" + e.getMessage());
 		}
 	}
 	
