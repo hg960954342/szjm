@@ -33,8 +33,7 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
     @Autowired
     ContainerTaskDetailMapper containerTaskDetailMapperMapper;
 
-    @Autowired
-    ContainerTaskDetailPoolMapper containerTaskDetailPoolMapper;
+
 
 
 

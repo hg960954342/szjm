@@ -25,4 +25,11 @@ public interface QcInBoundTaskService {
 	 * @param agvLocationId agv区域点位
 	 */
 	void rcsCompleteForward(String containerCode,int agvLocationId) throws Exception;
+	
+	/**
+	 * 碟盘机请求
+	 * @param deviceNo 
+	 * @param containerNo
+	 */
+	void foldInBound(String deviceNo,String containerNo) throws Exception;
 }
