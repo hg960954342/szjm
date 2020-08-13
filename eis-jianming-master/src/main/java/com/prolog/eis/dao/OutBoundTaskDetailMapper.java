@@ -202,7 +202,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
          "\t\t\t\t\t\tFROM\n" +
          "\t\t\t\t\t\t\toutbound_task_detail\n" +
          "\t\t\t\t\t\tWHERE\n" +
-         "\t\t\t\t\t\t\tbill_no IN (#{bill_no_string)\n" +
+         "\t\t\t\t\t\t\tbill_no IN (#{bill_no_string})\n" +
          "\t\t\t\t\t\tGROUP BY\n" +
          "\t\t\t\t\t\t\towner_id,\n" +
          "\t\t\t\t\t\t\titem_id,\n" +
