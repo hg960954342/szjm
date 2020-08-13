@@ -36,7 +36,7 @@ public interface InBoundTaskMapper  extends BaseMapper<InboundTask>{
             @Result(property = "rukuTime",  column = "ruku_time"),
             @Result(property = "endTime",  column = "end_time")
     })
-    @Select("select t.* from inbound_task t\r\n" +
+    @Select("select t.* from inbound_task t where t.task_state=0\r\n" +
             "\r\n" +
             "order by t.create_time desc")
      List<InboundTask> getListInboundTask();

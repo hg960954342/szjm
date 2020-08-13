@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-@Component(InBoundType.TASK_TYPE+0)
+@Component(InBoundType.TASK_TYPE+1)
 public class OrderInBoundStrategy implements InBoundStragtegy {
 
     @Autowired
@@ -89,8 +89,9 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
                 containerTask.setTaskCode(uuid);
 
                 containerTaskMapper.save(containerTask);
-
-
+                //更新入库状态
+            inboundTask.setTaskState(1);
+            inBoundTaskMapper.update(inboundTask);
 
 
 

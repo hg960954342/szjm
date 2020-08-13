@@ -98,6 +98,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.
                         getOutBoundContainerTaskDetail(String.join(",", similarityDataEntityListLoad.currentBillNoList));
                 containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
+                outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",",similarityDataEntityListLoad.currentBillNoList));
+
 
             }
             if((float) sxStore1.get("qty")>last&&(LocationType==4 ||LocationType==5 )&&!this.isExistTask(target)){ //非整托
@@ -105,6 +107,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.getOutBoundContainerTaskDetail
                         (String.join(",", similarityDataEntityListLoad.currentBillNoList));
                 containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
+
+                outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",",similarityDataEntityListLoad.currentBillNoList));
             }
 
 
