@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_SINGLETON;
@@ -39,6 +40,7 @@ public class SimilarityDataEntityListLoad {
 
     public int addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==0){
+
              billNoList.add("'"+outboundTask.getBillNo()+"'");
              return billNoList.size();
           }
@@ -81,5 +83,27 @@ public class SimilarityDataEntityListLoad {
 
     }
 
+    /**
+     * 获取相识度最高的出库任务
+     * @return
+     */
+    private OutboundTask getSimilarityDataList(){
+        List<OutboundTask> outboundTaskList=outBoundTaskMapper.getListOutboundTask();
+        List<SimilarityDataEntity> list=new ArrayList<SimilarityDataEntity>();
+        float count=outBoundTaskDetailMapper.getPoolItemCount(String.join(",", billNoList));
+        for (OutboundTask outboundTask:outboundTaskList) {
+            float  countSame= outBoundTaskDetailMapper.getPoolSameItemCount(String.join(",", billNoList),outboundTask.getBillNo());
+            float currentCount=outBoundTaskDetailMapper.getPoolItemCount("'"+outboundTask.getBillNo()+"'");
+            count=currentCount>=count?currentCount:count;
+            float similarity=countSame/count;
+            SimilarityDataEntity similarityDataEntity=new SimilarityDataEntity();
+            similarityDataEntity.setOutboundTask(outboundTask);
+            similarityDataEntity.setSimilarity(similarity);
+            list.add(similarityDataEntity);
+        }
+       return list.stream().max(Comparator.comparing(SimilarityDataEntity::getSimilarity)).orElse(null).getOutboundTask();
+
+
+    }
 
 }
