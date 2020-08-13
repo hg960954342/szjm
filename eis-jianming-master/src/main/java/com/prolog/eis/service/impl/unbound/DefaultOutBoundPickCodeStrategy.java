@@ -35,11 +35,12 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     SimilarityDataEntityLoad similarityDataEntityLoad;
 
 
-    @Autowired
-    ContainerTaskDetailPoolMapper containerTaskDetailPoolMapper;
+
 
     @Autowired
     ContainerTaskDetailMapper containerTaskDetailMapperMapper;
+    @Autowired
+    SimilarityDataEntityListLoad similarityDataEntityListLoad;
 
     @Autowired
     private  Map<String, DefaultOutBoundPickCodeStrategy> strategyMap  ;
@@ -54,7 +55,10 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy=this.getDefaultOutBoundPickCodeStrategy(outboundTask);
         if(null!=defaultOutBoundPickCodeStrategy){
             log.info(defaultOutBoundPickCodeStrategy.getClass().getName());
-        defaultOutBoundPickCodeStrategy.unbound(outboundTask);}
+            similarityDataEntityListLoad.addOutboundTask(outboundTask);
+            if(similarityDataEntityListLoad.getCurrentSize()==similarityDataEntityListLoad.maxSize)
+            defaultOutBoundPickCodeStrategy.unbound(outboundTask);
+        }
 
     }
 
@@ -95,12 +99,12 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         return false;
     }
 
-    /**
+  /*  *//**
      * 获取相邻订单的相似度高的任务
      *
      * @param outboundTask
      * @return
-     */
+     *//*
     public OutboundTask getSimilarityResult(OutboundTask outboundTask) {
         long similarity = similarityDataEntityLoad.getSimilarity();
         if (similarity != 0) {
@@ -122,14 +126,14 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
             return outboundTask;
         }
     }
+*/
 
-
-    /**
+   /* *//**
      * 获取当前订单相似度的计算
      *
      * @param OutboundTask
      * @return
-     */
+     *//*
     public long getPoolTask(OutboundTask OutboundTask) {
         long result;
         Map<String, Object> map = new HashMap<String, Object>();
@@ -149,5 +153,5 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         return result;
 
 
-    }
+    }*/
 }
