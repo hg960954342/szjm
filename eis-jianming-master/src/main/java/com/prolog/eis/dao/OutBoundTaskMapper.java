@@ -23,7 +23,7 @@ public interface OutBoundTaskMapper extends BaseMapper<OutboundTask>{
             @Result(property = "createTime",  column = "create_time"),
             @Result(property = "endTime",  column = "end_time")
     })
-    @Select("select t.* from outbound_task t\r\n" +
+    @Select("select t.* from outbound_task t where t.task_state=0\r\n" +
             "\r\n" +
             "order by t.create_time desc")
      List<OutboundTask> getListOutboundTask();
@@ -38,6 +38,7 @@ public interface OutBoundTaskMapper extends BaseMapper<OutboundTask>{
             "WHERE a.overtime>#{overTime} ORDER BY a.overtime")
     List<OutboundTask> getOutBoudTaskOverTime(@Param("overTime") long overTime);
 
-
+     @Update("update outbound_task set task_state=1 where bill_no in (#{bill_no_string})")
+     int updateOutBoundTaskBySQL(@Param("bill_no_string") String bill_no_string);
 
 }
