@@ -522,6 +522,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("Agv输送线区域点位不存在%s", portInfo.getJunctionPort()));
 				return;
 			}
+			
 
 			//清除托盘库库存
 			SxStore sxStore = this.clearSxStore(containerCode);
@@ -540,6 +541,10 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			containerTaskMapper.update(containerTask);
 		}else {
 			//非agv的出库口到位
+			//清除托盘库库存
+			this.clearSxStore(containerCode);
+			
+			containerTaskMapper.deleteById(containerTask.getId(), ContainerTask.class);
 		}
 	}
 
