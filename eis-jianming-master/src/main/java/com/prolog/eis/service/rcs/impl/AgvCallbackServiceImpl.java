@@ -1,21 +1,15 @@
 package com.prolog.eis.service.rcs.impl;
 
 import com.prolog.eis.dao.AgvStorageLocationMapper;
-import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
-import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
+import com.prolog.eis.service.rcs.AgvCallbackService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
-import com.prolog.eis.util.PrologCoordinateUtils;
-import com.prolog.framework.core.restriction.Criteria;
-import com.prolog.framework.core.restriction.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.prolog.eis.service.rcs.AgvCallbackService;
 
 import java.util.Date;
 import java.util.List;
@@ -46,11 +40,10 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskCode(taskCode);
         for (ContainerTask containerTask : containerTasks) {
 
-            Criteria criteria = Criteria.forClass(AgvStorageLocation.class);
-            criteria.setRestriction(Restrictions.eq("rcsPositionCode", containerTask.getSource()));
-            AgvStorageLocation currentPosition = agvStorageLocationMapper.findByCriteria(criteria).get(0);
-            criteria.setRestriction(Restrictions.eq("rcsPositionCode", containerTask.getTarget()));
-            AgvStorageLocation targetPosition = agvStorageLocationMapper.findByCriteria(criteria).get(0);
+
+            AgvStorageLocation currentPosition = agvStorageLocationMapper.findByRcs(containerTask.getSource());
+
+            AgvStorageLocation targetPosition = agvStorageLocationMapper.findByRcs(containerTask.getTarget());
             //判断小车状态
             if (method.equals("star")) {
                 //小车任务开始
@@ -81,6 +74,8 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 containerTaskService.update(containerTask);
                 //判断托盘到位 区域 agv
                 if (containerTask.getTargetType() == 1) {
+                    //删除容器任务
+
                     //任务类型 业务出库
                     if (containerTask.getTaskType() == 1) {
                         //出库完成 回告
