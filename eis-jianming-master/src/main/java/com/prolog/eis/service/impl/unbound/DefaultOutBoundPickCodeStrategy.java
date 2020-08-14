@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * 订单出库必须继承此类 名称必须符合 OutBoundType.TASK_TYPE+数据库中配置的类型数字
  *  * IF_PICKCODE_EXISTS 是否指定拣选站 1指定 0不指定
  */
-@Component("taskType1")
+@Component(OutBoundType.TASK_TYPE+1)
 @Slf4j
 public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
 
@@ -57,7 +57,8 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy=this.getDefaultOutBoundPickCodeStrategy(outboundTask);
         if(null!=defaultOutBoundPickCodeStrategy){
             log.info(defaultOutBoundPickCodeStrategy.getClass().getName());
-            if(similarityDataEntityListLoad.addOutboundTask(outboundTask)==similarityDataEntityListLoad.maxSize)
+            similarityDataEntityListLoad.addOutboundTask(outboundTask);
+            if(similarityDataEntityListLoad.currentBillNoList.size()==similarityDataEntityListLoad.maxSize)
             defaultOutBoundPickCodeStrategy.unbound(outboundTask);
         }
 

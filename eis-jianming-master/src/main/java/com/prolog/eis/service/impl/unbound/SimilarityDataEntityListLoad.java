@@ -19,7 +19,7 @@ public class SimilarityDataEntityListLoad {
 
 
     public  Set<String> currentBillNoList=new HashSet<>(); //当前执行的billNoString
-    public  int  maxSize=5; //订单池处理最大数量
+    public  int  maxSize=1; //订单池处理最大数量
 
     private Set<String> billNoPickCodeList=Collections.synchronizedSet(new HashSet<>());
     private Set<String> billNoList=Collections.synchronizedSet(new HashSet<>());
@@ -31,39 +31,43 @@ public class SimilarityDataEntityListLoad {
     @Autowired
     OutBoundTaskDetailMapper outBoundTaskDetailMapper;
     //订单超时处理时间默认值 半个小时 单位为min
-    public static final long overTime=30;
+    public static final long overTime=1;
 
 
-
-
-
-
-    public int addOutboundTask(OutboundTask outboundTask) {
+    /**
+     * 超时任务优先
+     * 1.订单池未满
+     * @param outboundTask
+     * @return
+     */
+    public void addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==0){
-
+             billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTime(overTime,outboundTask.getSfReq()));
              billNoList.add("'"+outboundTask.getBillNo()+"'");
-             return billNoList.size();
+             currentBillNoList=billNoList;
           }
         if(billNoPickCodeList.size()<=maxSize&&outboundTask.getSfReq()==1){
+            billNoPickCodeList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTime(overTime,outboundTask.getSfReq()));
             billNoPickCodeList.add("'"+outboundTask.getBillNo()+"'");
-            return billNoPickCodeList.size();
+            currentBillNoList=billNoPickCodeList;
         }
-        return 0;
+
     }
 
 
     public List<DetailDataBean> getOutDetailList(Class <? extends DefaultOutBoundPickCodeStrategy> classz) {
-        List<OutboundTask> listOverTimeBoundTask= outBoundTaskMapper.getOutBoudTaskOverTime(overTime);
+       /* List<OutboundTask> listOverTimeBoundTask= outBoundTaskMapper.getOutBoudTaskOverTime(overTime);
         for(OutboundTask outboundTask:listOverTimeBoundTask){
             this.addOutboundTask(outboundTask);
-        }
+        }*/
 
 
         if((null!=classz.getAnnotation(Component.class))&&
                 classz.getAnnotation(Component.class).value().indexOf(OutBoundType.IF_SfReq)!=-1) {
             String value=classz.getAnnotation(Component.class).value();
-            if(StringUtils.isNotEmpty(value.substring(value.indexOf(OutBoundType.IF_SfReq) + OutBoundType.IF_SfReq.length(),1))){
-                int sfreq=Integer.parseInt(value.substring(value.indexOf(OutBoundType.IF_SfReq) + OutBoundType.IF_SfReq.length(),1));
+            value=value.substring(value.indexOf(OutBoundType.IF_SfReq) + OutBoundType.IF_SfReq.length(),value.length());
+            if(StringUtils.isNotEmpty(value)){
+                int sfreq=Integer.parseInt(value);
                 if(sfreq==0){
                     currentBillNoList=billNoList;
                   return  outBoundTaskDetailMapper.getOuntBoundDetailAll(String.join(",", currentBillNoList));

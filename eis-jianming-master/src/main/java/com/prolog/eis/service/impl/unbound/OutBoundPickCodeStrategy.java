@@ -4,6 +4,7 @@ import com.prolog.eis.dao.*;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.PrologLocationUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.util.UUID;
  */
 @Component(OutBoundType.TASK_TYPE+1+OutBoundType.IF_SfReq+1)
 @SuppressWarnings("all")
+@Slf4j
 public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
 
@@ -57,7 +59,10 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             String pickCode =detailDataBeand.getPickCode();
 
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
-
+            if(null==agvStorageLocation){
+                log.error("拣选站："+pickCode+"未找到agv坐标！");
+                return;
+            }
             String target = PrologLocationUtils.splicingXYStr(PrologCoordinateUtils.splicingStr(agvStorageLocation.getX(), agvStorageLocation.getY(), agvStorageLocation.getCeng()));
 
             ContainerTask ordercontainerTask = new ContainerTask();
