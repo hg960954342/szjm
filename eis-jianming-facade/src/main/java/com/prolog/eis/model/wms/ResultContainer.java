@@ -13,7 +13,7 @@ public class ResultContainer {
      */
 
     private int size;
-    private String messageID;
+    private String MessageID;
     private List<DataBean> data;
 
     public int getSize() {
@@ -25,11 +25,11 @@ public class ResultContainer {
     }
 
     public String getMessageID() {
-        return messageID;
+        return MessageID;
     }
 
     public void setMessageID(String messageID) {
-        this.messageID = messageID;
+        MessageID = messageID;
     }
 
     public List<DataBean> getData() {
@@ -48,7 +48,7 @@ public class ResultContainer {
          */
 
         private String billno;
-        private String tasktype;
+        private String type;
         private List<DetailsBean> details;
 
         public String getBillno() {
@@ -59,12 +59,12 @@ public class ResultContainer {
             this.billno = billno;
         }
 
-        public String getTasktype() {
-            return tasktype;
+        public String getType() {
+            return type;
         }
 
-        public void setTasktype(String tasktype) {
-            this.tasktype = tasktype;
+        public void setType(String type) {
+            this.type = type;
         }
 
         public List<DetailsBean> getDetails() {
