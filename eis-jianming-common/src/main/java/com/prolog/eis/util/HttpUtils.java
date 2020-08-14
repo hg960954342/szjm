@@ -58,6 +58,29 @@ public class HttpUtils {
 		}
 		return result.toString();
 	}
+	public static String post(String url ,String json,String token) throws ClientProtocolException, IOException {
+		HttpPost httpPost = new HttpPost(url);
+		StringEntity entity = new StringEntity(json,"UTF-8");
+		httpPost.setEntity(entity);
+		httpPost.setHeader("Accept","application/json, text/javascript, */*; q=0.01");
+		httpPost.setHeader("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
+		httpPost.setHeader("Accept-Encoding", "gzip, deflate");
+		httpPost.setHeader("Referer", "http://www.prolog-int.cn:3111/outLogin");
+		httpPost.setHeader("Content-Type", "application/json; charset=UTF-8");
+		httpPost.setHeader("X-Requested-With", "XMLHttpRequest");
+		httpPost.setHeader("Authorization","Bearer"+"\n\r"+token);
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).build();
+		httpPost.setConfig(requestConfig);
+		CloseableHttpResponse  response = client.execute(httpPost);
+		int state = response.getStatusLine().getStatusCode();
+		BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+		StringBuffer result = new StringBuffer();
+		String line = "";
+		while ((line = rd.readLine()) != null) {
+			result.append(line);
+		}
+		return result.toString();
+	}
 	
 	public static String get(String url ) throws ClientProtocolException, IOException {
 		CloseableHttpClient client = HttpClients.createDefault();
