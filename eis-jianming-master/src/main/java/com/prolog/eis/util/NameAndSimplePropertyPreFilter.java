@@ -9,10 +9,13 @@ public class NameAndSimplePropertyPreFilter extends SimplePropertyPreFilter impl
         if (name == null || name.length() == 0) {
             return name;
         }
-        if (name.equals("messageID")){
+        if (name.equals("MessageID") ||name.equals("data") || name.equals("size")||name.equals("details")){
             return name;
         }
-        String pascalName = name.toLowerCase();
+        if (name.equals("messageID")){
+            return name="MessageID";
+        }
+        String pascalName = name.toUpperCase();
         return pascalName;
     }
 }

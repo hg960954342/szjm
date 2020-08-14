@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class WmsLoginServiceImpl implements WmsLoginService {
@@ -21,20 +22,29 @@ public class WmsLoginServiceImpl implements WmsLoginService {
     @Value("${userPass}")
     private String userPass;
 
+    @Value("${prolog.wms.url:}")
+    private String wmsIp;
+    @Value("${prolog.wms.port:}")
+    private String wmsPort;
+
     /**
      * 登录获取 token
      * @return
      */
     @Override
     public void loginWms() {
-        String url= "http://localhost:8091/api/v1/OAuth/token";
+        String url = String.format("http://%s:%s/api/v1/OAuth/token", wmsIp, wmsPort);
         Map<String,Object> map = new HashMap<>();
         map.put("userCode",userCode);
-        String userPassMd5 = PrologMd5Util.md5(userPass);
-        map.put("userPass",userPassMd5);
+        map.put("userPass",userPass);
+        map.put("accountCode","db_jianmin_wms");
+        map.put("messageID",UUID.randomUUID().toString().replaceAll("-", ""));
         String json = null;
         try {
             json = PrologApiJsonHelper.toJson(map);
+
+            LoginWmsResponse.getTokenTime = System.currentTimeMillis() / 1000;
+
             String restjson = HttpUtils.post(url, json);
             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restjson);
             String data = helper.getString("data");
@@ -53,7 +63,7 @@ public class WmsLoginServiceImpl implements WmsLoginService {
      * 刷新token
      */
     public void flushToken(){
-        String url= "http://localhost:8091/api/v1/OAuth/refresh";
+        String url = String.format("http://%s:%s/api/v1/OAuth/refresh", wmsIp, wmsPort);
         Map<String,Object> map = new HashMap<>();
         map.put("refreshToken",LoginWmsResponse.refreshToken);
 

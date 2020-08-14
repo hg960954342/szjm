@@ -14,8 +14,8 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
     @Results({
             @Result(property = "containerCode", column = "container_code"),
             @Result(property = "billNo", column = "bill_no"),
-            @Result(property = "taskType", column = "task_type"),
-            @Result(property = "ownerId", column = "owner_id"),
+            @Result(property = "type", column = "task_type"),
+            @Result(property = "consignor", column = "owner_id"),
             @Result(property = "seqNo", column = "seqno"),
             @Result(property = "itemId", column = "item_id"),
             @Result(property = "lotId", column = "lot_id"),
@@ -48,7 +48,7 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
 
     @Results({
             @Result(property = "billno", column = "bill_no"),
-            @Result(property = "tasktype", column = "task_type"),
+            @Result(property = "type", column = "task_type"),
             @Result(property = "details", column = "bill_no=bill_no,task_type=task_type",
                     many = @Many(select = "com.prolog.eis.dao.ContainerTaskDetailMapper.getCheckDetail")),
     })
