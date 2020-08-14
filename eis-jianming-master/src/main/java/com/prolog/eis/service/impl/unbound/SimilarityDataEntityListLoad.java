@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_SINGLETON;
@@ -17,11 +18,11 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 public class SimilarityDataEntityListLoad {
 
 
-    public Set<String> currentBillNoList=new HashSet<>(); //当前执行的billNoString
-    public final int  maxSize=5; //订单池处理最大数量
+    public  Set<String> currentBillNoList=new HashSet<>(); //当前执行的billNoString
+    public  int  maxSize=5; //订单池处理最大数量
 
-    private Set<String> billNoPickCodeList=new HashSet<>();
-    private Set<String> billNoList=new HashSet<>();
+    private Set<String> billNoPickCodeList=Collections.synchronizedSet(new HashSet<>());
+    private Set<String> billNoList=Collections.synchronizedSet(new HashSet<>());
 
 
     @Autowired
@@ -36,17 +37,18 @@ public class SimilarityDataEntityListLoad {
 
 
 
-    public int getCurrentSize() {
-        return currentBillNoList.size();
-    }
 
-    public void addOutboundTask(OutboundTask outboundTask) {
+    public int addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==0){
+
              billNoList.add("'"+outboundTask.getBillNo()+"'");
+             return billNoList.size();
           }
         if(billNoPickCodeList.size()<=maxSize&&outboundTask.getSfReq()==1){
             billNoPickCodeList.add("'"+outboundTask.getBillNo()+"'");
+            return billNoPickCodeList.size();
         }
+        return 0;
     }
 
 
@@ -81,5 +83,27 @@ public class SimilarityDataEntityListLoad {
 
     }
 
+    /**
+     * 获取相识度最高的出库任务
+     * @return
+     */
+    private OutboundTask getSimilarityDataList(){
+        List<OutboundTask> outboundTaskList=outBoundTaskMapper.getListOutboundTask();
+        List<SimilarityDataEntity> list=new ArrayList<SimilarityDataEntity>();
+        float count=outBoundTaskDetailMapper.getPoolItemCount(String.join(",", billNoList));
+        for (OutboundTask outboundTask:outboundTaskList) {
+            float  countSame= outBoundTaskDetailMapper.getPoolSameItemCount(String.join(",", billNoList),outboundTask.getBillNo());
+            float currentCount=outBoundTaskDetailMapper.getPoolItemCount("'"+outboundTask.getBillNo()+"'");
+            count=currentCount>=count?currentCount:count;
+            float similarity=countSame/count;
+            SimilarityDataEntity similarityDataEntity=new SimilarityDataEntity();
+            similarityDataEntity.setOutboundTask(outboundTask);
+            similarityDataEntity.setSimilarity(similarity);
+            list.add(similarityDataEntity);
+        }
+       return list.stream().max(Comparator.comparing(SimilarityDataEntity::getSimilarity)).orElse(null).getOutboundTask();
+
+
+    }
 
 }
