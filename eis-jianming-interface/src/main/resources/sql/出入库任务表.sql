@@ -68,6 +68,7 @@ CREATE TABLE `outbound_task_history` (
   `wms_push` int NOT NULL DEFAULT '0' COMMENT '是否wms下发，0不是，1是',
   `reback` int NOT NULL DEFAULT '0' COMMENT '是否回传，0不回传，1回传',
   `task_type` int DEFAULT NULL COMMENT 'eis内部暂定任务类型  1订单出库  2移库出库  3 盘点出库 4空托出库',
+  `task_state` int DEFAULT NULL COMMENT '任务状态',
   `sfreq` int NOT NULL DEFAULT '0' COMMENT '站点要求 0 无   1有',
   `pick_code` varchar(20) DEFAULT NULL COMMENT '拣选站',
   `owner_id` varchar(20) DEFAULT NULL COMMENT '货主',
