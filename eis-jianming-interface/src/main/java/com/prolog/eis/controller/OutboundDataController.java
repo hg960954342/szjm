@@ -119,7 +119,7 @@ public class OutboundDataController {
                 }
 
                 rejson.setCode("0");
-                rejson.setMessage("true");
+                rejson.setMessage("success");
 
                 WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                 wmsEisIdempotent.setMessageId(messageID);
@@ -237,7 +237,7 @@ public class OutboundDataController {
                 }
 
                 rejson.setCode("0");
-                rejson.setMessage("true");
+                rejson.setMessage("success");
 
                 WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                 wmsEisIdempotent.setMessageId(messageID);
@@ -348,7 +348,7 @@ public class OutboundDataController {
                 }
 
                 rejson.setCode("0");
-                rejson.setMessage("true");
+                rejson.setMessage("success");
 
                 WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                 wmsEisIdempotent.setMessageId(messageID);
@@ -463,7 +463,7 @@ public class OutboundDataController {
                 }
 
                 rejson.setCode("0");
-                rejson.setMessage("true");
+                rejson.setMessage("success");
 
                 WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                 wmsEisIdempotent.setMessageId(messageID);
