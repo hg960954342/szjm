@@ -78,5 +78,10 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
     inBoundTaskMapper.update(inboundTask);
     }
 
+    @Override
+    public void delete(InboundTask inboundTask) {
+        inBoundTaskMapper.deleteById(inboundTask.getId(),InboundTask.class);
+    }
+
 
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.dao.InBoundTaskHistoryMapper;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.*;
 import com.prolog.eis.service.login.WmsLoginService;
@@ -23,8 +24,6 @@ public class EisCallbackServiceImpl implements EisCallbackService {
     private String wmsIp;
     @Value("${prolog.wms.port:}")
     private String wmsPort;
-/*
-    private  String token = LoginWmsResponse.accessToken;*/
 
     @Autowired
     private InBoundTaskService inBoundTaskService;
@@ -43,6 +42,9 @@ public class EisCallbackServiceImpl implements EisCallbackService {
 
     @Autowired
     private AgvStorageLocationMapper agvStorageLocationMapper;
+
+    @Autowired
+    private InBoundTaskHistoryMapper inBoundTaskHistoryMapper;
 
     /**
      * 回告wms
@@ -99,7 +101,13 @@ public class EisCallbackServiceImpl implements EisCallbackService {
 
             inboundTask.setTaskState(4);
             inboundTask.setEndTime(new Date());
-            inBoundTaskService.update(inboundTask);
+//            inBoundTaskService.update(inboundTask);
+            inBoundTaskService.delete(inboundTask);
+            InBoundTaskHistory history = new InBoundTaskHistory();
+            org.springframework.beans.BeanUtils.copyProperties(inboundTask,history);
+            //加入历史表
+            inBoundTaskHistoryMapper.save(history);
+
         }
 
     }
@@ -127,7 +135,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
             RepeatReport repeatReport = new RepeatReport();
             repeatReport.setReportData(json);
-            repeatReport.setReportType(1);
+            repeatReport.setReportType(containerTask.getTaskType());
             repeatReport.setReportUrl(url);
             repeatReport.setMessage(resultMsg);
             repeatReport.setReportCount(1);
@@ -164,7 +172,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
             RepeatReport repeatReport = new RepeatReport();
             repeatReport.setReportData(json);
-            repeatReport.setReportType(2);
+            repeatReport.setReportType(containerTask.getTaskType());
             repeatReport.setReportUrl(url);
             repeatReport.setMessage(resultMsg);
             repeatReport.setReportCount(1);
@@ -230,27 +238,28 @@ public class EisCallbackServiceImpl implements EisCallbackService {
 
         String restJson = null;
         try {
-            restJson = HttpUtils.post(url, json);
+            restJson = HttpUtils.post(url, json,token);
+            repeatReport.setSendTime(new Date());
+            PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
+
+            if ("0".equals(helper.getString("stateCode"))) {
+                repeatReport.setReportCount(repeatReport.getReportCount() + 1);
+                repeatReport.setReportState(2);
+                repeatReport.setEndTime(new Date());
+            } else {
+                repeatReport.setReportCount(repeatReport.getReportCount() + 1);
+                repeatReport.setEndTime(new Date());
+                repeatReport.setMessage(helper.getString("message"));
+                if (repeatReport.getReportCount() > 10) {
+                    repeatReport.setReportState(3);
+                }
+            }
+            repeatReportService.update(repeatReport);
         } catch (IOException e) {
-            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败"+e.getMessage();
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
         }
-        repeatReport.setSendTime(new Date());
-        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 
-        if (helper.getString("code").equals("0")) {
-            repeatReport.setReportCount(repeatReport.getReportCount() + 1);
-            repeatReport.setReportState(2);
-            repeatReport.setEndTime(new Date());
-        } else {
-            repeatReport.setReportCount(repeatReport.getReportCount() + 1);
-            repeatReport.setEndTime(new Date());
-            repeatReport.setMessage(helper.getString("message"));
-            if (repeatReport.getReportCount() > 10) {
-                repeatReport.setReportState(3);
-            }
-        }
-        repeatReportService.update(repeatReport);
     }
 
 
@@ -274,7 +283,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         Map<String,Object> map = new HashMap<>();
         map.put("data",data);
         map.put("size",data.size());
-        map.put("MessageID",UUID.randomUUID().toString().replaceAll("-",""));
+        map.put("messageID",UUID.randomUUID().toString().replaceAll("-",""));
        return JSONObject.toJSONString(map,nameAndSimplePropertyPreFilter);
 
     }
@@ -360,8 +369,8 @@ public class EisCallbackServiceImpl implements EisCallbackService {
      */
     private void getWmsResponseData(String json, String restJson, String url, int type) {
         PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
-        String code = helper.getString("stateCode");
-        if (!code.equals("0")) {//回告失败
+        String stateCode = helper.getString("stateCode");
+        if (!"0".equals(stateCode)) {//回告失败
             //添加到重复回告表中
             //封装数据
             RepeatReport repeatReport = new RepeatReport();

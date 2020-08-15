@@ -12,4 +12,5 @@ public interface InBoundTaskService {
     List<InboundTask> selectByContainerCode(String containerCode);
 
     void update(InboundTask inboundTask);
+    void delete(InboundTask inboundTask);
 }
