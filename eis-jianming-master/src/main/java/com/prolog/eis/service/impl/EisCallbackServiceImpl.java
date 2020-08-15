@@ -301,10 +301,10 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         String[] str={"id","lotId","create_time","end_time"};
         NameAndSimplePropertyPreFilter nameAndSimplePropertyPreFilter=new NameAndSimplePropertyPreFilter();
         nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
-        AgvStorageLocation currentPosition = agvStorageLocationMapper.findByRcs(containerTask.getSource());
-        String strAgvLoc = PrologCoordinateUtils.splicingStr(currentPosition.getX(), currentPosition.getY(), currentPosition.getCeng());
+//        AgvStorageLocation currentPosition = agvStorageLocationMapper.findByRcs(containerTask.getSource());
+//        String strAgvLoc = PrologCoordinateUtils.splicingStr(currentPosition.getX(), currentPosition.getY(), currentPosition.getCeng());
         for (Map<String, Object> reportDatum : reportData) {
-            reportDatum.put("agvLoc",strAgvLoc);
+//            reportDatum.put("agvLoc",strAgvLoc);
             reportDatum.put("type",reportDatum.get("type").toString());
         }
         Map<String,Object> map = new HashMap<>();
@@ -328,10 +328,10 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         String[] str={"id","consignor","create_time","end_time"};
         NameAndSimplePropertyPreFilter nameAndSimplePropertyPreFilter=new NameAndSimplePropertyPreFilter();
         nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
-        AgvStorageLocation currentPosition = agvStorageLocationMapper.findByRcs(containerTask.getSource());
-        String strAgvLoc = PrologCoordinateUtils.splicingStr(currentPosition.getX(), currentPosition.getY(), currentPosition.getCeng());
+//        AgvStorageLocation currentPosition = agvStorageLocationMapper.findByRcs(containerTask.getSource());
+//        String strAgvLoc = PrologCoordinateUtils.splicingStr(currentPosition.getX(), currentPosition.getY(), currentPosition.getCeng());
         for (Map<String, Object> reportDatum : reportData) {
-            reportDatum.put("agvLoc",strAgvLoc);
+//            reportDatum.put("agvLoc",strAgvLoc);
             reportDatum.put("type",reportDatum.get("type").toString());
         }
         Map<String,Object> map = new HashMap<>();
