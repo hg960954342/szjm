@@ -9,7 +9,7 @@ public class NameAndSimplePropertyPreFilter extends SimplePropertyPreFilter impl
         if (name == null || name.length() == 0) {
             return name;
         }
-        if (name.equals("MessageID") ||name.equals("data") || name.equals("size")||name.equals("details")){
+        if (name.equals("data") || name.equals("size")||name.equals("details")){
             return name;
         }
         if (name.equals("messageID")){

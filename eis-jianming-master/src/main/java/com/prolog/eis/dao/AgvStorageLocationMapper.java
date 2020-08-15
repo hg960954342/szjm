@@ -10,9 +10,10 @@ public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation>
             @Result(property = "x",  column = "x"),
             @Result(property = "y",  column = "y"),
             @Result(property = "locationType",  column = "location_type"),
+            @Result(property = "rcsPositionCode",  column = "rcs_position_code"),
             @Result(property = "tallyCode",  column = "tally_code"),
             @Result(property = "taskLock",  column = "task_lock"),
-            @Result(property = "lock",  column = "lock"),
+            @Result(property = "locationLock",  column = "location_lock"),
             @Result(property = "deviceNo",  column = "device_no")    })
     @Select("select * from agv_storagelocation where ceng=#{layer} and x=#{x] and y=#{y}")
     AgvStorageLocation findByCoord(int layer, int x, int y);
