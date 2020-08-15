@@ -1,15 +1,20 @@
 package com.prolog.eis.service.rcs.impl;
 
 import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.dao.baseinfo.PortInfoMapper;
+import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.rcs.AgvCallbackService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
+import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -28,6 +33,8 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
 
     @Autowired
     private QcInBoundTaskService qcInBoundTaskService;
+    @Autowired
+    private PortInfoMapper portInfoMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -98,7 +105,14 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 if (containerTask.getTargetType() == 2) {
                     //小车搬运后当前位置在入库输送线口
                     //设置当前位置为输送线
-                    containerTask.setSourceType(2);
+                    containerTask.setSourceType(1);
+                    //设置坐标 为 四向库
+                    List<PortInfo> portInfos = portInfoMapper.findByMap(MapUtils.put("junctionPort", targetPosition.getDeviceNo()).getMap(), PortInfo.class);
+                    if (!StringUtils.isEmpty(portInfos) && portInfos.size() >0){
+                        PortInfo portInfo = portInfos.get(0);
+                        String source = PrologCoordinateUtils.splicingStr(portInfo.getX(), portInfo.getY(), portInfo.getLayer());
+                        containerTask.setSource(source);
+                    }
                     containerTaskService.update(containerTask);
                     //通知输送线运行
                     qcInBoundTaskService.rcsCompleteForward(containerTask.getContainerCode(), targetPosition.getId());
