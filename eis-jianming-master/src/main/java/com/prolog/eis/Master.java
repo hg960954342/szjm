@@ -1,16 +1,14 @@
 package com.prolog.eis;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.prolog.eis.filter.UrlFilter;
+import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
+import com.prolog.framework.microservice.annotation.EnablePrologService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -18,9 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-import com.prolog.eis.filter.LogFilter;
-import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
-import com.prolog.framework.microservice.annotation.EnablePrologService;
+import java.nio.charset.StandardCharsets;
 
 @SpringBootApplication()
 @EnableTransactionManagement
@@ -30,27 +26,23 @@ import com.prolog.framework.microservice.annotation.EnablePrologService;
 @MapperScan("com.prolog.eis.dao")
 @EnableAsync
 @EnableAspectJAutoProxy
-public class Application {
+public class Master {
 	@Bean
 	public FilterRegistrationBean registFilter() {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
-		registration.setFilter(new LogFilter());
+		registration.setFilter(new UrlFilter());
 		registration.addUrlPatterns("/*");
-		registration.setName("LogFilter");
+		registration.setName("UrlFilter");
 		registration.setOrder(1);
 		return registration;
 	}
 	@Bean
 	public RestTemplate restTemplate() {
 		HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-
 		httpRequestFactory.setConnectionRequestTimeout(60000);
 		httpRequestFactory.setConnectTimeout(60000);
 		httpRequestFactory.setReadTimeout(60000);
 		RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
-		List<ClientHttpRequestInterceptor> interceptors =new ArrayList<>();
-		//interceptors.add(new LogFilter());
-		restTemplate.setInterceptors(interceptors);
         restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 支持中文编码
 		return restTemplate;
 	}
@@ -58,6 +50,6 @@ public class Application {
 	
 	public static void main( String[] args )
     {
-    	SpringApplication.run(Application.class, args);
+    	SpringApplication.run(Master.class, args);
     }
 }

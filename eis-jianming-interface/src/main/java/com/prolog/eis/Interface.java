@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 @MapperScan("com.prolog.eis.dao")
 @EnableAsync
 @EnableAspectJAutoProxy
-public class Application {
+public class Interface {
     @Bean
     public FilterRegistrationBean registFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
@@ -50,6 +50,6 @@ public class Application {
 	
 	public static void main( String[] args )
     {
-    	SpringApplication.run(Application.class, args);
+    	SpringApplication.run(Interface.class, args);
     }
 }
