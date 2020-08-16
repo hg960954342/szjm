@@ -10,6 +10,7 @@ import java.util.Map;
 import com.prolog.eis.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ import com.prolog.framework.utils.MapUtils;
 @Service
 public class McsInterfaceServiceImpl implements McsInterfaceService{
 
-	@Autowired
+
 	private RestTemplate restTemplate;
 	@Value("${prolog.mcs.url:}")
 	private String mcsUrl;
@@ -33,6 +34,14 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 	private String mcsPort;
 	@Autowired
 	private MCSTaskMapper mcsTaskMapper;
+
+	public McsInterfaceServiceImpl() {
+		HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+		httpRequestFactory.setConnectionRequestTimeout(60000);
+		httpRequestFactory.setConnectTimeout(60000);
+		httpRequestFactory.setReadTimeout(60000);
+		this.restTemplate=new RestTemplate(httpRequestFactory);
+	}
 
 	@Override
 	@Transactional
@@ -59,7 +68,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		try {
 			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/Request");
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务："+data);
-			restJson = new RestTemplate().postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
+			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 			Boolean sucssess = helper.getBoolean("ret");
@@ -139,8 +148,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		String data = PrologApiJsonHelper.toJson(map);
 		String restJson = "";
 		try {
-			String postUrl = String.format("%s%s%s", mcsUrl, mcsPort, "Interface/Request");
-
+			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/Request");
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务："+data);
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
@@ -174,8 +182,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		String requestData = PrologApiJsonHelper.toJson(map);
 		String restJson = "";
 		try {
-			String postUrl = String.format("%s%s%s", mcsUrl, mcsPort, "Interface/getExitStatus");
-
+			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/Request");
 			FileLogHelper.WriteLog("getExitStatus", "EIS->MCS接驳口状态查询，请求参数："+requestData);
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(requestData), String.class);
 			FileLogHelper.WriteLog("getExitStatus", "EIS->MCS接驳口状态查询，返回参数："+restJson);
