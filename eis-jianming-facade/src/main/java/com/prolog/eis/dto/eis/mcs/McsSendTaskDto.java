@@ -7,7 +7,7 @@ public class McsSendTaskDto {
 	 */
 	private String taskId;
 	/**
-	 * 任务类型：1：入库:2：出库
+	 * 任务类型：1：入库:2：出库 3 移位 4输送线前进
 	 */
 	private int type;
 	

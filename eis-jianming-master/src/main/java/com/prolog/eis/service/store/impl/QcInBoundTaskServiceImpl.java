@@ -173,7 +173,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}
 
 		//判断入库口类型
-		if(taskType == 3) {
+		/*if(taskType == 3) {
 			//空托入库口//创建空托入库任务
 			InboundTask inboundTask = new InboundTask();
 			inboundTask.setBillNo(PrologStringUtils.newGUID());
@@ -197,24 +197,26 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			result.setResultType(1);
 
 			return result;
-		}else {
-			//检查是否存在入库任务
-			List<InboundTask> temInboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerNo).getMap(), InboundTask.class);
-			if(temInboundTasks.isEmpty()) {
-				String mString = String.format("托盘%s无入库任务", containerNo);
-				FileLogHelper.WriteLog("mcsRequestError", mString);
+		}else {*/
+		
+		
+		//检查是否存在入库任务
+		List<InboundTask> temInboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerNo).getMap(), InboundTask.class);
+		if(temInboundTasks.isEmpty()) {
+			String mString = String.format("托盘%s无入库任务", containerNo);
+			FileLogHelper.WriteLog("mcsRequestError", mString);
 
-				result.setSuccess(false);
-				result.setMsg(mString);
-				return result;
-			}	
-
-			result.setInboundTask(temInboundTasks.get(0));
-			result.setSuccess(true);
-			result.setResultType(2);
-
+			result.setSuccess(false);
+			result.setMsg(mString);
 			return result;
-		}
+		}	
+
+		result.setInboundTask(temInboundTasks.get(0));
+		result.setSuccess(true);
+		result.setResultType(2);
+
+		return result;
+		//}
 	}
 
 	@Override
@@ -318,6 +320,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private McsRequestTaskDto taskContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
 
 		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,null,1,3);
+		//没找到货位
 		if(null == locationId) {
 			if(portInfo.getShowLed() == 1) {
 				//this.addLedMsg(portInfo.getId(),portInfo.getPortType(),20,"貨位不足！！！");
@@ -485,6 +488,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				return;
 			}
 
+			//修改库存 货位组相关属性
 			rukuSxStore(containerCode);
 			//调用回告入库的方法
 			eisCallbackService.inBoundReport(containerCode);
@@ -522,7 +526,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("Agv输送线区域点位不存在%s", portInfo.getJunctionPort()));
 				return;
 			}
-			
+
 
 			//清除托盘库库存
 			SxStore sxStore = this.clearSxStore(containerCode);
@@ -543,7 +547,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			//非agv的出库口到位
 			//清除托盘库库存
 			this.clearSxStore(containerCode);
-			
+
 			containerTaskMapper.deleteById(containerTask.getId(), ContainerTask.class);
 		}
 	}
