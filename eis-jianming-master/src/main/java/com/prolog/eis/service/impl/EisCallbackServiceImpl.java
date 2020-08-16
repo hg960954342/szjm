@@ -258,6 +258,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         } catch (IOException e) {
             String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败"+e.getMessage();
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
+            return;
         }
 
     }

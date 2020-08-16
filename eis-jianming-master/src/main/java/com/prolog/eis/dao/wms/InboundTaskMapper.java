@@ -17,6 +17,6 @@ public interface InboundTaskMapper extends BaseMapper<InboundTask>{
 		@Result(property = "billNo",  column = "bill_no"),
 		@Result(property = "containerCode",  column = "container_code")
 	})
-	@Select("select t.id,t.bill_no,t.container_code from inbound_task t where t.task_state >= 1 and t.task_state < 4 and t.container_code = #{containerNo}")
+	@Select("select t.id,t.bill_no,t.container_code from inbound_task t where t.task_state >1 and t.task_state <= 4 and t.container_code = #{containerNo}")
 	List<InboundTask> getRkStartInboundTask(@Param("containerNo")String containerNo);
 }

@@ -1,11 +1,13 @@
 package com.prolog.eis.service.mcs.impl;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.prolog.eis.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -17,10 +19,6 @@ import com.prolog.eis.dao.mcs.MCSTaskMapper;
 import com.prolog.eis.dto.eis.mcs.McsSendTaskDto;
 import com.prolog.eis.model.mcs.MCSTask;
 import com.prolog.eis.service.mcs.McsInterfaceService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.PrologApiJsonHelper;
-import com.prolog.eis.util.PrologHttpUtils;
-import com.prolog.eis.util.PrologTaskIdUtils;
 import com.prolog.framework.utils.MapUtils;
 
 @Service
@@ -59,9 +57,9 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		String data = PrologApiJsonHelper.toJson(map);
 		String restJson = "";
 		try {
-			String postUrl = String.format("%s%s%s", mcsUrl, mcsPort, "Interface/Request");
+			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/Request");
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务："+data);
-			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
+			restJson = new RestTemplate().postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 			Boolean sucssess = helper.getBoolean("ret");
@@ -88,6 +86,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			
 			return taskId;
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			MCSTask mcsTask = new MCSTask();
 			mcsTask.setTaskId(taskId);
 			mcsTask.setBankId(1);
@@ -104,6 +103,8 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			mcsTask.setErrMsg(e.getMessage());
 			mcsTaskMapper.save(mcsTask);
 			return taskId;
+
+
 		}
 	}
 

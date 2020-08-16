@@ -6,6 +6,7 @@ import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.PrologLocationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.Comparator;
@@ -17,6 +18,7 @@ import java.util.UUID;
  * 订单出库 未指定拣选站
  */
 @Component(OutBoundType.TASK_TYPE+1+OutBoundType.IF_SfReq+0)
+@Transactional(rollbackFor=Exception.class)
 @SuppressWarnings("all")
 public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
@@ -67,7 +69,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
 
-            String target = PrologLocationUtils.splicingXYStr(PrologCoordinateUtils.splicingStr(agvStorageLocation.getX(), agvStorageLocation.getY(), agvStorageLocation.getCeng()));
+            String target = agvStorageLocation.getRcsPositionCode();
 
             ContainerTask ordercontainerTask = new ContainerTask();
             ordercontainerTask.setLotId(detailDataBeand.getLotId());
@@ -90,7 +92,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 return false;
 
             }).min(Comparator.comparingLong(entry -> (Long) entry.get("deptNum"))).get();
-            ordercontainerTask.setSource(PrologLocationUtils.splicingXYStr(PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"), (Integer) sxStore1.get("y"), (Integer) sxStore1.get("layer"))));
+            ordercontainerTask.setSource((String)sxStore1.get("storeLocationId"));
             ordercontainerTask.setContainerCode((String)sxStore1.get("containerNo"));
             int LocationType = agvStorageLocation.getLocationType();
             if((float) sxStore1.get("qty")==last&&(LocationType==3 ||LocationType==5 )&&!this.isExistTask(target)){ //出整托

@@ -1,8 +1,11 @@
 package com.prolog.eis.dao;
 
+import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation> {
     @Results(id="AgvStorageLocation" , value= {
@@ -26,5 +29,9 @@ public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation>
     @Select("select * from agv_storagelocation  WHERE device_no=#{deviceCode} and task_lock=#{taskLock} and location_lock=#{lock} limit 1 ")
     AgvStorageLocation findByPickCodeAndLock(@Param("deviceCode") String deviceCode, @Param("lock") int lock,@Param("taskLock") int taskLock);
 
+
+    @ResultMap(value="AgvStorageLocation")
+    @Select("select a.* from port_info t,agv_storagelocation a where t.junction_port=a.device_no and t.task_type=#{task_type} and (t.port_type=1 or t.port_type=3)")
+    List<AgvStorageLocation> getPortInfoByTaskType(@Param("task_type")int task_type);
 
 }

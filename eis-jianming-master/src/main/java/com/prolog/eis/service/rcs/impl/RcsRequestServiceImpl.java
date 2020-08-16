@@ -6,6 +6,7 @@ import com.prolog.eis.dto.rcs.RcsRequestResultDto;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologHttpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class RcsRequestServiceImpl implements RcsRequestService{
 
 	@Value("${prolog.rcs.ip:}")
@@ -70,7 +72,7 @@ public class RcsRequestServiceImpl implements RcsRequestService{
 
 		String resultMsg = "EIS->RCS [RCSInterface] 返回JSON：[message]:" + result;
 		FileLogHelper.WriteLog("RCSRequest", resultMsg);
-
+		log.info("RCSRequest"+resultMsg);
 		RcsRequestResultDto resultObj = JSONObject.parseObject(result, RcsRequestResultDto.class);
 		return resultObj;
 	}
