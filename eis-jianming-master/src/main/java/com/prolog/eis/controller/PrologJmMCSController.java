@@ -19,6 +19,7 @@ import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.util.ListHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 
 import io.swagger.annotations.Api;
@@ -49,11 +50,13 @@ public class PrologJmMCSController {
 			FileLogHelper.WriteLog("McsInterface", "MCS->EIS请求" + json);
 
 			List<InBoundRequest> inBoundRequests = helper.getObjectList("carryList", InBoundRequest.class);
-
+			//将母托盘进行去重
+			List<InBoundRequest> newInBoundRequests = ListHelper.distinct(inBoundRequests,p->p.getStockId());
+			
 			String errorMsg = "";
 
 			List<McsRequestTaskDto> sendList = new ArrayList<McsRequestTaskDto>(); 
-			for(int i=0;i<inBoundRequests.size();i++) {
+			for(int i=0;i<newInBoundRequests.size();i++) {
 				synchronized ("kucun".intern()) {
 					try {
 						McsRequestTaskDto mcsRequestTaskDto = qcInBoundTaskService.inBoundTask(inBoundRequests.get(i));
