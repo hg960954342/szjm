@@ -15,4 +15,5 @@ public interface ContainerTaskService {
     List<ContainerTask> selectByContainerCode(String containerCode);
 
 
+    void delete(ContainerTask containerTask);
 }

@@ -60,4 +60,13 @@ public class ContainerTaskServiceImpl implements ContainerTaskService {
         Map<String, Object> map = MapUtils.put("containerCode", containerCode).getMap();
         return containerTaskMapper.findByMap(map,ContainerTask.class);
     }
+
+    /**
+     * 删除容器任务
+     * @param containerTask
+     */
+    @Override
+    public void delete(ContainerTask containerTask) {
+        containerTaskMapper.deleteById(containerTask.getId(),ContainerTask.class);
+    }
 }
