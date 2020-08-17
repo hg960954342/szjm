@@ -6,11 +6,9 @@ import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.dao.InBoundTaskMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.dto.base.Coordinate;
-import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.InboundTask;
-import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.PrologLocationUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -22,10 +20,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-@Component(InBoundType.TASK_TYPE+2)
+
+@Component(InBoundType.TASK_TYPE+40)
 @Transactional(rollbackFor=Exception.class)
 @Slf4j
-public class OrderInBoundStrategy implements InBoundStragtegy {
+public class EmptyContainerInBoundStrategy implements InBoundStragtegy {
 
     @Autowired
     private InBoundTaskMapper inBoundTaskMapper;
@@ -48,7 +47,7 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
                 Coordinate CoordinateAgv= PrologLocationUtils.analysis(agvLoc);
                 //暂时定入库任务状态开始为0
 
-                int taskType=1; //定义任务类型 （1任务托 2包材 3 空拖 4质检 ）
+                int taskType=4; //
                 //获取所有的入库口
                 List<AgvStorageLocation> listPortInfo=agvStorageLocationMapper.getPortInfoByTaskType(taskType);
                 //查找同一楼层没有任务占用的入库口集合
@@ -64,9 +63,9 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
                             &&((layer+"").equals(task.getCeng()));
                 }).collect(Collectors.toList());
 
-            if(listPortInfo.size()==0) {
-                log.error("没有找到taskType："+taskType+"入口");
-                return;  }
+                if(listPortInfo.size()==0) {
+                    log.error("警告没有找到taskType："+taskType+"入口");
+                    return;  } //没有则直接结束}
                 //查找最近的入库口
                  AgvStorageLocation distinPortInfo=listPortInfo.stream().sorted((s1,s2)->{
                     double _x1 = Math.abs(CoordinateAgv.getX()- s1.getX());
@@ -87,12 +86,12 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
 
                 Date date=new Date();
                 containerTask.setCreateTime(date);
-                containerTask.setSendTime(date);
+              //  containerTask.setSendTime(date);
 
                 //暂时定入库任务类型为5
 
 
-                containerTask.setTaskType(5);
+                containerTask.setTaskType(4);
                 containerTask.setTaskState(1);
                 containerTask.setSourceType(2);
                 containerTask.setTargetType(2);
