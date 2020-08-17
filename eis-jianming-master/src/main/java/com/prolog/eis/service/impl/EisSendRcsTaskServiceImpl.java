@@ -46,6 +46,7 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
             if (!containerTask.getTarget().equals("") && containerTask.getTarget() != null) {
 
                 AgvStorageLocation targetPosition = agvStorageLocationMapper.findByRcs(containerTask.getTarget());
+                if (targetPosition.getTaskLock()==1){continue;}
 
                 try {
 					/*//添加任务下发前日志
