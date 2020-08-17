@@ -2,6 +2,7 @@ package com.prolog.eis.controller;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,6 @@ import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.ListHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 
 import io.swagger.annotations.Api;
@@ -50,8 +50,8 @@ public class PrologJmMCSController {
 			FileLogHelper.WriteLog("McsInterface", "MCS->EIS请求" + json);
 
 			List<InBoundRequest> inBoundRequests = helper.getObjectList("carryList", InBoundRequest.class);
-			//将母托盘进行去重
-			List<InBoundRequest> newInBoundRequests = ListHelper.distinct(inBoundRequests,p->p.getStockId());
+			//根据原点，去除重复集合
+			List<InBoundRequest> newInBoundRequests = dictinctInBoundRequest(inBoundRequests);
 			
 			String errorMsg = "";
 
@@ -101,6 +101,24 @@ public class PrologJmMCSController {
 
 			FileLogHelper.WriteLog("mcsRequest", "MCS->EIS返回" + resultStr);
 		}
+	}
+	
+	private List<InBoundRequest> dictinctInBoundRequest(List<InBoundRequest> list){
+		
+		HashMap<String,InBoundRequest> hashMap = new HashMap<String,InBoundRequest>();
+		
+		for (InBoundRequest inBoundRequest : list) {
+			if(!hashMap.containsKey(inBoundRequest.getSource())) {
+				hashMap.put(inBoundRequest.getSource(),inBoundRequest);
+			}else {
+				//判断后面的条码是否为noRead
+				if(!"noRead".equals(inBoundRequest.getStockId())) {
+					hashMap.put(inBoundRequest.getSource(),inBoundRequest);
+				}
+			}
+		}
+		
+		return new ArrayList<InBoundRequest>(hashMap.values());
 	}
 	
 	
