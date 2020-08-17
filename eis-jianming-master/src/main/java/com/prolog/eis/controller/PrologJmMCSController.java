@@ -3,7 +3,6 @@ package com.prolog.eis.controller;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +20,6 @@ import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.ListHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 
 import io.swagger.annotations.Api;
