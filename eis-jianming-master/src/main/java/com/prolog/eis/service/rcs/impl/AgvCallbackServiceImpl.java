@@ -1,10 +1,12 @@
 package com.prolog.eis.service.rcs.impl;
 
 import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.rcs.AgvCallbackService;
@@ -27,6 +29,9 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
 
     @Autowired
     private AgvStorageLocationMapper agvStorageLocationMapper;
+
+    @Autowired
+    private ContainerTaskDetailMapper containerTaskDetailMapper;
 
     @Autowired
     private EisCallbackService eisCallbackService;
@@ -52,14 +57,14 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
 
             AgvStorageLocation targetPosition = agvStorageLocationMapper.findByRcs(containerTask.getTarget());
             //判断小车状态
-            if (method.equals("star")) {
+            if ("star".equals(method)) {
                 //小车任务开始
                 containerTask.setTaskState(3);//设置下游设备回告开始
                 containerTask.setStartTime(new Date());
                 containerTaskService.update(containerTask);
 
             }
-            if (method.equals("outbin")) {
+            if ("outbin".equals(method)) {
                 //小车离开原存储位
                 containerTask.setTaskState(4);//设置下游设备离开原存储位
                 containerTask.setMoveTime(new Date());
@@ -71,7 +76,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
 
 
             }
-            if (method.equals("end")) {
+            if ("end".equals(method)) {
                 //小车任务结束
                 containerTask.setTaskState(1);//设置托盘到位
                 containerTask.setEndTime(new Date());//设置小车结束时间
@@ -82,6 +87,9 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 //判断托盘到位 区域 agv
                 if (containerTask.getTargetType() == 1) {
                     //删除容器任务
+                    containerTaskService.delete(containerTask);
+                    //删除容器明细
+                    containerTaskDetailMapper.deleteByMap(MapUtils.put("containerCode",containerTask.getContainerCode()).getMap(), ContainerTaskDetail.class);
 
                     //任务类型 业务出库
                     if (containerTask.getTaskType() == 1) {
