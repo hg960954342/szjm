@@ -21,7 +21,7 @@ public class SimilarityDataEntityListLoad {
     public  Set<String> currentBillNoList=new HashSet<>(); //当前执行的billNoString
     public  int  maxSize=1; //订单池处理最大数量
 
-    private Set<String> billNoPickCodeList=Collections.synchronizedSet(new HashSet<>());
+  //  private Set<String> billNoPickCodeList=Collections.synchronizedSet(new HashSet<>());
     private Set<String> billNoList=Collections.synchronizedSet(new HashSet<>());
 
 
@@ -41,16 +41,18 @@ public class SimilarityDataEntityListLoad {
      * @return
      */
     public void addOutboundTask(OutboundTask outboundTask) {
-         if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==0){
-             billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTime(overTime,outboundTask.getSfReq()));
+         if(billNoList.size()<=maxSize) {//&&outboundTask.getSfReq()==0){
+             billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTime(overTime));
              billNoList.add("'"+outboundTask.getBillNo()+"'");
              currentBillNoList=billNoList;
           }
+          /*
         if(billNoPickCodeList.size()<=maxSize&&outboundTask.getSfReq()==1){
             billNoPickCodeList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTime(overTime,outboundTask.getSfReq()));
             billNoPickCodeList.add("'"+outboundTask.getBillNo()+"'");
             currentBillNoList=billNoPickCodeList;
         }
+        */
 
     }
 
@@ -61,7 +63,9 @@ public class SimilarityDataEntityListLoad {
             this.addOutboundTask(outboundTask);
         }*/
 
-
+        currentBillNoList=billNoList;
+        return  outBoundTaskDetailMapper.getOuntBoundDetailAll(String.join(",", currentBillNoList));
+        /*
         if((null!=classz.getAnnotation(Component.class))&&
                 classz.getAnnotation(Component.class).value().indexOf(OutBoundType.IF_SfReq)!=-1) {
             String value=classz.getAnnotation(Component.class).value();
@@ -82,7 +86,7 @@ public class SimilarityDataEntityListLoad {
         }
 
         return new ArrayList<>();
-
+    */
 
 
     }

@@ -1,6 +1,5 @@
 package com.prolog.eis.dao;
 
-import com.prolog.eis.dao.wms.OutBoundContainerTaskDetailProvider;
 import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.service.impl.unbound.DetailDataBean;
@@ -8,7 +7,6 @@ import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
-import java.util.Set;
 
 public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail> {
 
@@ -46,7 +44,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
                  "\t\tAND c.lot_id = d.lot_id\n" +
                  "\t\tAND c.owner_id = d.owner_id\n" +
                  "\t\tAND c.seqno = d.seqno\n" +
-                 "\t\tAND d.bill_no IN (#{bill_no_string})\n" +
+                 "\t\tAND d.bill_no IN (${bill_no_string})\n" +
                  "\t) x\n" +
                  "GROUP BY\n" +
                  "\tx.item_id,\n" +
@@ -85,7 +83,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
                      "\t\tAND c.owner_id = d.owner_id\n" +
                      "\t\tAND c.seqno = d.seqno\n" +
                      "\t\tAND d.pick_code = t.pick_code\n" +
-                     "\t\tAND d.bill_no IN (#{bill_no_string})\n" +
+                     "\t\tAND d.bill_no IN (${bill_no_string})\n" +
                      "\t) x\n" +
                      "GROUP BY\n" +
                      "\tx.item_id,\n" +
@@ -124,7 +122,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
            "\t\tFROM\n" +
            "\t\t\toutbound_task_detail\n" +
            "\t\tWHERE\n" +
-           "\t\t\tbill_no IN (#{billNoString})\n" +
+           "\t\t\tbill_no IN (${billNoString})\n" +
            "\t) x")
     List<ContainerTaskDetail> getOutBoundContainerTaskDetail(@Param("billNoString")String billNoString);
 
@@ -145,7 +143,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
           "\t\tFROM\n" +
           "\t\t\toutbound_task_detail\n" +
           "\t\tWHERE\n" +
-          "\t\t\tbill_no IN (#{bill_no_string})\n" +
+          "\t\t\tbill_no IN (${bill_no_string})\n" +
           "\t\tGROUP BY\n" +
           "\t\t\towner_id,\n" +
           "\t\t\titem_id,\n" +
@@ -184,7 +182,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
          "\t\t\t\t\t\tFROM\n" +
          "\t\t\t\t\t\t\toutbound_task_detail\n" +
          "\t\t\t\t\t\tWHERE\n" +
-         "\t\t\t\t\t\t\tbill_no IN (#{bill_no_string})\n" +
+         "\t\t\t\t\t\t\tbill_no IN (${bill_no_string})\n" +
          "\t\t\t\t\t\tGROUP BY\n" +
          "\t\t\t\t\t\t\towner_id,\n" +
          "\t\t\t\t\t\t\titem_id,\n" +

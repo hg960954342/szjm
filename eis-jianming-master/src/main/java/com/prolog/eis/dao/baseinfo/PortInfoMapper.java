@@ -123,7 +123,9 @@ public interface PortInfoMapper extends BaseMapper<PortInfo>{
 	@Select("select * from port_info where task_type=#{task_type} and (port_type=1 or port_type=3) and position=1")
 	List<PortInfo> getPortInfoByTaskType(@Param("task_type")int task_type);
 
-
+	@ResultMap(value="PortInfo")
+	@Select("select * from port_info where task_type=#{task_type} and (port_type=2 or port_type=3)")
+	List<PortInfo> getPortInfoOutByTaskType(@Param("task_type")int task_type);
 
 
 }

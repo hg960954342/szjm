@@ -1,21 +1,22 @@
 package com.prolog.eis.service.impl.unbound;
 
-import com.prolog.eis.dao.AgvStorageLocationMapper;
-import com.prolog.eis.dao.ContainerTaskDetailMapper;
-import com.prolog.eis.dao.ContainerTaskMapper;
-import com.prolog.eis.dao.PickStationMapper;
-import com.prolog.eis.model.wms.AgvStorageLocation;
-import com.prolog.eis.model.wms.ContainerTask;
-import com.prolog.eis.model.wms.OutboundTask;
-import com.prolog.eis.model.wms.PickStation;
+import com.prolog.eis.dao.*;
+import com.prolog.eis.dao.baseinfo.PortInfoMapper;
+import com.prolog.eis.model.eis.PortInfo;
+import com.prolog.eis.model.wms.*;
+import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -35,14 +36,28 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     ContainerTaskMapper containerTaskMapper;
 
 
+    @Autowired
+    OutBoundTaskMapper outBoundTaskMapper;
 
-
-
+    @Autowired
+    OutBoundTaskDetailMapper outBoundTaskDetailMapper;
 
     @Autowired
     ContainerTaskDetailMapper containerTaskDetailMapperMapper;
+
     @Autowired
     SimilarityDataEntityListLoad similarityDataEntityListLoad;
+
+    @Autowired
+    QcSxStoreMapper qcSxStoreMapper;
+
+    @Autowired
+    PortInfoMapper portInfoMapper;
+
+
+
+
+
 
     @Autowired
     private  Map<String, DefaultOutBoundPickCodeStrategy> strategyMap  ;
@@ -101,59 +116,67 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         return false;
     }
 
-  /*  *//**
-     * 获取相邻订单的相似度高的任务
-     *
-     * @param outboundTask
-     * @return
-     *//*
-    public OutboundTask getSimilarityResult(OutboundTask outboundTask) {
-        long similarity = similarityDataEntityLoad.getSimilarity();
-        if (similarity != 0) {
-            long current = this.getPoolTask(outboundTask);
-            if (current >= similarity) {
-                similarityDataEntityLoad.setSimilarity(this.getPoolTask(outboundTask));
-                similarityDataEntityLoad.setOutboundTask(outboundTask);
-                return outboundTask;
-            } else {
-                OutboundTask result = similarityDataEntityLoad.getOutboundTask();
-                similarityDataEntityLoad.setSimilarity(this.getPoolTask(outboundTask));
-                similarityDataEntityLoad.setOutboundTask(outboundTask);
-                return result;
+    protected void unbound(DetailDataBean detailDataBeand,String pickCode){
+
+        AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
+
+
+
+        ContainerTask ordercontainerTask = new ContainerTask();
+        ordercontainerTask.setLotId(detailDataBeand.getLotId());
+        ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
+        ordercontainerTask.setOwnerId(detailDataBeand.getOwnerId());
+        ordercontainerTask.setItemId(detailDataBeand.getItemId());
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        ordercontainerTask.setTaskCode(uuid);
+        ordercontainerTask.setTaskType(1);
+        ordercontainerTask.setSourceType(1);
+        List<PortInfo> listOutPortInfos=portInfoMapper.getPortInfoOutByTaskType(1);
+        if(listOutPortInfos.size()==0) {log.info("没有可用出库口");return;}
+        PortInfo OutPortInfo =listOutPortInfos.get(0);
+        String target=agvStorageLocation.getRcsPositionCode();
+        ordercontainerTask.setTarget(target);
+        ordercontainerTask.setTargetType(2); //Agv目标区域
+        float last = detailDataBeand.getLast();           //获取需要出库的总量
+        ordercontainerTask.setQty(last);
+        List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
+        if (listSxStore.size() < 1) {log.info("未找到库存！"); return; }    //没有库存结束
+        listSxStore=  listSxStore.stream().filter(x -> {
+            BigDecimal qty = (BigDecimal) x.get("qty");
+            if (qty!=null&&qty.floatValue() >= last) return true;
+            return false;
+        }).collect(Collectors.toList());
+        if(listSxStore.size()==0)  {log.info("库存不够！"); return;}
+        Map<String, Object> sxStore1 = listSxStore.stream().min(Comparator.comparingLong(entry -> {
+            Object objectDeptNum= entry.get("deptNum");
+            if(objectDeptNum!=null){
+                return (Long) entry.get("deptNum");
             }
-
-        } else {
-            similarityDataEntityLoad.setSimilarity(this.getPoolTask(outboundTask));
-            similarityDataEntityLoad.setOutboundTask(outboundTask);
-            return outboundTask;
-        }
-    }
-*/
-
-   /* *//**
-     * 获取当前订单相似度的计算
-     *
-     * @param OutboundTask
-     * @return
-     *//*
-    public long getPoolTask(OutboundTask OutboundTask) {
-        long result;
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("billNo", OutboundTask.getBillNo());
-        long count = containerTaskDetailMapperMapper.findCountByMap(map, ContainerTaskDetail.class);
-        if(count==0) {
-            FileLogHelper.WriteLog("outBoundTask","单号",OutboundTask.getBillNo(),"没有出库明细");
             return 0;
-        }
-        long billNoCount = containerTaskDetailPoolMapper.getContainerTaskDetailPoolCountByBillNo(OutboundTask.getBillNo());
-        long poolCount = containerTaskDetailPoolMapper.findCountByCriteria(Criteria.forClass(ContainerTaskDetailPool.class));
-        if (count >= poolCount) {
-            result = billNoCount / count;
-        } else {
-            result = billNoCount / poolCount;
-        }
-        return result;
+        })).get();
+        String sourceLocation= PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"),(Integer) sxStore1.get("y"),(Integer) sxStore1.get("layer"));
+        ordercontainerTask.setSource(sourceLocation);
+        ordercontainerTask.setContainerCode((String)sxStore1.get("containerNo"));
+        ordercontainerTask.setTaskState(1);
+        int LocationType = agvStorageLocation.getLocationType();
+        if(((BigDecimal) sxStore1.get("qty")).floatValue()==last&&(LocationType==3 ||LocationType==5 )&&!this.isExistTask(target)){ //出整托
+            containerTaskMapper.save(ordercontainerTask);
+            List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.
+                    getOutBoundContainerTaskDetail(String.join(",", similarityDataEntityListLoad.currentBillNoList));
+            containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
+            outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",",similarityDataEntityListLoad.currentBillNoList));
 
 
-    }*/
+        }
+        if(((BigDecimal) sxStore1.get("qty")).floatValue()>=last&&(LocationType==4 ||LocationType==5 )&&!this.isExistTask(target)){ //非整托
+            containerTaskMapper.save(ordercontainerTask);
+            List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.getOutBoundContainerTaskDetail
+                    (String.join(",", similarityDataEntityListLoad.currentBillNoList));
+            containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
+
+            outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",",similarityDataEntityListLoad.currentBillNoList));
+        }
+
+
+    }
 }
