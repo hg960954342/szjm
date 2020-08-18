@@ -98,7 +98,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
 
             }
         } catch (IOException e) {
-            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败："+e.getMessage();
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
             RepeatReport repeatReport = new RepeatReport();
             repeatReport.setReportData(json);
@@ -127,6 +127,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         try {
             wmsLoginService.loginWms();
             String token = LoginWmsResponse.accessToken;
+            json = this.outBoundReportData(containerTask);
             url = String.format("http://%s:%s/api/v1/StockMove/OutPull", wmsIp, wmsPort);
             String msg = "EIS->WMS [WMSInterface] 出库回告请求JSON：[message]:" + json;
             FileLogHelper.WriteLog("WMSRequest", msg);
@@ -138,7 +139,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             //判断回告结果
             this.getWmsResponseData(json, restJson, url, containerTask.getTaskType());
         } catch (IOException e) {
-            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败："+e.getMessage();
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
             RepeatReport repeatReport = new RepeatReport();
             repeatReport.setReportData(json);
@@ -176,7 +177,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             FileLogHelper.WriteLog("WMSRequest", resultMsg);
             this.getWmsResponseData(json, restJson, url, containerTask.getTaskType());
         } catch (Exception e) {
-            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败："+e.getMessage();
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
             RepeatReport repeatReport = new RepeatReport();
             repeatReport.setReportData(json);
@@ -214,7 +215,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             FileLogHelper.WriteLog("WMSRequest", resultMsg);
             this.getWmsResponseData(json, restJson, url, 3);
         } catch (IOException e) {
-            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败";
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败："+e.getMessage();
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
             RepeatReport repeatReport = new RepeatReport();
             repeatReport.setReportData(json);
@@ -260,7 +261,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             }
             repeatReportService.update(repeatReport);
         } catch (IOException e) {
-            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败" + e.getMessage();
+            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败：" + e.getMessage();
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
         }
 
