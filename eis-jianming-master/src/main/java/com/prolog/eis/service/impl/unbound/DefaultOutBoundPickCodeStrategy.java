@@ -4,6 +4,7 @@ import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.*;
+import com.prolog.eis.service.enums.OutBoundEnum;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
@@ -128,12 +129,10 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         ordercontainerTask.setTaskCode(uuid);
         ordercontainerTask.setTaskType(1);
         ordercontainerTask.setSourceType(1);
-        List<PortInfo> listOutPortInfos=portInfoMapper.getPortInfoOutByTaskType(1);
-        if(listOutPortInfos.size()==0) {log.info("没有可用出库口");return;}
-        PortInfo OutPortInfo =listOutPortInfos.get(0);
+
         String target=agvStorageLocation.getRcsPositionCode();
         ordercontainerTask.setTarget(target);
-        ordercontainerTask.setTargetType(2); //Agv目标区域
+        ordercontainerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber()); //Agv目标区域
         float last = detailDataBeand.getLast();           //获取需要出库的总量
         ordercontainerTask.setQty(last);
         List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
