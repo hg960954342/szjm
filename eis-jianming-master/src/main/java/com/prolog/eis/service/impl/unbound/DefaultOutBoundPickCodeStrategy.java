@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -147,10 +144,10 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
             return false;
         }).collect(Collectors.toList());
         if(listSxStore.size()==0)  {log.info("库存不够！"); return;}
-        Map<String, Object> sxStore1 = listSxStore.stream().min(Comparator.comparingLong(entry -> {
+        Map<String, Object> sxStore1 = listSxStore.stream().min(Comparator.comparingInt(entry -> {
             Object objectDeptNum= entry.get("deptNum");
             if(objectDeptNum!=null){
-                return (Long) entry.get("deptNum");
+                return  (Integer)entry.get("deptNum");
             }
             return 0;
         })).get();
@@ -162,19 +159,19 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         if(((BigDecimal) sxStore1.get("qty")).floatValue()==last&&(LocationType==3 ||LocationType==5 )&&!this.isExistTask(target)){ //出整托
             containerTaskMapper.save(ordercontainerTask);
             List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.
-                    getOutBoundContainerTaskDetail(String.join(",", similarityDataEntityListLoad.currentBillNoList));
+                    getOutBoundContainerTaskDetail("'"+detailDataBeand.getBillNo()+"'",ordercontainerTask.getContainerCode());
             containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
-            outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",",similarityDataEntityListLoad.currentBillNoList));
+            outBoundTaskMapper.updateOutBoundTaskBySQL("'"+detailDataBeand.getBillNo()+"'");
 
 
         }
         if(((BigDecimal) sxStore1.get("qty")).floatValue()>=last&&(LocationType==4 ||LocationType==5 )&&!this.isExistTask(target)){ //非整托
             containerTaskMapper.save(ordercontainerTask);
             List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.getOutBoundContainerTaskDetail
-                    (String.join(",", similarityDataEntityListLoad.currentBillNoList));
+                    ("'"+detailDataBeand.getBillNo()+"'",ordercontainerTask.getContainerCode());
             containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
 
-            outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",",similarityDataEntityListLoad.currentBillNoList));
+            outBoundTaskMapper.updateOutBoundTaskBySQL("'"+detailDataBeand.getBillNo()+"'");
         }
 
 

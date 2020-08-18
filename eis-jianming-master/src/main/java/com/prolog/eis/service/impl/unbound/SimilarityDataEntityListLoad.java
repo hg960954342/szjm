@@ -42,7 +42,7 @@ public class SimilarityDataEntityListLoad {
      */
     public void addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize) {//&&outboundTask.getSfReq()==0){
-             billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTime(overTime));
+             billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTimeStringList(overTime));
              billNoList.add("'"+outboundTask.getBillNo()+"'");
              currentBillNoList=billNoList;
           }

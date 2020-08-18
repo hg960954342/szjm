@@ -17,81 +17,25 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
             @Result(property = "cqty",  column = "cqty"),
             @Result(property = "qty",  column = "qty"),
             @Result(property = "pickCode",  column = "pick_code"),
-            @Result(property = "finishQty",  column = "finish_qty")
+            @Result(property = "finishQty",  column = "finish_qty"),
+            @Result(property = "billNo",  column = "bill_no"),
     })
     @Select(
-         "SELECT\n" +
-                 "\tx.owner_id,\n" +
-                 "\tx.item_id,\n" +
-                 "\tx.lot_id,\n" +
-                 "\tsum(x.qty) qty,\n" +
-                 "\tsum(x.cqty) cqty,\n" +
-                 "\tsum(x.finish_qty) finish_qty\n" +
-                 "FROM\n" +
-                 "\t(\n" +
-                 "\t\tSELECT\n" +
-                 "\t\t\td.item_id,\n" +
-                 "\t\t\td.lot_id,\n" +
-                 "\t\t\td.owner_id,\n" +
-                 "\t\t\td.qty,\n" +
-                 "\t\t\td.finish_qty,\n" +
-                 "\t\t\tc.qty cqty\n" +
-                 "\t\tFROM\n" +
-                 "\t\t\toutbound_task_detail d\n" +
-                 "\t\tinner JOIN outbound_task t ON d.owner_id = t.owner_id\n" +
-                 "\t\tAND t.bill_no = d.bill_no\n" +
-                 "\t\tLEFT JOIN container_task_detail c ON c.item_id = d.item_id\n" +
-                 "\t\tAND c.lot_id = d.lot_id\n" +
-                 "\t\tAND c.owner_id = d.owner_id\n" +
-                 "\t\tAND c.seqno = d.seqno\n" +
-                 "\t\tAND d.bill_no IN (${bill_no_string})\n" +
-                 "\t) x\n" +
-                 "GROUP BY\n" +
-                 "\tx.item_id,\n" +
-                 "\tx.lot_id,\n" +
-                 "\tx.owner_id"
+        "SELECT\n" +
+                "\tsum(d.qty) over(partition by d.owner_id,d.item_id,d.lot_id) qty,\n" +
+                "  sum(d.finish_qty) over(partition by d.owner_id,d.item_id,d.lot_id) finish_qty,\n" +
+                "  sum(c.qty) over(partition by d.owner_id,d.item_id,d.lot_id) cqty,\n" +
+                "  d.owner_id,d.item_id,d.lot_id,d.pick_code,d.bill_no\n" +
+                "FROM\n" +
+                "\toutbound_task_detail d  \n" +
+                "INNER JOIN outbound_task t ON t.bill_no = d.bill_no\n" +
+                "LEFT JOIN container_task_detail c ON c.bill_no = d.bill_no\n" +
+                "and d.bill_no IN (${bill_no_string})"
 
     )
      List<DetailDataBean> getOuntBoundDetailAll(@Param("bill_no_string") String billNoString);
 
-    @ResultMap("map")
-    @Select(
-             "SELECT\n" +
-                     "\tx.owner_id,\n" +
-                     "\tx.item_id,\n" +
-                     "\tx.lot_id,\n" +
-                     "\tx.pick_code,\n" +
-                     "\tsum(x.qty) qty,\n" +
-                     "\tsum(x.cqty) cqty,\n" +
-                     "\tsum(x.finish_qty) finish_qty\n" +
-                     "FROM\n" +
-                     "\t(\n" +
-                     "\t\tSELECT\n" +
-                     "\t\t\td.item_id,\n" +
-                     "\t\t\td.lot_id,\n" +
-                     "\t\t\td.owner_id,\n" +
-                     "\t\t\td.qty,\n" +
-                     "\t\t\td.finish_qty,\n" +
-                     "\t\t\td.pick_code,\n" +
-                     "\t\t\tc.qty cqty\n" +
-                     "\t\tFROM\n" +
-                     "\t\t\toutbound_task_detail d\n" +
-                     "\t\tinner JOIN outbound_task t ON d.owner_id = t.owner_id\n" +
-                     "\t\tAND t.bill_no = d.bill_no\n" +
-                     "\t\tLEFT JOIN container_task_detail c ON c.item_id = d.item_id\n" +
-                     "\t\tAND c.lot_id = d.lot_id\n" +
-                     "\t\tAND c.owner_id = d.owner_id\n" +
-                     "\t\tAND c.seqno = d.seqno\n" +
-                     "\t\tAND d.pick_code = t.pick_code\n" +
-                     "\t\tAND d.bill_no IN (${bill_no_string})\n" +
-                     "\t) x\n" +
-                     "GROUP BY\n" +
-                     "\tx.item_id,\n" +
-                     "\tx.lot_id,\n" +
-                     "\tx.owner_id,\n" +
-                     "\tx.pick_code"
-       )
-    List<DetailDataBean> getOuntBoundDetailPickCodeAll(@Param("bill_no_string") String billNoString);
+
 
     @Results(id="ContainerTaskDetail" , value= {
             @Result(property = "id",  column = "ID"),
@@ -111,7 +55,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
            "\tx.item_id,\n" +
            "\tx.owner_id,\n" +
            "\tx.lot_id,\n" +
-           "\tx.container_code,\n" +
+           "\t#{container_code} container_code,\n" +
            "\tx.qty - x.finish_qty qty,\n" +
            "\tNOW() create_time,\n" +
            "\tNULL end_time\n" +
@@ -124,7 +68,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
            "\t\tWHERE\n" +
            "\t\t\tbill_no IN (${billNoString})\n" +
            "\t) x")
-    List<ContainerTaskDetail> getOutBoundContainerTaskDetail(@Param("billNoString")String billNoString);
+    List<ContainerTaskDetail> getOutBoundContainerTaskDetail(@Param("billNoString")String billNoString,@Param("container_code")String containerCode);
 
     /**
      * 获取订单池中的商品总数

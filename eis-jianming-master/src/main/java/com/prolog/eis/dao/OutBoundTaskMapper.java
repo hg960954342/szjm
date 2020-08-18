@@ -45,7 +45,7 @@ public interface OutBoundTaskMapper extends BaseMapper<OutboundTask>{
      */
     @Select("select CONCAT(CONCAT(\"'\",bill_no),\"'\") from (select TIMESTAMPDIFF(MINUTE,t.create_time,NOW()) overtime,t.* from outbound_task t where t.task_type=1 )a \r\n"+
             "WHERE a.overtime>#{overTime} ORDER BY a.overtime")
-    List<String> getOutBoudTaskBillNoOverTime(@Param("overTime") long overTime);
+    List<String> getOutBoudTaskBillNoOverTimeStringList(@Param("overTime") long overTime);
     /**
      * 获取所有超时出库订单 按降序排序
      * @return
