@@ -54,7 +54,7 @@ CREATE TABLE `pick_station` (
   `auto_supply` int NOT NULL COMMENT '是否自动补给空托盘',
   `io` int NOT NULL COMMENT '1 入库 2 出库 3(1+2)',
   `task_type` int NOT NULL COMMENT '1 订单 2 移库 3 （1+2）4空拖任务 5 (1+4) 6(2+4) 7(1+2+4)',
-  `lock` varchar(50) COMMENT '锁定 0不锁定 1锁定',
+  `islock` varchar(50) COMMENT '锁定 0不锁定 1锁定',
   `remarks` varchar(255) NOT NULL COMMENT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='拣选站表';

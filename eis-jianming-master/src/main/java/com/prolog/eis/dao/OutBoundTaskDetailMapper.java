@@ -1,17 +1,16 @@
 package com.prolog.eis.dao;
 
+import com.prolog.eis.dao.wms.OutBoundContainerTaskDetailProvider;
 import com.prolog.eis.model.wms.ContainerTaskDetail;
-import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.service.impl.unbound.DetailDataBean;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>{
+public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail> {
 
     @Results(id="map",value = {
             @Result(property = "ownerId",  column = "owner_id"),
@@ -41,7 +40,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
                  "\t\t\tc.qty cqty\n" +
                  "\t\tFROM\n" +
                  "\t\t\toutbound_task_detail d\n" +
-                 "\t\tLEFT JOIN outbound_task t ON d.owner_id = t.owner_id\n" +
+                 "\t\tinner JOIN outbound_task t ON d.owner_id = t.owner_id\n" +
                  "\t\tAND t.bill_no = d.bill_no\n" +
                  "\t\tLEFT JOIN container_task_detail c ON c.item_id = d.item_id\n" +
                  "\t\tAND c.lot_id = d.lot_id\n" +
@@ -79,7 +78,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
                      "\t\t\tc.qty cqty\n" +
                      "\t\tFROM\n" +
                      "\t\t\toutbound_task_detail d\n" +
-                     "\t\tLEFT JOIN outbound_task t ON d.owner_id = t.owner_id\n" +
+                     "\t\tinner JOIN outbound_task t ON d.owner_id = t.owner_id\n" +
                      "\t\tAND t.bill_no = d.bill_no\n" +
                      "\t\tLEFT JOIN container_task_detail c ON c.item_id = d.item_id\n" +
                      "\t\tAND c.lot_id = d.lot_id\n" +
@@ -99,43 +98,35 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
     @Results(id="ContainerTaskDetail" , value= {
             @Result(property = "id",  column = "ID"),
             @Result(property = "containerCode",  column = "container_code"),
+            @Result(property = "qty",  column = "qty"),
             @Result(property = "billNo",  column = "bill_no"),
-            @Result(property = "seqNo",  column = "seqno"),
             @Result(property = "itemId",  column = "item_id"),
             @Result(property = "lotId",  column = "lot_id"),
             @Result(property = "ownerId",  column = "owner_id"),
-            @Result(property = "qty",  column = "qty"),
             @Result(property = "createTime",  column = "create_time"),
+            @Result(property = "seqNo",  column = "seqno"),
             @Result(property = "endTime",  column = "end_time")
     })
-    @Select("SELECT\n" +
-            "\tx.seqno,\n" +
-            "\tx.bill_no,\n" +
-            "\tx.item_id,\n" +
-            "\tx.owner_id,\n" +
-            "\tx.lot_id,\n" +
-            "\tt.container_code,\n" +
-            "\tx.qty - y.qty - x.finish_qty qty,\n" +
-            "\t NOW() create_time \n" +
-            "FROM\n" +
-            "\t(\n" +
-            "\t\tSELECT\n" +
-            "\t\t\t*\n" +
-            "\t\tFROM\n" +
-            "\t\t\toutbound_task_detail\n" +
-            "\t\tWHERE\n" +
-            "\t\t\tbill_no IN (#{bill_no_string}\n" +
-            ") x,\n" +
-            "\t\t\tcontainer_task_detail y,\n" +
-            "\t\t\tcontainer_task t\n" +
-            "\t\tWHERE\n" +
-            "\t\t\ty.owner_id = x.owner_id\n" +
-            "\t\tAND y.item_id = x.item_id\n" +
-            "\t\tAND y.lot_id = x.lot_id\n" +
-            "\t\tAND t.item_id = y.item_id\n" +
-            "\t\tAND t.owner_id = y.owner_id\n" +
-            "\t\tAND t.lot_id = y.lot_id")
-    List<ContainerTaskDetail> getOutBoundContainerTaskDetail(@Param("bill_no_string") String billNoString);
+   @Select("SELECT\n" +
+           "\tx.seqno,\n" +
+           "\tx.bill_no,\n" +
+           "\tx.item_id,\n" +
+           "\tx.owner_id,\n" +
+           "\tx.lot_id,\n" +
+           "\tx.container_code,\n" +
+           "\tx.qty - x.finish_qty qty,\n" +
+           "\tNOW() create_time,\n" +
+           "\tNULL end_time\n" +
+           "FROM\n" +
+           "\t(\n" +
+           "\t\tSELECT\n" +
+           "\t\t\t*\n" +
+           "\t\tFROM\n" +
+           "\t\t\toutbound_task_detail\n" +
+           "\t\tWHERE\n" +
+           "\t\t\tbill_no IN (#{billNoString})\n" +
+           "\t) x")
+    List<ContainerTaskDetail> getOutBoundContainerTaskDetail(@Param("billNoString")String billNoString);
 
     /**
      * 获取订单池中的商品总数

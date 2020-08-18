@@ -41,7 +41,7 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
     ContainerTask selectStartTaskByContainerCode(@Param("containerCode") String containerCode);
 
    @ResultMap("ContainerTask")
-    @Select("select * from container_task where source = #{source} and task_state='1' UNION all \r\n" +
+    @Select("select * from container_task where source = #{source} and (task_state>='1' or task_state<='3' ) UNION all \r\n" +
             "select * from container_task where target = #{source} and task_state='1' ")
     List<ContainerTask> selectBySource(@Param("source") String source);
 

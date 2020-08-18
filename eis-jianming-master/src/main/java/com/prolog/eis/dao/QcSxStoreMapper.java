@@ -129,7 +129,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			@Result(property = "storeLocationId2",  column = "STORE_LOCATION_ID2"),
 			@Result(property = "ascentLockState",  column = "ASCENT_LOCK_STATE"),
 			@Result(property = "locationIndex",  column = "LOCATION_INDEX"),
-			@Result(property = "deptNum",  column = "dept_num"),
+			@Result(property = "deptNum",  column = "dept_num_"),
 			@Result(property = "depth",  column = "depth"),
 			@Result(property = "createTime",  column = "CREATE_TIME"),
 			@Result(property = "verticalLocationGroupId",  column = "vertical_location_group_id"),
@@ -176,8 +176,8 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"\t\t\t\tINNER JOIN sx_store_location l ON a.store_location_id = l.id\n" +
 			"\t\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id\n" +
 			"\t\t\t\tWHERE\n" +
-			"\t\t\t\t\tl.task_lock = 0\n" +
-			"\t\t\t\tAND g.IS_LOCK = 0\n" +
+			//"\t\t\t\t\tl.task_lock = 0\n" +
+			"\t\t\t\t g.IS_LOCK = 0\n" +
 			"\t\t\t\tAND a.STORE_STATE = 20\n" +
 			"\t\t\t) x\n" +
 			"\t\tGROUP BY\n" +

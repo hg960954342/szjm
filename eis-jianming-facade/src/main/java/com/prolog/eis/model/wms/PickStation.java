@@ -19,8 +19,8 @@ public class PickStation {
   private long io;
   @Column("task_type")
   private long taskType;
-  @Column("lock")
-  private String lock;
+  @Column("islock")
+  private String isLock;
   @Column("remarks")
   private String remarks;
 
@@ -68,14 +68,13 @@ public class PickStation {
   }
 
 
-  public String getLock() {
-    return lock;
+  public String getIsLock() {
+    return isLock;
   }
 
-  public void setLock(String lock) {
-    this.lock = lock;
+  public void setIsLock(String isLock) {
+    this.isLock = isLock;
   }
-
 
   public String getRemarks() {
     return remarks;

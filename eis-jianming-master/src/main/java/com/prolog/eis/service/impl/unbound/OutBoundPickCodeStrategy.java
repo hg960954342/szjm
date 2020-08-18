@@ -66,7 +66,6 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                 return;
             }
             String target =agvStorageLocation.getRcsPositionCode();
-
             ContainerTask ordercontainerTask = new ContainerTask();
             ordercontainerTask.setLotId(detailDataBeand.getLotId());
             ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
@@ -93,7 +92,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             int LocationType = agvStorageLocation.getLocationType();
             if((float) sxStore1.get("qty")==last&&(LocationType==3 ||LocationType==5 )&&!this.isExistTask(target)){ //出整托
                 containerTaskMapper.save(ordercontainerTask);
-                List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.
+               List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.
                         getOutBoundContainerTaskDetail(String.join(",", similarityDataEntityListLoad.currentBillNoList));
                 containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
                 outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",",similarityDataEntityListLoad.currentBillNoList));
@@ -101,7 +100,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             }
             if((float) sxStore1.get("qty")>last&&(LocationType==4 ||LocationType==5 )&&!this.isExistTask(target)){ //非整托
                 containerTaskMapper.save(ordercontainerTask);
-                List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.getOutBoundContainerTaskDetail
+               List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.getOutBoundContainerTaskDetail
                         (String.join(",", similarityDataEntityListLoad.currentBillNoList));
                 containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
                 outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",",similarityDataEntityListLoad.currentBillNoList));

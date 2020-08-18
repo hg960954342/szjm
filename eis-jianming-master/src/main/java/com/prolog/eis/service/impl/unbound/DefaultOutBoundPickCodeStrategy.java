@@ -75,7 +75,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         Long[] taskTypes=new Long[]{1L,3L,5L,7L};
         pickStationCriteria.setRestriction(Restrictions.in("io",ios));
         pickStationCriteria.setRestriction(Restrictions.in("taskType",taskTypes));
-        pickStationCriteria.setRestriction(Restrictions.eq("lock",0));
+        pickStationCriteria.setRestriction(Restrictions.eq("isLock",0 ));
         List<PickStation> listPickStation= pickStationMapper.findByCriteria(pickStationCriteria);
         //过滤掉不能用的拣选站
         listPickStation=listPickStation.stream().filter(x->{
