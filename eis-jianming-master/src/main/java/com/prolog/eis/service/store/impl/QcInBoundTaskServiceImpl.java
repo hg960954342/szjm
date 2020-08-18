@@ -142,7 +142,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 	/**
 	 * 入庫驗證
-	 * @param validateType  1 空托入庫驗證  2 字母托入庫驗證
+	 * @param   1 空托入庫驗證  2 字母托入庫驗證
 	 * @param containerNo
 	 * @param wmsPortNo
 	 * @param junctionPort
@@ -265,7 +265,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		//优先找1层
 		Integer locationId = checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),emptyContainNo,deviceJunctionPort.getLayer(),1,3,1,1);
 		if(null == locationId) {
-			locationId = checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),emptyContainNo,deviceJunctionPort.getLayer(),1,3,1,3);
+			//找不到 1层 直接屏蔽
+			//locationId = checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),emptyContainNo,deviceJunctionPort.getLayer(),1,3,1,3);
 		}
 
 		if(null == locationId) {

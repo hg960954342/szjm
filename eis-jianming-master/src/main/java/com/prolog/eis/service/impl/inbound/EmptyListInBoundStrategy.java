@@ -22,12 +22,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * 40空托碟 入库
+ * 60空托碟 入库
  */
-@Component(InBoundType.TASK_TYPE+40)
+@Component(InBoundType.TASK_TYPE+60)
 @Transactional(rollbackFor=Exception.class)
 @Slf4j
-public class EmptyContainerInBoundStrategy implements InBoundStragtegy {
+public class EmptyListInBoundStrategy implements InBoundStragtegy {
 
     @Autowired
     private InBoundTaskMapper inBoundTaskMapper;
