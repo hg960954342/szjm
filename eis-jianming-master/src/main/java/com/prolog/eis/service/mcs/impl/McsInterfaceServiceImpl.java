@@ -25,7 +25,7 @@ import com.prolog.framework.utils.MapUtils;
 @Service
 public class McsInterfaceServiceImpl implements McsInterfaceService{
 
-
+	@Autowired
 	private RestTemplate restTemplate;
 	@Value("${prolog.mcs.url:}")
 	private String mcsUrl;
@@ -35,13 +35,13 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 	@Autowired
 	private MCSTaskMapper mcsTaskMapper;
 
-	public McsInterfaceServiceImpl() {
+	/*public McsInterfaceServiceImpl() {
 		HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
 		httpRequestFactory.setConnectionRequestTimeout(60000);
 		httpRequestFactory.setConnectTimeout(60000);
 		httpRequestFactory.setReadTimeout(60000);
 		this.restTemplate=new RestTemplate(httpRequestFactory);
-	}
+	}*/
 
 	@Override
 	@Transactional

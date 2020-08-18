@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -38,8 +39,7 @@ public class Master {
 	}
 	@Bean
 	public RestTemplate restTemplate() {
-		HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		httpRequestFactory.setConnectionRequestTimeout(60000);
+		SimpleClientHttpRequestFactory httpRequestFactory = new SimpleClientHttpRequestFactory();
 		httpRequestFactory.setConnectTimeout(60000);
 		httpRequestFactory.setReadTimeout(60000);
 		RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
