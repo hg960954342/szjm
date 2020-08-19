@@ -182,7 +182,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		String requestData = PrologApiJsonHelper.toJson(map);
 		String restJson = "";
 		try {
-			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/Request");
+			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/getExitStatus");
 			FileLogHelper.WriteLog("getExitStatus", "EIS->MCS接驳口状态查询，请求参数："+requestData);
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(requestData), String.class);
 			FileLogHelper.WriteLog("getExitStatus", "EIS->MCS接驳口状态查询，返回参数："+restJson);
