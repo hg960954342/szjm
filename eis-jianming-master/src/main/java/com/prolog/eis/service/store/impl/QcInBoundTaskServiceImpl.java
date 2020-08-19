@@ -249,7 +249,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		inboundTask.setBillNo(PrologStringUtils.newGUID());
 		inboundTask.setWmsPush(0);
 		inboundTask.setReBack(0);
-		inboundTask.setEmptyContainer(0);
+		inboundTask.setEmptyContainer(1);
 		inboundTask.setContainerCode(emptyContainNo);
 		inboundTask.setTaskType(0);
 		inboundTask.setOwnerId("空托");
