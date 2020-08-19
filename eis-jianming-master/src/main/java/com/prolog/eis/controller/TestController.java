@@ -1,29 +1,33 @@
 package com.prolog.eis.controller;
 
-import com.prolog.eis.dao.led.LedPortParamMapper;
-import com.prolog.eis.dto.eis.led.LedPortParamDto;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.PrologApiJsonHelper;
-import com.prolog.eis.util.led.LedUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
+import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
+import com.prolog.eis.dao.led.LedPortParamMapper;
+import com.prolog.eis.dto.eis.led.LedPortParamDto;
+import com.prolog.eis.service.test.TestService;
+import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.eis.util.led.LedUtil;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONObject;
 
 @RestController
 @Api(tags = "test")
 @RequestMapping("/api/v1/master/sxk/test")
 public class TestController {
 	
-//	@Autowired
-	//private TestService testService;
+	@Autowired
+	private TestService testService;
 	
 	@Autowired
 	private LedPortParamMapper ledPortParamMapper;
@@ -154,4 +158,31 @@ public class TestController {
 		}
 	}
 
+	
+	@ApiOperation(value = "库存删除接口", notes = "库存删除接口")
+	@PostMapping("/deletestore")
+	public void deleteStore(@RequestBody String json, HttpServletResponse response) throws Exception {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json; charset=utf-8");
+		OutputStream out = response.getOutputStream();
+		PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
+
+		try {
+			FileLogHelper.WriteLog("deletestore", json);
+			String containerNo = helper.getString("containerNo");
+			
+			testService.deleteStore(containerNo);
+			
+			JSONObject jsonObject = new JSONObject();
+
+			out.write(jsonObject.toString().getBytes("UTF-8"));
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			FileLogHelper.WriteLog("deletestoreError", "异常："+e.getMessage());
+			out.write(e.getMessage().getBytes("UTF-8"));
+			out.flush();
+			out.close();
+		}
+	}
 }
