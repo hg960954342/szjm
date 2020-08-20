@@ -31,17 +31,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
 
     @Override
-    public void unbound(OutboundTask outboundTask) {
-        //获取出库明细
-        List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList(this.getClass());
-
-
-
-        for (DetailDataBean detailDataBeand : list) {
-            String pickCode=detailDataBeand.getPickCode();
-            this.unbound(detailDataBeand,pickCode);
-        }
-    }
+    public void unbound(OutboundTask outboundTask)  {}
 
 
 

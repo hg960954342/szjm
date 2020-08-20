@@ -588,7 +588,10 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("点位%s不是托盘库货位", address));
 		}
 	}
-
+    @Override
+	public SxStore rukuSxStoreUpdate(String containerNo) throws Exception{
+       return rukuSxStore(containerNo);
+	}
 	//判断有无库存
 	private SxStore rukuSxStore(String containerNo) throws Exception {
 		List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(),

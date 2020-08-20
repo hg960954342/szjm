@@ -4,11 +4,9 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.prolog.eis.service.store.QcInBoundTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.prolog.eis.dao.led.LedPortParamMapper;
 import com.prolog.eis.dto.eis.led.LedPortParamDto;
@@ -184,5 +182,15 @@ public class TestController {
 			out.flush();
 			out.close();
 		}
+	}
+
+	@Autowired
+	QcInBoundTaskService qcInBoundTaskService;
+	//入库失败更新库存测试接口
+	@RequestMapping("/update")
+	@ResponseBody
+	public String updateInBound(@RequestParam("id")String containerNo)throws Exception{
+
+		return PrologApiJsonHelper.toJson(qcInBoundTaskService.rukuSxStoreUpdate(containerNo));
 	}
 }

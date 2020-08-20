@@ -23,7 +23,17 @@ public class PickStation {
   private String isLock;
   @Column("remarks")
   private String remarks;
+  @Column("device_no")
+  private String deviceNo;
 
+
+  public String getDeviceNo() {
+    return deviceNo;
+  }
+
+  public void setDeviceNo(String deviceNo) {
+    this.deviceNo = deviceNo;
+  }
 
   public long getId() {
     return id;

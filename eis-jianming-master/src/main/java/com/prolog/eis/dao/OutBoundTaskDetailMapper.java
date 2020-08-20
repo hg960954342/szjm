@@ -21,16 +21,16 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
             @Result(property = "billNo",  column = "bill_no"),
     })
     @Select(
-        "SELECT\n" +
-                "\tsum(d.qty) over(partition by d.owner_id,d.item_id,d.lot_id) qty,\n" +
-                "  sum(d.finish_qty) over(partition by d.owner_id,d.item_id,d.lot_id) finish_qty,\n" +
-                "  sum(c.qty) over(partition by d.owner_id,d.item_id,d.lot_id) cqty,\n" +
-                "  d.owner_id,d.item_id,d.lot_id,d.pick_code,d.bill_no\n" +
-                "FROM\n" +
-                "\toutbound_task_detail d  \n" +
-                "INNER JOIN outbound_task t ON t.bill_no = d.bill_no\n" +
-                "LEFT JOIN container_task_detail c ON c.bill_no = d.bill_no\n" +
-                "and d.bill_no IN (${bill_no_string})"
+        " SELECT \n" +
+                "                  sum(d.qty),  \n" +
+                "                  sum(d.finish_qty), \n" +
+                "                  sum(d.qty_)  ,\n" +
+                "                  d.owner_id,d.item_id,d.lot_id,d.pick_code\n" +
+                "                FROM  \n" +
+                "               (select d.qty,d.finish_qty,c.qty qty_, d.owner_id,d.item_id,d.lot_id,d.pick_code\n" +
+                "                  from outbound_task_detail d   \n" +
+                "                INNER JOIN outbound_task t ON t.bill_no = d.bill_no \n" +
+                "                left JOIN container_task_detail c ON c.bill_no = d.bill_no and d.bill_no IN (${billNoString} )d GROUP BY d.owner_id,d.item_id,d.lot_id,d.pick_code "
 
     )
      List<DetailDataBean> getOuntBoundDetailAll(@Param("bill_no_string") String billNoString);

@@ -3,6 +3,7 @@ package com.prolog.eis.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.prolog.eis.service.enums.OutBoundEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,6 +94,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		containerTask.setSource(source);
 		containerTask.setSourceType(1);
 		containerTask.setTarget(target);
+		containerTask.setTargetType(OutBoundEnum.TargetType.SSX.getNumber());
 		containerTask.setSourceType(1);
 		containerTask.setTaskState(1);
 		containerTask.setQty(1d);

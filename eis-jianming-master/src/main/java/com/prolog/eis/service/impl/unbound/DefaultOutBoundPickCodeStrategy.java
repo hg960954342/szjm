@@ -92,7 +92,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         List<PickStation> listPickStation= pickStationMapper.findByCriteria(pickStationCriteria);
         //过滤掉不能用的拣选站
         listPickStation=listPickStation.stream().filter(x->{
-            String stationNo=x.getStationNo();
+            String stationNo=x.getDeviceNo();
             AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo,0,0);
             if(null!=agvStorageLocation){
 
@@ -114,65 +114,5 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         return false;
     }
 
-    protected void unbound(DetailDataBean detailDataBeand,String pickCode){
 
-        AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
-
-
-
-        ContainerTask ordercontainerTask = new ContainerTask();
-        ordercontainerTask.setLotId(detailDataBeand.getLotId());
-        ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
-        ordercontainerTask.setOwnerId(detailDataBeand.getOwnerId());
-        ordercontainerTask.setItemId(detailDataBeand.getItemId());
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        ordercontainerTask.setTaskCode(uuid);
-        ordercontainerTask.setTaskType(1);
-        ordercontainerTask.setSourceType(1);
-
-        String target=agvStorageLocation.getRcsPositionCode();
-        ordercontainerTask.setTarget(target);
-        ordercontainerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber()); //Agv目标区域
-        float last = detailDataBeand.getLast();           //获取需要出库的总量
-        ordercontainerTask.setQty(last);
-        List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
-        if (listSxStore.size() < 1) {log.info("未找到库存！"); return; }    //没有库存结束
-        listSxStore=  listSxStore.stream().filter(x -> {
-            BigDecimal qty = (BigDecimal) x.get("qty");
-            if (qty!=null&&qty.floatValue() >= last) return true;
-            return false;
-        }).collect(Collectors.toList());
-        if(listSxStore.size()==0)  {log.info("库存不够！"); return;}
-        Map<String, Object> sxStore1 = listSxStore.stream().min(Comparator.comparingInt(entry -> {
-            Object objectDeptNum= entry.get("deptNum");
-            if(objectDeptNum!=null){
-                return  (Integer)entry.get("deptNum");
-            }
-            return 0;
-        })).get();
-        String sourceLocation= PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"),(Integer) sxStore1.get("y"),(Integer) sxStore1.get("layer"));
-        ordercontainerTask.setSource(sourceLocation);
-        ordercontainerTask.setContainerCode((String)sxStore1.get("containerNo"));
-        ordercontainerTask.setTaskState(1);
-        int LocationType = agvStorageLocation.getLocationType();
-        if(((BigDecimal) sxStore1.get("qty")).floatValue()==last&&(LocationType==3 ||LocationType==5 )&&!this.isExistTask(target)){ //出整托
-            containerTaskMapper.save(ordercontainerTask);
-            List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.
-                    getOutBoundContainerTaskDetail("'"+detailDataBeand.getBillNo()+"'",ordercontainerTask.getContainerCode());
-            containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
-            outBoundTaskMapper.updateOutBoundTaskBySQL("'"+detailDataBeand.getBillNo()+"'");
-
-
-        }
-        if(((BigDecimal) sxStore1.get("qty")).floatValue()>=last&&(LocationType==4 ||LocationType==5 )&&!this.isExistTask(target)){ //非整托
-            containerTaskMapper.save(ordercontainerTask);
-            List<ContainerTaskDetail> listContainerTaskDetail=outBoundTaskDetailMapper.getOutBoundContainerTaskDetail
-                    ("'"+detailDataBeand.getBillNo()+"'",ordercontainerTask.getContainerCode());
-            containerTaskDetailMapperMapper.saveBatch(listContainerTaskDetail);
-
-            outBoundTaskMapper.updateOutBoundTaskBySQL("'"+detailDataBeand.getBillNo()+"'");
-        }
-
-
-    }
 }

@@ -2,6 +2,7 @@ package com.prolog.eis.service.store;
 
 import com.prolog.eis.dto.eis.mcs.InBoundRequest;
 import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
+import com.prolog.eis.model.sxk.SxStore;
 
 public interface QcInBoundTaskService {
 
@@ -32,4 +33,13 @@ public interface QcInBoundTaskService {
 	 * @param containerNo
 	 */
 	void foldInBound(String deviceNo,String containerNo) throws Exception;
+
+
+	/**
+	 * 测试方法
+	 * @param
+	 * @param containerNo
+	 * @throws Exception
+	 */
+	public SxStore rukuSxStoreUpdate(String containerNo) throws Exception;
 }
