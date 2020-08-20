@@ -8,5 +8,5 @@ public interface AgvCallbackService {
 	 * @param method
 	 * @throws Exception
 	 */
-	void agvCallback(String taskCode,String method) throws Exception;
+	void agvCallback(String taskCode,String method);
 }

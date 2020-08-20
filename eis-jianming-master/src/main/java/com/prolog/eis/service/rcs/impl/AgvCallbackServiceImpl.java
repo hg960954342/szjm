@@ -43,7 +43,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void agvCallback(String taskCode, String method) throws Exception {
+    public void agvCallback(String taskCode, String method) {
 
         //agv 回告 method ：star : 任务开始、outbin : 走出储位、end : 任务结束
 
@@ -112,22 +112,17 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 //判断托盘到位 区域 输送线
                 if (containerTask.getTargetType() == 2) {
                     //小车搬运后当前位置在入库输送线口
-                    //设置当前位置为输送线
-                    containerTask.setSourceType(1);
-                    //设置坐标 为 四向库
-                    List<PortInfo> portInfos = portInfoMapper.findByMap(MapUtils.put("junctionPort", targetPosition.getDeviceNo()).getMap(), PortInfo.class);
-                    if (!StringUtils.isEmpty(portInfos) && portInfos.size() >0){
-                        PortInfo portInfo = portInfos.get(0);
-                        String source = PrologCoordinateUtils.splicingStr(portInfo.getX(), portInfo.getY(), portInfo.getLayer());
-                        containerTask.setSource(source);
-                    }
-                    containerTaskService.update(containerTask);
                     //通知输送线运行
-                    qcInBoundTaskService.rcsCompleteForward(containerTask.getContainerCode(), targetPosition.getId());
-                    //更改目标点位状态
-                    targetPosition.setTaskLock(0);
-                    targetPosition.setLocationLock(0);
-                    agvStorageLocationMapper.update(targetPosition);
+                    try {
+                        qcInBoundTaskService.rcsCompleteForward(containerTask.getContainerCode(), targetPosition.getId());
+                        //更改目标点位状态
+                        targetPosition.setTaskLock(0);
+                        targetPosition.setLocationLock(0);
+                        agvStorageLocationMapper.update(targetPosition);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
 
                 }
             }
