@@ -248,13 +248,14 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 
             if ("0".equals(helper.getString("stateCode"))) {
+                repeatReport.setMessage(restJson);
                 repeatReport.setReportCount(repeatReport.getReportCount() + 1);
                 repeatReport.setReportState(2);
                 repeatReport.setEndTime(new Date());
             } else {
                 repeatReport.setReportCount(repeatReport.getReportCount() + 1);
                 repeatReport.setEndTime(new Date());
-                repeatReport.setMessage(helper.getString("message"));
+                repeatReport.setMessage(restJson);
                 if (repeatReport.getReportCount() > 10) {
                     repeatReport.setReportState(3);
                 }

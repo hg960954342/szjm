@@ -3,6 +3,7 @@ package com.prolog.eis.service.test.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
@@ -14,7 +15,7 @@ import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.framework.utils.MapUtils;
-
+@Service
 public class TestServiceImpl implements TestService{
 
 	@Autowired
