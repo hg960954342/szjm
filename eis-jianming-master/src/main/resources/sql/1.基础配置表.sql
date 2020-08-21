@@ -58,7 +58,7 @@ CREATE TABLE `pick_station` (
   `device_no` varchar(50) default null comment '设备编号',
   `remarks` varchar(255) NOT NULL COMMENT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='拣选站表';
+) COMMENT='拣选站表';
 
 drop table if exists `agv_storagelocation`;
 create table `agv_storagelocation` (
@@ -72,6 +72,18 @@ create table `agv_storagelocation` (
   `task_lock` int(11) not null comment '任务锁  0空闲 1锁定',
   `location_lock` int(11) not null comment '锁定 0不锁定 1锁定',
   `device_no` varchar(50) default null comment '设备编号',
+  `remarks` varchar(50) default null comment '拣选站名称',
   primary key (`id`)
-) engine=innodb default charset=utf8mb4 collate=utf8mb4_0900_ai_ci;
+) ;
+
+DROP TABLE IF EXISTS `led_port`;
+CREATE TABLE `led_port`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `led_ip` varchar(255) NULL DEFAULT NULL COMMENT 'Led ip',
+  `port` int(0) NULL DEFAULT NULL COMMENT '端口',
+  `message` varchar(255)  NULL DEFAULT NULL COMMENT 'ip 信息',
+  PRIMARY KEY (`id`) USING BTREE
+) ;
+
+
 
