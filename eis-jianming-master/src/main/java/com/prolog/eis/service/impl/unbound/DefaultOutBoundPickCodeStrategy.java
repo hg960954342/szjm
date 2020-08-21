@@ -90,7 +90,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         pickStationCriteria.setRestriction(Restrictions.in("taskType",taskTypes));
         pickStationCriteria.setRestriction(Restrictions.eq("isLock",0 ));
         List<PickStation> listPickStation= pickStationMapper.findByCriteria(pickStationCriteria);
-        //过滤掉不能用的拣选站
+      /*  //过滤掉不能用的拣选站
         listPickStation=listPickStation.stream().filter(x->{
             String stationNo=x.getDeviceNo();
             AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo,0,0);
@@ -99,7 +99,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
                 return true;
             }
             return false;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList());*/
         return listPickStation;
     }
 

@@ -129,7 +129,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			@Result(property = "storeLocationId2",  column = "STORE_LOCATION_ID2"),
 			@Result(property = "ascentLockState",  column = "ASCENT_LOCK_STATE"),
 			@Result(property = "locationIndex",  column = "LOCATION_INDEX"),
-			@Result(property = "deptNum",  column = "dept_num_"),
+			@Result(property = "deptNum",  column = "dept_num"),
 			@Result(property = "depth",  column = "depth"),
 			@Result(property = "createTime",  column = "CREATE_TIME"),
 			@Result(property = "verticalLocationGroupId",  column = "vertical_location_group_id"),
@@ -153,78 +153,28 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			@Result(property = "belongArea",  column = "belong_area"),
 			@Result(property = "createTime",  column = "CREATE_TIME")
 	})
-    @Select("select * from (SELECT\n" +
-			"\t* from (\n" +
-			"\t\tSELECT\n" +
-			"\t\t\t*\n" +
-			"\t\tFROM\n" +
-			"\t\t\t(\n" +
-			"\t\t\t\tSELECT\n" +
-			"\t\t\t\t\ta.id,\n" +
-			"\t\t\t\t\tl.dept_num as dept_num_\n" +
-			"\t\t\t\tFROM\n" +
-			"\t\t\t\t\t(\n" +
-			"\t\t\t\t\t\tSELECT\n" +
-			"\t\t\t\t\t\t\t*\n" +
-			"\t\t\t\t\t\tFROM\n" +
-			"\t\t\t\t\t\t\tSX_STORE st\n" +
-			"\t\t\t\t\t\tWHERE\n" +
-			"\t\t\t\t\t\t\tst.item_id = #{itemId}\n" +
-			"\t\t\t\t\t\tAND st.lot_id = #{lotId}\n" +
-			"\t\t\t\t\t\tAND st.owner_id = #{ownerId}\n" +
-			"\t\t\t\t\t) a\n" +
-			"\t\t\t\tINNER JOIN sx_store_location l ON a.store_location_id = l.id\n" +
-			"\t\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id\n" +
-			"\t\t\t\tWHERE\n" +
-			//"\t\t\t\t\tl.task_lock = 0\n" +
-			"\t\t\t\t g.IS_LOCK = 0\n" +
-			"\t\t\t\tAND a.STORE_STATE = 20\n" +
-			"\t\t\t) x\n" +
-			"\t\tGROUP BY\n" +
-			"\t\t\tx.dept_num_,\n" +
-			"\t\t\tx.id\n" +
-			"\t) y\n" +
-			"LEFT JOIN SX_STORE sx ON sx.id = y.id\n" +
-			"LEFT JOIN sx_store_location l ON l.id = sx.store_location_id\n" +
-			"LEFT JOIN sx_store_location_group g ON l.store_location_group_id = g.id)z order by z.qty desc,z.dept_num_ asc ")
+	@Select("select * from sx_store a\n" +
+			"      INNER JOIN sx_store_location l ON a.store_location_id = l.id \n" +
+			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"and g.IS_LOCK=0\n" +
+			"and a.STORE_STATE=20\n" +
+			"and a.item_id = #{itemId}\n" +
+			"and a.lot_id = #{lotId}\n" +
+			"and a.owner_id = #{ownerId}\n" +
+			"ORDER BY dept_num asc,qty asc")
 	List<Map<String,Object>> getSxStoreByOrder(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
 
 
 
-	@Select("SELECT\n" +
-			"\tcount(qty) from (\n" +
-			"\t\tSELECT\n" +
-			"\t\t\t*\n" +
-			"\t\tFROM\n" +
-			"\t\t\t(\n" +
-			"\t\t\t\tSELECT\n" +
-			"\t\t\t\t\ta.id,\n" +
-			"\t\t\t\t\tl.dept_num as dept_num_\n" +
-			"\t\t\t\tFROM\n" +
-			"\t\t\t\t\t(\n" +
-			"\t\t\t\t\t\tSELECT\n" +
-			"\t\t\t\t\t\t\t*\n" +
-			"\t\t\t\t\t\tFROM\n" +
-			"\t\t\t\t\t\t\tSX_STORE st\n" +
-			"\t\t\t\t\t\tWHERE\n" +
-			"\t\t\t\t\t\t\tst.item_id = #{itemId}\n" +
-			"\t\t\t\t\t\tAND st.lot_id = #{lotId}\n" +
-			"\t\t\t\t\t\tAND st.owner_id = #{ownerId}\n" +
-			"\t\t\t\t\t) a\n" +
-			"\t\t\t\tINNER JOIN sx_store_location l ON a.store_location_id = l.id\n" +
-			"\t\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id\n" +
-			"\t\t\t\tWHERE\n" +
-			//"\t\t\t\t\tl.task_lock = 0\n" +
-			"\t\t\t\t g.IS_LOCK = 0\n" +
-			"\t\t\t\tAND a.STORE_STATE = 20\n" +
-			"\t\t\t) x\n" +
-			"\t\tGROUP BY\n" +
-			"\t\t\tx.dept_num_,\n" +
-			"\t\t\tx.id\n" +
-			"\t) y\n" +
-			"LEFT JOIN SX_STORE sx ON sx.id = y.id\n" +
-			"LEFT JOIN sx_store_location l ON l.id = sx.store_location_id\n" +
-			"LEFT JOIN sx_store_location_group g ON l.store_location_group_id = g.id")
+	@Select("select sum(qty) from sx_store a\n" +
+			"      INNER JOIN sx_store_location l ON a.store_location_id = l.id \n" +
+			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"and g.IS_LOCK=0\n" +
+			"and a.STORE_STATE=20\n" +
+			"and a.item_id = #{itemId}\n" +
+			"and a.lot_id = #{lotId}\n" +
+			"and a.owner_id = #{ownerId}\n" +
+			"ORDER BY dept_num asc,qty asc")
 	float getSxStoreCount(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
 
 }
