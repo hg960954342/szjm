@@ -30,5 +30,5 @@ public class LedShow {
 
     @Column("message")
     @ApiModelProperty("led屏信息")
-    private int message;
+    private String message;
 }

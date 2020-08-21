@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.prolog.eis.controller.led.PrologLedController;
 import com.prolog.eis.dao.led.LedShowMapper;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.led.LedShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -113,27 +114,27 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		ContainerTask containerTask = containerTaskMapper.queryContainerTaskByConcode(containerNo);
 		//入库,回库显示led屏
 		if(sourceLayer==1){
-			LedShow ledShow = ledShowMapper.queryByIp(1);
+			LedShow ledShow = ledShowMapper.findById(1,LedShow.class);
 
 			if(ledShow != null){
 				PrologLedController prologLedController = new PrologLedController();
 				try {
 					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",weight,containerTask.getLotId(),state);
 				}catch (Exception e){
-					System.out.println("connect led failed");
+					LogServices.logSys(e.getMessage());
 				}
 			}
 		}
 
 		if(sourceLayer==2){
-			LedShow ledShow = ledShowMapper.queryByIp(2);
+			LedShow ledShow = ledShowMapper.findById(2,LedShow.class);
 
 			if(ledShow != null){
 				PrologLedController prologLedController = new PrologLedController();
 				try {
 					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",weight,containerTask.getLotId(),state);
 				}catch (Exception e){
-					System.out.println("connect led failed");
+					LogServices.logSys(e.getMessage());
 				}
 
 			}
@@ -566,14 +567,14 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			}
 
 			String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getTarget());
-			LedShow ledShow = ledShowMapper.queryByIp(3);
+			LedShow ledShow = ledShowMapper.findById(3,LedShow.class);
 
 			if(ledShow != null){
 				PrologLedController prologLedController = new PrologLedController();
 				try {
 					prologLedController.outStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",containerTask.getQty(),containerTask.getLotId(),station);
 				}catch (Exception e){
-					System.out.println("connect failed");
+					LogServices.logSys(e.getMessage());
 				}
 
 			}

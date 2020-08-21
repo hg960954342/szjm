@@ -1,10 +1,10 @@
 package com.prolog.eis.dao.led;
 
 import com.prolog.eis.model.led.LedShow;
+import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
 
-public interface LedShowMapper {
+public interface LedShowMapper extends BaseMapper<LedShow> {
 
-    @Select("select * from led_port where id = #{id}")
-    LedShow queryByIp(int id);
+
 }

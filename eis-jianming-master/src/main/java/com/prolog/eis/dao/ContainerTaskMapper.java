@@ -61,6 +61,7 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
     		"where t.source_type = 1 and t.task_state = 1 and t.task_code is not null")
     List<CkContainerTaskDto> getCkTask();
 
+	@ResultMap("ContainerTask")
     @Select("select * from container_task where container_code = #{containerNo}")
     ContainerTask queryContainerTaskByConcode(String containerNo);
 }

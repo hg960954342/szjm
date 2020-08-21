@@ -5,6 +5,7 @@ import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.dao.led.LedShowMapper;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.led.LedShow;
 import com.prolog.eis.model.wms.AgvStorageLocation;
@@ -96,37 +97,37 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                     double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
                     double rQty = containerTask.getQty()-pQty;
                     if(station.equals("站台1")){
-                        LedShow ledShow = ledShowMapper.queryByIp(4);
+                        LedShow ledShow = ledShowMapper.findById(4,LedShow.class);
                         if(ledShow != null){
                             PrologLedController prologLedController = new PrologLedController();
                             try {
                                 prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"根板蓝",pQty,containerTask.getLotId(),rQty);
                             }catch (Exception e){
-                                System.out.println("connect led failed");
+                                LogServices.logSys(e.getMessage());
                             }
                         }
                     }
 
                     if(station.equals("站台2")){
-                        LedShow ledShow = ledShowMapper.queryByIp(5);
+                        LedShow ledShow = ledShowMapper.findById(5,LedShow.class);
                         if(ledShow != null){
                             PrologLedController prologLedController = new PrologLedController();
                             try {
                                 prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"蓝根板",pQty,containerTask.getLotId(),rQty);
                             }catch (Exception e){
-                                System.out.println("connect led failed");
+                                LogServices.logSys(e.getMessage());
                             }
                         }
                     }
 
                     if(station.equals("站台3")){
-                        LedShow ledShow = ledShowMapper.queryByIp(6);
+                        LedShow ledShow = ledShowMapper.findById(6,LedShow.class);
                         if(ledShow != null){
                             PrologLedController prologLedController = new PrologLedController();
                             try {
                                 prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"板根蓝",pQty,containerTask.getLotId(),rQty);
                             }catch (Exception e){
-                                System.out.println("connect led failed");
+                                LogServices.logSys(e.getMessage());
                             }
                         }
                     }
