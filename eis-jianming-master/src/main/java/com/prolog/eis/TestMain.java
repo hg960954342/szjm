@@ -3,7 +3,6 @@ package com.prolog.eis;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.util.PrologHttpUtils;
-import org.junit.Test;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +25,7 @@ public class TestMain {
 
 
 
-@Test
+
 public void moveAgv(){
 
 

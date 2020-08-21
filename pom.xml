@@ -60,4 +60,19 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>               <!-- 仓库地址   -->
+			<id>nexus</id>
+			<name>Team Nexus Repository </name >
+			<url>http://localhost:9088/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>               <!--  插件地址   -->
+			<id>nexus</id>
+			<name>Team Nexus Repository </name >
+			<url>http://localhost:9088/nexus/content/groups/public</url>
+		</pluginRepository>
+	</pluginRepositories >
 </project>

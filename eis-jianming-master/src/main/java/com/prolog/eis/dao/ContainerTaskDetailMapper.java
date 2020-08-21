@@ -72,4 +72,7 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
             "select t.qty qtyy,d.* from \tcontainer_task_detail d INNER join container_task t ON t.container_code = d.container_code \r\n" +
             "where  d.bill_no=#{bill_no} and t.task_type=#{task_type} )x")
     List<ResultContainer.DataBean.DetailsBean> getCheckDetail(@Param("bill_no") String bill_no, @Param("task_type") String task_type);
+
+    @Select("select sum(qty) from container_task_detail where container_code = #{containerCode}")
+    double queryPickQtyByConcode(String containerCode);
 }

@@ -3,6 +3,9 @@ package com.prolog.eis.service.store.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.prolog.eis.controller.led.PrologLedController;
+import com.prolog.eis.dao.led.LedShowMapper;
+import com.prolog.eis.model.led.LedShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +76,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private McsInterfaceService mcsInterfaceService;
 	@Autowired
 	private DeviceJunctionPortMapper deviceJunctionPortMapper;
+	@Autowired
+	private LedShowMapper ledShowMapper;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -100,6 +105,38 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 		if(weight > limitWeight) {
 			return this.addMcsTask(false,1,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重");
+		}
+
+		String state ="";
+		state =(weight>=limitWeight)?"超重":"正常";
+		//根据托盘码查询入库托盘任务
+		ContainerTask containerTask = containerTaskMapper.queryContainerTaskByConcode(containerNo);
+		//入库,回库显示led屏
+		if(sourceLayer==1){
+			LedShow ledShow = ledShowMapper.queryByIp(1);
+
+			if(ledShow != null){
+				PrologLedController prologLedController = new PrologLedController();
+				try {
+					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",weight,containerTask.getLotId(),state);
+				}catch (Exception e){
+					System.out.println("connect led failed");
+				}
+			}
+		}
+
+		if(sourceLayer==2){
+			LedShow ledShow = ledShowMapper.queryByIp(2);
+
+			if(ledShow != null){
+				PrologLedController prologLedController = new PrologLedController();
+				try {
+					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",weight,containerTask.getLotId(),state);
+				}catch (Exception e){
+					System.out.println("connect led failed");
+				}
+
+			}
 		}
 
 		// 找port口
@@ -528,6 +565,18 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				return;
 			}
 
+			String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getTarget());
+			LedShow ledShow = ledShowMapper.queryByIp(3);
+
+			if(ledShow != null){
+				PrologLedController prologLedController = new PrologLedController();
+				try {
+					prologLedController.outStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",containerTask.getQty(),containerTask.getLotId(),station);
+				}catch (Exception e){
+					System.out.println("connect failed");
+				}
+
+			}
 
 			//清除托盘库库存
 			SxStore sxStore = this.clearSxStore(containerCode);

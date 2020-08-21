@@ -3,6 +3,7 @@ package com.prolog.eis;
 import com.prolog.eis.filter.UrlFilter;
 import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
 import com.prolog.framework.microservice.annotation.EnablePrologService;
+import onbon.bx05.Bx5GEnv;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -47,8 +48,11 @@ public class Master {
 	}
 	
 	
-	public static void main( String[] args )
-    {
+	public static void main( String[] args ) throws Exception {
+
+		//LED初始化API,此操作只在程序启动时候执行一次即可，多次执行会出现内存错误
+		Bx5GEnv.initial("log.properties");
+
     	SpringApplication.run(Master.class, args);
     }
 }

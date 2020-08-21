@@ -1,9 +1,12 @@
 package com.prolog.eis.service.rcs.impl;
 
+import com.prolog.eis.controller.led.PrologLedController;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
+import com.prolog.eis.dao.led.LedShowMapper;
 import com.prolog.eis.model.eis.PortInfo;
+import com.prolog.eis.model.led.LedShow;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.ContainerTaskDetail;
@@ -40,6 +43,8 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
     private QcInBoundTaskService qcInBoundTaskService;
     @Autowired
     private PortInfoMapper portInfoMapper;
+    @Autowired
+    private LedShowMapper ledShowMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -87,6 +92,45 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 //判断托盘到位 区域 agv
                 if (containerTask.getTargetType() == 1) {
 
+                    String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getSource());
+                    double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
+                    double rQty = containerTask.getQty()-pQty;
+                    if(station.equals("站台1")){
+                        LedShow ledShow = ledShowMapper.queryByIp(4);
+                        if(ledShow != null){
+                            PrologLedController prologLedController = new PrologLedController();
+                            try {
+                                prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"根板蓝",pQty,containerTask.getLotId(),rQty);
+                            }catch (Exception e){
+                                System.out.println("connect led failed");
+                            }
+                        }
+                    }
+
+                    if(station.equals("站台2")){
+                        LedShow ledShow = ledShowMapper.queryByIp(5);
+                        if(ledShow != null){
+                            PrologLedController prologLedController = new PrologLedController();
+                            try {
+                                prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"蓝根板",pQty,containerTask.getLotId(),rQty);
+                            }catch (Exception e){
+                                System.out.println("connect led failed");
+                            }
+                        }
+                    }
+
+                    if(station.equals("站台3")){
+                        LedShow ledShow = ledShowMapper.queryByIp(6);
+                        if(ledShow != null){
+                            PrologLedController prologLedController = new PrologLedController();
+                            try {
+                                prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"板根蓝",pQty,containerTask.getLotId(),rQty);
+                            }catch (Exception e){
+                                System.out.println("connect led failed");
+                            }
+                        }
+                    }
+
                     //任务类型 业务出库
                     if (containerTask.getTaskType() == 1) {
                         //出库完成 回告
@@ -102,15 +146,16 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         targetPosition.setLocationLock(1);
                         agvStorageLocationMapper.update(targetPosition);
                     }
+
                     //删除容器任务
                     containerTaskService.delete(containerTask);
                     //删除容器明细
                     containerTaskDetailMapper.deleteByMap(MapUtils.put("containerCode",containerTask.getContainerCode()).getMap(), ContainerTaskDetail.class);
 
-
                 }
                 //判断托盘到位 区域 输送线
                 if (containerTask.getTargetType() == 2) {
+
                     //小车搬运后当前位置在入库输送线口
                     //通知输送线运行
                     try {

@@ -15,11 +15,11 @@
 			<artifactId>eis-jianming-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<!-- <dependency>
+		 <dependency>
 			<groupId>com.prolog.eis</groupId>
 			<artifactId>eis-jianming-base-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency> -->
+		</dependency>
         <dependency>
             <groupId>com.prolog.framework</groupId>
             <artifactId>plg-fx-starter-dao</artifactId>
@@ -106,11 +106,84 @@
               <version>RELEASE</version>
               <scope>compile</scope>
           </dependency>
+
           <dependency>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>RELEASE</version>
-              <scope>compile</scope>
+              <groupId>fakepath</groupId>
+              <artifactId>bx05</artifactId>
+              <version>0.5.0</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>bx05.message</artifactId>
+              <version>0.5.0</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>log4j</artifactId>
+              <version>1.2.14</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>RXTXcomm</artifactId>
+              <version>1.0.0</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>simple-xml</artifactId>
+              <version>2.7.1</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>uia-comm</artifactId>
+              <version>0.3.3</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>uia-message</artifactId>
+              <version>0.6.0</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>uia-utils</artifactId>
+              <version>0.2.0</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>bx05</artifactId>
+              <version>0.5.0</version>
+              <classifier>javadoc</classifier>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>stax</artifactId>
+              <version>1.2.0</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>stax-api</artifactId>
+              <version>1.0.1</version>
+          </dependency>
+
+          <dependency>
+              <groupId>fakepath</groupId>
+              <artifactId>xpp3</artifactId>
+              <version>1.1.3.3</version>
+          </dependency>
+
+          <dependency>
+              <groupId>cn.hutool</groupId>
+              <artifactId>hutool-core</artifactId>
+              <version>5.1.1</version>
           </dependency>
       </dependencies>
 </project>
