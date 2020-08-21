@@ -1,6 +1,7 @@
 package com.prolog.eis.scheduler;
 
 import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.mcs.MCSTask;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.*;
@@ -10,7 +11,10 @@ import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -30,15 +34,22 @@ public class TimeTask {
     private SxStoreCkService sxStoreCkService;
     @Autowired
     private MCSLineService mcsLineService;
+    @Bean
+    public TaskScheduler taskScheduler() {
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        taskScheduler.setPoolSize(50);
+        return taskScheduler;
+    }
 
     /**
      * 定时处理入库任务
      *
      * @throws Exception
      */
-//    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void buildCkTask() throws Exception {
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void buildCkTask()   {
         inBoundTaskService.inboundTask();
+        LogServices.logSys("Message error Test");
     }
 
 
@@ -47,14 +58,14 @@ public class TimeTask {
      *
      * @throws Exception
      */
-//    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void buildUnTask() throws Exception {
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void buildUnTask()   {
         outBoundTaskService.unboundTask();
 
     }
 
-    //    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void buildAndSendSxCkTask() throws Exception {
+        @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void buildAndSendSxCkTask()  {
 
         try {
             synchronized ("kucun".intern()) {
@@ -63,7 +74,7 @@ public class TimeTask {
             sxStoreCkService.sendSxCkTask();
         } catch (Exception e) {
             // TODO: handle exception
-            FileLogHelper.WriteLog("生成四向库出库任务错误", e.toString());
+            LogServices.logSys("生成四向库出库任务错误"+e.getMessage());
         }
     }
 
@@ -77,16 +88,15 @@ public class TimeTask {
 		}
 	}*/
 
-    //	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void resendMcsTask() throws Exception {
-        List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();
-        for (MCSTask mcsTask : mcsTasks) {
-            try {
-                mcsInterfaceService.recall(mcsTask);
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void resendMcsTask() {
+        try {  List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();
+               for (MCSTask mcsTask : mcsTasks) {
+                mcsInterfaceService.recall(mcsTask);}
             } catch (Exception e) {
                 FileLogHelper.WriteLog("resendMcsTask", "MCS重发异常:" + e.toString());
             }
-        }
+
     }
 
 	/*@Scheduled(initialDelay = 3000, fixedDelay = 5000)
@@ -117,8 +127,8 @@ public class TimeTask {
     private AgvStorageLocationMapper agvStorageLocationMapper;
 
     //定时给agv小车下分任务
-//	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
-    public void sendTask2Rcs() throws Exception {
+	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
+    public void sendTask2Rcs()  {
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
         if (!containerTasks.isEmpty() && containerTasks.size() > 0) {
             eisSendRcsTaskService.sendTask(containerTasks);
@@ -130,8 +140,8 @@ public class TimeTask {
      *
      * @throws Exception
      */
-//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void resendReport() throws Exception {
+	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void resendReport()   {
         List<RepeatReport> repeatReports = repeatReportService.findByState(0);
         if (repeatReports != null && repeatReports.size() > 0) {
             for (RepeatReport repeatReport : repeatReports) {
@@ -143,8 +153,8 @@ public class TimeTask {
     /**
      * 补空托托盘
      */
-//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void replenishContainer() throws Exception {
+	//@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void replenishContainer()   {
         Map<String, Object> map = MapUtils.put("ceng", 3).put("locationType", 1).put("taskLock", 0).put("locationLock", 0).getMap();
         List<AgvStorageLocation> agvStorageLocations = agvStorageLocationMapper.findByMap(map, AgvStorageLocation.class);
 
@@ -170,8 +180,8 @@ public class TimeTask {
      *
      * @throws Exception
      */
-//	@Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void buildEmptyContainerSupply() throws Exception {
+	//@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void buildEmptyContainerSupply()   {
         try {
             mcsLineService.buildEmptyContainerSupply();
         } catch (Exception e) {
@@ -180,8 +190,8 @@ public class TimeTask {
     }
 
 
-    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void testReport() throws Exception {
+//    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void testReport()   {
         ContainerTask containerTask = new ContainerTask();
 //		containerTask.setContainerCode("800011");
 //        containerTask.setContainerCode("800012");//出库

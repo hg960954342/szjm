@@ -1,26 +1,23 @@
 package com.prolog.eis.service.mcs.impl;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.prolog.eis.util.*;
+import com.prolog.eis.dao.mcs.MCSTaskMapper;
+import com.prolog.eis.dto.eis.mcs.McsSendTaskDto;
+import com.prolog.eis.logs.LogServices;
+import com.prolog.eis.model.mcs.MCSTask;
+import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.eis.util.PrologHttpUtils;
+import com.prolog.eis.util.PrologTaskIdUtils;
+import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.prolog.eis.dao.mcs.MCSTaskMapper;
-import com.prolog.eis.dto.eis.mcs.McsSendTaskDto;
-import com.prolog.eis.model.mcs.MCSTask;
-import com.prolog.eis.service.mcs.McsInterfaceService;
-import com.prolog.framework.utils.MapUtils;
+import java.util.*;
 
 @Service
 public class McsInterfaceServiceImpl implements McsInterfaceService{
@@ -75,6 +72,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			String message = helper.getString("msg");
 			
 			if (!sucssess) {
+				LogServices.log(postUrl,data,message,restJson);
 				//失败记重发表
 				MCSTask mcsTask = new MCSTask();
 				mcsTask.setTaskId(taskId);
@@ -95,7 +93,6 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			
 			return taskId;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			MCSTask mcsTask = new MCSTask();
 			mcsTask.setTaskId(taskId);
 			mcsTask.setBankId(1);
@@ -150,15 +147,16 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		try {
 			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/Request");
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务："+data);
+
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
 			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 			Boolean sucssess = helper.getBoolean("ret");
 			String message = helper.getString("msg");
-
 			if (sucssess) {
 				mcsTaskMapper.deleteById(mcsTask.getId(), MCSTask.class);
 			} else {
+				LogServices.log(postUrl,data,message,restJson);
 				mcsTask.setTaskState(2);
 				mcsTask.setErrMsg(message);
 				mcsTask.setSendCount(mcsTask.getSendCount()+1);
@@ -191,13 +189,14 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			Boolean sucssess = helper.getBoolean("ret");
 			String message = helper.getString("msg");
 			List<Map> data = helper.getObjectList("data", Map.class);
-			
+
 			if (sucssess && !data.isEmpty()) {
 				Map<String, Object> m = data.get(0);
 				// isEmpty：Boolean【是否为空 true为空，false 不为空】
 				boolean isEmpty = (boolean) m.get("empty");
 				return isEmpty;
 			}else {
+				LogServices.log(postUrl,requestData,message,restJson);
 				FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，响应失败："+message);
 				return false;
 			}

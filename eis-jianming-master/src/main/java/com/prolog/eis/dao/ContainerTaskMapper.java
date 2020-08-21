@@ -1,6 +1,7 @@
 package com.prolog.eis.dao;
 
 import com.prolog.eis.dto.eis.CkContainerTaskDto;
+import com.prolog.eis.logs.McsLog;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.framework.dao.mapper.BaseMapper;
 
@@ -59,4 +60,6 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
     		"left join sx_store_location_group g on l.store_location_group_id = g.ID\r\n" + 
     		"where t.source_type = 1 and t.task_state = 1 and t.task_code is not null")
     List<CkContainerTaskDto> getCkTask();
+
+
 }

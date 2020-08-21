@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.prolog.eis.logs.LogServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -98,7 +99,6 @@ public class PrologJmMCSController {
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
-
 			FileLogHelper.WriteLog("mcsRequest", "MCS->EIS返回" + resultStr);
 		}
 	}

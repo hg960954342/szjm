@@ -95,7 +95,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		//验证超重
 		Double weight = 0d;
 		if(!StringUtils.isEmpty(inBoundRequest.getWeight())) {
-			weight = Double.valueOf(inBoundRequest.getWeight());
+			weight = Double.valueOf(inBoundRequest.getWeight())/10.00;
 		}
 
 		if(weight > limitWeight) {

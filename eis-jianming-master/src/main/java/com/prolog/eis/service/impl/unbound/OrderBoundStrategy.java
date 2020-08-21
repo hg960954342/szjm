@@ -24,7 +24,7 @@ import java.util.UUID;
  * 订单出库 未指定拣选站
  */
 @Component(OutBoundType.TASK_TYPE+1+OutBoundType.IF_SfReq+0)
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor=Exception.class,timeout = 1000)
 @Slf4j
 @SuppressWarnings("all")
 public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
@@ -76,8 +76,6 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
                 ordercontainerTask.setOwnerId(detailDataBeand.getOwnerId());
                 ordercontainerTask.setItemId(detailDataBeand.getItemId());
-                String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-                ordercontainerTask.setTaskCode(uuid);
                 ordercontainerTask.setTaskType(1);
                 ordercontainerTask.setSourceType(1);
 
@@ -89,8 +87,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 if (countQty<last) {log.info("库存不够！"); return; }
                //更新任务锁
                 AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
-                agvStorageLocation.setTaskLock(1);
-                agvStorageLocationMapper.update(agvStorageLocation);
+              //  agvStorageLocation.setTaskLock(1);
+              //  agvStorageLocationMapper.update(agvStorageLocation);
 
                 int  LocationType= agvStorageLocation.getLocationType();
                 if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
@@ -98,11 +96,12 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                     listBillNos.addAll(similarityDataEntityListLoad.currentBillNoList);
                     int seqno=0;
                 List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
+
                 for (Map<String, Object> sxStore1 : listSxStore) {
                     if (((BigDecimal) sxStore1.get("qty")).floatValue() <= last && (LocationType == 3 || LocationType == 5)) { //出整托
                         //出整托
                         last = last - ((BigDecimal) sxStore1.get("qty")).floatValue();
-                        if (last == 0) break;
+                        if (last < 0) break;
                         String target = agvStorageLocation.getRcsPositionCode();
                         ordercontainerTask.setTarget(target);
                         ordercontainerTask.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
@@ -110,6 +109,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
+                        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+                        ordercontainerTask.setTaskCode(uuid);
                         containerTaskMapper.save(ordercontainerTask);
                   List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.
                           put("billNo",listBillNos.get(seqno).replace("'",""))
@@ -142,6 +143,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
+                        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+                        ordercontainerTask.setTaskCode(uuid);
                         containerTaskMapper.save(ordercontainerTask);
 
 

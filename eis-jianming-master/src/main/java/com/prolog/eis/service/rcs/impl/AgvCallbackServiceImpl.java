@@ -86,10 +86,6 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 containerTaskService.update(containerTask);
                 //判断托盘到位 区域 agv
                 if (containerTask.getTargetType() == 1) {
-                    //删除容器任务
-                    containerTaskService.delete(containerTask);
-                    //删除容器明细
-                    containerTaskDetailMapper.deleteByMap(MapUtils.put("containerCode",containerTask.getContainerCode()).getMap(), ContainerTaskDetail.class);
 
                     //任务类型 业务出库
                     if (containerTask.getTaskType() == 1) {
@@ -106,6 +102,10 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         targetPosition.setLocationLock(1);
                         agvStorageLocationMapper.update(targetPosition);
                     }
+                    //删除容器任务
+                    containerTaskService.delete(containerTask);
+                    //删除容器明细
+                    containerTaskDetailMapper.deleteByMap(MapUtils.put("containerCode",containerTask.getContainerCode()).getMap(), ContainerTaskDetail.class);
 
 
                 }

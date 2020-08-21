@@ -1,5 +1,6 @@
 package com.prolog.eis.filter;
 
+import com.prolog.eis.logs.LogServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,6 @@ import java.util.Map;
 
 public class UrlFilter implements Filter {
 
-    static Logger logger = LoggerFactory.getLogger(UrlFilter.class);
 
     ServletContext context;
 
@@ -33,8 +33,7 @@ public class UrlFilter implements Filter {
                 String value = ((HttpServletRequest) request).getHeader(key);
                 map.put(key, value);
             }
-            System.out.println(map.toString());
-            path = map.toString();
+             path = map.toString();
         }
         String url = r.getRequestURI();
         RequestWrapper requestWrapper = null;
@@ -44,10 +43,11 @@ public class UrlFilter implements Filter {
         } else {
             return;
         }
-        StringBuffer buffer=new StringBuffer("\n-----------------  url:" + url + " & queryString:" + path);
+
 
         ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse) response);
-
+       String params="";
+       String error="";
         if (request instanceof HttpServletRequest) {
             requestWrapper = new RequestWrapper((HttpServletRequest) request);
             try {
@@ -58,10 +58,10 @@ public class UrlFilter implements Filter {
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
                 }
-                buffer.append("\nparams:" + sb.toString());
+                params=sb.toString();
             } catch (Exception e) {
                 // TODO: handle exception
-                logger.error("p2ps doFilter :", e);
+                error=e.getMessage();
             }
 
         }
@@ -79,9 +79,7 @@ public class UrlFilter implements Filter {
         out.write(result);
         out.flush();
         out.close();
-        buffer.append("\n return data:" + result);
-        buffer.append("\n end url:" + url + " httpstatus:" + ((HttpServletResponse) response).getStatus() + "");
-        logger.info(buffer.toString());
+        LogServices.logEis(url+path,params,error,result);
     }
 
     public void init(FilterConfig filterConfig) throws ServletException {
