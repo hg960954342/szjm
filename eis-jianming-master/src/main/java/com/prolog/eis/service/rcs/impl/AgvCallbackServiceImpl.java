@@ -5,12 +5,14 @@ import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.dao.led.LedShowMapper;
+import com.prolog.eis.dao.wms.InboundTaskMapper;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.led.LedShow;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.ContainerTaskDetail;
+import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.rcs.AgvCallbackService;
@@ -43,7 +45,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
     @Autowired
     private QcInBoundTaskService qcInBoundTaskService;
     @Autowired
-    private PortInfoMapper portInfoMapper;
+    private InboundTaskMapper inboundTaskMapper;
     @Autowired
     private LedShowMapper ledShowMapper;
 
@@ -165,14 +167,18 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                     try {
                         qcInBoundTaskService.rcsCompleteForward(containerTask.getContainerCode(), targetPosition.getId());
                         //更改目标点位状态
+                        if (containerTask.getTaskType() == 4){ //空托入库
+                            //删除容器任务
+                            containerTaskService.delete(containerTask);
+                            //删除空托入库任务
+                            inboundTaskMapper.deleteByMap(MapUtils.put("containerCode",containerTask.getContainerCode()).getMap(), InboundTask.class);
+                        }
                         targetPosition.setTaskLock(0);
                         targetPosition.setLocationLock(0);
                         agvStorageLocationMapper.update(targetPosition);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-
                 }
             }
         }
