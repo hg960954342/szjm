@@ -6,6 +6,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.InBoundTaskHistoryMapper;
 import com.prolog.eis.dao.RepeatReportMapper;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.*;
 import com.prolog.eis.service.login.WmsLoginService;
@@ -179,6 +180,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             FileLogHelper.WriteLog("WMSRequest", resultMsg);
 
             repeatReport.setSendTime(new Date());
+            repeatReport.setMessage(LogServices.spliitString(restJson));
             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
             repeatReportMapper.update(repeatReport);
             if ("0".equals(helper.getString("stateCode"))) {
