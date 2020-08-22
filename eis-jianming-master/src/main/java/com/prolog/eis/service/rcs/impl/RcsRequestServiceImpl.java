@@ -3,6 +3,7 @@ package com.prolog.eis.service.rcs.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.dto.rcs.RcsRequestResultDto;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologHttpUtils;
@@ -64,15 +65,16 @@ public class RcsRequestServiceImpl implements RcsRequestService{
 
 		String data = jsonObject.toString();
 
-		String msg = "EIS->RCS [RCSInterface] 请求JSON：[message]:" + data;
-		FileLogHelper.WriteLog("RCSRequest", msg);
+		//String msg = "EIS->RCS [RCSInterface] 请求JSON：[message]:" + data;
+		//FileLogHelper.WriteLog("RCSRequest", msg);
 
 		String postUrl = String.format("http://%s:%s/cms/services/rest/hikRpcService/genAgvSchedulingTask", rcsIp, rcsPort);
 		String result = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
 
-		String resultMsg = "EIS->RCS [RCSInterface] 返回JSON：[message]:" + result;
-		FileLogHelper.WriteLog("RCSRequest", resultMsg);
-		log.info("RCSRequest"+resultMsg);
+		//String resultMsg = "EIS->RCS [RCSInterface] 返回JSON：[message]:" + result;
+		//FileLogHelper.WriteLog("RCSRequest", resultMsg);
+		//log.info("RCSRequest"+resultMsg);
+		LogServices.logRcs(postUrl,data,"",result);
 		RcsRequestResultDto resultObj = JSONObject.parseObject(result, RcsRequestResultDto.class);
 		return resultObj;
 	}

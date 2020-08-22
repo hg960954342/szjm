@@ -3,6 +3,7 @@ package com.prolog.eis.logs;
 import com.prolog.eis.dao.EisInterfaceLogMapper;
 import com.prolog.eis.dao.LogMapper;
 import com.prolog.eis.dao.LogSysMapper;
+import com.prolog.eis.dao.RcsLogMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,8 @@ public class LogServices {
 
     @Autowired
     LogSysMapper logSysMapper;
+    @Autowired
+    RcsLogMapper rcsLogMapper;
 
     private static LogServices logServices;
 
@@ -29,6 +32,7 @@ public class LogServices {
         logServices.logMapper = this.logMapper;
         logServices.eisInterfaceLogMapper = this.eisInterfaceLogMapper;
         logServices.logSysMapper=this.logSysMapper;
+        logServices.rcsLogMapper=this.rcsLogMapper;
     }
 
     /**
@@ -63,6 +67,8 @@ public class LogServices {
         logServices.logMapper.save(mcsLog);
     }
 
+
+
     /**
      * 记录其他系统-->EIS接口的日志
      * @param url
@@ -78,6 +84,23 @@ public class LogServices {
         eisInterfaceLog.setResult(spliitString(result));
         eisInterfaceLog.setCreateTime(new java.util.Date());
         logServices.eisInterfaceLogMapper.save(eisInterfaceLog);
+    }
+
+    /**
+     * EIS->RCS接口请求日志
+     * @param postUrl
+     * @param params
+     * @param error
+     * @param result
+     */
+    public static void logRcs(String postUrl,String params,String error,String result ){
+        RcsLog rcsLog=new RcsLog();
+        rcsLog.setError(spliitString(error));
+        rcsLog.setInterfaceAddress(postUrl);
+        rcsLog.setResult(spliitString(result));
+        rcsLog.setParams(spliitString(params));
+        rcsLog.setCreateTime(new java.util.Date());
+        logServices.rcsLogMapper.save(rcsLog);
     }
 
     /**
@@ -98,6 +121,7 @@ public class LogServices {
         sysLog.setCreateTime(new java.util.Date());
         logServices.logSysMapper.save(sysLog);
     }
+
 
     /**
      * 清空日志
