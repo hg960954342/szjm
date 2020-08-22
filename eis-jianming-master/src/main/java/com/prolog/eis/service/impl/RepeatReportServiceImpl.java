@@ -30,4 +30,9 @@ public class RepeatReportServiceImpl implements RepeatReportService {
     public void update(RepeatReport repeatReport) {
         repeatReportMapper.update(repeatReport);
     }
+
+    @Override
+    public void delete(RepeatReport repeatReport) {
+        repeatReportMapper.deleteById(repeatReport.getId(),RepeatReport.class);
+    }
 }

@@ -22,10 +22,6 @@ public class RepeatReport {
     @ApiModelProperty("回告数据")
     private String reportData;
 
-    @Column("report_type")
-    @ApiModelProperty("回告类型")
-    private int reportType;
-
     @Column("report_url")
     @ApiModelProperty("回告地址")
     private String reportUrl;
@@ -50,9 +46,6 @@ public class RepeatReport {
     @ApiModelProperty("发送时间")
     private Date sendTime;
 
-    @Column("end_time")
-    @ApiModelProperty("结束")
-    private Date endTime;
 
     public int getId() {
         return id;
@@ -69,15 +62,6 @@ public class RepeatReport {
     public void setReportData(String reportData) {
         this.reportData = reportData;
     }
-
-    public int getReportType() {
-        return reportType;
-    }
-
-    public void setReportType(int reportType) {
-        this.reportType = reportType;
-    }
-
 
     public String getReportUrl() {
         return reportUrl;
@@ -127,27 +111,17 @@ public class RepeatReport {
         this.sendTime = sendTime;
     }
 
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
     @Override
     public String toString() {
         return "RepeatReport{" +
                 "id=" + id +
                 ", reportData='" + reportData + '\'' +
-                ", reportType=" + reportType +
                 ", reportUrl='" + reportUrl + '\'' +
                 ", message='" + message + '\'' +
                 ", reportCount=" + reportCount +
                 ", reportState=" + reportState +
                 ", createTime=" + createTime +
                 ", sendTime=" + sendTime +
-                ", endTime=" + endTime +
                 '}';
     }
 }
