@@ -30,10 +30,6 @@ public class RepeatReport {
     @ApiModelProperty("返回信息")
     private String message;
 
-    @Column("report_count")
-    @ApiModelProperty("回告次数")
-    private int reportCount;
-
     @Column("report_state")
     @ApiModelProperty("回告状态")
     private int reportState;
@@ -79,14 +75,6 @@ public class RepeatReport {
         this.message = message;
     }
 
-    public int getReportCount() {
-        return reportCount;
-    }
-
-    public void setReportCount(int reportCount) {
-        this.reportCount = reportCount;
-    }
-
     public int getReportState() {
         return reportState;
     }
@@ -118,7 +106,6 @@ public class RepeatReport {
                 ", reportData='" + reportData + '\'' +
                 ", reportUrl='" + reportUrl + '\'' +
                 ", message='" + message + '\'' +
-                ", reportCount=" + reportCount +
                 ", reportState=" + reportState +
                 ", createTime=" + createTime +
                 ", sendTime=" + sendTime +

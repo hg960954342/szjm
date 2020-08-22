@@ -38,13 +38,10 @@ DROP TABLE IF EXISTS `repeat_report`;
 CREATE TABLE `repeat_report` (
   `id` int NOT NULL AUTO_INCREMENT,
   `report_data` varchar(255) NOT NULL COMMENT '回告数据 json格式',
-  `report_type` int NOT NULL COMMENT '回告类型 1订单出库  2移库出库  3盘点出库 4空托出库 5订单入库',
   `report_url` varchar(255) NOT NULL COMMENT '回告地址',
-  `message` varchar(255) NOT NULL COMMENT '返回信息',
-  `report_count` int NOT NULL COMMENT '回告次数',
-  `report_state` int DEFAULT 0 COMMENT '回告状态 0 未回告 1已回告 2取消回告',
+  `message` varchar(1000) DEFAULT NULL COMMENT '返回信息',
+  `report_state` int DEFAULT 0 COMMENT '回告状态 0 未回告 1取消回告',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `send_time` datetime DEFAULT NULL COMMENT '发送时间',
-  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='回告重发表';
