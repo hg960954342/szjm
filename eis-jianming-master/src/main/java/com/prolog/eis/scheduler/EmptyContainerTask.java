@@ -32,14 +32,15 @@ public class EmptyContainerTask {
      */
     //@Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildEmptyContainerSupply()   {
+        long start=System.currentTimeMillis();
         try {
-            long start=System.currentTimeMillis();
             mcsLineService.buildEmptyContainerSupply();
-            long end=System.currentTimeMillis();
-            FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildEmptyContainerSupply");
+
         } catch (Exception e) {
             FileLogHelper.WriteLog("buildEmptyContainerSupplyError", e.toString());
         }
+        long end=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildEmptyContainerSupply");
     }
 
 
@@ -48,6 +49,7 @@ public class EmptyContainerTask {
      */
     //@Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void replenishContainer()   {
+        long start=System.currentTimeMillis();
         Map<String, Object> map = MapUtils.put("ceng", 3).put("locationType", 1).put("taskLock", 0).put("locationLock", 0).getMap();
         List<AgvStorageLocation> agvStorageLocations = agvStorageLocationMapper.findByMap(map, AgvStorageLocation.class);
 
@@ -55,7 +57,7 @@ public class EmptyContainerTask {
         if (agvStorageLocations != null && agvStorageLocations.size() > 0) {
             for (AgvStorageLocation agvStorageLocation : agvStorageLocations) {
                 //判断是否有空托盘
-                long start=System.currentTimeMillis();
+
                 List<ContainerTask> containerTasks = containerTaskService.selectByTaskCode("6");
                 if (containerTasks != null && containerTasks.size() > 0) {
                     //生成容器任务container_task 托盘号uuid,task_type 待定，source....
@@ -63,12 +65,14 @@ public class EmptyContainerTask {
                     containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
                     containerTask.setTargetType(1);
                     containerTaskService.update(containerTask);
-                    long end=System.currentTimeMillis();
-                    FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"replenishContainer");
+
+
                 }
             }
 
         }
+        long end=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"replenishContainer");
     }
 
 

@@ -7,10 +7,15 @@ import com.prolog.eis.service.EisSendRcsTaskService;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.OutBoundTaskService;
 import com.prolog.eis.service.sxk.SxStoreCkService;
+import com.prolog.eis.util.FileLogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -31,12 +36,12 @@ public class TimeTask {
     @Autowired
     private SxStoreCkService sxStoreCkService;
 
-   /* @Bean
+    @Bean
     public TaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         taskScheduler.setPoolSize(50);
         return taskScheduler;
-    }*/
+    }
 
     /**
      * 定时处理入库任务
@@ -45,7 +50,10 @@ public class TimeTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildCkTask()   {
+        long start=System.currentTimeMillis();
         inBoundTaskService.inboundTask();
+        long end=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildCkTask");
     }
 
 
@@ -56,12 +64,15 @@ public class TimeTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildUnTask()   {
+        long start=System.currentTimeMillis();
         outBoundTaskService.unboundTask();
-
+        long end=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildUnTask");
     }
 
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildAndSendSxCkTask()  {
+        long start=System.currentTimeMillis();
 
         try {
             synchronized ("kucun".intern()) {
@@ -71,6 +82,8 @@ public class TimeTask {
         } catch (Exception e) {
              LogServices.logSys("生成四向库出库任务错误"+e.getMessage());
         }
+        long end=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildAndSendSxCkTask");
     }
 
 
@@ -81,10 +94,13 @@ public class TimeTask {
     //定时给agv小车下分任务
 	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
     public void sendTask2Rcs()  {
+        long start=System.currentTimeMillis();
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
         if (!containerTasks.isEmpty() && containerTasks.size() > 0) {
             eisSendRcsTaskService.sendTask(containerTasks);  //异步任务
         }
+        long end=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"sendTask2Rcs");
     }
 
 

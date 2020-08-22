@@ -15,9 +15,9 @@ CREATE TABLE `eis_log_interface` (
   `id` int NOT NULL AUTO_INCREMENT,
   `url` varchar(255)  NOT NULL COMMENT '接口地址',
   `params` varchar(5000) DEFAULT NULL,
-  `error` varchar(5000) DEFAULT NULL COMMENT '错误消息',
   `result` varchar(5000)  DEFAULT NULL COMMENT '返回结果',
   `create_time` datetime DEFAULT NULL,
+  `error` varchar(5000) DEFAULT NULL COMMENT '错误消息',
   PRIMARY KEY (`id`)
 )COMMENT='EIS接口被请求表';
 
@@ -26,8 +26,19 @@ CREATE TABLE `mcs_log` (
   `id` int NOT NULL AUTO_INCREMENT,
   `interface_address` varchar(255)  NOT NULL COMMENT '接口地址',
   `params` varchar(5000) DEFAULT NULL,
-  `error` varchar(5000) DEFAULT NULL COMMENT '错误消息',
   `result` varchar(5000)  DEFAULT NULL COMMENT '返回结果',
   `create_time` datetime DEFAULT NULL,
+  `error` varchar(5000) DEFAULT NULL COMMENT '错误消息',
   PRIMARY KEY (`id`)
 )COMMENT='请求MCS接口日志表';
+
+DROP TABLE IF EXISTS `gcs_log`;
+CREATE TABLE `gcs_log` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `interface_address` varchar(255)  NOT NULL COMMENT '接口地址',
+  `params` varchar(5000) DEFAULT NULL,
+  `result` varchar(5000)  DEFAULT NULL COMMENT '返回结果',
+  `create_time` datetime DEFAULT NULL,
+  `error` varchar(5000) DEFAULT NULL COMMENT '错误消息',
+  PRIMARY KEY (`id`)
+)COMMENT='请求GCS接口日志表';
