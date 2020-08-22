@@ -1,21 +1,12 @@
 package com.prolog.eis.service.store.impl;
 
-import java.util.Date;
-import java.util.List;
-
 import com.prolog.eis.controller.led.PrologLedController;
-import com.prolog.eis.dao.led.LedShowMapper;
-import com.prolog.eis.logs.LogServices;
-import com.prolog.eis.model.led.LedShow;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.dao.DeviceJunctionPortMapper;
 import com.prolog.eis.dao.base.SysParameMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
+import com.prolog.eis.dao.led.LedShowMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
@@ -24,9 +15,11 @@ import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.dto.eis.InStoreValidateDto;
 import com.prolog.eis.dto.eis.mcs.InBoundRequest;
 import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.base.SysParame;
 import com.prolog.eis.model.eis.DeviceJunctionPort;
 import com.prolog.eis.model.eis.PortInfo;
+import com.prolog.eis.model.led.LedShow;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
@@ -45,6 +38,13 @@ import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.eis.util.detetionlayer.DetetionLayerHelper;
 import com.prolog.framework.utils.MapUtils;
 import com.prolog.framework.utils.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
@@ -456,7 +456,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class,propagation=Propagation.SUPPORTS)
 	public void taskReturn(String taskId,int status,int type,String containerNo,String rgvId,String address) throws Exception{
 
 		if("-1".equals(address) || "1".equals(address)) {
@@ -522,7 +522,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			//检查有无入库库存
 			List<InboundTask> inboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), InboundTask.class);
 			if(inboundTasks.isEmpty()) {
-				FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("托盘%s无入库任务", containerCode));
+				LogServices.logSys(String.format("托盘%s无入库任务", containerCode));
 
 				return;
 			}
@@ -532,7 +532,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			//调用回告入库的方法
 			eisCallbackService.inBoundReport(containerCode);
 		}else {
-			FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("点位%s不是托盘库货位", address));
+			LogServices.logSys(String.format("点位%s不是托盘库货位", address));
+
 
 			return;
 		}

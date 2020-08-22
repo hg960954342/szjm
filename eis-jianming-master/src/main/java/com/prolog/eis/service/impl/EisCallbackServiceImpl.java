@@ -180,13 +180,12 @@ public class EisCallbackServiceImpl implements EisCallbackService {
 
             repeatReport.setSendTime(new Date());
             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
-
+            repeatReportMapper.update(repeatReport);
             if ("0".equals(helper.getString("stateCode"))) {
                 //回告成功 删除
                repeatReportMapper.deleteById(repeatReport.getId(),RepeatReport.class);
             }
 
-            repeatReportMapper.update(repeatReport);
         } catch (IOException e) {
             String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败：" + e.getMessage();
             FileLogHelper.WriteLog("WMSRequestErr", resultMsg);

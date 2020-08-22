@@ -3,7 +3,7 @@ package com.prolog.eis.logs;
 import com.prolog.eis.dao.EisInterfaceLogMapper;
 import com.prolog.eis.dao.LogMapper;
 import com.prolog.eis.dao.LogSysMapper;
-import com.prolog.framework.core.restriction.Criteria;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +32,7 @@ public class LogServices {
     }
 
     /**
-     * 记录MCS接口日志
+     * 记录EIS->MCS接口日志
      * @param postUrl
      * @param params
      * @param error
@@ -40,22 +40,22 @@ public class LogServices {
      */
     public static void log(String postUrl,String params,String error,String result ){
           McsLog mcsLog=new McsLog();
-           mcsLog.setError(error);
+           mcsLog.setError(spliitString(error));
            mcsLog.setInterfaceAddress(postUrl);
-           mcsLog.setResult(result);
-           mcsLog.setParams(params);
+           mcsLog.setResult(spliitString(result));
+           mcsLog.setParams(spliitString(params));
            mcsLog.setCreateTime(new java.util.Date());
            logServices.logMapper.save(mcsLog);
     }
 
     /**
-     * Eis调用MCS接口
+     * 记录EIS->MCS接口日志
      * @param postUrl
      * @param error
      */
     public static void log(String postUrl,String error ){
         McsLog mcsLog=new McsLog();
-        mcsLog.setError(error);
+        mcsLog.setError(spliitString(error));
         mcsLog.setInterfaceAddress(postUrl);
         mcsLog.setResult("");
         mcsLog.setParams("");
@@ -63,12 +63,19 @@ public class LogServices {
         logServices.logMapper.save(mcsLog);
     }
 
+    /**
+     * 记录其他系统-->EIS接口的日志
+     * @param url
+     * @param params
+     * @param error
+     * @param result
+     */
     public static void logEis(String url,String params,String error,String result ){
         EisInterfaceLog eisInterfaceLog=new EisInterfaceLog();
         eisInterfaceLog.setUrl(url);
-        eisInterfaceLog.setError(error);
-        eisInterfaceLog.setParams(params);
-        eisInterfaceLog.setResult(result);
+        eisInterfaceLog.setError(spliitString(error));
+        eisInterfaceLog.setParams(spliitString(params));
+        eisInterfaceLog.setResult(spliitString(result));
         eisInterfaceLog.setCreateTime(new java.util.Date());
         logServices.eisInterfaceLogMapper.save(eisInterfaceLog);
     }
@@ -81,13 +88,13 @@ public class LogServices {
         SysLog sysLog=new SysLog();
         String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
         sysLog.setClassName(className);
-        String classSimpleName = Thread.currentThread().getStackTrace()[2].getClass().getSimpleName();
+        String classSimpleName = StringUtils.substring(className,StringUtils.lastIndexOf(className,".")+1);
         sysLog.setClassSimpleName(classSimpleName);
         String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();//调用的方法名
         sysLog.setClassMethod(methodName);
         int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
         sysLog.setLineNumber(lineNumber+"");
-        sysLog.setError(error);
+        sysLog.setError(spliitString(error));
         sysLog.setCreateTime(new java.util.Date());
         logServices.logSysMapper.save(sysLog);
     }
@@ -100,6 +107,18 @@ public class LogServices {
         logServices.logMapper.deleteAll();
         logServices.logSysMapper.deleteAll();
         logServices.eisInterfaceLogMapper.deleteAll();
+    }
+
+    /**
+     * 截取错误日志防止日志超长 插入不进
+     * @param str
+     * @return
+     */
+    public static String spliitString(String str) {
+        if(!str.isEmpty()&&str.length()>4500){
+             return str.substring(0,4500);
+        }
+        return str;
     }
 
 }

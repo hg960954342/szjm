@@ -2,16 +2,16 @@ package com.prolog.eis.service.impl;
 
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dto.rcs.RcsRequestResultDto;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
-import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.EisSendRcsTaskService;
-import com.prolog.eis.service.RepeatReportService;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,6 +30,7 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
     @Autowired
     private AgvStorageLocationMapper agvStorageLocationMapper;
 
+    @Async
     @Override
     public void sendTask(List<ContainerTask> containerTasks) {
         for (ContainerTask containerTask : containerTasks) {
@@ -89,13 +90,14 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
                     } else {
                         //agv接收失败
                         String resultMsg = "EIS->RCS [RCSInterface] 返回JSON：[message]:" + restJson;
-                        FileLogHelper.WriteLog("RCSRequestErr", resultMsg);
+                        LogServices.logSys(resultMsg);
 
                     }
                 } catch (Exception e) {
                     //任务下发失败
                     String resultMsg = "EIS->RCS [RCSInterface] 任务下发 rcs 失败：请求rcs失败";
-                    FileLogHelper.WriteLog("RCSRequestErr", resultMsg);
+                    //FileLogHelper.WriteLog("RCSRequestErr", resultMsg);
+                    LogServices.logSys(resultMsg+e.getMessage());
                 }
             }
         }

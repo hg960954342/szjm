@@ -3,8 +3,6 @@ package com.prolog.eis.dao;
 import com.prolog.eis.model.wms.InboundTask;
 import org.apache.ibatis.annotations.Insert;
 
-import java.sql.Timestamp;
-
 public interface InboundDataMapper {
 
     @Insert("insert into inbound_task " +

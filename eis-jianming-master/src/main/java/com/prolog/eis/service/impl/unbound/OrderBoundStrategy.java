@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -67,7 +66,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
         String pickCode=lists.get(0).getDeviceNo();
 
-        List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList(this.getClass());
+        List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList();
 
 
         for (DetailDataBean detailDataBeand : list) {
@@ -83,7 +82,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 ordercontainerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber()); //Agv目标区域
                 float last = detailDataBeand.getLast();           //获取需要出库的总量
 
-                float countQty=qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
+                Float countQty=qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
+                if(countQty==null) countQty=0f;
                 if (countQty<last) {log.info("库存不够！"); return; }
                //更新任务锁
                 AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
@@ -101,7 +101,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                     if (((BigDecimal) sxStore1.get("qty")).floatValue() <= last && (LocationType == 3 || LocationType == 5)) { //出整托
                         //出整托
                         last = last - ((BigDecimal) sxStore1.get("qty")).floatValue();
-                        if (last < 0) break;
+
                         String target = agvStorageLocation.getRcsPositionCode();
                         ordercontainerTask.setTarget(target);
                         ordercontainerTask.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
@@ -133,11 +133,13 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                       }
 
                         outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.currentBillNoList));
+                        if (last <= 0) break;
                     }
                     if (((BigDecimal) sxStore1.get("qty")).floatValue() > last && (LocationType == 4 || LocationType == 5) ) { //非整托
                         //非整托
-                        last = last-((BigDecimal) sxStore1.get("qty")).floatValue() ;
-                        if(last<0) break;
+                        last = ((BigDecimal) sxStore1.get("qty")).floatValue()-last ;
+                        String target = agvStorageLocation.getRcsPositionCode();
+                        ordercontainerTask.setTarget(target);
                         ordercontainerTask.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
                         String sourceLocation = PrologCoordinateUtils.splicingStr((Integer) sxStore1.get("x"), (Integer) sxStore1.get("y"), (Integer) sxStore1.get("layer"));
                         ordercontainerTask.setSource(sourceLocation);
@@ -170,7 +172,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
                         outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.currentBillNoList));
 
-
+                       break;
                     }
 
                 }

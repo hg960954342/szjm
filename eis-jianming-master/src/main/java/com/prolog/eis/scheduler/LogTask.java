@@ -1,5 +1,6 @@
-package com.prolog.eis.logs;
+package com.prolog.eis.scheduler;
 
+import com.prolog.eis.logs.LogServices;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

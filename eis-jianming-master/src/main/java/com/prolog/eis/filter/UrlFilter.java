@@ -1,20 +1,20 @@
 package com.prolog.eis.filter;
 
 import com.prolog.eis.logs.LogServices;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
 
-public class UrlFilter implements Filter {
+
+public class UrlFilter extends OncePerRequestFilter {
+
 
 
     ServletContext context;
@@ -22,69 +22,51 @@ public class UrlFilter implements Filter {
     public void destroy() {
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filter) throws IOException, ServletException {
-        HttpServletRequest r = (HttpServletRequest) request;
-        String path = r.getQueryString();
-        if (path == null) {
-            Map<String, String> map = new HashMap<String, String>();
-            Enumeration headerNames = ((HttpServletRequest) request).getHeaderNames();
-            while (headerNames.hasMoreElements()) {//循环遍历Header中的参数，把遍历出来的参数放入Map中
-                String key = (String) headerNames.nextElement();
-                String value = ((HttpServletRequest) request).getHeader(key);
-                map.put(key, value);
-            }
-             path = map.toString();
-        }
-        String url = r.getRequestURI();
-        RequestWrapper requestWrapper = null;
-        String repalceUrl = url.replaceAll("/", "");
-        if (null != repalceUrl) {
-            repalceUrl = repalceUrl.trim();
-        } else {
-            return;
-        }
 
 
-        ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse) response);
-       String params="";
-       String error="";
-        if (request instanceof HttpServletRequest) {
-            requestWrapper = new RequestWrapper((HttpServletRequest) request);
-            try {
-               // Map map = request.getParameterMap();
-                BufferedReader bufferedReader = requestWrapper.getReader();
-                String line;
-                StringBuilder sb = new StringBuilder();
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-                params=sb.toString();
-            } catch (Exception e) {
-                // TODO: handle exception
-                error=e.getMessage();
-            }
 
-        }
-        if (null == requestWrapper) {
-            filter.doFilter(request, response);
-        } else {
-            filter.doFilter(requestWrapper, responseWrapper);
-        }
-
-        String result = new String(responseWrapper.getResponseData());
-
-        response.setContentLength(-1);//解决可能在运行的过程中页面只输出一部分
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.write(result);
-        out.flush();
-        out.close();
-        LogServices.logEis(url+path,params,error,result);
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {        request = new RequestWrapper(request);
+        response = new ResponseWrapper(response);
+        filterChain.doFilter(request, response);
+        String requestparmas=printRequestLog(request);
+        String result=printResponseLog((ResponseWrapper) response);
+        LogServices.logEis(request.getRequestURI().toString(),requestparmas,"",result);
     }
 
-    public void init(FilterConfig filterConfig) throws ServletException {
-        context = filterConfig.getServletContext();
+    private String printRequestLog(final HttpServletRequest request) {
+        StringBuilder msg = new StringBuilder();
+        if (request instanceof RequestWrapper && !isMultipart(request) && !isBinaryContent(request)) {
+            RequestWrapper requestWrapper = (RequestWrapper) request;
+            msg.append(requestWrapper.getRequestBodyString(request));
+        }
+
+        return msg.toString();
     }
 
+    private boolean isBinaryContent(final HttpServletRequest request) {
+        if (request.getContentType() == null) {
+            return false;
+        }
+        return request.getContentType().startsWith("image")
+                || request.getContentType().startsWith("video")
+                || request.getContentType().startsWith("audio");
+    }
+
+    private boolean isMultipart(final HttpServletRequest request) {
+        return request.getContentType() != null
+                && request.getContentType().startsWith("multipart/form-data");
+    }
+
+    private String printResponseLog(final ResponseWrapper response) {
+        StringBuilder msg = new StringBuilder();
+        try {
+            msg.append(new String(response.toByteArray(), response.getCharacterEncoding()));
+        } catch (UnsupportedEncodingException e) {
+            LogServices.logSys(e.getMessage());
+        }
+
+        return msg.toString();
+    }
 }
 

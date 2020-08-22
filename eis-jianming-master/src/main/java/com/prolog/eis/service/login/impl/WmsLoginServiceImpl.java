@@ -5,7 +5,6 @@ import com.prolog.eis.service.login.WmsLoginService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.HttpUtils;
 import com.prolog.eis.util.PrologApiJsonHelper;
-import com.prolog.eis.util.PrologMd5Util;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

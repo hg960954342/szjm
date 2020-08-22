@@ -1,23 +1,20 @@
 package com.prolog.eis.controller;
 
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletResponse;
-
-import com.prolog.eis.service.store.QcInBoundTaskService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.prolog.eis.dao.led.LedPortParamMapper;
 import com.prolog.eis.dto.eis.led.LedPortParamDto;
+import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.led.LedUtil;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 
 @RestController
 @Api(tags = "test")

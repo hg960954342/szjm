@@ -1,31 +1,27 @@
 package com.prolog.eis.controller;
 
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.prolog.eis.dto.eis.mcs.InBoundRequest;
+import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
+import com.prolog.eis.dto.eis.mcs.TaskReturnInBoundRequestResponse;
 import com.prolog.eis.logs.LogServices;
+import com.prolog.eis.service.MCSLineService;
+import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.service.store.QcInBoundTaskService;
+import com.prolog.eis.util.PrologApiJsonHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prolog.eis.dto.eis.mcs.InBoundRequest;
-import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
-import com.prolog.eis.dto.eis.mcs.TaskReturnInBoundRequestResponse;
-import com.prolog.eis.service.MCSLineService;
-import com.prolog.eis.service.mcs.McsInterfaceService;
-import com.prolog.eis.service.store.QcInBoundTaskService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.PrologApiJsonHelper;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @Api(tags = "MCS接口")
@@ -48,8 +44,6 @@ public class PrologJmMCSController {
 		OutputStream out = response.getOutputStream();
 		PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
 		try {
-			FileLogHelper.WriteLog("McsInterface", "MCS->EIS请求" + json);
-
 			List<InBoundRequest> inBoundRequests = helper.getObjectList("carryList", InBoundRequest.class);
 			//根据原点，去除重复集合
 			List<InBoundRequest> newInBoundRequests = dictinctInBoundRequest(inBoundRequests);
@@ -70,6 +64,7 @@ public class PrologJmMCSController {
 						}
 					}
 					catch (Exception e) {
+						LogServices.logSys("MCS->EIS返回" + e.getMessage());
 						// TODO: handle exception
 						errorMsg = errorMsg + " " + e.getMessage();
 					}
@@ -80,9 +75,6 @@ public class PrologJmMCSController {
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
-
-			FileLogHelper.WriteLog("McsInterface", "MCS->EIS返回" + resultStr);
-
 			//int type, String containerNo, String address, String target, String weight, String priority,int state
 			//给mcs发指令
 			for (McsRequestTaskDto mcsRequestTaskDto : sendList) {
@@ -94,12 +86,11 @@ public class PrologJmMCSController {
 			}
 		}catch (Exception e) {
 			// TODO: handle exception
-			FileLogHelper.WriteLog("McsInterfaceError", "入库异常，错误信息：\n" + e.toString());
-			String resultStr = getJmMcsValue(false,e.toString(),"100",new ArrayList<TaskReturnInBoundRequestResponse>());
+ 			String resultStr = getJmMcsValue(false,e.toString(),"100",new ArrayList<TaskReturnInBoundRequestResponse>());
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
-			FileLogHelper.WriteLog("mcsRequest", "MCS->EIS返回" + resultStr);
+ 			LogServices.logSys("MCS->EIS返回" + resultStr);
 		}
 	}
 	
@@ -131,7 +122,6 @@ public class PrologJmMCSController {
 		PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
 
 		try {
-			FileLogHelper.WriteLog("McsInterfaceCallback", "MCS->EIS传输" + json);
 
 			//下发任务号
 			String taskId = helper.getString("taskId");
@@ -154,28 +144,24 @@ public class PrologJmMCSController {
 				out.flush();
 				out.close();
 
-				FileLogHelper.WriteLog("McsInterfaceCallback", "EIS->MCS返回" + resultStr);
-			}catch (Exception e) {
+ 			}catch (Exception e) {
 				// TODO: handle exception
 				
-				FileLogHelper.WriteLog("McsInterfaceCallbackError", "mcs返回异常" + e.toString());
-				String resultStr = getJmMcsValue(false,e.toString(),"100",new ArrayList<TaskReturnInBoundRequestResponse>());
+ 				String resultStr = getJmMcsValue(false,e.toString(),"100",new ArrayList<TaskReturnInBoundRequestResponse>());
 				out.write(resultStr.getBytes("UTF-8"));
 				out.flush();
 				out.close();
 
-				FileLogHelper.WriteLog("McsInterfaceCallback", "EIS->MCS返回" + resultStr);
+ 				LogServices.logSys("EIS->MCS返回" + resultStr);
 			}
 		} catch (Exception e) {
 
-			FileLogHelper.WriteLog("McsInterfaceCallbackError", "mcs返回异常" + e.toString());
 			String resultStr = getJmMcsValue(false,e.toString(),"100",new ArrayList<TaskReturnInBoundRequestResponse>());
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
-
-			FileLogHelper.WriteLog("McsInterfaceCallback", "EIS->MCS返回" + resultStr);
-		}
+			LogServices.logSys("EIS->MCS返回" + resultStr);
+ 		}
 	}
 	
 	@ApiOperation(value = "WCS-EIS拆盘机为空请求出库", notes = "WCS-EIS拆盘机为空请求出库")
@@ -186,7 +172,6 @@ public class PrologJmMCSController {
 		OutputStream out = response.getOutputStream();
 		try {
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
-			FileLogHelper.WriteLog("mcssplitOutBound", "MCS->EIS请求" + json);
 
 			String deviceNo = helper.getString("deviceNo");
 
@@ -197,11 +182,9 @@ public class PrologJmMCSController {
 			out.flush();
 			out.close();
 			
-			FileLogHelper.WriteLog("mcssplitOutBound", "MCS->EIS请求返回" + resultStr);
-		}catch (Exception e) {
+ 		}catch (Exception e) {
 			// TODO: handle exception
-			FileLogHelper.WriteLog("mcssplitOutBoundError", "MCS->EIS返回" + e.toString());
-
+ 			LogServices.logSys(e.getMessage());
 			String resultStr = this.getJmMcsValue(true,"执行失败" + e.getMessage(),"100",null);
 			
 			out.write(resultStr.getBytes("UTF-8"));
@@ -220,7 +203,6 @@ public class PrologJmMCSController {
 		try {
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
 
-			FileLogHelper.WriteLog("mcsfoldInBound", "MCS->EIS请求" + json);
 
 			String deviceNo = helper.getString("deviceNo");
 			String containerNo = helper.getString("containerNo");
@@ -234,17 +216,17 @@ public class PrologJmMCSController {
 			out.flush();
 			out.close();
 			
-			FileLogHelper.WriteLog("mcsfoldInBound", "MCS->EIS" + resultStr);
-		}
+ 		}
 		catch (Exception e) {
 			// TODO: handle exception
+			LogServices.logSys( e.getMessage());
 			String resultStr = this.getJmMcsValue(true,"执行失败:" + e.getMessage(),"200",null);
 
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
 			
-			FileLogHelper.WriteLog("mcsfoldInBoundError", "MCS->EIS返回" + e.getMessage());
+
 		}
 	}
 	

@@ -26,7 +26,7 @@ public class RepeatReportServiceImpl implements RepeatReportService {
         return repeatReportMapper.findByMap(map,RepeatReport.class);
     }
 
-    @Override
+    /*@Override
     public void update(RepeatReport repeatReport) {
         repeatReportMapper.update(repeatReport);
     }
@@ -34,5 +34,5 @@ public class RepeatReportServiceImpl implements RepeatReportService {
     @Override
     public void delete(RepeatReport repeatReport) {
         repeatReportMapper.deleteById(repeatReport.getId(),RepeatReport.class);
-    }
+    }*/
 }

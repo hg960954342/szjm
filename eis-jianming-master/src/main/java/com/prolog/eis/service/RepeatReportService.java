@@ -14,8 +14,8 @@ public interface RepeatReportService {
 
 
     List<RepeatReport> findByState(int state);
-
+/*
     void update(RepeatReport repeatReport);
 
-    void delete(RepeatReport repeatReport);
+    void delete(RepeatReport repeatReport);*/
 }
