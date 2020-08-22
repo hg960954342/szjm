@@ -16,9 +16,10 @@ public class LogTask {
     @Scheduled(cron = "0 30 12 * * ?")
     public void clearLog(){
         long start = System.currentTimeMillis() /1000;
+        FileLogHelper.WriteLog("timeTask","LogTask类 clearLog方法 开始时间:"+start);
         LogServices.deteleteLog();
         long end = System.currentTimeMillis()/1000;
-        FileLogHelper.WriteLog("timeTask","logTask:"+(end-start));
+        FileLogHelper.WriteLog("timeTask","LogTask类 clearLog方法 结束时间:"+end);
 
     }
 }

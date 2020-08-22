@@ -27,7 +27,7 @@ spring:
     url: jdbc:mysql://10.5.90.227:3306/jianmin
     username: root
     password: eis888
-    #password: 123456 
+    #password: 123456
     driver-class-name: com.mysql.jdbc.Driver
     #初始化大小
     initialSize: 0

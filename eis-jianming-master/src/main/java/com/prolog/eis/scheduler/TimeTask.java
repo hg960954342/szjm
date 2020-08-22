@@ -51,9 +51,10 @@ public class TimeTask {
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildCkTask()   {
         long start=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask","TimeTask类 buildCkTask方法 开始时间:"+(start / 1000));
         inBoundTaskService.inboundTask();
         long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildCkTask");
+        FileLogHelper.WriteLog("timeTask","TimeTask类 buildCkTask方法 结束时间:"+(end/1000));
     }
 
 
@@ -65,14 +66,18 @@ public class TimeTask {
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildUnTask()   {
         long start=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask","TimeTask类 buildUnTask方法 结束时间:"+(start/1000));
+
         outBoundTaskService.unboundTask();
         long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildUnTask");
+        FileLogHelper.WriteLog("timeTask","TimeTask类 buildUnTask方法 结束时间:"+(end/1000));
+
     }
 
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildAndSendSxCkTask()  {
         long start=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask","TimeTask类 buildAndSendSxCkTask方法 结束时间:"+(start/1000));
 
         try {
             synchronized ("kucun".intern()) {
@@ -83,7 +88,8 @@ public class TimeTask {
              LogServices.logSys("生成四向库出库任务错误"+e.getMessage());
         }
         long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildAndSendSxCkTask");
+        FileLogHelper.WriteLog("timeTask","TimeTask类 buildAndSendSxCkTask方法 结束时间:"+(end/1000));
+
     }
 
 
@@ -95,12 +101,15 @@ public class TimeTask {
 	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
     public void sendTask2Rcs()  {
         long start=System.currentTimeMillis();
+        FileLogHelper.WriteLog("timeTask","TimeTask类 sendTask2Rcs方法 结束时间:"+(start/1000));
+
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
         if (!containerTasks.isEmpty() && containerTasks.size() > 0) {
             eisSendRcsTaskService.sendTask(containerTasks);  //异步任务
         }
         long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"sendTask2Rcs");
+        FileLogHelper.WriteLog("timeTask","TimeTask类 sendTask2Rcs方法 结束时间:"+(end/1000));
+
     }
 
 

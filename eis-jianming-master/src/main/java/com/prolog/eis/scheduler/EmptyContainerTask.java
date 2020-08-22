@@ -41,6 +41,7 @@ public class EmptyContainerTask {
         }
         long end=System.currentTimeMillis();
         FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildEmptyContainerSupply");
+        FileLogHelper.WriteLog("timeTask","LogTask类 clearLog方法 开始时间:"+start);
     }
 
 

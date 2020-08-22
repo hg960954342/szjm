@@ -37,6 +37,7 @@ public class RecallBackTask {
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void resendReport()   {
         long start = System.currentTimeMillis() /1000;
+        FileLogHelper.WriteLog("timeTask","RecallBackTask类 resendReport方法 开始时间:"+start);
 
         List<RepeatReport> repeatReports = repeatReportService.findByState(0);
         if (repeatReports != null && repeatReports.size() > 0) {
@@ -46,7 +47,7 @@ public class RecallBackTask {
         }
 
         long end = System.currentTimeMillis()/1000;
-        FileLogHelper.WriteLog("timeTask","recallBackTask:"+(end-start));
+        FileLogHelper.WriteLog("timeTask","RecallBackTask类 resendReport方法 结束时间:"+end);
     }
 
 
@@ -55,6 +56,8 @@ public class RecallBackTask {
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void resendMcsTask() {
         long start = System.currentTimeMillis() /1000;
+        FileLogHelper.WriteLog("timeTask","RecallBackTask类 recallBackTask方法 开始时间:"+start);
+
 
         try {  List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();
             for (MCSTask mcsTask : mcsTasks) {
@@ -64,7 +67,7 @@ public class RecallBackTask {
         }
 
         long end = System.currentTimeMillis()/1000;
-        FileLogHelper.WriteLog("timeTask","recallBackTask:"+(end-start));
+        FileLogHelper.WriteLog("timeTask","RecallBackTask类 recallBackTask方法 结束始时间:"+ end);
 
     }
 }
