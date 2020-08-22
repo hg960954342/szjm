@@ -18,7 +18,7 @@ public class LogTask {
         long start = System.currentTimeMillis() /1000;
         LogServices.deteleteLog();
         long end = System.currentTimeMillis()/1000;
-        FileLogHelper.WriteLog("logTask","time:"+(end-start));
+        FileLogHelper.WriteLog("timeTask","logTask:"+(end-start));
 
     }
 }
