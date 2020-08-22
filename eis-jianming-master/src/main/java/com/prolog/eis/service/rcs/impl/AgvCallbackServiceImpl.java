@@ -156,21 +156,21 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 //删除容器明细
                 containerTaskDetailMapper.deleteByMap(MapUtils.put("containerCode", containerTask.getContainerCode()).getMap(), ContainerTaskDetail.class);
 
-            }
-            //判断托盘到位 区域 输送线
-            if (containerTask.getTargetType() == 2) {
-
-                //小车搬运后当前位置在入库输送线口
-                //通知输送线运行
-                try {
-                    qcInBoundTaskService.rcsCompleteForward(containerTask.getContainerCode(), targetPosition.getId());
-                    //更改目标点位状态
-                    targetPosition.setTaskLock(0);
-                    targetPosition.setLocationLock(0);
-                    agvStorageLocationMapper.update(targetPosition);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+                //判断托盘到位 区域 输送线
+                if (containerTask.getTargetType() == 2) {
+
+                    //小车搬运后当前位置在入库输送线口
+                    //通知输送线运行
+                    try {
+                        qcInBoundTaskService.rcsCompleteForward(containerTask.getContainerCode(), targetPosition.getId());
+                        //更改目标点位状态
+                        targetPosition.setTaskLock(0);
+                        targetPosition.setLocationLock(0);
+                        agvStorageLocationMapper.update(targetPosition);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
 
                 }
@@ -181,4 +181,4 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
     }
 
 
-}
+
