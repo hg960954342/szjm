@@ -6,6 +6,7 @@ import com.prolog.eis.model.wms.RepeatReport;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.RepeatReportService;
 import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.util.FileLogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -35,12 +36,17 @@ public class RecallBackTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void resendReport()   {
+        long start = System.currentTimeMillis() /1000;
+
         List<RepeatReport> repeatReports = repeatReportService.findByState(0);
         if (repeatReports != null && repeatReports.size() > 0) {
             for (RepeatReport repeatReport : repeatReports) {
                 eisCallbackService.recall(repeatReport); //异步任务
             }
         }
+
+        long end = System.currentTimeMillis()/1000;
+        FileLogHelper.WriteLog("recallBackTask","time:"+(end-start));
     }
 
 
@@ -48,12 +54,17 @@ public class RecallBackTask {
 
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void resendMcsTask() {
+        long start = System.currentTimeMillis() /1000;
+
         try {  List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();
             for (MCSTask mcsTask : mcsTasks) {
                 mcsInterfaceService.recall(mcsTask);}   //异步任务
         } catch (Exception e) {
             LogServices.logSys("resendMcsTaskMCS重发异常:" + e.toString());
         }
+
+        long end = System.currentTimeMillis()/1000;
+        FileLogHelper.WriteLog("recallBackTask","time:"+(end-start));
 
     }
 }
