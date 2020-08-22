@@ -188,7 +188,7 @@ public interface SxStoreLocationMapper extends BaseMapper<SxStoreLocation>{
 	@Select("select g.belong_area from sx_store_location t \r\n" + 
 			"left join sx_store_location_group g on t.store_location_group_id = g.id \r\n" + 
 			"where t.x = #{x} and t.y = #{y} and t.layer = #{layer}")
-	int findPositionRegion(@Param("x") int x,@Param("y") int y,@Param("layer") int layer);
+	Integer findPositionRegion(@Param("x") int x,@Param("y") int y,@Param("layer") int layer);
 	
 	
     //查询所有的id和货位编号

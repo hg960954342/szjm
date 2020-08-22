@@ -4,7 +4,8 @@ import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 @Table("container_task_detail")
 public class ContainerTaskDetail {

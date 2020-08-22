@@ -77,7 +77,7 @@ public interface SxStoreLocationGroupMapper extends BaseMapper<SxStoreLocationGr
 			"FIND_IN_SET(slg.layer,#{layers})\n" +
 			"AND slg.x <= #{x}\n" +
 			"AND slg.y <= #{y};")
-	int LockLocationGroup(@Param("isLock") int isLock,@Param("x") int x,@Param("y") int y,@Param("layers") String layers);
+	Integer LockLocationGroup(@Param("isLock") int isLock,@Param("x") int x,@Param("y") int y,@Param("layers") String layers);
 
     @Select("select slg.id ,slg.location_num as locationNum from sx_store_location_group slg where slg.id not in ( select slg2.id from sx_store_location_group slg2 INNER JOIN sx_store_location sl on sl.STORE_LOCATION_GROUP_ID = slg2.id inner join sx_store s on s.STORE_LOCATION_ID = sl.ID   )")
     List<SxStoreLocationGroup> findNoHaveStore();

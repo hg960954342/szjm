@@ -74,5 +74,5 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
     List<ResultContainer.DataBean.DetailsBean> getCheckDetail(@Param("bill_no") String bill_no, @Param("task_type") String task_type);
 
     @Select("select sum(qty) from container_task_detail where container_code = #{containerCode}")
-    double queryPickQtyByConcode(String containerCode);
+    Double queryPickQtyByConcode(String containerCode);
 }

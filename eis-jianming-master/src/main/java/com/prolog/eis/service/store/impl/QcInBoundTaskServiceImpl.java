@@ -109,7 +109,15 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}
 
 		String state ="";
-		state =(weight>=limitWeight)?"超重":"正常";
+		//state =(weight>=limitWeight)?"超重":"正常";
+		//state=(detection!=1)?"尺寸异常":"正常";
+		if(weight>=limitWeight){
+			state="超重";
+		}else if (detection!=1){
+			state="尺寸异常";
+		}else{
+			state="正常";
+		}
 		//根据托盘码查询入库托盘任务
 		ContainerTask containerTask = containerTaskMapper.queryContainerTaskByConcode(containerNo);
 		//入库,回库显示led屏

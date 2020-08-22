@@ -55,6 +55,6 @@ public interface OutBoundTaskMapper extends BaseMapper<OutboundTask>{
     List<String> getOutBoudTaskBillNoOverTime(@Param("overTime") long overTime,@Param("sfreq") int sfreq);
 
      @Update("update outbound_task set task_state=1 where bill_no in (${bill_no_string})")
-     int updateOutBoundTaskBySQL(@Param("bill_no_string") String bill_no_string);
+     Integer updateOutBoundTaskBySQL(@Param("bill_no_string") String bill_no_string);
 
 }

@@ -93,10 +93,13 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 //判断托盘到位 区域 agv
                 if (containerTask.getTargetType() == 1) {
 
-                    String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getSource());
-                    double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
+                    //String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getSource());
+                    Double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
+                    if(pQty==null){
+                        pQty=0.0;
+                    }
                     double rQty = containerTask.getQty()-pQty;
-                    if(station.equals("站台1")){
+                    if("057200AB048300".equals(containerTask.getSource())){
                         LedShow ledShow = ledShowMapper.findById(4,LedShow.class);
                         if(ledShow != null){
                             PrologLedController prologLedController = new PrologLedController();
@@ -108,7 +111,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         }
                     }
 
-                    if(station.equals("站台2")){
+                    if("054320AB048300".equals(containerTask.getSource())){
                         LedShow ledShow = ledShowMapper.findById(5,LedShow.class);
                         if(ledShow != null){
                             PrologLedController prologLedController = new PrologLedController();
@@ -120,7 +123,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         }
                     }
 
-                    if(station.equals("站台3")){
+                    if("051440AB047200".equals(containerTask.getSource())){
                         LedShow ledShow = ledShowMapper.findById(6,LedShow.class);
                         if(ledShow != null){
                             PrologLedController prologLedController = new PrologLedController();
