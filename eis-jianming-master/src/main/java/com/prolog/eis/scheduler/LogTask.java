@@ -1,8 +1,11 @@
 package com.prolog.eis.scheduler;
 
 import com.prolog.eis.logs.LogServices;
+import com.prolog.eis.util.FileLogHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class LogTask {
@@ -12,6 +15,10 @@ public class LogTask {
      */
     @Scheduled(cron = "0 30 12 * * ?")
     public void clearLog(){
-     LogServices.deteleteLog();
+        long start = System.currentTimeMillis() /1000;
+        LogServices.deteleteLog();
+        long end = System.currentTimeMillis()/1000;
+        FileLogHelper.WriteLog("logTask","time:"+(end-start));
+
     }
 }
