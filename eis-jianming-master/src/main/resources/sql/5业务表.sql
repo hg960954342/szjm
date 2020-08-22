@@ -39,7 +39,7 @@ CREATE TABLE `repeat_report` (
   `id` int NOT NULL AUTO_INCREMENT,
   `report_data` varchar(255) NOT NULL COMMENT '回告数据 json格式',
   `report_url` varchar(255) NOT NULL COMMENT '回告地址',
-  `message` varchar(1000) DEFAULT NULL COMMENT '返回信息',
+  `message` varchar(5000) DEFAULT NULL COMMENT '返回信息',
   `report_state` int DEFAULT 0 COMMENT '回告状态 0 未回告 1取消回告',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `send_time` datetime DEFAULT NULL COMMENT '发送时间',
