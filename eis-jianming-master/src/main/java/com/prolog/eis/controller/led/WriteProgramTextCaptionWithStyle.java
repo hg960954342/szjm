@@ -1,7 +1,5 @@
 package com.prolog.eis.controller.led;
 
-import java.awt.Color;
-
 import onbon.bx05.Bx5GEnv;
 import onbon.bx05.Bx5GException;
 import onbon.bx05.Bx5GScreen;
@@ -12,6 +10,8 @@ import onbon.bx05.file.BxFileWriterListener;
 import onbon.bx05.file.ProgramBxFile;
 import onbon.bx05.utils.DisplayStyleFactory;
 import onbon.bx05.utils.DisplayStyleFactory.DisplayStyle;
+
+import java.awt.*;
 
 public class WriteProgramTextCaptionWithStyle implements BxFileWriterListener<Bx5GScreen> {
 

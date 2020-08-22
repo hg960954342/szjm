@@ -1,6 +1,5 @@
 package com.prolog.eis.dao;
 
-import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;

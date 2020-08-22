@@ -1,8 +1,8 @@
 package com.prolog.eis.service.mcs;
 
-import java.util.List;
-
 import com.prolog.eis.model.mcs.MCSTask;
+
+import java.util.List;
 
 public interface McsInterfaceService {
 

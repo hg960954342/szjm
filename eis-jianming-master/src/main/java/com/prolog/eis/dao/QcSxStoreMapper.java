@@ -175,6 +175,6 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"and a.lot_id = #{lotId}\n" +
 			"and a.owner_id = #{ownerId}\n" +
 			"ORDER BY dept_num asc,qty asc")
-	float getSxStoreCount(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
+	Float getSxStoreCount(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
 
 }

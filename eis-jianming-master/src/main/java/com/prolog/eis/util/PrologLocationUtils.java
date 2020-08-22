@@ -3,7 +3,6 @@ package com.prolog.eis.util;
 
 import com.prolog.eis.dto.base.Coordinate;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

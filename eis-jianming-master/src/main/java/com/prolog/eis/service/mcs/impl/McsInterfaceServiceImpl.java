@@ -70,9 +70,9 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 			Boolean sucssess = helper.getBoolean("ret");
 			String message = helper.getString("msg");
-			
+			LogServices.log(postUrl,data,message,restJson);
 			if (!sucssess) {
-				LogServices.log(postUrl,data,message,restJson);
+
 				//失败记重发表
 				MCSTask mcsTask = new MCSTask();
 				mcsTask.setTaskId(taskId);
@@ -108,6 +108,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			mcsTask.setTaskState(2);
 			mcsTask.setErrMsg(e.getMessage());
 			mcsTaskMapper.save(mcsTask);
+			LogServices.logSys(e.getMessage());
 			return taskId;
 
 
@@ -127,7 +128,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		List<MCSTask> mcsTasks = mcsTaskMapper.findByMap(MapUtils.put("taskState", 2).getMap(), MCSTask.class);
 		return mcsTasks;
 	}
-
+	@Async
 	@Override
 	public void recall(MCSTask mcsTask) throws Exception {
 		List<McsSendTaskDto> mcsSendTaskDtos = new ArrayList<McsSendTaskDto>();
@@ -146,13 +147,15 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 		String restJson = "";
 		try {
 			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/Request");
-			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务："+data);
+			//FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务："+data);
 
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
-			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
+			//FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
+
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 			Boolean sucssess = helper.getBoolean("ret");
 			String message = helper.getString("msg");
+			LogServices.log(postUrl,data,message,restJson);
 			if (sucssess) {
 				mcsTaskMapper.deleteById(mcsTask.getId(), MCSTask.class);
 			} else {
@@ -166,6 +169,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			mcsTask.setSendCount(mcsTask.getSendCount()+1);
 			mcsTask.setTaskState(2);
 			mcsTask.setErrMsg(e.getMessage());
+			LogServices.logSys(e.getMessage());
 			mcsTaskMapper.update(mcsTask);
 		}
 	}
@@ -189,7 +193,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			Boolean sucssess = helper.getBoolean("ret");
 			String message = helper.getString("msg");
 			List<Map> data = helper.getObjectList("data", Map.class);
-
+			LogServices.log(postUrl,requestData,message,restJson);
 			if (sucssess && !data.isEmpty()) {
 				Map<String, Object> m = data.get(0);
 				// isEmpty：Boolean【是否为空 true为空，false 不为空】
@@ -201,6 +205,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 				return false;
 			}
 		} catch (Exception e) {
+			LogServices.logSys(e.getMessage());
 			FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，接口调用异常："+e.getMessage());
 			return false;
 		}

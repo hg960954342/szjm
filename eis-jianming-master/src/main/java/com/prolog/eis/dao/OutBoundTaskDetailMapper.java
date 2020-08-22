@@ -4,7 +4,10 @@ import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.service.impl.unbound.DetailDataBean;
 import com.prolog.framework.dao.mapper.BaseMapper;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

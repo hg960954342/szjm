@@ -3,12 +3,10 @@ package com.prolog.eis.service.impl.unbound;
 import com.prolog.eis.dao.OutBoundTaskDetailMapper;
 import com.prolog.eis.dao.OutBoundTaskMapper;
 import com.prolog.eis.model.wms.OutboundTask;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_SINGLETON;
@@ -57,7 +55,7 @@ public class SimilarityDataEntityListLoad {
     }
 
 
-    public List<DetailDataBean> getOutDetailList(Class <? extends DefaultOutBoundPickCodeStrategy> classz) {
+    public List<DetailDataBean> getOutDetailList() {
        /* List<OutboundTask> listOverTimeBoundTask= outBoundTaskMapper.getOutBoudTaskOverTime(overTime);
         for(OutboundTask outboundTask:listOverTimeBoundTask){
             this.addOutboundTask(outboundTask);

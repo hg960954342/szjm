@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 @MapperScan("com.prolog.eis.dao")
 @EnableAsync
 @EnableAspectJAutoProxy
+@SuppressWarnings("all")
 public class Master {
 	@Bean
 	public FilterRegistrationBean registFilter() {
