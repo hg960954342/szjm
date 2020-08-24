@@ -109,7 +109,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         try {
                             prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "根板蓝", pQty, containerTask.getLotId(), rQty,"一站");
                         } catch (Exception e) {
-                            LogServices.logSys(e.getMessage());
+                            LogServices.logSys(e);
                         }
                     }
                 }
@@ -121,7 +121,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         try {
                             prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "蓝根板", pQty, containerTask.getLotId(), rQty,"二站");
                         } catch (Exception e) {
-                            LogServices.logSys(e.getMessage());
+                            LogServices.logSys(e);
                         }
                     }
                 }
@@ -133,7 +133,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         try {
                             prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "板根蓝", pQty, containerTask.getLotId(), rQty,"三站");
                         } catch (Exception e) {
-                            LogServices.logSys(e.getMessage());
+                            LogServices.logSys(e);
                         }
                     }
                 }
@@ -145,7 +145,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         try {
                             prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"板根蓝",pQty,containerTask.getLotId(),rQty,"四站");
                         }catch (Exception e){
-                            LogServices.logSys(e.getMessage());
+                            LogServices.logSys(e);
                         }
                     }
                 }

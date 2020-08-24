@@ -67,7 +67,7 @@ public class PrologJmMCSController {
 						}
 					}
 					catch (Exception e) {
-						LogServices.logSys("MCS->EIS返回" + e.getMessage());
+						LogServices.logSys(e);
 						// TODO: handle exception
 						errorMsg = errorMsg + " " + e.getMessage();
 					}
@@ -95,7 +95,7 @@ public class PrologJmMCSController {
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
- 			LogServices.logSys("MCS->EIS返回" + resultStr);
+ 			LogServices.logSys(e);
 		}
 	}
 	
@@ -157,7 +157,7 @@ public class PrologJmMCSController {
 				out.flush();
 				out.close();
 
- 				LogServices.logSys("EIS->MCS返回" + resultStr);
+ 				LogServices.logSys(e);
 			}
 		} catch (Exception e) {
 
@@ -165,7 +165,7 @@ public class PrologJmMCSController {
 			out.write(resultStr.getBytes("UTF-8"));
 			out.flush();
 			out.close();
-			LogServices.logSys("EIS->MCS返回" + resultStr);
+			LogServices.logSys(e);
  		}
 	}
 	
@@ -189,7 +189,7 @@ public class PrologJmMCSController {
 			
  		}catch (Exception e) {
 			// TODO: handle exception
- 			LogServices.logSys(e.getMessage());
+ 			LogServices.logSys(e);
 			String resultStr = this.getJmMcsValue(true,"执行失败" + e.getMessage(),"100",null);
 			
 			out.write(resultStr.getBytes("UTF-8"));
@@ -224,7 +224,7 @@ public class PrologJmMCSController {
  		}
 		catch (Exception e) {
 			// TODO: handle exception
-			LogServices.logSys( e.getMessage());
+			LogServices.logSys(e);
 			String resultStr = this.getJmMcsValue(true,"执行失败:" + e.getMessage(),"200",null);
 
 			out.write(resultStr.getBytes("UTF-8"));

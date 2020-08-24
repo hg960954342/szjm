@@ -35,7 +35,7 @@ public class PrologRcsController {
 		catch (Exception e) {
 			String resultStr = returnError(reqCode,e.getMessage());
 			//String errorMsg = "RCS-> EIS[agvCallback]返回" + reqCode +" json:" + resultStr;
-			LogServices.logSys(e.getMessage());
+			LogServices.logSys(e);
             return resultStr;
 		}
 	}

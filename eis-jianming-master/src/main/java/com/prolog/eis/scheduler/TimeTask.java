@@ -64,19 +64,13 @@ public class TimeTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildUnTask()   {
-        long start=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildUnTask方法 开始时间:"+(start/1000));
 
         outBoundTaskService.unboundTask();
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildUnTask方法 结束时间:"+(end/1000));
 
     }
 
-    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    //@Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildAndSendSxCkTask()  {
-        long start=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildAndSendSxCkTask方法 开始时间:"+(start/1000));
 
         try {
             synchronized ("kucun".intern()) {
@@ -84,10 +78,8 @@ public class TimeTask {
             }
             sxStoreCkService.sendSxCkTask();
         } catch (Exception e) {
-             LogServices.logSys("生成四向库出库任务错误"+e.getMessage());
+             LogServices.logSys(e);
         }
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildAndSendSxCkTask方法 结束时间:"+(end/1000));
 
     }
 
@@ -97,17 +89,13 @@ public class TimeTask {
 
 
     //定时给agv小车下分任务
-	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
+	//@Scheduled(initialDelay = 3000,fixedDelay = 5000)
     public void sendTask2Rcs()  {
-        long start=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 sendTask2Rcs方法 开始时间:"+(start/1000));
 
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
         if (!containerTasks.isEmpty() && containerTasks.size() > 0) {
             eisSendRcsTaskServiceSend.sendTask(containerTasks);
         }
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 sendTask2Rcs方法 结束时间:"+(end/1000));
 
     }
 

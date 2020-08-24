@@ -132,7 +132,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				try {
 					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",weight,containerTask.getLotId(),state);
 				}catch (Exception e){
-					LogServices.logSys(e.getMessage());
+					LogServices.logSys(e);
 				}
 			}
 		}
@@ -145,7 +145,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				try {
 					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",weight,containerTask.getLotId(),state);
 				}catch (Exception e){
-					LogServices.logSys(e.getMessage());
+					LogServices.logSys(e);
 				}
 
 			}
@@ -533,7 +533,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			//检查有无入库库存
 			List<InboundTask> inboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), InboundTask.class);
 			if(inboundTasks.isEmpty()) {
-				LogServices.logSys(String.format("托盘%s无入库任务", containerCode));
+				LogServices.logSys(new RuntimeException(String.format("托盘%s无入库任务", containerCode)));
 
 				return;
 			}
@@ -543,7 +543,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			//调用回告入库的方法
 			eisCallbackService.inBoundReport(containerCode);
 		}else {
-			LogServices.logSys(String.format("点位%s不是托盘库货位", address));
+			LogServices.logSys(new RuntimeException(String.format("点位%s不是托盘库货位", address)));
 
 
 			return;
@@ -586,7 +586,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				try {
 					prologLedController.outStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",containerTask.getQty(),containerTask.getLotId(),station);
 				}catch (Exception e){
-					LogServices.logSys(e.getMessage());
+					LogServices.logSys(e);
 				}
 
 			}

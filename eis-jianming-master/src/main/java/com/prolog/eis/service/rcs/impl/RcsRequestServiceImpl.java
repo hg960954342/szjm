@@ -64,16 +64,8 @@ public class RcsRequestServiceImpl implements RcsRequestService{
 		jsonObject.put("data", "");
 
 		String data = jsonObject.toString();
-
-		String msg = "EIS->RCS [RCSInterface] 请求JSON：[message]:" + data;
-		FileLogHelper.WriteLog("RCSRequest", msg);
-
 		String postUrl = String.format("http://%s:%s/cms/services/rest/hikRpcService/genAgvSchedulingTask", rcsIp, rcsPort);
 		String result = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
-
-		String resultMsg = "EIS->RCS [RCSInterface] 返回JSON：[message]:" + result;
-		FileLogHelper.WriteLog("RCSRequest", resultMsg);
-		//log.info("RCSRequest"+resultMsg);
 		LogServices.logRcs(postUrl,data,"",result);
 		RcsRequestResultDto resultObj = JSONObject.parseObject(result, RcsRequestResultDto.class);
 		return resultObj;

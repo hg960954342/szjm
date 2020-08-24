@@ -11,15 +11,11 @@ import java.util.Date;
 public class LogTask {
 
     /**
-     * 每天12点半清除日志的定时任务
+     * 每天中午12点半清除日志的定时任务
      */
     @Scheduled(cron = "0 30 12 * * ?")
     public void clearLog(){
-        long start = System.currentTimeMillis() /1000;
-        FileLogHelper.WriteLog("timeTask","LogTask类 clearLog方法 开始时间:"+start);
-        LogServices.deteleteLog();
-        long end = System.currentTimeMillis()/1000;
-        FileLogHelper.WriteLog("timeTask","LogTask类 clearLog方法 结束时间:"+end);
+          LogServices.deteleteLog();
 
     }
 }

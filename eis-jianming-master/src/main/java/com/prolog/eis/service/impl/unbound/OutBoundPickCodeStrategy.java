@@ -77,13 +77,13 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
             Float countQty=qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
             if(countQty==null) countQty=0f;
-            if (countQty<last) { LogServices.logSys("库存:"+countQty+"不够出:"+last+"！"); return; }
+            if (countQty<last) { LogServices.logSys(new RuntimeException("库存:"+countQty+"不够出:"+last+"！")); return; }
             //更新任务锁
             String pickCode=detailDataBeand.getPickCode();
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
             //  agvStorageLocation.setTaskLock(1);
             //  agvStorageLocationMapper.update(agvStorageLocation);
-            if(agvStorageLocation==null){ LogServices.logSys(pickCode+"拣选站点位已经锁定！");return ;}
+            if(agvStorageLocation==null){ LogServices.logSys(new RuntimeException(pickCode+"拣选站点位已经锁定！"));return ;}
             int  LocationType= agvStorageLocation.getLocationType();
             if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
                  /*   List<String> listBillNos=new ArrayList<String>();

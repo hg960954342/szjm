@@ -74,7 +74,7 @@ public class McsInterfaceServiceSend  {
 			mcsTaskWithOutPathAsycDto.setTaskId(taskId);
  		} catch (Exception e) {
 
-			LogServices.logSys(e.getMessage());
+			LogServices.logSys(e);
 			mcsTaskWithOutPathAsycDto.setSuccess(false);
 			mcsTaskWithOutPathAsycDto.setMessage(LogServices.spliitString(e.getMessage()));
 			mcsTaskWithOutPathAsycDto.setTaskId(taskId);
@@ -125,7 +125,7 @@ public class McsInterfaceServiceSend  {
 			mcsTask.setSendCount(mcsTask.getSendCount()+1);
 			mcsTask.setTaskState(2);
 			mcsTask.setErrMsg(e.getMessage());
-			LogServices.logSys(e.getMessage());
+			LogServices.logSys(e);
 			recallMcsTaskDto.setSuccess(false);
 			recallMcsTaskDto.setMcsTask(mcsTask);
  		}
@@ -142,9 +142,7 @@ public class McsInterfaceServiceSend  {
 		String restJson = "";
 		try {
 			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/getExitStatus");
-			FileLogHelper.WriteLog("getExitStatus", "EIS->MCS接驳口状态查询，请求参数："+requestData);
-			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(requestData), String.class);
-			FileLogHelper.WriteLog("getExitStatus", "EIS->MCS接驳口状态查询，返回参数："+restJson);
+ 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(requestData), String.class);
 
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 			Boolean sucssess = helper.getBoolean("ret");
@@ -162,7 +160,7 @@ public class McsInterfaceServiceSend  {
 				return false;
 			}
 		} catch (Exception e) {
-			LogServices.logSys(e.getMessage());
+			LogServices.logSys(e);
 			//FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，接口调用异常："+e.getMessage());
 			return false;
 		}

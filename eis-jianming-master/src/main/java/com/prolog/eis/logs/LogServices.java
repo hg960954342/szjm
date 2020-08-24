@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 @Component
 public class LogServices {
@@ -103,11 +105,12 @@ public class LogServices {
         logServices.rcsLogMapper.save(rcsLog);
     }
 
+
     /**
      * 系统内部日志
-     * @param error
+     * @param e
      */
-    public static void logSys(String error){
+    public static void logSys(Exception e){
         SysLog sysLog=new SysLog();
         String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
         sysLog.setClassName(className);
@@ -117,9 +120,18 @@ public class LogServices {
         sysLog.setClassMethod(methodName);
         int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
         sysLog.setLineNumber(lineNumber+"");
-        sysLog.setError(spliitString(error));
+        sysLog.setError(toString_(e));
         sysLog.setCreateTime(new java.util.Date());
         logServices.logSysMapper.save(sysLog);
+    }
+
+    private static String toString_(Throwable e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw, true);
+        e.printStackTrace(pw);
+        pw.flush();
+        sw.flush();
+        return spliitString(sw.toString());
     }
 
 
@@ -131,6 +143,7 @@ public class LogServices {
         logServices.logMapper.deleteAll();
         logServices.logSysMapper.deleteAll();
         logServices.eisInterfaceLogMapper.deleteAll();
+        logServices.rcsLogMapper.deleteAll();
     }
 
     /**
