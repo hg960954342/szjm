@@ -46,9 +46,9 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
     @Override
     public void addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==1) {
-             billNoList.addAll(outBoundTaskMapper.getOutBoudTaskPickCodeBillNoOverTimeStringList(overTime));
+             //billNoList.addAll(outBoundTaskMapper.getOutBoudTaskPickCodeBillNoOverTimeStringList(overTime));
              billNoList.add("'"+outboundTask.getBillNo()+"'");
-             getCrrentBillNoList().addAll(billNoList);
+             getCrrentBillNoList().add("'"+outboundTask.getBillNo()+"'");
           }
 
 

@@ -50,9 +50,9 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
      */
     public void addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==0) {
-             billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTimeStringList(overTime));
+             //billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTimeStringList(overTime));
              billNoList.add("'"+outboundTask.getBillNo()+"'");
-             this.getCrrentBillNoList().addAll(billNoList);
+             getCrrentBillNoList().add("'"+outboundTask.getBillNo()+"'");
           }
           /*
         if(billNoPickCodeList.size()<=maxSize&&outboundTask.getSfReq()==1){
