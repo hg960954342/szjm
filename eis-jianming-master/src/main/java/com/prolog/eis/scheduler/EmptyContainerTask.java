@@ -33,16 +33,16 @@ public class EmptyContainerTask {
      *
      * @throws Exception
      */
-    //@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildEmptyContainerSupply()   {
-        long start=System.currentTimeMillis();
+
         try {
             mcsLineService.buildEmptyContainerSupply();
 
         } catch (Exception e) {
             LogServices.logSys(new RuntimeException("buildEmptyContainerSupplyError"));
         }
-        long end=System.currentTimeMillis();
+
 
     }
 
@@ -50,7 +50,7 @@ public class EmptyContainerTask {
     /**
      * 补空托托盘
      */
-    //@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void replenishContainer()   {
          Map<String, Object> map = MapUtils.put("ceng", 3).put("locationType", 1).put("taskLock", 0).put("locationLock", 0).getMap();
         List<AgvStorageLocation> agvStorageLocations = agvStorageLocationMapper.findByMap(map, AgvStorageLocation.class);
@@ -74,7 +74,6 @@ public class EmptyContainerTask {
             }
 
         }
-        long end=System.currentTimeMillis();
      }
 
 
