@@ -155,18 +155,14 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 if (containerTask.getTaskType() == 1) {
                     //出库完成 回告
                     eisCallbackService.outBoundReport(containerTask);
-                    //锁定拣选站
-                    targetPosition.setLocationLock(1);
-                    agvStorageLocationMapper.update(targetPosition);
                 }
                 //任务类型 移库出库
                 if (containerTask.getTaskType() == 2) {
                     eisCallbackService.moveBoundReport(containerTask);
-                    //锁定拣选站
-                    targetPosition.setLocationLock(1);
-                    agvStorageLocationMapper.update(targetPosition);
                 }
-
+                //锁定拣选站
+                targetPosition.setLocationLock(1);
+                agvStorageLocationMapper.update(targetPosition);
                 //删除容器任务
                 containerTaskService.delete(containerTask);
                 //删除容器明细

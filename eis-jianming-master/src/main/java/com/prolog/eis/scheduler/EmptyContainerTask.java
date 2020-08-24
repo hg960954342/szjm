@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class EmptyContainerTask {
@@ -66,6 +67,7 @@ public class EmptyContainerTask {
                     ContainerTask containerTask = containerTasks.get(0);
                     containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
                     containerTask.setTargetType(1);
+                    containerTask.setTaskCode(UUID.randomUUID().toString().replaceAll("-", ""));
                     containerTaskService.update(containerTask);
 
 
