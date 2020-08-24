@@ -95,8 +95,14 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 		List<InStoreLocationGroupDto> inStoreLocationGroupDtos = findSamePropertyLocationGroup(
 				findSameTypeLocationGroup, taskProperty1, taskProperty2);
 		if (inStoreLocationGroupDtos.size() == 0) {
-			// 没有相同属性 1.托盘数小于出口数的货位组 2.托盘数减去出口数小的
-			storeLocationGroupId = findLocationGroupId(findSameTypeLocationGroup, originX, originY);
+			List<InStoreLocationGroupDto> notSameInStoreLocationGroupDtos = findNotSamePropertyLocationGroup(findSameTypeLocationGroup,taskProperty1,taskProperty2);
+			if(notSameInStoreLocationGroupDtos.size() == 0) {
+				// 没有相同属性 1.托盘数小于出口数的货位组 2.托盘数减去出口数小的
+				storeLocationGroupId = findLocationGroupId(findSameTypeLocationGroup, originX, originY);
+			}else {
+				//找不同属性的货位组
+				storeLocationGroupId = findLocationGroupId(notSameInStoreLocationGroupDtos, originX, originY);	
+			}
 		} else if (inStoreLocationGroupDtos.size() > 1) {
 			// 有两个相同属性的货位组则找 预留货位1.托盘数小于出口数的货位组 2.托盘数减去出口数小的
 			storeLocationGroupId = findLocationGroupId(inStoreLocationGroupDtos, originX, originY);
