@@ -213,7 +213,7 @@ public class PrologLedController {
 
     }
 
-    public void pick(String ip,int port,String itemName,double pickWeight,String lotId,double reWeight) throws Exception {
+    public void pick(String ip,int port,String itemName,double pickWeight,String lotId,double reWeight,String pickStation) throws Exception {
         //Bx5GEnv.initial("log.properties");
 
         Bx5GScreenClient screen = new Bx5GScreenClient("MyScreen");
@@ -237,10 +237,11 @@ public class PrologLedController {
 
         int size =8;
         String padChar="    ";
+        String ps="  "+pickStation;
         String s1 = StrUtil.center(itemName, size,padChar);
 
         //创建数据页
-        TextBxPage page = new TextBxPage("  品名："+s1);
+        TextBxPage page = new TextBxPage(ps+"："+s1);
         PrologLedController.setPageStyle(page);
 
         //创建第二块区域
