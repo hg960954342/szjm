@@ -52,7 +52,7 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==0) {
              billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTimeStringList(overTime));
              billNoList.add("'"+outboundTask.getBillNo()+"'");
-             currentBillNoList=billNoList;
+             this.getCrrentBillNoList().addAll(billNoList);
           }
           /*
         if(billNoPickCodeList.size()<=maxSize&&outboundTask.getSfReq()==1){
@@ -71,8 +71,8 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
             this.addOutboundTask(outboundTask);
         }*/
 
-        currentBillNoList=billNoList;
-        return  outBoundTaskDetailMapper.getOuntBoundDetailAll(String.join(",", currentBillNoList));
+
+        return  outBoundTaskDetailMapper.getOuntBoundDetailAll(String.join(",", getCrrentBillNoList()));
         /*
         if((null!=classz.getAnnotation(Component.class))&&
                 classz.getAnnotation(Component.class).value().indexOf(OutBoundType.IF_SfReq)!=-1) {

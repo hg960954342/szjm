@@ -204,7 +204,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		List<InboundTask> inboundTasks = inboundTaskMapper.getRkStartInboundTask(containerNo);
 		if(!inboundTasks.isEmpty()) {
 			String mString = String.format("托盘%s已在库内", containerNo);
-			FileLogHelper.WriteLog("mcsRequestError", mString);
+            LogServices.logSysBusiness("mcsRequestError"+ mString);
 
 			result.setSuccess(false);
 			result.setMsg(mString);
@@ -214,7 +214,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(), SxStore.class);
 		if(!sxStores.isEmpty()) {			
 			String mString = String.format("托盘%s已在库内", containerNo);
-			FileLogHelper.WriteLog("mcsRequestError", mString);
+            LogServices.logSysBusiness("mcsRequestError"+ mString);
 
 			result.setSuccess(false);
 			result.setMsg(mString);
@@ -253,7 +253,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		List<InboundTask> temInboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerNo).getMap(), InboundTask.class);
 		if(temInboundTasks.isEmpty()) {
 			String mString = String.format("托盘%s无入库任务", containerNo);
-			FileLogHelper.WriteLog("mcsRequestError", mString);
+            LogServices.logSysBusiness("mcsRequestError"+ mString);
 
 			result.setSuccess(false);
 			result.setMsg(mString);
@@ -272,8 +272,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	@Transactional(rollbackFor = Exception.class)
 	public void foldInBound(String deviceNo,String containerNo) throws Exception {
 		DeviceJunctionPort deviceJunctionPort = deviceJunctionPortMapper.findById(deviceNo, DeviceJunctionPort.class);
-		if(null == deviceJunctionPort) {	
-			FileLogHelper.WriteLog("mcsfoldInBoundError", String.format("设备编号%s未配置", deviceNo));
+		if(null == deviceJunctionPort) {
+            LogServices.logSysBusiness("mcsfoldInBoundError"+ String.format("设备编号%s未配置", deviceNo));
 			return;
 		}
 
@@ -282,7 +282,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		//验证
 		List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(), SxStore.class);
 		if(!sxStores.isEmpty()) {
-			FileLogHelper.WriteLog("mcsfoldInBoundError", String.format("容器%s存在库存", containerNo));
+            LogServices.logSysBusiness("mcsfoldInBoundError"+ String.format("容器%s存在库存", containerNo));
 
 			mcsInterfaceServiceSend.sendMcsTaskWithOutPathAsyc(1,
 					containerNo, 
@@ -319,7 +319,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}
 
 		if(null == locationId) {
-			FileLogHelper.WriteLog("mcsfoldInBoundError", String.format("货位不足"));
+            LogServices.logSysBusiness("mcsfoldInBoundError"+ String.format("货位不足"));
 
 			mcsInterfaceServiceSend.sendMcsTaskWithOutPathAsyc(1,
 					containerNo, 
@@ -533,7 +533,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			//检查有无入库库存
 			List<InboundTask> inboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), InboundTask.class);
 			if(inboundTasks.isEmpty()) {
-				LogServices.logSys(new RuntimeException(String.format("托盘%s无入库任务", containerCode)));
+                LogServices.logSysBusiness(String.format("托盘%s无入库任务", containerCode));
 
 				return;
 			}
@@ -543,7 +543,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			//调用回告入库的方法
 			eisCallbackService.inBoundReport(containerCode);
 		}else {
-			LogServices.logSys(new RuntimeException(String.format("点位%s不是托盘库货位", address)));
+            LogServices.logSysBusiness(String.format("点位%s不是托盘库货位", address));
 
 
 			return;
@@ -556,7 +556,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		// 找port口
 		List<PortInfo> portInfos = portInfoMapper.findByMap(MapUtils.put("layer", targetLayer).put("x", targetX).put("y", targetY).getMap(), PortInfo.class);
 		if(portInfos.isEmpty()) {
-			FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("点位%s不是托盘库出入口", address));
+			LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("点位%s不是托盘库出入口", address));
 
 			return;
 		}
@@ -564,7 +564,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		ContainerTask containerTask = containerTaskMapper.selectStartTaskByContainerCode(containerCode);
 		if(null == containerTask) {
 			//没有正在从托盘库内正在出库的任务
-			FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("托盘%s无容器出库任务", containerCode));
+            LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("托盘%s无容器出库任务", containerCode));
 		}
 
 		PortInfo portInfo = portInfos.get(0);
@@ -574,7 +574,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			List<AgvStorageLocation> agvStorageLocations = agvStorageLocationMapper.findByMap(MapUtils.put("locationType", 2).put("deviceNo",portInfo.getJunctionPort()).getMap(), AgvStorageLocation.class);
 			if(agvStorageLocations.isEmpty()) {
 
-				FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("Agv输送线区域点位不存在%s", portInfo.getJunctionPort()));
+                LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("Agv输送线区域点位不存在%s", portInfo.getJunctionPort()));
 				return;
 			}
 
@@ -644,10 +644,11 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 						MapUtils.put("ascentLockState", 0).getMap(), SxStoreLocationGroup.class);
 				sxStoreTaskFinishService.computeLocation(sxStore);
 			}else {
+                LogServices.logSysBusiness(String.format("托盘%s库存存在多个",containerCode));
 				throw new Exception(String.format("托盘%s库存存在多个",containerCode));
 			}
 		}else {
-			FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("点位%s不是托盘库货位", address));
+            LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("点位%s不是托盘库货位", address));
 		}
 	}
     @Override
@@ -661,7 +662,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		if (sxStores.size() == 1) {
 			SxStore sxStore = sxStores.get(0);
 			if(sxStore.getStoreState() != 10) {
-				FileLogHelper.WriteLog("McsInterfaceCallbackError", String.format("托盘%s入库库存状态异常%s", containerNo,String.valueOf(sxStore.getStoreState())));
+                LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("托盘%s入库库存状态异常%s", containerNo,String.valueOf(sxStore.getStoreState())));
 			}
 			//修改库存为已上架
 			sxStore.setStoreState(20);

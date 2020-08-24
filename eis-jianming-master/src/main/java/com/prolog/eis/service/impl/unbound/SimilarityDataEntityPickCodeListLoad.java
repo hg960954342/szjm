@@ -48,7 +48,7 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==1) {
              billNoList.addAll(outBoundTaskMapper.getOutBoudTaskPickCodeBillNoOverTimeStringList(overTime));
              billNoList.add("'"+outboundTask.getBillNo()+"'");
-             currentBillNoList=billNoList;
+             getCrrentBillNoList().addAll(billNoList);
           }
 
 
@@ -58,8 +58,8 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
     public List<DetailDataBean> getOutDetailList() {
 
 
-        currentBillNoList=billNoList;
-        return  outBoundTaskDetailMapper.getOuntBoundDetailAll(String.join(",", currentBillNoList));
+
+        return  outBoundTaskDetailMapper.getOuntBoundDetailAll(String.join(",", getCrrentBillNoList()));
 
     }
 
