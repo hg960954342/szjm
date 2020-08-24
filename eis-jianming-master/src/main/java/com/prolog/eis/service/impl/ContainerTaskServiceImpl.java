@@ -38,6 +38,12 @@ public class ContainerTaskServiceImpl implements ContainerTaskService {
         containerTaskMapper.update(containerTask);
     }
 
+    @Override
+    public List<ContainerTask> selectByTaskType(String taskType) {
+        Map<String, Object> map = MapUtils.put("taskType", taskType).getMap();
+        return containerTaskMapper.findByMap(map,ContainerTask.class);
+    }
+
     /**
      * 根据托盘任务号查询托盘任务
      * @param taskCode 托盘任务号

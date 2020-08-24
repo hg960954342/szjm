@@ -10,6 +10,8 @@ public interface ContainerTaskService {
 
     void update(ContainerTask containerTask);
 
+    List<ContainerTask> selectByTaskType(String taskType);
+
     List<ContainerTask> selectByTaskCode(String taskCode);
 
     List<ContainerTask> selectByContainerCode(String containerCode);

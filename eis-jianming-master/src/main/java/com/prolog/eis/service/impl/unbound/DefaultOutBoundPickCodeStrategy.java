@@ -68,7 +68,8 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         if(null!=defaultOutBoundPickCodeStrategy){
             log.info(defaultOutBoundPickCodeStrategy.getClass().getName());
             similarityDataEntityListLoad.addOutboundTask(outboundTask);
-            if(similarityDataEntityListLoad.currentBillNoList.size()==similarityDataEntityListLoad.maxSize)
+            if(similarityDataEntityListLoad.currentBillNoList.size()!=0
+                    &&similarityDataEntityListLoad.currentBillNoList.size()>=similarityDataEntityListLoad.maxSize)
             defaultOutBoundPickCodeStrategy.unbound(outboundTask);
         }
 
@@ -106,8 +107,8 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
      * @return boolean
      */
     public boolean isExistTask(String source){
-        List<ContainerTask> list=containerTaskMapper.selectBySource(source);
-        if(list!=null&&list.size()>0) return true;
+        //List<ContainerTask> list=containerTaskMapper.selectBySource(source);
+        //if(list!=null&&list.size()>0) return true;
         return false;
     }
 

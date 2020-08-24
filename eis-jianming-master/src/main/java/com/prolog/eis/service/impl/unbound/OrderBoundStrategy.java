@@ -93,9 +93,9 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                   if(agvStorageLocation==null){ LogServices.logSys(pickCode+"拣选站点位已经锁定！");return ;}
                 int  LocationType= agvStorageLocation.getLocationType();
                 if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
-                    List<String> listBillNos=new ArrayList<String>();
+                 /*   List<String> listBillNos=new ArrayList<String>();
                     listBillNos.addAll(similarityDataEntityListLoad.currentBillNoList);
-                    int seqno=0;
+                    int seqno=0;*/
                 List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
 
                 for (Map<String, Object> sxStore1 : listSxStore) {
@@ -114,7 +114,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setTaskCode(uuid);
                         containerTaskMapper.save(ordercontainerTask);
                   List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.
-                          put("billNo",listBillNos.get(seqno).replace("'",""))
+                          put("billNo",detailDataBeand.getBillNo())
                           .put("itemId",detailDataBeand.getItemId()).put("ownerId",detailDataBeand.getOwnerId()
                           ).put("lotId",detailDataBeand.getLotId()).getMap(),OutboundTaskDetail.class);
                       for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetailList){
@@ -134,7 +134,9 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                       }
 
                         outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.currentBillNoList));
-                        if (last <= 0) break;
+                        similarityDataEntityListLoad.currentBillNoList.remove(","+detailDataBeand.getBillNo()+"'");
+
+                      if (last <= 0) break;
                     }
                     if (((BigDecimal) sxStore1.get("qty")).floatValue() > last && (LocationType == 4 || LocationType == 5) ) { //非整托
                         //非整托
@@ -152,7 +154,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
 
                         List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.
-                                put("billNo",listBillNos.get(seqno).replace("'",""))
+                                put("billNo",detailDataBeand.getBillNo())
                                 .put("itemId",detailDataBeand.getItemId()).put("ownerId",detailDataBeand.getOwnerId()
                                 ).put("lotId",detailDataBeand.getLotId()).getMap(),OutboundTaskDetail.class);
                         for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetailList){
@@ -172,7 +174,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         }
 
                         outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.currentBillNoList));
-
+                        similarityDataEntityListLoad.currentBillNoList.remove(","+detailDataBeand.getBillNo()+"'");
                        break;
                     }
 

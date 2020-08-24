@@ -5,7 +5,8 @@ import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
 import com.prolog.eis.dto.eis.mcs.TaskReturnInBoundRequestResponse;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.service.MCSLineService;
-import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
+import com.prolog.eis.service.mcs.impl.McsTaskWithOutPathAsycDto;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import io.swagger.annotations.Api;
@@ -31,9 +32,11 @@ public class PrologJmMCSController {
 	@Autowired
 	private QcInBoundTaskService qcInBoundTaskService;
 	@Autowired
-	private McsInterfaceService mcsInterfaceService;
+	private McsInterfaceServiceSend mcsInterfaceServiceSend;
 	@Autowired
 	private MCSLineService mcsLineService;
+	@Autowired
+	com.prolog.eis.service.mcs.McsInterfaceService mcsInterfaceService;
 
 	@ApiOperation(value = "提升机请求", notes = "提升机请求")
 	@PostMapping("/mcsRequest")
@@ -78,11 +81,13 @@ public class PrologJmMCSController {
 			//int type, String containerNo, String address, String target, String weight, String priority,int state
 			//给mcs发指令
 			for (McsRequestTaskDto mcsRequestTaskDto : sendList) {
-				mcsInterfaceService.sendMcsTaskWithOutPathAsyc(mcsRequestTaskDto.getType(), 
+				mcsInterfaceServiceSend.sendMcsTaskWithOutPathAsyc(mcsRequestTaskDto.getType(),
 						mcsRequestTaskDto.getStockId(), 
 						mcsRequestTaskDto.getSource(),
 						mcsRequestTaskDto.getTarget(),
 						"0", "99",0);
+
+
 			}
 		}catch (Exception e) {
 			// TODO: handle exception

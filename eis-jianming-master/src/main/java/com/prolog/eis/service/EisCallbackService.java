@@ -34,10 +34,11 @@ public interface EisCallbackService {
      */
     void checkBoundReport(String billNo);
 
+
+
     /**
-     * eis 重复回告 wms
-     * @param repeatReport
-     * @throws IOException
+     * 回告成功更新数据
      */
-    void recall(RepeatReport repeatReport);
+    void updateResport(boolean  isSuccess,RepeatReport repeatReport);
+
 }

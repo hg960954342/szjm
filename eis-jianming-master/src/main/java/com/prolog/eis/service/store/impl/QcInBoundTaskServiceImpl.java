@@ -29,6 +29,7 @@ import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.base.SysParameService;
 import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.sxk.SxInStoreService;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
@@ -79,6 +80,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private DeviceJunctionPortMapper deviceJunctionPortMapper;
 	@Autowired
 	private LedShowMapper ledShowMapper;
+	@Autowired
+	private McsInterfaceServiceSend mcsInterfaceServiceSend;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -187,8 +190,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	}
 
 	/**
-	 * 入庫驗證
-	 * @param   1 空托入庫驗證  2 字母托入庫驗證
+	 * 入庫驗證 1 空托入庫驗證  2 字母托入庫驗證
+	 * @param
 	 * @param containerNo
 	 * @param wmsPortNo
 	 * @param junctionPort
@@ -281,7 +284,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		if(!sxStores.isEmpty()) {
 			FileLogHelper.WriteLog("mcsfoldInBoundError", String.format("容器%s存在库存", containerNo));
 
-			mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+			mcsInterfaceServiceSend.sendMcsTaskWithOutPathAsyc(1,
 					containerNo, 
 					source,
 					"-1",
@@ -318,7 +321,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		if(null == locationId) {
 			FileLogHelper.WriteLog("mcsfoldInBoundError", String.format("货位不足"));
 
-			mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+			mcsInterfaceServiceSend.sendMcsTaskWithOutPathAsyc(1,
 					containerNo, 
 					source,
 					"-1",
@@ -333,7 +336,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		SxStoreLocation sxStoreLocation = sxStoreLocationMapper.findById(locationId, SxStoreLocation.class);
 		String target = PrologCoordinateUtils.splicingStr(sxStoreLocation.getX(), sxStoreLocation.getY(), sxStoreLocation.getLayer());
 
-		mcsInterfaceService.sendMcsTaskWithOutPathAsyc(1, 
+		mcsInterfaceServiceSend.sendMcsTaskWithOutPathAsyc(1,
 				emptyContainNo,
 				source,
 				target,
@@ -514,7 +517,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				PortInfo portInfo = portInfos.get(0);
 				String source = PrologCoordinateUtils.splicingStr(portInfo.getX(), portInfo.getY(), portInfo.getLayer());
 
-				mcsInterfaceService.sendMcsTaskWithOutPathAsyc(4, 
+				mcsInterfaceServiceSend.sendMcsTaskWithOutPathAsyc(4,
 						containerCode, 
 						source,
 						"1",

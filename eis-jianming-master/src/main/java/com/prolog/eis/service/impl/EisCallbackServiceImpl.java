@@ -6,11 +6,13 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.InBoundTaskHistoryMapper;
 import com.prolog.eis.dao.RepeatReportMapper;
-import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.*;
-import com.prolog.eis.service.*;
-import com.prolog.eis.service.login.WmsLoginService;
-import com.prolog.eis.util.*;
+import com.prolog.eis.service.ContainerTaskDetailService;
+import com.prolog.eis.service.ContainerTaskService;
+import com.prolog.eis.service.EisCallbackService;
+import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.util.FileLogHelper;
+import com.prolog.eis.util.NameAndSimplePropertyPreFilter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @Service
@@ -43,16 +43,26 @@ public class EisCallbackServiceImpl implements EisCallbackService {
     @Autowired
     private RepeatReportMapper repeatReportMapper;
 
-    @Autowired
-    private WmsLoginService wmsLoginService;
 
     @Autowired
     private AgvStorageLocationMapper agvStorageLocationMapper;
 
     @Autowired
     private InBoundTaskHistoryMapper inBoundTaskHistoryMapper;
-    @Autowired
-    RestTemplate restTemplate;
+
+
+    @Override
+    public void updateResport(boolean  isSuccess,RepeatReport repeatReport){
+
+            if(isSuccess){
+                repeatReportMapper.deleteById(repeatReport.getId(),RepeatReport.class);
+            }else{
+                repeatReport.setSendTime(new Date());
+                 repeatReportMapper.update(repeatReport);
+            }
+
+
+    }
 
     /**
      * 入库 回告 wms 写入回告重发表
@@ -155,45 +165,6 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         repeatReportMapper.save(repeatReport);
     }
 
-    /**
-     * 重发 回告
-     *
-     * @param repeatReport
-     */
-    @Override
-    public void recall(RepeatReport repeatReport) {
-        try {
-            wmsLoginService.loginWms();
-            String token = LoginWmsResponse.accessToken;
-
-            String url = repeatReport.getReportUrl();
-            String json = repeatReport.getReportData();
-
-            //添加日志信息
-            String msg = "EIS->WMS [WMSInterface] 回告请求JSON：[message]:" + json + "\r\n请求路径：" + url;
-            FileLogHelper.WriteLog("WMSRequest", msg);
-
-            //发送回告
-            String restJson = HttpUtils.post(url, json, token);
-
-            String resultMsg = "EIS->WMS [WMSInterface] 返回JSON：[message]:" + restJson;
-            FileLogHelper.WriteLog("WMSRequest", resultMsg);
-
-            repeatReport.setSendTime(new Date());
-            repeatReport.setMessage(LogServices.spliitString(restJson));
-            PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
-            repeatReportMapper.update(repeatReport);
-            if ("0".equals(helper.getString("stateCode"))) {
-                //回告成功 删除
-               repeatReportMapper.deleteById(repeatReport.getId(),RepeatReport.class);
-            }
-
-        } catch (IOException e) {
-            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败：" + e.getMessage();
-            FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
-        }
-
-    }
 
 
     /**

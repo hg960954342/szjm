@@ -13,12 +13,14 @@ import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.service.enums.OutBoundEnum;
 import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -33,12 +35,15 @@ public class MCSLineServiceImpl implements MCSLineService{
 	private ContainerTaskMapper containerTaskMapper;
 	@Autowired
 	private SxStoreMapper sxStoreMapper;
-	@Autowired
-	private McsInterfaceService mcsInterfaceService;
+
 	@Autowired
 	private PortInfoMapper portInfoMapper;
 	@Autowired
 	private AgvStorageLocationMapper agvStorageLocationMapper;
+	@Autowired
+	private McsInterfaceServiceSend mcsInterfaceServiceSend;
+	@Autowired
+	private McsInterfaceService mcsInterfaceService;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -103,7 +108,6 @@ public class MCSLineServiceImpl implements MCSLineService{
 	}
 	
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void buildEmptyContainerSupply() throws Exception {
 		
 		//获取
@@ -129,21 +133,9 @@ public class MCSLineServiceImpl implements MCSLineService{
 		if(tasks.isEmpty()) {
 			//判断mcs这个点位是否存在托盘
 			String source = PrologCoordinateUtils.splicingStr(portInfo.getX(), portInfo.getY(), portInfo.getLayer());
-			boolean exit = mcsInterfaceService.getExitStatus(source);
-			if(exit) {
-				//创建agv区域的空托补给任务
-				ContainerTask containerTask = new ContainerTask();
-				//空托盘没有托盘号
-				containerTask.setContainerCode(PrologStringUtils.newGUID());
-				containerTask.setTaskType(6);
-				containerTask.setSource(agvStorageLocation.getRcsPositionCode());
-				containerTask.setSourceType(2);
-				containerTask.setTaskState(1);
-				containerTask.setQty(1d);
-				containerTask.setCreateTime(new Date());
-				
-				containerTaskMapper.save(containerTask);
-			}
+			boolean exit = mcsInterfaceServiceSend.getExitStatus(source);
+			mcsInterfaceService.updateBuildEmptyContainerSupply(exit,agvStorageLocation.getRcsPositionCode());
+
 		}
 	}
 }

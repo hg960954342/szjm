@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -57,7 +58,7 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
 
                     //查找当前点位是否有任务
                     String source= PrologLocationUtils.splicingXYStr(layer,x,y);
-                    List<ContainerTask> listContainerTask= containerTaskMapper.selectBySource(source);
+                    List<ContainerTask> listContainerTask= new ArrayList<>();//containerTaskMapper.selectBySource(source);
                     return (listContainerTask.size()==0)
                             &&((layer+"").equals(task.getCeng()));
                 }).collect(Collectors.toList());

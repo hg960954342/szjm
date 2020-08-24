@@ -3,9 +3,10 @@ package com.prolog.eis.scheduler;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.mcs.MCSTask;
 import com.prolog.eis.model.wms.RepeatReport;
-import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.RepeatReportService;
+import com.prolog.eis.service.impl.EisCallbackServiceSend;
 import com.prolog.eis.service.mcs.McsInterfaceService;
+import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
 import com.prolog.eis.util.FileLogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,10 +25,13 @@ public class RecallBackTask {
     private RepeatReportService repeatReportService;
 
     @Autowired
-    private EisCallbackService eisCallbackService;
+    private EisCallbackServiceSend eisCallbackServiceSend;
 
     @Autowired
     private McsInterfaceService mcsInterfaceService;
+
+    @Autowired
+    private McsInterfaceServiceSend mcsInterfaceServiceSend;
 
     /**
      * 回告wms未成功 重复回告
@@ -42,7 +46,7 @@ public class RecallBackTask {
         List<RepeatReport> repeatReports = repeatReportService.findByState(0);
         if (repeatReports != null && repeatReports.size() > 0) {
             for (RepeatReport repeatReport : repeatReports) {
-                eisCallbackService.recall(repeatReport); //异步任务
+                eisCallbackServiceSend.recall(repeatReport);
             }
         }
 
@@ -61,7 +65,7 @@ public class RecallBackTask {
 
         try {  List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();
             for (MCSTask mcsTask : mcsTasks) {
-                mcsInterfaceService.recall(mcsTask);}   //异步任务
+                mcsInterfaceServiceSend.recall(mcsTask);}
         } catch (Exception e) {
             LogServices.logSys("resendMcsTaskMCS重发异常:" + e.toString());
         }

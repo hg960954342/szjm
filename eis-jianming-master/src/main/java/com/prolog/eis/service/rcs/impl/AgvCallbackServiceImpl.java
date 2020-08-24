@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class AgvCallbackServiceImpl implements AgvCallbackService {
 
     @Autowired
@@ -95,47 +96,47 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
             //判断托盘到位 区域 agv
             if (containerTask.getTargetType() == 1) {
 
-                    //String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getSource());
-                    Double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
-                    if(pQty==null){
-                        pQty=0.0;
-                    }
-                    double rQty = containerTask.getQty()-pQty;
-                    if("057200AB048300".equals(containerTask.getSource())){
-                        LedShow ledShow = ledShowMapper.findById(4,LedShow.class);
-                        if(ledShow != null){
-                            PrologLedController prologLedController = new PrologLedController();
-                            try {
-                                prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"根板蓝",pQty,containerTask.getLotId(),rQty);
-                            }catch (Exception e){
-                                LogServices.logSys(e.getMessage());
-                            }
+                //String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getSource());
+                Double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
+                if (pQty == null) {
+                    pQty = 0.0;
+                }
+                double rQty = containerTask.getQty() - pQty;
+                if ("057200AB048300".equals(containerTask.getSource())) {
+                    LedShow ledShow = ledShowMapper.findById(4, LedShow.class);
+                    if (ledShow != null) {
+                        PrologLedController prologLedController = new PrologLedController();
+                        try {
+                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "根板蓝", pQty, containerTask.getLotId(), rQty);
+                        } catch (Exception e) {
+                            LogServices.logSys(e.getMessage());
                         }
                     }
+                }
 
-                    if("054320AB048300".equals(containerTask.getSource())){
-                        LedShow ledShow = ledShowMapper.findById(5,LedShow.class);
-                        if(ledShow != null){
-                            PrologLedController prologLedController = new PrologLedController();
-                            try {
-                                prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"蓝根板",pQty,containerTask.getLotId(),rQty);
-                            }catch (Exception e){
-                                LogServices.logSys(e.getMessage());
-                            }
+                if ("054320AB048300".equals(containerTask.getSource())) {
+                    LedShow ledShow = ledShowMapper.findById(5, LedShow.class);
+                    if (ledShow != null) {
+                        PrologLedController prologLedController = new PrologLedController();
+                        try {
+                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "蓝根板", pQty, containerTask.getLotId(), rQty);
+                        } catch (Exception e) {
+                            LogServices.logSys(e.getMessage());
                         }
                     }
+                }
 
-                    if("051440AB047200".equals(containerTask.getSource())){
-                        LedShow ledShow = ledShowMapper.findById(6,LedShow.class);
-                        if(ledShow != null){
-                            PrologLedController prologLedController = new PrologLedController();
-                            try {
-                                prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"板根蓝",pQty,containerTask.getLotId(),rQty);
-                            }catch (Exception e){
-                                LogServices.logSys(e.getMessage());
-                            }
+                if ("051440AB047200".equals(containerTask.getSource())) {
+                    LedShow ledShow = ledShowMapper.findById(6, LedShow.class);
+                    if (ledShow != null) {
+                        PrologLedController prologLedController = new PrologLedController();
+                        try {
+                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "板根蓝", pQty, containerTask.getLotId(), rQty);
+                        } catch (Exception e) {
+                            LogServices.logSys(e.getMessage());
                         }
                     }
+                }
 
                 //任务类型 业务出库
                 if (containerTask.getTaskType() == 1) {
@@ -158,33 +159,33 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                 //删除容器明细
                 containerTaskDetailMapper.deleteByMap(MapUtils.put("containerCode", containerTask.getContainerCode()).getMap(), ContainerTaskDetail.class);
 
-                }
-                //判断托盘到位 区域 输送线
-                if (containerTask.getTargetType() == 2) {
+            }
+            //判断托盘到位 区域 输送线
+            if (containerTask.getTargetType() == 2) {
 
-                    //小车搬运后当前位置在入库输送线口
-                    //通知输送线运行
-                    try {
-                        qcInBoundTaskService.rcsCompleteForward(containerTask.getContainerCode(), targetPosition.getId());
-                        //更改目标点位状态
-                        if (containerTask.getTaskType() == 4){ //空托入库
-                            //删除容器任务
-                            containerTaskService.delete(containerTask);
-                            //删除空托入库任务
-                            inboundTaskMapper.deleteByMap(MapUtils.put("containerCode",containerTask.getContainerCode()).getMap(), InboundTask.class);
-                        }
-                        targetPosition.setTaskLock(0);
-                        targetPosition.setLocationLock(0);
-                        agvStorageLocationMapper.update(targetPosition);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                //小车搬运后当前位置在入库输送线口
+                //通知输送线运行
+                try {
+                    qcInBoundTaskService.rcsCompleteForward(containerTask.getContainerCode(), targetPosition.getId());
+                    //更改目标点位状态
+                    if (containerTask.getTaskType() == 4) { //空托入库
+                        //删除容器任务
+                        containerTaskService.delete(containerTask);
+                        //删除空托入库任务
+                        inboundTaskMapper.deleteByMap(MapUtils.put("containerCode", containerTask.getContainerCode()).getMap(), InboundTask.class);
                     }
+                    targetPosition.setTaskLock(0);
+                    targetPosition.setLocationLock(0);
+                    agvStorageLocationMapper.update(targetPosition);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
-
-
     }
+
+
+}
 
 
 

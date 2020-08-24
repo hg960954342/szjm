@@ -8,6 +8,7 @@ import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class EmptyContainerTask {
      *
      * @throws Exception
      */
-    //@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildEmptyContainerSupply()   {
         long start=System.currentTimeMillis();
         try {
@@ -48,7 +49,7 @@ public class EmptyContainerTask {
     /**
      * 补空托托盘
      */
-    //@Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void replenishContainer()   {
         long start=System.currentTimeMillis();
         Map<String, Object> map = MapUtils.put("ceng", 3).put("locationType", 1).put("taskLock", 0).put("locationLock", 0).getMap();
@@ -59,7 +60,7 @@ public class EmptyContainerTask {
             for (AgvStorageLocation agvStorageLocation : agvStorageLocations) {
                 //判断是否有空托盘
 
-                List<ContainerTask> containerTasks = containerTaskService.selectByTaskCode("6");
+                List<ContainerTask> containerTasks = containerTaskService.selectByTaskType("6");
                 if (containerTasks != null && containerTasks.size() > 0) {
                     //生成容器任务container_task 托盘号uuid,task_type 待定，source....
                     ContainerTask containerTask = containerTasks.get(0);

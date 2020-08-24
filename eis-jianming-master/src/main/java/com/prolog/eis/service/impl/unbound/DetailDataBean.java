@@ -14,10 +14,17 @@ public class DetailDataBean {
     private float qty;  //总量
     private float cqty; //正在出库的量
     private float finishQty;
+    private String billNo;
     private float last; //需要出库的总量
 
 
+    public String getBillNo() {
+        return billNo;
+    }
 
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
 
     public float getLast() {
         return qty-cqty-finishQty;

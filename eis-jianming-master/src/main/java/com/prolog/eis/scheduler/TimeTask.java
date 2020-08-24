@@ -3,9 +3,9 @@ package com.prolog.eis.scheduler;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
-import com.prolog.eis.service.EisSendRcsTaskService;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.OutBoundTaskService;
+import com.prolog.eis.service.impl.EisSendRcsTaskServiceSend;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.FileLogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -28,7 +27,7 @@ public class TimeTask {
 
 
     @Autowired
-    private EisSendRcsTaskService eisSendRcsTaskService;
+    private EisSendRcsTaskServiceSend eisSendRcsTaskServiceSend;
 
     @Autowired
     private ContainerTaskService containerTaskService;
@@ -105,7 +104,7 @@ public class TimeTask {
 
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
         if (!containerTasks.isEmpty() && containerTasks.size() > 0) {
-            eisSendRcsTaskService.sendTask(containerTasks);  //异步任务
+            eisSendRcsTaskServiceSend.sendTask(containerTasks);
         }
         long end=System.currentTimeMillis();
         FileLogHelper.WriteLog("timeTask","TimeTask类 sendTask2Rcs方法 结束时间:"+(end/1000));
