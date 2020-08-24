@@ -8,7 +8,7 @@ CREATE TABLE `sys_log` (
   `error` varchar(5000) DEFAULT NULL COMMENT '错误信息',
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-)COMMENT='EIS接口请求表';
+)COMMENT='EIS系统错误日志表';
 
 DROP TABLE IF EXISTS `eis_log_interface`;
 CREATE TABLE `eis_log_interface` (
@@ -42,3 +42,15 @@ CREATE TABLE `gcs_log` (
   `error` varchar(5000) DEFAULT NULL COMMENT '错误消息',
   PRIMARY KEY (`id`)
 )COMMENT='请求GCS接口日志表';
+
+DROP TABLE IF EXISTS `sys_log_business`;
+CREATE TABLE `sys_log_business` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `class_name` varchar(255)  NOT NULL COMMENT '调用的类',
+  `class_simple_name` varchar(255) NOT NULL,
+  `class_method` varchar(255)  NOT NULL COMMENT '调用的方法',
+  `line_number` varchar(255) NOT NULL,
+  `error` varchar(5000) DEFAULT NULL COMMENT '错误信息',
+  `create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)COMMENT='EIS系统业务错误日志表';
