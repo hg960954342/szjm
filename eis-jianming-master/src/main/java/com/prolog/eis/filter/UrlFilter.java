@@ -4,11 +4,9 @@ import com.prolog.eis.logs.LogServices;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -17,7 +15,6 @@ public class UrlFilter extends OncePerRequestFilter {
 
 
 
-    ServletContext context;
 
     public void destroy() {
     }
@@ -26,7 +23,8 @@ public class UrlFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {        request = new RequestWrapper(request);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        request = new RequestWrapper(request);
         response = new ResponseWrapper(response);
         filterChain.doFilter(request, response);
         String requestparmas=printRequestLog(request);
@@ -63,7 +61,7 @@ public class UrlFilter extends OncePerRequestFilter {
         try {
             msg.append(new String(response.toByteArray(), response.getCharacterEncoding()));
         } catch (UnsupportedEncodingException e) {
-            LogServices.logSys(e.getMessage());
+            LogServices.logSys(e);
         }
 
         return msg.toString();

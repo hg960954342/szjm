@@ -8,9 +8,11 @@ import com.prolog.eis.service.login.WmsLoginService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.HttpUtils;
 import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.eis.util.PrologHttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
@@ -28,6 +30,10 @@ public class EisCallbackServiceSend   {
     private WmsLoginService wmsLoginService;
 
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+
 
 
     public void recall(RepeatReport repeatReport) {
@@ -39,18 +45,10 @@ public class EisCallbackServiceSend   {
             String url = repeatReport.getReportUrl();
             String json = repeatReport.getReportData();
 
-            //添加日志信息
-            String msg = "EIS->WMS [WMSInterface] 回告请求JSON：[message]:" + json + "\r\n请求路径：" + url;
-            FileLogHelper.WriteLog("WMSRequest", msg);
+            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json,token), String.class);
 
             //发送回告
-            String restJson = HttpUtils.post(url, json, token);
-
-            String resultMsg = "EIS->WMS [WMSInterface] 返回JSON：[message]:" + restJson;
-            FileLogHelper.WriteLog("WMSRequest", resultMsg);
-            PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
-
-
+             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
             if ("0".equals(helper.getString("stateCode"))) {
                 //回告成功 删除
                 isSucucess= true;
@@ -60,10 +58,10 @@ public class EisCallbackServiceSend   {
                 isSucucess= false;
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败：" + e.getMessage();
-            FileLogHelper.WriteLog("WMSRequestErr", resultMsg);
-            isSucucess= false;
+            LogServices.logSysBusiness(resultMsg);
+             isSucucess= false;
         }
 
 

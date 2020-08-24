@@ -5,8 +5,11 @@ import com.prolog.eis.service.login.WmsLoginService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.HttpUtils;
 import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.eis.util.PrologHttpUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +28,8 @@ public class WmsLoginServiceImpl implements WmsLoginService {
     private String wmsIp;
     @Value("${prolog.wms.port:}")
     private String wmsPort;
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * 登录获取 token
@@ -44,7 +49,7 @@ public class WmsLoginServiceImpl implements WmsLoginService {
 
             LoginWmsResponse.getTokenTime = System.currentTimeMillis() / 1000;
 
-            String restjson = HttpUtils.post(url, json);
+            String restjson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json), String.class);
             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restjson);
             String data = helper.getString("data");
             PrologApiJsonHelper jwtData = PrologApiJsonHelper.createHelper(data);
@@ -68,8 +73,8 @@ public class WmsLoginServiceImpl implements WmsLoginService {
 
         try {
             String json = PrologApiJsonHelper.toJson(map);
-            String restjson = HttpUtils.post(url, json);
-            PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restjson);
+            String restjson = restTemplate.postForObject(url, PrologHttpUtils.getRequestEntity(json), String.class);
+             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restjson);
             String data = helper.getString("data");
             PrologApiJsonHelper jwtData = PrologApiJsonHelper.createHelper(data);
             LoginWmsResponse.accessToken = jwtData.getString("access_token");

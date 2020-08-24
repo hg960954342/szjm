@@ -107,9 +107,9 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                     if (ledShow != null) {
                         PrologLedController prologLedController = new PrologLedController();
                         try {
-                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "根板蓝", pQty, containerTask.getLotId(), rQty);
+                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "根板蓝", pQty, containerTask.getLotId(), rQty,"一站");
                         } catch (Exception e) {
-                            LogServices.logSys(e.getMessage());
+                            LogServices.logSys(e);
                         }
                     }
                 }
@@ -119,9 +119,9 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                     if (ledShow != null) {
                         PrologLedController prologLedController = new PrologLedController();
                         try {
-                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "蓝根板", pQty, containerTask.getLotId(), rQty);
+                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "蓝根板", pQty, containerTask.getLotId(), rQty,"二站");
                         } catch (Exception e) {
-                            LogServices.logSys(e.getMessage());
+                            LogServices.logSys(e);
                         }
                     }
                 }
@@ -131,29 +131,38 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                     if (ledShow != null) {
                         PrologLedController prologLedController = new PrologLedController();
                         try {
-                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "板根蓝", pQty, containerTask.getLotId(), rQty);
+                            prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), "板根蓝", pQty, containerTask.getLotId(), rQty,"三站");
                         } catch (Exception e) {
-                            LogServices.logSys(e.getMessage());
+                            LogServices.logSys(e);
                         }
                     }
                 }
+
+                if("050000AB051200".equals(containerTask.getSource())){
+                    LedShow ledShow = ledShowMapper.findById(6,LedShow.class);
+                    if(ledShow != null){
+                        PrologLedController prologLedController = new PrologLedController();
+                        try {
+                            prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),"板根蓝",pQty,containerTask.getLotId(),rQty,"四站");
+                        }catch (Exception e){
+                            LogServices.logSys(e);
+                        }
+                    }
+                }
+
 
                 //任务类型 业务出库
                 if (containerTask.getTaskType() == 1) {
                     //出库完成 回告
                     eisCallbackService.outBoundReport(containerTask);
-                    //锁定拣选站
-                    targetPosition.setLocationLock(1);
-                    agvStorageLocationMapper.update(targetPosition);
                 }
                 //任务类型 移库出库
                 if (containerTask.getTaskType() == 2) {
                     eisCallbackService.moveBoundReport(containerTask);
-                    //锁定拣选站
-                    targetPosition.setLocationLock(1);
-                    agvStorageLocationMapper.update(targetPosition);
                 }
-
+                //锁定拣选站
+                targetPosition.setLocationLock(1);
+                agvStorageLocationMapper.update(targetPosition);
                 //删除容器任务
                 containerTaskService.delete(containerTask);
                 //删除容器明细

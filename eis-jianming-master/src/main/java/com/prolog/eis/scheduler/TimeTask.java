@@ -6,6 +6,7 @@ import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.OutBoundTaskService;
 import com.prolog.eis.service.impl.EisSendRcsTaskServiceSend;
+import com.prolog.eis.service.login.WmsLoginService;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.FileLogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +50,7 @@ public class TimeTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildCkTask()   {
-        long start=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildCkTask方法 开始时间:"+(start / 1000));
         inBoundTaskService.inboundTask();
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildCkTask方法 结束时间:"+(end/1000));
     }
 
 
@@ -64,19 +61,13 @@ public class TimeTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildUnTask()   {
-        long start=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildUnTask方法 开始时间:"+(start/1000));
 
         outBoundTaskService.unboundTask();
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildUnTask方法 结束时间:"+(end/1000));
 
     }
 
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildAndSendSxCkTask()  {
-        long start=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildAndSendSxCkTask方法 开始时间:"+(start/1000));
 
         try {
             synchronized ("kucun".intern()) {
@@ -84,61 +75,24 @@ public class TimeTask {
             }
             sxStoreCkService.sendSxCkTask();
         } catch (Exception e) {
-             LogServices.logSys("生成四向库出库任务错误"+e.getMessage());
+             LogServices.logSys(e);
         }
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 buildAndSendSxCkTask方法 结束时间:"+(end/1000));
 
     }
-
-
-
-
-
 
     //定时给agv小车下分任务
 	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
     public void sendTask2Rcs()  {
-        long start=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 sendTask2Rcs方法 开始时间:"+(start/1000));
 
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
         if (!containerTasks.isEmpty() && containerTasks.size() > 0) {
             eisSendRcsTaskServiceSend.sendTask(containerTasks);
         }
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask","TimeTask类 sendTask2Rcs方法 结束时间:"+(end/1000));
 
     }
 
 
-
-
-
-
-//    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-   /* public void testReport()   {
-        ContainerTask containerTask = new ContainerTask();
-//		containerTask.setContainerCode("800011");
-//        containerTask.setContainerCode("800012");//出库
-//        containerTask.setSource("057200AB054000");
-//		containerTask.setContainerCode("700010");//移库
-//		containerTask.setTaskType(2);
-//		containerTask.setItemId("SPH00001363");
-//		containerTask.setOwnerId("008");
-//		eisCallbackService.inBoundReport("800027");//入库
-//		eisCallbackService.inBoundReport("800045");//移入回告
-//        eisCallbackService.outBoundReport(containerTask);
-        AgvStorageLocation byRcs = agvStorageLocationMapper.findByRcs("060080AB054000");
-
-//		eisCallbackService.moveBoundReport(containerTask);
-//		eisCallbackService.checkBoundReport("PDC00000101");
-
-
-    }*/
-
-  /*  @Autowired
-    private WmsLoginService wmsLoginService;*/
+    private WmsLoginService wmsLoginService;
 /*
 
     //刷新token

@@ -1,6 +1,7 @@
 package com.prolog.eis.scheduler;
 
 import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class EmptyContainerTask {
@@ -33,16 +35,15 @@ public class EmptyContainerTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildEmptyContainerSupply()   {
-        long start=System.currentTimeMillis();
+
         try {
             mcsLineService.buildEmptyContainerSupply();
 
         } catch (Exception e) {
-            FileLogHelper.WriteLog("buildEmptyContainerSupplyError", e.toString());
+            LogServices.logSys(new RuntimeException("buildEmptyContainerSupplyError"));
         }
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"buildEmptyContainerSupply");
-        FileLogHelper.WriteLog("timeTask","LogTask类 clearLog方法 开始时间:"+start);
+
+
     }
 
 
@@ -51,8 +52,7 @@ public class EmptyContainerTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void replenishContainer()   {
-        long start=System.currentTimeMillis();
-        Map<String, Object> map = MapUtils.put("ceng", 3).put("locationType", 1).put("taskLock", 0).put("locationLock", 0).getMap();
+         Map<String, Object> map = MapUtils.put("ceng", 3).put("locationType", 1).put("taskLock", 0).put("locationLock", 0).getMap();
         List<AgvStorageLocation> agvStorageLocations = agvStorageLocationMapper.findByMap(map, AgvStorageLocation.class);
 
         //判断是否需要补空托盘
@@ -66,6 +66,7 @@ public class EmptyContainerTask {
                     ContainerTask containerTask = containerTasks.get(0);
                     containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
                     containerTask.setTargetType(1);
+                    containerTask.setTaskCode(UUID.randomUUID().toString().replaceAll("-", ""));
                     containerTaskService.update(containerTask);
 
 
@@ -73,9 +74,7 @@ public class EmptyContainerTask {
             }
 
         }
-        long end=System.currentTimeMillis();
-        FileLogHelper.WriteLog("timeTask",((end-start)/1000)+"replenishContainer");
-    }
+     }
 
 
 }

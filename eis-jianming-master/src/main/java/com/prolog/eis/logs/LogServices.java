@@ -1,14 +1,13 @@
 package com.prolog.eis.logs;
 
-import com.prolog.eis.dao.EisInterfaceLogMapper;
-import com.prolog.eis.dao.LogMapper;
-import com.prolog.eis.dao.LogSysMapper;
-import com.prolog.eis.dao.RcsLogMapper;
+import com.prolog.eis.dao.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 @Component
 public class LogServices {
@@ -21,6 +20,10 @@ public class LogServices {
 
     @Autowired
     LogSysMapper logSysMapper;
+
+    @Autowired
+    LogSysBusinessMapper logSysBusinessMapper;
+
     @Autowired
     RcsLogMapper rcsLogMapper;
 
@@ -33,6 +36,7 @@ public class LogServices {
         logServices.eisInterfaceLogMapper = this.eisInterfaceLogMapper;
         logServices.logSysMapper=this.logSysMapper;
         logServices.rcsLogMapper=this.rcsLogMapper;
+        logServices.logSysBusinessMapper=this.logSysBusinessMapper;
     }
 
     /**
@@ -103,11 +107,12 @@ public class LogServices {
         logServices.rcsLogMapper.save(rcsLog);
     }
 
+
     /**
      * 系统内部日志
-     * @param error
+     * @param e
      */
-    public static void logSys(String error){
+    public static void logSys(Exception e){
         SysLog sysLog=new SysLog();
         String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
         sysLog.setClassName(className);
@@ -117,9 +122,36 @@ public class LogServices {
         sysLog.setClassMethod(methodName);
         int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
         sysLog.setLineNumber(lineNumber+"");
-        sysLog.setError(spliitString(error));
+        sysLog.setError(toString_(e));
         sysLog.setCreateTime(new java.util.Date());
         logServices.logSysMapper.save(sysLog);
+    }
+
+    /**
+     * 系统内部业务输出日志
+     * @param errorMsg
+     */
+    public static void logSysBusiness(String errorMsg){
+        SysBusinessLog sysBusinessLog=new SysBusinessLog();
+        String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
+        sysBusinessLog.setClassName(className);
+        String classSimpleName = StringUtils.substring(className,StringUtils.lastIndexOf(className,".")+1);
+        sysBusinessLog.setClassSimpleName(classSimpleName);
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();//调用的方法名
+        sysBusinessLog.setClassMethod(methodName);
+        int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
+        sysBusinessLog.setLineNumber(lineNumber+"");
+        sysBusinessLog.setError(spliitString(errorMsg));
+        sysBusinessLog.setCreateTime(new java.util.Date());
+        logServices.logSysBusinessMapper.save(sysBusinessLog);
+    }
+    private static String toString_(Throwable e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw, true);
+        e.printStackTrace(pw);
+        pw.flush();
+        sw.flush();
+        return spliitString(sw.toString());
     }
 
 
@@ -131,6 +163,7 @@ public class LogServices {
         logServices.logMapper.deleteAll();
         logServices.logSysMapper.deleteAll();
         logServices.eisInterfaceLogMapper.deleteAll();
+        logServices.rcsLogMapper.deleteAll();
     }
 
     /**

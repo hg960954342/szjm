@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -47,8 +46,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     @Autowired
     ContainerTaskDetailMapper containerTaskDetailMapperMapper;
 
-    @Autowired
-    SimilarityDataEntityListLoad similarityDataEntityListLoad;
+
 
     @Autowired
     QcSxStoreMapper qcSxStoreMapper;
@@ -63,9 +61,10 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     public void unbound(OutboundTask outboundTask) {
 
         List<PickStation> lists=getAvailablePickStation();
-        if(lists.size()<1) { LogServices.logSys("无可用拣选站");return;}
+        if(lists.size()<1) { LogServices.logSysBusiness("无可用拣选站");return;}
 
         String pickCode=lists.get(0).getDeviceNo();
+        SimilarityDataEntityLoadInterface similarityDataEntityListLoad=getsimilarityDataEntityListLoad(outboundTask);
 
         List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList();
 
@@ -85,12 +84,12 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
                 Float countQty=qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
                 if(countQty==null) countQty=0f;
-                if (countQty<last) { LogServices.logSys("库存:"+countQty+"不够出:"+last+"！"); return; }
+                if (countQty<last) {LogServices.logSysBusiness("库存:"+countQty+"不够出:"+last+"！"); return; }
                //更新任务锁
                 AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
               //  agvStorageLocation.setTaskLock(1);
               //  agvStorageLocationMapper.update(agvStorageLocation);
-                  if(agvStorageLocation==null){ LogServices.logSys(pickCode+"拣选站点位已经锁定！");return ;}
+                  if(agvStorageLocation==null){ LogServices.logSysBusiness(pickCode+"拣选站点位已经锁定！");return ;}
                 int  LocationType= agvStorageLocation.getLocationType();
                 if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
                  /*   List<String> listBillNos=new ArrayList<String>();
@@ -133,8 +132,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                           containerTaskDetailMapperMapper.save(containerTaskDetail);
                       }
 
-                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.currentBillNoList));
-                        similarityDataEntityListLoad.currentBillNoList.remove(","+detailDataBeand.getBillNo()+"'");
+                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.getCrrentBillNoList()));
+                        similarityDataEntityListLoad.getCrrentBillNoList().remove(","+detailDataBeand.getBillNo()+"'");
 
                       if (last <= 0) break;
                     }
@@ -173,8 +172,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                             containerTaskDetailMapperMapper.save(containerTaskDetail);
                         }
 
-                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.currentBillNoList));
-                        similarityDataEntityListLoad.currentBillNoList.remove(","+detailDataBeand.getBillNo()+"'");
+                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.getCrrentBillNoList()));
+                        similarityDataEntityListLoad.getCrrentBillNoList().remove(","+detailDataBeand.getBillNo()+"'");
                        break;
                     }
 
