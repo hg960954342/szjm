@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -47,8 +46,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     @Autowired
     ContainerTaskDetailMapper containerTaskDetailMapperMapper;
 
-    @Autowired
-    SimilarityDataEntityListLoad similarityDataEntityListLoad;
+
 
     @Autowired
     QcSxStoreMapper qcSxStoreMapper;
@@ -66,6 +64,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
         if(lists.size()<1) { LogServices.logSys("无可用拣选站");return;}
 
         String pickCode=lists.get(0).getDeviceNo();
+        SimilarityDataEntityLoadInterface similarityDataEntityListLoad=getsimilarityDataEntityListLoad(outboundTask);
 
         List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList();
 
@@ -133,8 +132,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                           containerTaskDetailMapperMapper.save(containerTaskDetail);
                       }
 
-                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.currentBillNoList));
-                        similarityDataEntityListLoad.currentBillNoList.remove(","+detailDataBeand.getBillNo()+"'");
+                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.getCrrentBillNoList()));
+                        similarityDataEntityListLoad.getCrrentBillNoList().remove(","+detailDataBeand.getBillNo()+"'");
 
                       if (last <= 0) break;
                     }
@@ -173,8 +172,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                             containerTaskDetailMapperMapper.save(containerTaskDetail);
                         }
 
-                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.currentBillNoList));
-                        similarityDataEntityListLoad.currentBillNoList.remove(","+detailDataBeand.getBillNo()+"'");
+                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.getCrrentBillNoList()));
+                        similarityDataEntityListLoad.getCrrentBillNoList().remove(","+detailDataBeand.getBillNo()+"'");
                        break;
                     }
 

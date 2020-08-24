@@ -2,7 +2,6 @@ package com.prolog.eis.service.impl.unbound;
 
 import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
-import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.model.wms.PickStation;
 import com.prolog.framework.core.restriction.Criteria;
@@ -40,8 +39,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     @Autowired
     ContainerTaskDetailMapper containerTaskDetailMapperMapper;
 
-    @Autowired
-    SimilarityDataEntityListLoad similarityDataEntityListLoad;
+
 
     @Autowired
     QcSxStoreMapper qcSxStoreMapper;
@@ -49,13 +47,18 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     @Autowired
     PortInfoMapper portInfoMapper;
 
-
-
+    @Autowired
+   private  Map<String, SimilarityDataEntityLoadInterface> similarityDataEntityListLoadMap  ;
 
 
 
     @Autowired
     private  Map<String, DefaultOutBoundPickCodeStrategy> strategyMap  ;
+
+    public SimilarityDataEntityLoadInterface getsimilarityDataEntityListLoad(OutboundTask OutboundTask){
+        int isPickCode=OutboundTask.getSfReq();
+        return similarityDataEntityListLoadMap.get(OutBoundType.IF_SfReq+isPickCode);
+    }
 
     public DefaultOutBoundPickCodeStrategy getDefaultOutBoundPickCodeStrategy(OutboundTask OutboundTask){
         int isPickCode=OutboundTask.getSfReq();
@@ -65,11 +68,11 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     @Override
     public void unbound(OutboundTask outboundTask) {
         DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy=this.getDefaultOutBoundPickCodeStrategy(outboundTask);
-        if(null!=defaultOutBoundPickCodeStrategy){
-            log.info(defaultOutBoundPickCodeStrategy.getClass().getName());
-            similarityDataEntityListLoad.addOutboundTask(outboundTask);
-            if(similarityDataEntityListLoad.currentBillNoList.size()!=0
-                    &&similarityDataEntityListLoad.currentBillNoList.size()>=similarityDataEntityListLoad.maxSize)
+        SimilarityDataEntityLoadInterface similarityDataEntityLoadStrategy=getsimilarityDataEntityListLoad(outboundTask);
+        if(null!=defaultOutBoundPickCodeStrategy&&similarityDataEntityLoadStrategy!=null){
+            similarityDataEntityLoadStrategy.addOutboundTask(outboundTask);
+             if(similarityDataEntityLoadStrategy.getCrrentBillNoList().size()!=0
+                    &&similarityDataEntityLoadStrategy.getCrrentBillNoList().size()>=similarityDataEntityLoadStrategy.getMaxSize())
             defaultOutBoundPickCodeStrategy.unbound(outboundTask);
         }
 
