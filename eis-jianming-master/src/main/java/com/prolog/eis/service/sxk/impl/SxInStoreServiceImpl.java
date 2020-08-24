@@ -43,7 +43,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 		try {
 			List<Integer> types = new ArrayList<>();
 			types.add(1);
-			
+
 			List<AreaSortDto> areaSortDtos = new ArrayList<>();
 			AreaSortDto areaSortDto = new AreaSortDto();
 			areaSortDto.setSortIndex(1);
@@ -227,7 +227,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 
 		return sxStoreLocation;
 	}
-	
+
 	private Integer chooseBestLocation(int locationNum, SxStoreLocation sxStoreLocationProperty1,
 			SxStoreLocation sxStoreLocationProperty2) throws Exception {
 		Integer storeLocationId = null;
@@ -289,7 +289,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 		}
 		return storeLocationId;
 	}
-	
+
 	private Integer findEmptyLocation(SxStoreLocationGroup sxStoreLocationGroup) throws Exception {
 		// 空货位组找出离出口最远的货位
 		Integer storeLocationId = null;
@@ -300,7 +300,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 			List<SxStoreLocation> sxStoreLocations = sxStoreLocationMapper
 					.findByMap(
 							MapUtils.put("locationIndex", locationNum)
-									.put("storeLocationGroupId", sxStoreLocationGroup.getId()).getMap(),
+							.put("storeLocationGroupId", sxStoreLocationGroup.getId()).getMap(),
 							SxStoreLocation.class);
 			storeLocationId = sxStoreLocations.get(0).getId();
 		} else if (sxStoreLocationGroup.getEntrance() == 2) {
@@ -316,13 +316,13 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 			List<SxStoreLocation> sxStoreLocations = sxStoreLocationMapper
 					.findByMap(
 							MapUtils.put("locationIndex", index)
-									.put("storeLocationGroupId", sxStoreLocationGroup.getId()).getMap(),
+							.put("storeLocationGroupId", sxStoreLocationGroup.getId()).getMap(),
 							SxStoreLocation.class);
 			storeLocationId = sxStoreLocations.get(0).getId();
 		}
 		return storeLocationId;
 	}
-	
+
 	private Integer findSingleLocation(int locationNum, SxStoreLocation sxStoreLocation) throws Exception {
 		Integer storeLocationId = null;
 		StoreLocationDistance storeLocationDistance = new StoreLocationDistance();
@@ -345,20 +345,20 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 		if (storeLocationDistance.getFlag() == 1) {
 			List<SxStoreLocation> sxStoreLocations = sxStoreLocationMapper.findByMap(
 					MapUtils.put("locationIndex", sxStoreLocation.getLocationIndex() - 1)
-							.put("storeLocationGroupId", sxStoreLocation.getStoreLocationGroupId()).getMap(),
+					.put("storeLocationGroupId", sxStoreLocation.getStoreLocationGroupId()).getMap(),
 					SxStoreLocation.class);
 			storeLocationId = sxStoreLocations.get(0).getId();
 		} else {
 			List<SxStoreLocation> sxStoreLocations = sxStoreLocationMapper.findByMap(
 					MapUtils.put("locationIndex", sxStoreLocation.getLocationIndex() + 1)
-							.put("storeLocationGroupId", sxStoreLocation.getStoreLocationGroupId()).getMap(),
+					.put("storeLocationGroupId", sxStoreLocation.getStoreLocationGroupId()).getMap(),
 					SxStoreLocation.class);
 			storeLocationId = sxStoreLocations.get(0).getId();
 		}
 
 		return storeLocationId;
 	}
-	
+
 	private Integer findLocationAscentId(SxStoreLocation sxLocation) throws Exception {
 		Integer sxStoreLocation = null;
 		Integer storeLocationId1 = sxLocation.getStoreLocationId1();
@@ -546,6 +546,33 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 		return inStoreLocationGroupDtosUsed;
 	}
 
+	// 查询相同属性的货位组
+	private List<InStoreLocationGroupDto> findNotSamePropertyLocationGroup(
+			List<InStoreLocationGroupDto> findSameTypeLocationGroup, String taskProperty1, String taskProperty2)
+					throws Exception {
+		List<InStoreLocationGroupDto> inStoreLocationGroupDtosUsed = new ArrayList<InStoreLocationGroupDto>();
+		for (InStoreLocationGroupDto inStoreLocationGroupDto : findSameTypeLocationGroup) {
+
+			inStoreLocationGroupDto.setEntrance1Property1(inStoreLocationGroupDto.getEntrance1Property1() == null ? ""
+					: inStoreLocationGroupDto.getEntrance1Property1());
+			inStoreLocationGroupDto.setEntrance1Property2(inStoreLocationGroupDto.getEntrance1Property2() == null ? ""
+					: inStoreLocationGroupDto.getEntrance1Property2());
+			inStoreLocationGroupDto.setEntrance2Property1(inStoreLocationGroupDto.getEntrance2Property1() == null ? ""
+					: inStoreLocationGroupDto.getEntrance2Property1());
+			inStoreLocationGroupDto.setEntrance2Property2(inStoreLocationGroupDto.getEntrance2Property2() == null ? ""
+					: inStoreLocationGroupDto.getEntrance2Property2());
+			taskProperty1 = taskProperty1 == null ? "" : taskProperty1;
+			taskProperty2 = taskProperty2 == null ? "" : taskProperty2;
+			if ((!inStoreLocationGroupDto.getEntrance1Property1().equals(taskProperty1)
+					|| !inStoreLocationGroupDto.getEntrance1Property2().equals(taskProperty2))
+					&& (!inStoreLocationGroupDto.getEntrance2Property1().equals(taskProperty1)
+							|| !inStoreLocationGroupDto.getEntrance2Property2().equals(taskProperty2))) {
+				inStoreLocationGroupDtosUsed.add(inStoreLocationGroupDto);
+			}
+		}
+		return inStoreLocationGroupDtosUsed;
+	}
+
 	// 根据 0.预留货位组1.托盘数小于出口数的货位组 2.托盘数减去出口数小的 3.离目标提升机最近的
 	private Integer findLocationGroupId(List<InStoreLocationGroupDto> inStoreLocationGroupDtos, Integer originX,
 			Integer originY) throws Exception {
@@ -565,7 +592,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 
 		return storeLocationGroupId;
 	}
-	
+
 	private Integer bubblingSort(List<InStoreLocationGroupDto> inStoreLocationGroupDtos) throws Exception {
 		Integer storeLocationGroupId = null;
 		// 冒泡排序筛选出离提升机最近的
@@ -584,7 +611,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 		storeLocationGroupId = inStoreLocationGroupDto2.getStoreLocationGroupId();
 		return storeLocationGroupId;
 	}
-	
+
 	private InStoreLocationGroupDto chooseBestLocationGroup(InStoreLocationGroupDto inStoreLocationGroupDto2,
 			InStoreLocationGroupDto inStoreLocationGroupDto) {
 		if (inStoreLocationGroupDto2.getSubtract() > inStoreLocationGroupDto.getSubtract()) {

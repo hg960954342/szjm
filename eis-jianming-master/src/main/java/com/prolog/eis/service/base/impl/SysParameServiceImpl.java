@@ -13,22 +13,21 @@ public class SysParameServiceImpl implements SysParameService {
 
 	@Autowired
 	private SysParameMapper sysParameMapper;
-	
+
 	@Override
-	public int getLayerReserveCount(List<Integer> layers) {
-		
+	public int getLayerReserveCount(Integer layer) {
+
 		int reserveCount = 0;
-		for (Integer layer : layers) {
-			String key = String.format("LAYER%s_RESERVE_COUNT", layer);
-			SysParame sysParame = sysParameMapper.findById(key, SysParame.class);
-			if(null == sysParame) {
-				reserveCount += 10;
-			}else {
-				int tem = Integer.valueOf(sysParame.getParameValue());
-				reserveCount += tem;
-			} 
-		}
-		
+
+		String key = String.format("LAYER%s_RESERVE_COUNT", layer);
+		SysParame sysParame = sysParameMapper.findById(key, SysParame.class);
+		if(null == sysParame) {
+			reserveCount = 10;
+		}else {
+			int tem = Integer.valueOf(sysParame.getParameValue());
+			reserveCount = tem;
+		} 
+
 		return reserveCount;
 	}
 }

@@ -446,7 +446,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 				Integer reserveCount = defaultReserveCount;
 				if(null == reserveCount) {
-					reserveCount = sysParameService.getLayerReserveCount(layers);	
+					reserveCount = sysParameService.getLayerReserveCount(layers.get(0));	
 				}
 
 				Integer findLayer = sxInStoreService.findLayer(0,layers, reserveCount, "", "");

@@ -9,5 +9,5 @@ public interface SysParameService {
 	 * @param layer
 	 * @return
 	 */
-	int getLayerReserveCount(List<Integer> layer);
+	int getLayerReserveCount(Integer layer);
 }
