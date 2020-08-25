@@ -56,21 +56,12 @@ public class EisSendRcsTaskServiceSend   {
                     int targetType = containerTask.getTargetType();
                     if (containerTask.getTaskType() == 6) {
                         //补空托
-                         rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "4");
+                         rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "3");
 
                     } else {
-                         rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "3");
+                         rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "1");
                     }
-					/*if (targetType == 1) {//目标地点位为 agv区域
-						if (containerTask.getTaskType()==6){
-							//补空托
-							rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "4");
-						}else {
-							rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "F01", "3");
-						}
-					} else {//目的地点位 为输送线
-						rcsRequestResultDto = rcsRequestService.sendTask(taskCode, containerCode, source, target, "M10", "3");
-					}*/
+
                     rsultAgvDto.setRcsRequestResultDto(rcsRequestResultDto);
                     rsultAgvDto.setContainerTask(containerTask);
                     list.add(rsultAgvDto);
