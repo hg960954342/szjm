@@ -81,7 +81,7 @@ public class WmsLoginServiceImpl implements WmsLoginService {
             String restJson = restTemplate.postForObject(url, PrologHttpUtils.getRequestEntity(json), String.class);
              PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
             String data = helper.getString("data");
-            String message = helper.getString("Message");
+            String message = helper.getString("message");
             PrologApiJsonHelper jwtData = PrologApiJsonHelper.createHelper(data);
             LoginWmsResponse.accessToken = jwtData.getString("access_token");
             LoginWmsResponse.expiresIn = jwtData.getString("expires_in");
