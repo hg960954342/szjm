@@ -1,5 +1,6 @@
 package com.prolog.eis.service.login.impl;
 
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.LoginWmsResponse;
 import com.prolog.eis.service.login.WmsLoginService;
 import com.prolog.eis.util.FileLogHelper;
@@ -49,17 +50,21 @@ public class WmsLoginServiceImpl implements WmsLoginService {
 
             LoginWmsResponse.getTokenTime = System.currentTimeMillis() / 1000;
 
-            String restjson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json), String.class);
-            PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restjson);
+            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json), String.class);
+            PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
             String data = helper.getString("data");
+            String message = helper.getString("Message");
             PrologApiJsonHelper jwtData = PrologApiJsonHelper.createHelper(data);
             LoginWmsResponse.accessToken = jwtData.getString("access_token");
             LoginWmsResponse.expiresIn = jwtData.getString("expires_in");
             LoginWmsResponse.tokenType = jwtData.getString("token_type");
             LoginWmsResponse.refreshToken = jwtData.getString("refresh_token");
 
+            LogServices.logWms(url,json,message,restJson);
+
         } catch (Exception e) {
-            FileLogHelper.WriteLog("WMSLogin","EIS->WMS [WMSInterface] 登录失败：[message]:"+e.toString());
+           // String resultMsg = "EIS->WMS [WMSInterface] 登录失败：[message]:" + e.getMessage();
+            LogServices.logSys(e);
         }
     }
 
@@ -73,16 +78,21 @@ public class WmsLoginServiceImpl implements WmsLoginService {
 
         try {
             String json = PrologApiJsonHelper.toJson(map);
-            String restjson = restTemplate.postForObject(url, PrologHttpUtils.getRequestEntity(json), String.class);
-             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restjson);
+            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getRequestEntity(json), String.class);
+             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
             String data = helper.getString("data");
+            String message = helper.getString("Message");
             PrologApiJsonHelper jwtData = PrologApiJsonHelper.createHelper(data);
             LoginWmsResponse.accessToken = jwtData.getString("access_token");
             LoginWmsResponse.expiresIn = jwtData.getString("expires_in");
             LoginWmsResponse.tokenType = jwtData.getString("token_type");
             LoginWmsResponse.refreshToken = jwtData.getString("refresh_token");
+
+            LogServices.logWms(url,json,message,restJson);
         } catch (Exception e) {
-            FileLogHelper.WriteLog("EIS->WMS [WMSInterface] 刷新token失败：[message]:"+e.toString());
+           /* String resultMsg = "EIS->WMS [WMSInterface] 刷新token失败：[message]:" + e.getMessage();
+            LogServices.logSysBusiness(resultMsg);*/
+           LogServices.logSys(e);
         }
 
     }

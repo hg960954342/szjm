@@ -54,3 +54,14 @@ CREATE TABLE `sys_log_business` (
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 )COMMENT='EIS系统业务错误日志表';
+
+DROP TABLE IF EXISTS `wms_log`;
+CREATE TABLE `wms_log` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `interface_address` varchar(255)  NOT NULL COMMENT '接口地址',
+  `params` varchar(5000) DEFAULT NULL,
+  `result` varchar(5000)  DEFAULT NULL COMMENT '返回结果',
+  `create_time` datetime DEFAULT NULL,
+  `error` varchar(5000) DEFAULT NULL COMMENT '错误消息',
+  PRIMARY KEY (`id`)
+)COMMENT='请求Wms接口日志表';

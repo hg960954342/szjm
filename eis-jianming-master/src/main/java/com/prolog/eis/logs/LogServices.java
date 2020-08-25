@@ -26,6 +26,8 @@ public class LogServices {
 
     @Autowired
     RcsLogMapper rcsLogMapper;
+    @Autowired
+    private  WmsLogMapper wmsLogMapper;
 
     private static LogServices logServices;
 
@@ -37,6 +39,7 @@ public class LogServices {
         logServices.logSysMapper=this.logSysMapper;
         logServices.rcsLogMapper=this.rcsLogMapper;
         logServices.logSysBusinessMapper=this.logSysBusinessMapper;
+        logServices.wmsLogMapper=this.wmsLogMapper;
     }
 
     /**
@@ -69,6 +72,21 @@ public class LogServices {
         mcsLog.setParams("");
         mcsLog.setCreateTime(new java.util.Date());
         logServices.logMapper.save(mcsLog);
+    }
+
+    /**
+     * 记录EIS->Wms接口日志
+     * @param postUrl
+     * @param error
+     */
+    public static void logWms(String postUrl,String params,String error,String result){
+        WmsLog wmsLog = new WmsLog();
+        wmsLog.setError(spliitString(error));
+        wmsLog.setInterfaceAddress(postUrl);
+        wmsLog.setResult(spliitString(result));
+        wmsLog.setParams(spliitString(params));
+        wmsLog.setCreateTime(new java.util.Date());
+        logServices.wmsLogMapper.save(wmsLog);
     }
 
 
@@ -164,6 +182,7 @@ public class LogServices {
         logServices.logSysMapper.deleteAll();
         logServices.eisInterfaceLogMapper.deleteAll();
         logServices.rcsLogMapper.deleteAll();
+        logServices.wmsLogMapper.deleteAll();
     }
 
     /**

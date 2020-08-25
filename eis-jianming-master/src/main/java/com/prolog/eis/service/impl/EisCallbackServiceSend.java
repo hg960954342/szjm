@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
 @Component
-public class EisCallbackServiceSend   {
+public class EisCallbackServiceSend {
 
     @Value("${prolog.wms.url:}")
     private String wmsIp;
@@ -34,10 +34,8 @@ public class EisCallbackServiceSend   {
     private RestTemplate restTemplate;
 
 
-
-
     public void recall(RepeatReport repeatReport) {
-        boolean isSucucess= false;
+        boolean isSucucess = false;
         try {
             wmsLoginService.loginWms();
             String token = LoginWmsResponse.accessToken;
@@ -45,29 +43,30 @@ public class EisCallbackServiceSend   {
             String url = repeatReport.getReportUrl();
             String json = repeatReport.getReportData();
 
-            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json,token), String.class);
+            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json, token), String.class);
 
             //发送回告
-             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
+            PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
+            String message = helper.getString("message");
             if ("0".equals(helper.getString("stateCode"))) {
                 //回告成功 删除
-                isSucucess= true;
-            }else
-            {
-                repeatReport.setMessage(LogServices.spliitString(restJson));
-                isSucucess= false;
+                isSucucess = true;
+            } else {
+                repeatReport.setMessage(LogServices.spliitString(message));
+                isSucucess = false;
             }
 
+            LogServices.logWms(url, json,message, restJson);
         } catch (Exception e) {
-            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败：" + e.getMessage();
-            LogServices.logSysBusiness(resultMsg);
-             isSucucess= false;
+//            String resultMsg = "EIS->WMS [WMSInterface] 连接wms 失败：" + e.getMessage();
+//            LogServices.logSysBusiness(resultMsg);
+            LogServices.logSys(e);
+            isSucucess = false;
         }
 
 
-        eisCallbackService.updateResport(isSucucess,repeatReport);
+        eisCallbackService.updateResport(isSucucess, repeatReport);
     }
-
 
 
 }
