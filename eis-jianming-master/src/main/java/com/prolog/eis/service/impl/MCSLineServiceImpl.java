@@ -6,6 +6,7 @@ import com.prolog.eis.dao.DeviceJunctionPortMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
 import com.prolog.eis.dto.eis.SxStoreDto;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.eis.DeviceJunctionPort;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.AgvStorageLocation;
@@ -50,7 +51,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 	public void splitOutBound(String deviceNo) {
 		DeviceJunctionPort deviceJunctionPort = deviceJunctionPortMapper.findById(deviceNo, DeviceJunctionPort.class);
 		if(null == deviceJunctionPort) {
-			FileLogHelper.WriteLog("splitOutBoundInfo", "设备不存在" + deviceNo);
+			LogServices.logSysBusiness("splitOutBoundInfo"+ "设备不存在" + deviceNo);
 			return;
 		}
 
@@ -61,13 +62,13 @@ public class MCSLineServiceImpl implements MCSLineService{
 		List<ContainerTask> tasks = containerTaskMapper.findByMap(MapUtils.put("target", target).put("targetType", 1).getMap(), ContainerTask.class);
 		if(!tasks.isEmpty()) {
 			//已经有往拆盘机口送的出库任务了
-			FileLogHelper.WriteLog("splitOutBoundInfo", "已经有往出库口送的任务" + deviceNo);
+			LogServices.logSysBusiness("splitOutBoundInfo"+ "已经有往出库口送的任务" + deviceNo);
 			return;
 		}
 		
 		List<SxStoreDto> list = sxStoreMapper.getEmptyContainerCode();
 		if(list.isEmpty()) {
-			FileLogHelper.WriteLog("splitOutBoundInfo", "库内无空托盘");
+			LogServices.logSysBusiness("splitOutBoundInfo"+ "库内无空托盘");
 			return;
 		}
 		
@@ -122,7 +123,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		//获取agv区域的点位
 		List<AgvStorageLocation> agvStorageLocations = agvStorageLocationMapper.findByMap(MapUtils.put("locationType", 2).put("deviceNo", portInfo.getJunctionPort()).getMap(), AgvStorageLocation.class);
 		if(agvStorageLocations.isEmpty()) {
-			FileLogHelper.WriteLog("buildEmptyContainerSupplyInfo", "未找到agv区域对应点位");
+			LogServices.logSysBusiness("buildEmptyContainerSupplyInfo"+ "未找到agv区域对应点位");
 			return;
 		}
 		

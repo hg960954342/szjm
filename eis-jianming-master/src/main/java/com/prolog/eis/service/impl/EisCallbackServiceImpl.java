@@ -6,13 +6,16 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.InBoundTaskHistoryMapper;
 import com.prolog.eis.dao.RepeatReportMapper;
-import com.prolog.eis.model.wms.*;
+import com.prolog.eis.logs.LogServices;
+import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.model.wms.InBoundTaskHistory;
+import com.prolog.eis.model.wms.InboundTask;
+import com.prolog.eis.model.wms.RepeatReport;
 import com.prolog.eis.service.ContainerTaskDetailService;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResponse;
-import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.NameAndSimplePropertyPreFilter;
 import com.prolog.eis.util.PrologStringUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -20,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -190,11 +192,11 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             Map<String, Object> map = new HashMap<>();
             map.put("data", data);
             map.put("size", data.size());
-            map.put("messageID", UUID.randomUUID().toString().replaceAll("-", ""));
+            map.put("messageID", PrologStringUtils.newGUID());
             return JSONObject.toJSONString(map, nameAndSimplePropertyPreFilter);
         } catch (Exception e) {
-            FileLogHelper.WriteLog("GetReportDataErr", "封装数据失败：" + e.getMessage());
-        }
+            LogServices.logSys(e);
+         }
         return null;
 
     }
@@ -219,11 +221,11 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             Map<String, Object> map = new HashMap<>();
             map.put("data", reportData);
             map.put("size", reportData.size());
-            map.put("messageID", UUID.randomUUID().toString().replaceAll("-", ""));
+            map.put("messageID",  PrologStringUtils.newGUID());
             return JSONObject.toJSONString(map, nameAndSimplePropertyPreFilter);
         } catch (Exception e) {
-            FileLogHelper.WriteLog("GetReportDataErr", "封装数据失败：" + e.getMessage());
-        }
+            LogServices.logSys(e);
+         }
         return null;
     }
 
@@ -247,11 +249,11 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             Map<String, Object> map = new HashMap<>();
             map.put("data", reportData);
             map.put("size", reportData.size());
-            map.put("messageID", UUID.randomUUID().toString().replaceAll("-", ""));
+            map.put("messageID", PrologStringUtils.newGUID());
             return JSONObject.toJSONString(map, nameAndSimplePropertyPreFilter);
         } catch (Exception e) {
-            FileLogHelper.WriteLog("GetReportDataErr", "封装数据失败：" + e.getMessage());
-        }
+            LogServices.logSys(e);
+         }
 
         return null;
     }
@@ -275,8 +277,8 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             Map map = JSON.parseObject(jsonString, Map.class);
             return JSON.toJSONString(map, new NameAndSimplePropertyPreFilter(), SerializerFeature.DisableCircularReferenceDetect);
         } catch (Exception e) {
-            FileLogHelper.WriteLog("GetReportDataErr", "封装数据失败：" + e.getMessage());
-        }
+            LogServices.logSys(e);
+         }
 
         return null;
     }

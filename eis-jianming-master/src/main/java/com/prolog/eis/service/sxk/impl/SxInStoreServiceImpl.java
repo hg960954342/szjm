@@ -5,6 +5,7 @@ import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
 import com.prolog.eis.dto.sxk.*;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
@@ -54,8 +55,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 				//return null;
 			}*/
 			Integer locationId = null;
-			long startTime = System.currentTimeMillis();
-			// step2 再找货位组(找出离原点最近的货位组)
+ 			// step2 再找货位组(找出离原点最近的货位组)
 			Integer storeLocationGroupId = findLocationGroup(layer, taskProperty1, taskProperty2, originX, originY,
 					areaSortDtos, area, weight);
 			// step3 再找具体货位(找出离原点最近的货位)
@@ -64,12 +64,11 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 				locationId = findLocationId;
 			}
 			long endTime = System.currentTimeMillis();
-			System.out.println("time" + (endTime - startTime) + "ms");
-			return locationId;
+ 			return locationId;
 		}catch (Exception e) {
 			// TODO: handle exception
 
-			FileLogHelper.WriteLog("getInStoreDetailError", e.toString());
+			LogServices.logSys(e);
 
 			return null;
 		}
@@ -391,7 +390,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 			throws Exception {
 		Integer layer = null;
 		if (layers.size() == 0) {
-			FileLogHelper.WriteLog("sxInStoreError", "无可用层");
+			LogServices.logSysBusiness ("sxInStoreError"+ "无可用层");
 			throw new Exception("无可用层");
 		}
 		// step1 .先找层+区域
@@ -603,7 +602,7 @@ public class SxInStoreServiceImpl implements SxInStoreService{
 		Integer storeLocationGroupId = null;
 		// 冒泡排序筛选出离提升机最近的
 		if (inStoreLocationGroupDtos.size() == 0) {
-			FileLogHelper.WriteLog("sxInStoreError", "货位组排序的集合不能为空");
+			LogServices.logSysBusiness("sxInStoreError"+ "货位组排序的集合不能为空");
 			throw new Exception("货位组排序的集合不能为空");
 		}
 		InStoreLocationGroupDto inStoreLocationGroupDto2 = inStoreLocationGroupDtos.get(0);

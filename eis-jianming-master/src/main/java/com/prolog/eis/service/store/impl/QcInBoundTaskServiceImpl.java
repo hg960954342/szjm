@@ -260,14 +260,26 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		
 		//检查是否存在入库任务
 		List<InboundTask> temInboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerNo).getMap(), InboundTask.class);
-		if(temInboundTasks.isEmpty()) {
+		List<CheckOutTask> checkOutTasks= checkOutTaskMapper.findByMap(MapUtils.put("containerCode", containerNo).getMap(), CheckOutTask.class);
+
+		if(temInboundTasks.isEmpty()&&checkOutTasks.isEmpty()) {
 			String mString = String.format("托盘%s无入库任务", containerNo);
             LogServices.logSysBusiness("mcsRequestError"+ mString);
 
 			result.setSuccess(false);
 			result.setMsg(mString);
 			return result;
-		}	
+		}
+		if(!temInboundTasks.isEmpty()&&!checkOutTasks.isEmpty()) {
+			String mString = String.format("托盘%s同事被两个任务使用逻辑错误！", containerNo);
+			LogServices.logSysBusiness("mcsRequestError"+ mString);
+
+			result.setSuccess(false);
+			result.setMsg(mString);
+			return result;
+		}
+
+
 
 		result.setInboundTask(temInboundTasks.get(0));
 		result.setSuccess(true);
@@ -469,7 +481,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
-				//繼續尋找其他層
+				LogServices.logSys(e);
 			}
 		}
 		return locationId;
