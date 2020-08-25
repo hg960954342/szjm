@@ -9,6 +9,7 @@ import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.HttpUtils;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.PrologHttpUtils;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -43,7 +44,7 @@ public class EisCallbackServiceSend {
             String url = repeatReport.getReportUrl();
             String json = repeatReport.getReportData();
 
-            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json, token), String.class);
+            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json, token), JSONObject.class).toString();
 
             //发送回告
             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);

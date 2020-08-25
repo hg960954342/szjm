@@ -7,6 +7,7 @@ import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.HttpUtils;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.PrologHttpUtils;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class WmsLoginServiceImpl implements WmsLoginService {
 
             LoginWmsResponse.getTokenTime = System.currentTimeMillis() / 1000;
 
-            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json), String.class);
+            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getRequestEntity(json), JSONObject.class).toString();
             PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
             String data = helper.getString("data");
             String message = helper.getString("Message");
@@ -78,7 +79,7 @@ public class WmsLoginServiceImpl implements WmsLoginService {
 
         try {
             String json = PrologApiJsonHelper.toJson(map);
-            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getRequestEntity(json), String.class);
+            String restJson = restTemplate.postForObject(url, PrologHttpUtils.getRequestEntity(json), JSONObject.class).toString();
              PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
             String data = helper.getString("data");
             String message = helper.getString("message");
