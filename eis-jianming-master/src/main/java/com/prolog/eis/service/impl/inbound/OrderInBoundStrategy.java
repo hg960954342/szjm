@@ -10,6 +10,7 @@ import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.util.PrologLocationUtils;
+import com.prolog.eis.util.PrologStringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,8 +96,8 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
                 containerTask.setTaskState(1);
                 containerTask.setSourceType(2);
                 containerTask.setTargetType(2);
-                String uuid = UUID.randomUUID().toString().replaceAll("-","");
-                containerTask.setTaskCode(uuid);
+
+                containerTask.setTaskCode(PrologStringUtils.newGUID());
 
                 containerTaskMapper.save(containerTask);
                 //更新入库状态

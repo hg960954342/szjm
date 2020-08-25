@@ -2,10 +2,12 @@ package com.prolog.eis.service.rcs.impl;
 
 import com.prolog.eis.controller.led.PrologLedController;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.dao.CheckOutTaskMapper;
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.dao.led.LedShowMapper;
 import com.prolog.eis.dao.wms.InboundTaskMapper;
+import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.led.LedShow;
@@ -15,10 +17,17 @@ import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
+import com.prolog.eis.service.enums.OutBoundEnum;
+import com.prolog.eis.service.impl.unbound.OutBoundType;
+import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.service.rcs.AgvCallbackService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.eis.util.PrologLocationUtils;
+import com.prolog.framework.core.restriction.Criteria;
+import com.prolog.framework.core.restriction.Restrictions;
 import com.prolog.framework.utils.MapUtils;
+import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +48,8 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
 
     @Autowired
     private ContainerTaskDetailMapper containerTaskDetailMapper;
+    @Autowired
+    private CheckOutTaskMapper checkOutTaskMapper;
 
     @Autowired
     private EisCallbackService eisCallbackService;
@@ -183,6 +194,23 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         //删除空托入库任务
                         inboundTaskMapper.deleteByMap(MapUtils.put("containerCode", containerTask.getContainerCode()).getMap(), InboundTask.class);
                     }
+                    if (containerTask.getTaskType() ==3) { //盘点出库
+
+                        //更新入库口的状态
+                        Criteria criteria=Criteria.forClass(CheckOutTask.class);
+                        criteria.setRestriction(Restrictions.eq("containerCode",containerTask.getContainerCode()));
+                        List<CheckOutTask> listCheckOut=checkOutTaskMapper.findByCriteria(criteria);
+                        if(listCheckOut.size()>1) {LogServices.logSysBusiness("一个托盘同时被两个盘点任务盘点！"); return;}
+                        CheckOutTask checkOutTask=listCheckOut.get(0);
+                        checkOutTask.setState("2");
+                        checkOutTaskMapper.update(checkOutTask);
+                        //转换容器任务
+                        String target =containerTask.getTarget();
+                        Coordinate coordinate=PrologCoordinateUtils.analysis(target);
+                        String agvTarget=PrologLocationUtils.splicingXYStr(coordinate.getLayer(), coordinate.getX(), coordinate.getY());
+                        containerTask.setSource(agvTarget);
+                        containerTaskService.update(containerTask);
+                     }
                     targetPosition.setTaskLock(0);
                     targetPosition.setLocationLock(0);
                     agvStorageLocationMapper.update(targetPosition);

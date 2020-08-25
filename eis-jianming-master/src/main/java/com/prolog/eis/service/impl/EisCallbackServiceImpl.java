@@ -11,8 +11,10 @@ import com.prolog.eis.service.ContainerTaskDetailService;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.service.impl.unbound.entity.CheckOutResponse;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.NameAndSimplePropertyPreFilter;
+import com.prolog.eis.util.PrologStringUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -263,11 +265,12 @@ public class EisCallbackServiceImpl implements EisCallbackService {
      */
     private String checkBoundReportData(String billNo) {
         try {
-            List<ResultContainer.DataBean> list = containerTaskDetailService.getCheckReportData(billNo);
-            ResultContainer container = new ResultContainer();
+
+            List<CheckOutResponse.DataBean> list = containerTaskDetailService.getCheckReportData(billNo);
+            CheckOutResponse container = new CheckOutResponse();
             container.setData(list);
             container.setSize(list.size());
-            container.setMessageID(UUID.randomUUID().toString().replaceAll("-", ""));
+            container.setMessageID(PrologStringUtils.newGUID());
             String jsonString = JSON.toJSONString(container);
             Map map = JSON.parseObject(jsonString, Map.class);
             return JSON.toJSONString(map, new NameAndSimplePropertyPreFilter(), SerializerFeature.DisableCircularReferenceDetect);

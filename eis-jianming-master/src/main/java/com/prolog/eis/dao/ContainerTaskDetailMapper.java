@@ -2,6 +2,7 @@ package com.prolog.eis.dao;
 
 import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.ResultContainer;
+import com.prolog.eis.service.impl.unbound.entity.CheckOutResponse;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 
@@ -47,31 +48,25 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
 
 
     @Results({
-            @Result(property = "billno", column = "bill_no"),
-            @Result(property = "type", column = "task_type"),
-            @Result(property = "details", column = "bill_no=bill_no,task_type=task_type",
+            @Result(property = "BILLNO", column = "bill_no"),
+            @Result(property = "TYPE", column = "type"),
+            @Result(property = "details", column = "item_id=item_id,lot_id=lot_id,bill_no=bill_no",
                     many = @Many(select = "com.prolog.eis.dao.ContainerTaskDetailMapper.getCheckDetail")),
     })
-    @Select("select  x.bill_no,x.task_type from (\n" +
-            "SELECT d.bill_no,\n" +
-            " t.task_type,t.container_code FROM\n" +
-            " container_task_detail d INNER join container_task t ON t.container_code = d.container_code  and d.bill_no=#{billNo})x\n" +
-            " GROUP BY x.bill_no,x.task_type")
-    List<ResultContainer.DataBean> getCheckReportData(@Param("billNo") String billNo);
+    @Select("select bill_no,\"2\" type,d.item_id,d.lot_id from outbound_task_detail d where d.bill_no = #{billNo} GROUP BY item_id,lot_id")
+    List<CheckOutResponse.DataBean> getCheckReportData(@Param("billNo") String billNo);
 
 
     @Results({
-            @Result(property = "seqno", column = "seqno"),
-            @Result(property = "itemid", column = "item_id"),
-            @Result(property = "lotid", column = "lot_id"),
-            @Result(property = "containercode", column = "container_code"),
-            @Result(property = "qty", column = "qtyy")
+            @Result(property = "SEQNO", column = "seqno"),
+            @Result(property = "ITEMID", column = "item_id"),
+            @Result(property = "LOTID", column = "lot_id"),
+            @Result(property = "CONTAINERCODE", column = "CONTAINER_NO"),
+            @Result(property = "qty", column = "QTY")
     })
-    @Select("select  x.* from (\n" +
-            "\n" +
-            "select t.qty qtyy,d.* from \tcontainer_task_detail d INNER join container_task t ON t.container_code = d.container_code \r\n" +
-            "where  d.bill_no=#{bill_no} and t.task_type=#{task_type} )x")
-    List<ResultContainer.DataBean.DetailsBean> getCheckDetail(@Param("bill_no") String bill_no, @Param("task_type") String task_type);
+    @Select("select d.seqno,s.item_id,s.lot_id,s.CONTAINER_NO,s.WEIGHT qty from outbound_task_detail d ,sx_store s\n" +
+            "where d.item_id=s.item_id and d.lot_id=s.lot_id and d.item_id=#{item_id} and d.lot_id=#{lot_id} and d.bill_no=#{bill_no}")
+    List<CheckOutResponse.DataBean.DetailsBean> getCheckDetail(@Param("item_id") String item_id, @Param("lot_id") String lot_id,@Param("bill_no") String bill_no);
 
     @Select("select sum(qty) from container_task_detail where container_code = #{containerCode}")
     Double queryPickQtyByConcode(String containerCode);

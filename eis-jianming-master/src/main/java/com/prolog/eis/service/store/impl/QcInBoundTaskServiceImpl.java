@@ -2,6 +2,7 @@ package com.prolog.eis.service.store.impl;
 
 import com.prolog.eis.controller.led.PrologLedController;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
+import com.prolog.eis.dao.CheckOutTaskMapper;
 import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.dao.DeviceJunctionPortMapper;
 import com.prolog.eis.dao.base.SysParameMapper;
@@ -11,6 +12,7 @@ import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
 import com.prolog.eis.dao.wms.InboundTaskMapper;
+import com.prolog.eis.dao.wms.OutboundTaskMapper;
 import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.dto.eis.InStoreValidateDto;
 import com.prolog.eis.dto.eis.mcs.InBoundRequest;
@@ -26,8 +28,11 @@ import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.InboundTask;
+import com.prolog.eis.model.wms.OutboundTask;
+import com.prolog.eis.service.CallBackCheckOutService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.base.SysParameService;
+import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
 import com.prolog.eis.service.store.QcInBoundTaskService;
@@ -82,6 +87,10 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private LedShowMapper ledShowMapper;
 	@Autowired
 	private McsInterfaceServiceSend mcsInterfaceServiceSend;
+	@Autowired
+	private CallBackCheckOutService callBackCheckOutService;
+	@Autowired
+	CheckOutTaskMapper checkOutTaskMapper;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -532,16 +541,22 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		if(null != sxStoreLocation) {
 			//检查有无入库库存
 			List<InboundTask> inboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), InboundTask.class);
-			if(inboundTasks.isEmpty()) {
-                LogServices.logSysBusiness(String.format("托盘%s无入库任务", containerCode));
-
+			List<CheckOutTask> checkOutTasks= checkOutTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), CheckOutTask.class);
+			if(inboundTasks.isEmpty()&&checkOutTasks.isEmpty()){
+				LogServices.logSysBusiness(String.format("托盘%s无入库任务", containerCode));
 				return;
 			}
-
+			if(!inboundTasks.isEmpty()&&!checkOutTasks.isEmpty()){
+				LogServices.logSysBusiness(String.format("托盘%s既有盘点任务又有入库任务，代码逻辑错误！", containerCode));
+				return;
+			}
 			//修改库存 货位组相关属性
 			rukuSxStore(containerCode);
 			//调用回告入库的方法
 			eisCallbackService.inBoundReport(containerCode);
+			//更新盘点任务状态
+			callBackCheckOutService.updateCallBackCheckOut(containerCode);
+
 		}else {
             LogServices.logSysBusiness(String.format("点位%s不是托盘库货位", address));
 

@@ -3,6 +3,7 @@ package com.prolog.eis.dao;
 import com.prolog.eis.dto.eis.SxStoreDto;
 import com.prolog.eis.dto.eis.YiWeiCountDto;
 import com.prolog.eis.model.sxk.SxStore;
+import com.prolog.eis.service.impl.unbound.entity.CheckOutResult;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -176,5 +177,24 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"and a.owner_id = #{ownerId}\n" +
 			"ORDER BY dept_num asc,qty asc")
 	Float getSxStoreCount(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
+
+
+      @Results(id="checkOutResult" , value= {
+				@Result(property = "layer",  column = "layer"),
+				@Result(property = "x",  column = "x"),
+				@Result(property = "y",  column = "y"),
+				@Result(property = "itemId",  column = "item_id"),
+				@Result(property = "lotId",  column = "lot_id"),
+			    @Result(property = "ownerId",  column = "owner_id"),
+			    @Result(property = "qty",  column = "qty")
+      })
+	  @Select("select d.*,a.*,l.*,g.* from \n" +
+			"(select d.item_id,d.lot_id from outbound_task_detail d where d.bill_no = #{billNo} GROUP BY d.item_id,d.lot_id)d\n" +
+			"inner join sx_store a on d.item_id =a.item_id and d.lot_id=a.lot_id \n" +
+			"INNER JOIN sx_store_location l ON a.store_location_id = l.id  \n" +
+			"INNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id  \n" +
+			"\tand g.IS_LOCK=0 and a.STORE_STATE=20 ORDER BY dept_num asc,qty asc ")
+	List<CheckOutResult> getCheckOutByOutBoundTaskDetail(@Param("billNo") String billNo );
+
 
 }

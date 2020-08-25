@@ -9,6 +9,7 @@ import com.prolog.eis.dao.sxk.SxStoreMapper;
 import com.prolog.eis.dto.eis.CkContainerTaskDto;
 import com.prolog.eis.dto.sxk.SxStoreGroupDto;
 import com.prolog.eis.dto.sxk.SxStoreLock;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.mcs.MCSTask;
 import com.prolog.eis.model.sxk.SxStore;
@@ -83,7 +84,7 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 					}
 				}
 			}else {
-				FileLogHelper.WriteLog("buildSxCkTaskError", String.format("托盘出库无库存%s",containerTask.getContainerCode()));
+				LogServices.logSysBusiness("buildSxCkTaskError"+ String.format("托盘出库无库存%s",containerTask.getContainerCode()));
 				continue;
 			}
 		}

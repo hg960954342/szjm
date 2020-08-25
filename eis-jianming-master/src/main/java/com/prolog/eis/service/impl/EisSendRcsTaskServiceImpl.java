@@ -56,7 +56,7 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
                 //agv接收失败
                 String restJson = JSONObject.toJSONString(rcsRequestResultDto) ;
                 String resultMsg = "EIS->RCS [RCSInterface] 返回JSON：[message]:" + restJson;
-                LogServices.logSys(new RuntimeException(resultMsg));
+                LogServices.logSysBusiness(resultMsg);
 
             }
         }

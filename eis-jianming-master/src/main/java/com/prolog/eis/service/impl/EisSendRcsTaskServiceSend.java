@@ -77,9 +77,9 @@ public class EisSendRcsTaskServiceSend   {
 
                 } catch (Exception e) {
                     //任务下发失败
-                    String resultMsg = "EIS->RCS [RCSInterface] 任务下发 rcs 失败：请求rcs失败";
+                    //String resultMsg = "EIS->RCS [RCSInterface] 任务下发 rcs 失败：请求rcs失败";
                     //FileLogHelper.WriteLog("RCSRequestErr", resultMsg);
-                    LogServices.logSysBusiness(resultMsg);
+                    LogServices.logSys(e);
                     break;
                 }
             }

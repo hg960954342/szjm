@@ -45,3 +45,12 @@ CREATE TABLE `repeat_report` (
   `send_time` datetime DEFAULT NULL COMMENT '发送时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='回告重发表';
+
+DROP TABLE IF EXISTS `checkout_task`;
+CREATE TABLE `checkout_task` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `container_code` varchar(255)  NOT NULL COMMENT '容器号或者托盘编号',
+  `bill_no` varchar(255)  NOT NULL COMMENT '单号',
+  `state` varchar(50) COMMENT '创建1 出库完成2 盘点回库完成 3',
+  PRIMARY KEY (`id`)
+)COMMENT='盘点任务表';
