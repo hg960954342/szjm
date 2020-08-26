@@ -18,7 +18,7 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
 
 
     public  Set<String> currentBillNoList=Collections.synchronizedSet(new HashSet<>());//当前执行的billNoString
-    public  int  maxSize=5; //订单池处理最大数量
+    public  int  maxSize=1; //订单池处理最大数量
 
   //  private Set<String> billNoPickCodeList=Collections.synchronizedSet(new HashSet<>());
     private Set<String> billNoList=Collections.synchronizedSet(new HashSet<>());
@@ -33,10 +33,10 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
     public static final long overTime=1;
 
 
-    public Set<String> getCrrentBillNoList(){
+    public  Set<String> getCrrentBillNoList(){
         return currentBillNoList;
     }
-    public int getMaxSize(){
+    public  int getMaxSize(){
         return maxSize;
     }
 
@@ -48,7 +48,7 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
      * @param outboundTask
      * @return
      */
-    public void addOutboundTask(OutboundTask outboundTask) {
+    public synchronized void addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==0) {
              //billNoList.addAll(outBoundTaskMapper.getOutBoudTaskBillNoOverTimeStringList(overTime));
              billNoList.add("'"+outboundTask.getBillNo()+"'");

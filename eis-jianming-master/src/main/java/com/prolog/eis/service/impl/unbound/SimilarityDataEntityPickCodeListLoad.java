@@ -30,10 +30,10 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
     //订单超时处理时间默认值 半个小时 单位为min
     public static final long overTime=1;
 
-    public Set<String> getCrrentBillNoList(){
+    public  Set<String> getCrrentBillNoList(){
         return currentBillNoList;
     }
-    public int getMaxSize(){
+    public  int getMaxSize(){
         return maxSize;
     }
 
@@ -44,7 +44,7 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
      * @return
      */
     @Override
-    public void addOutboundTask(OutboundTask outboundTask) {
+    public synchronized void addOutboundTask(OutboundTask outboundTask) {
          if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==1) {
              //billNoList.addAll(outBoundTaskMapper.getOutBoudTaskPickCodeBillNoOverTimeStringList(overTime));
              billNoList.add("'"+outboundTask.getBillNo()+"'");
