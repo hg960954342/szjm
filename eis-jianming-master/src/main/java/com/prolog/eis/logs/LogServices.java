@@ -28,6 +28,8 @@ public class LogServices {
     RcsLogMapper rcsLogMapper;
     @Autowired
     private  WmsLogMapper wmsLogMapper;
+    @Autowired
+    ScheduledLogMapper scheduledLogMapper;
 
     private static LogServices logServices;
 
@@ -40,6 +42,7 @@ public class LogServices {
         logServices.rcsLogMapper=this.rcsLogMapper;
         logServices.logSysBusinessMapper=this.logSysBusinessMapper;
         logServices.wmsLogMapper=this.wmsLogMapper;
+        logServices.scheduledLogMapper=this.scheduledLogMapper;
     }
 
     /**
@@ -183,6 +186,7 @@ public class LogServices {
         logServices.eisInterfaceLogMapper.deleteAll();
         logServices.rcsLogMapper.deleteAll();
         logServices.wmsLogMapper.deleteAll();
+        logServices.scheduledLogMapper.deleteAll();
     }
 
     /**

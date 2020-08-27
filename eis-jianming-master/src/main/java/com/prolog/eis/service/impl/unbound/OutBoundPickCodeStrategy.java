@@ -84,7 +84,15 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
             //  agvStorageLocation.setTaskLock(1);
             //  agvStorageLocationMapper.update(agvStorageLocation);
-            if(agvStorageLocation==null){LogServices.logSysBusiness(pickCode+"拣选站点位已经锁定！");return ;}
+            if(agvStorageLocation==null){LogServices.logSysBusiness(pickCode+"拣选站点位已经锁定！");
+                //去除指定此billNo
+               // similarityDataEntityPickCodeListLoad.getCrrentBillNoList().removeAll()
+                //清除此非记录
+                outboundTask.setTaskState(1);
+                outBoundTaskMapper.save(outboundTask);
+                //移除此缓存条目
+                similarityDataEntityPickCodeListLoad.getCrrentBillNoList().remove(String.format("'%s'",outboundTask.getBillNo()));
+            return ;}
             int  LocationType= agvStorageLocation.getLocationType();
             if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
                  /*   List<String> listBillNos=new ArrayList<String>();

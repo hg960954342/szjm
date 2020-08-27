@@ -17,7 +17,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntityLoadInterface {
 
     public  Set<String> currentBillNoList=Collections.synchronizedSet(new HashSet<>()); //当前执行的billNoString
-    public  int  maxSize=5; //订单池处理最大数量*/
+    public  int  maxSize=1; //订单池处理最大数量*/
 
     private Set<String> billNoList=Collections.synchronizedSet(new HashSet<>());
 

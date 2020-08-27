@@ -72,7 +72,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         if(null!=defaultOutBoundPickCodeStrategy&&similarityDataEntityLoadStrategy!=null){
             similarityDataEntityLoadStrategy.addOutboundTask(outboundTask);
              if(similarityDataEntityLoadStrategy.getCrrentBillNoList().size()!=0
-                    &&similarityDataEntityLoadStrategy.getCrrentBillNoList().size()==similarityDataEntityLoadStrategy.getMaxSize())
+                    &&similarityDataEntityLoadStrategy.getCrrentBillNoList().size()>=similarityDataEntityLoadStrategy.getMaxSize())
             defaultOutBoundPickCodeStrategy.unbound(outboundTask);
         }
 

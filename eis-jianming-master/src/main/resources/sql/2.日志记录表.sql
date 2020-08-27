@@ -65,3 +65,14 @@ CREATE TABLE `wms_log` (
   `error` varchar(5000) DEFAULT NULL COMMENT '错误消息',
   PRIMARY KEY (`id`)
 )COMMENT='请求Wms接口日志表';
+
+DROP TABLE IF EXISTS `scheduled_log`;
+CREATE TABLE `scheduled_log`(
+`id` int NOT NULL AUTO_INCREMENT,
+`class_name` varchar(255) NOT NULL COMMENT '调用的类',
+`method_name` varchar(255) NOT NULL COMMENT '调用的方法',
+`run_time` varchar(255) DEFAULT NULL,
+`start_time` datetime DEFAULT NULL,
+`end_time` datetime DEFAULT NULL,
+ PRIMARY KEY (`id`)
+) COMMENT='定时任务执行日志';

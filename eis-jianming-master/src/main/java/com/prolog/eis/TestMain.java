@@ -3,6 +3,7 @@ package com.prolog.eis;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.util.PrologHttpUtils;
+import org.junit.Test;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -25,21 +26,21 @@ public class TestMain {
 
 
 
-
+@Test
 public void moveAgv(){
 
 
 
 String   taskCode = UUID.randomUUID().toString().replaceAll("-", "");
-String containerCode="801199";
+String containerCode="801111";
 
 
 
-String startPosition="057200AB054000";
-String endPosition="057200AB048300";
+String startPosition="060080AB054000"; //出库口  endPosition
+String  endPosition="054320AB048300";  //startPosition
 
 String taskTyp="F01";
-String reqCode="4";
+String reqCode=Math.random()*10+"";
 String priority="5";
 
     JSONObject jsonObject = new JSONObject();
