@@ -60,7 +60,7 @@ public interface InStoreMapper {
 	@Select("select slg.id as storeLocationGroupId,count(s.id) as containerCount,slg.IN_OUT_NUM as inOutNum ,slg.x,slg.y,slg.reserved_location as reservedLocation,slg.entrance1_property1 as entrance1Property1 ,slg.entrance1_property2 as entrance1Property2 ,slg.entrance2_property1 as entrance2Property1 ,slg.entrance2_property2 as  entrance2Property2 from sx_store_location sl \n" + 
 			"						left join sx_store s on s.STORE_LOCATION_ID = sl.ID \n" + 
 			"						inner join sx_store_location_group slg on slg.id = sl.STORE_LOCATION_GROUP_ID \n" + 
-			"						where slg.IS_LOCK = 0 and slg.ASCENT_LOCK_STATE = 0  and sl.is_inBound_location = 1\n" + 
+			"						where slg.IS_LOCK = 0 and slg.ASCENT_LOCK_STATE = 0\n" + 
 			"						and slg.location_num > (select count(*) from sx_store_location sl inner join sx_store s on \n" + 
 			"						s.STORE_LOCATION_ID = sl.ID where sl.STORE_LOCATION_GROUP_ID = slg.ID) \n" + 
 			"						and slg.layer = #{layer} and EXISTS (select sl2.id from sx_store_location sl2 where sl2.limit_weight > #{weight} and sl2.STORE_LOCATION_GROUP_ID = slg.ID and sl2.is_inBound_location = 1 )\n" + 
@@ -70,7 +70,7 @@ public interface InStoreMapper {
 	@Select("select slg.id as storeLocationGroupId,count(s.id) as containerCount,slg.IN_OUT_NUM as inOutNum ,slg.x,slg.y,slg.reserved_location as reservedLocation,slg.entrance1_property1 as entrance1Property1 ,slg.entrance1_property2 as entrance1Property2 ,slg.entrance2_property1 as entrance2Property1 ,slg.entrance2_property2 as  entrance2Property2 from sx_store_location sl \n" + 
 			"						left join sx_store s on s.STORE_LOCATION_ID = sl.ID \n" + 
 			"						inner join sx_store_location_group slg on slg.id = sl.STORE_LOCATION_GROUP_ID \n" + 
-			"						where slg.IS_LOCK = 0 and slg.ASCENT_LOCK_STATE = 0 and sl.is_inBound_location = 1\n" + 
+			"						where slg.IS_LOCK = 0 and slg.ASCENT_LOCK_STATE = 0\n" + 
 			"						and slg.location_num > (select count(*) from sx_store_location sl inner join sx_store s on \n" + 
 			"						s.STORE_LOCATION_ID = sl.ID where sl.STORE_LOCATION_GROUP_ID = slg.ID) \n" + 
 			"						and slg.layer = #{layer} and slg.belong_area = #{area} and EXISTS (select sl2.id from sx_store_location sl2 where sl2.limit_weight > #{weight} and sl2.STORE_LOCATION_GROUP_ID = slg.ID and sl2.is_inBound_location = 1 )\n" + 
