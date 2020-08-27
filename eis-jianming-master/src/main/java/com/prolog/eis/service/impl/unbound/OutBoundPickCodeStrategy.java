@@ -19,6 +19,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 订单出库  指定拣选站
@@ -58,9 +59,9 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
     @Override
     public void unbound(OutboundTask outboundTask)  {
 
-        SimilarityDataEntityLoadInterface similarityDataEntityPickCodeListLoad=getsimilarityDataEntityListLoad(outboundTask);
+        SimilarityDataEntityLoadInterface similarityDataEntityListLoad=getsimilarityDataEntityListLoad(outboundTask);
 
-        List<DetailDataBean> list = similarityDataEntityPickCodeListLoad.getOutDetailList();
+        List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList();
 
 
         for (DetailDataBean detailDataBeand : list) {
@@ -84,20 +85,15 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
             //  agvStorageLocation.setTaskLock(1);
             //  agvStorageLocationMapper.update(agvStorageLocation);
-            if(agvStorageLocation==null){LogServices.logSysBusiness(pickCode+"拣选站点位已经锁定！");
-                //去除指定此billNo
-               // similarityDataEntityPickCodeListLoad.getCrrentBillNoList().removeAll()
-                //清除此非记录
+            if(agvStorageLocation==null){
+                LogServices.logSysBusiness(pickCode+"拣选站点位已经锁定！");
                 outboundTask.setTaskState(1);
                 outBoundTaskMapper.save(outboundTask);
                 //移除此缓存条目
-                similarityDataEntityPickCodeListLoad.getCrrentBillNoList().remove(String.format("'%s'",outboundTask.getBillNo()));
+                similarityDataEntityListLoad.getCrrentBillNoList().remove(String.format("'%s'",outboundTask.getBillNo()));
             return ;}
             int  LocationType= agvStorageLocation.getLocationType();
             if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
-                 /*   List<String> listBillNos=new ArrayList<String>();
-                    listBillNos.addAll(similarityDataEntityListLoad.currentBillNoList);
-                    int seqno=0;*/
                 List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
 
                 for (Map<String, Object> sxStore1 : listSxStore) {
@@ -112,7 +108,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                         ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
+                        // ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
                         containerTaskMapper.save(ordercontainerTask);
                         List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.
                                 put("billNo",detailDataBeand.getBillNo())
@@ -134,8 +130,8 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                             containerTaskDetailMapperMapper.save(containerTaskDetail);
                         }
 
-                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityPickCodeListLoad.getCrrentBillNoList()));
-                        similarityDataEntityPickCodeListLoad.getCrrentBillNoList().remove(","+detailDataBeand.getBillNo()+"'");
+                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.getCrrentBillNoList()));
+                        similarityDataEntityListLoad.getCrrentBillNoList().remove(String.format("'%s'",detailDataBeand.getBillNo()));
 
                         if (last <= 0) break;
                     }
@@ -149,7 +145,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                         ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
+                        // ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
                         containerTaskMapper.save(ordercontainerTask);
 
 
@@ -163,7 +159,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                             containerTaskDetail.setBillNo(outboundTaskDetail.getBillNo());
                             containerTaskDetail.setSeqNo(outboundTaskDetail.getSeqNo());
                             containerTaskDetail.setContainerCode((String) sxStore1.get("containerNo"));
-                            containerTaskDetail.setCreateTime(new java.util.Date());
+                            containerTaskDetail.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
                             if(((BigDecimal) sxStore1.get("qty")).floatValue()<outboundTaskDetail.getQty()){
                                 containerTaskDetail.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
                             }else{
@@ -173,8 +169,8 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                             containerTaskDetailMapperMapper.save(containerTaskDetail);
                         }
 
-                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityPickCodeListLoad.getCrrentBillNoList()));
-                        similarityDataEntityPickCodeListLoad.getCrrentBillNoList().remove(","+detailDataBeand.getBillNo()+"'");
+                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.getCrrentBillNoList()));
+                        similarityDataEntityListLoad.getCrrentBillNoList().remove(String.format("'%s'",detailDataBeand.getBillNo()));
                         break;
                     }
 
