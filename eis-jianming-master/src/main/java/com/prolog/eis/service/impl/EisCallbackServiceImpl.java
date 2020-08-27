@@ -186,6 +186,9 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
             Map describe = BeanUtils.describe(inboundTask);
             List<Map<String, Object>> data = new ArrayList<>();
+            if ((Integer)describe.get("ceng")== 4){
+                describe.put("taskType",50);
+            }
             describe.put("consignor", describe.get("ownerId"));
             describe.remove("ownerId");
             data.add(describe);

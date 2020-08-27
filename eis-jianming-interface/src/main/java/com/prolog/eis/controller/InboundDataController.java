@@ -71,6 +71,7 @@ public class InboundDataController {
                         datum.setWmsPush(1);
                         datum.setReBack(1);
                         datum.setEmptyContainer(0);
+                        datum.setTaskType(2);
                         long l = System.currentTimeMillis();
                         Date t = new Date(l);
                         java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
