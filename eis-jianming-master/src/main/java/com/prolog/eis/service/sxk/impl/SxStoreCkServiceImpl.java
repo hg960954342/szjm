@@ -230,7 +230,7 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 		mcsTask.setBankId(1);
 		mcsTask.setPriority("99");
 		mcsTask.setAddress(address);
-		mcsTask.setContainerNo(containerTask.getContainerCode());
+		mcsTask.setContainerNo(sxStore.getContainerNo());
 		mcsTask.setTarget(target);
 		mcsTask.setType(3);
 		mcsTask.setWeight("0");
