@@ -18,6 +18,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * 写入库出库任务
+ */
 @Component
 public class TimeTask {
 
@@ -27,21 +30,14 @@ public class TimeTask {
     OutBoundTaskService outBoundTaskService;
 
 
-    @Autowired
-    private EisSendRcsTaskServiceSend eisSendRcsTaskServiceSend;
 
-    @Autowired
-    private ContainerTaskService containerTaskService;
 
-    @Autowired
-    private SxStoreCkService sxStoreCkService;
-
-    @Bean
+   /* @Bean
     public TaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         taskScheduler.setPoolSize(50);
         return taskScheduler;
-    }
+    }*/
 
     /**
      * 定时处理入库任务
@@ -66,33 +62,10 @@ public class TimeTask {
 
     }
 
-    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void buildAndSendSxCkTask()  {
-
-        try {
-            synchronized ("kucun".intern()) {
-                sxStoreCkService.buildSxCkTask();
-            }
-            sxStoreCkService.sendSxCkTask();
-        } catch (Exception e) {
-             LogServices.logSys(e);
-        }
-
-    }
-
-    //定时给agv小车下分任务
-	@Scheduled(initialDelay = 3000,fixedDelay = 5000)
-    public void sendTask2Rcs()  {
-
-        List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
-        if (!containerTasks.isEmpty() && containerTasks.size() > 0) {
-            eisSendRcsTaskServiceSend.sendTask(containerTasks);
-        }
-
-    }
 
 
-    private WmsLoginService wmsLoginService;
+
+ //   private WmsLoginService wmsLoginService;
 /*
 
     //刷新token
