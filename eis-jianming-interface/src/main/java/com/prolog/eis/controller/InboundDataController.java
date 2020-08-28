@@ -106,7 +106,7 @@ public class InboundDataController {
                             e.printStackTrace();
                             return rejson;
                         }
-                    }else {
+                    } else {
                         JsonResult resultStr = new JsonResult();
                         resultStr.setCode("-1");
                         resultStr.setMessage("agv小车不能跨层!!!");
@@ -176,48 +176,43 @@ public class InboundDataController {
             } else {
                 List<InboundTask> data = inboundTaskDto.getData();
                 for (InboundTask datum : data) {
-                    if (StringUtils.isEmpty(data)) {
-                        try {
+                    try {
 
-                            String uuid = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
-                            datum.setBillNo(uuid);
-                            datum.setWmsPush(1);
-                            datum.setReBack(0);
-                            datum.setEmptyContainer(1);
-                            datum.setTaskState(0);
-                            long l = System.currentTimeMillis();
-                            Date t = new Date(l);
-                            java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
+                        String uuid = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+                        datum.setBillNo(uuid);
+                        datum.setWmsPush(1);
+                        datum.setReBack(0);
+                        datum.setEmptyContainer(1);
+                        datum.setTaskState(0);
+                        long l = System.currentTimeMillis();
+                        Date t = new Date(l);
+                        java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
 
-                            datum.setCreateTime(ctime);
+                        datum.setCreateTime(ctime);
 
-                            inboundDataService.insertEmptyBoxInStockTask(datum);
+                        inboundDataService.insertEmptyBoxInStockTask(datum);
 
-                        } catch (Exception e) {
+                    } catch (Exception e) {
 
-                            rejson.setCode("-1");
-                            rejson.setMessage("false");
+                        rejson.setCode("-1");
+                        rejson.setMessage("false");
 
-                            WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
-                            wmsEisIdempotent.setMessageId(messageID);
-                            long l = System.currentTimeMillis();
-                            Date t = new Date(l);
-                            java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
-                            wmsEisIdempotent.setLocDate(ltime);
+                        WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
+                        wmsEisIdempotent.setMessageId(messageID);
+                        long l = System.currentTimeMillis();
+                        Date t = new Date(l);
+                        java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
+                        wmsEisIdempotent.setLocDate(ltime);
 
-                            string = JSONObject.toJSONString(rejson);
-                            wmsEisIdempotent.setRejson(string);
-                            eisIdempotentService.insertReport(wmsEisIdempotent);
-                            FileLogHelper.WriteLog("WmsEmptyBoxInStockTask", "WMS->EIS空托入库返回" + rejson);
+                        string = JSONObject.toJSONString(rejson);
+                        wmsEisIdempotent.setRejson(string);
+                        eisIdempotentService.insertReport(wmsEisIdempotent);
+                        FileLogHelper.WriteLog("WmsEmptyBoxInStockTask", "WMS->EIS空托入库返回" + rejson);
 
-                            e.printStackTrace();
-                            return rejson;
-                        }
-                    }else {
-                        JsonResult resultStr = new JsonResult();
-                        resultStr.setCode("-1");
-                        resultStr.setMessage("空托入库信息为空！！！");
+                        e.printStackTrace();
+                        return rejson;
                     }
+
                 }
 
                 rejson.setCode("0");
