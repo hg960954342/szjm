@@ -2,6 +2,7 @@ package com.prolog.eis.service.impl.unbound;
 
 import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
+import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.model.wms.PickStation;
 import com.prolog.framework.core.restriction.Criteria;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 订单出库必须继承此类 名称必须符合 OutBoundType.TASK_TYPE+数据库中配置的类型数字
@@ -91,7 +93,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         pickStationCriteria.setRestriction(Restrictions.in("taskType",taskTypes));
         pickStationCriteria.setRestriction(Restrictions.eq("isLock",0 ));
         List<PickStation> listPickStation= pickStationMapper.findByCriteria(pickStationCriteria);
-      /*  //过滤掉不能用的拣选站
+        //过滤掉不能用的拣选站
         listPickStation=listPickStation.stream().filter(x->{
             String stationNo=x.getDeviceNo();
             AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo,0,0);
@@ -100,7 +102,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
                 return true;
             }
             return false;
-        }).collect(Collectors.toList());*/
+        }).collect(Collectors.toList());
         return listPickStation;
     }
 

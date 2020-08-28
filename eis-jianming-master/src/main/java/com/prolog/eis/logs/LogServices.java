@@ -133,7 +133,7 @@ public class LogServices {
      * 系统内部日志
      * @param e
      */
-    public static void logSys(Exception e){
+    public static void logSys(Throwable e){
         SysLog sysLog=new SysLog();
         String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
         sysLog.setClassName(className);
