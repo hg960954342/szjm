@@ -70,7 +70,6 @@ public class InboundDataController {
                 for (InboundTask datum : data) {
                     if ((Integer.parseInt(datum.getCeng()) == 3 && datum.getAgvLoc().contains("XY")) || (Integer.parseInt(datum.getCeng()) == 4 && datum.getAgvLoc().contains("AB"))) {
 
-
                         try {
 
                             datum.setWmsPush(1);
