@@ -85,7 +85,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
                 //封装入库回告数据
                 String json = this.inBoundReportData(inboundTask);
                 String url = null;
-                if (inboundTask.getTaskType() == 2) {//订单入库
+                if (inboundTask.getTaskType() == 2 || inboundTask.getTaskType()==50) {//订单入库
                     url = String.format("http://%s:%s/api/v1/StockMove/POPutaway", wmsIp, wmsPort);
                 } else {//移库入库
                     url = String.format("http://%s:%s/api/v1/StockMove/InPutaway", wmsIp, wmsPort);
@@ -186,9 +186,6 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
             Map describe = BeanUtils.describe(inboundTask);
             List<Map<String, Object>> data = new ArrayList<>();
-            if ((Integer)describe.get("ceng")== 4){
-                describe.put("taskType",50);
-            }
             describe.put("consignor", describe.get("ownerId"));
             describe.remove("ownerId");
             data.add(describe);
