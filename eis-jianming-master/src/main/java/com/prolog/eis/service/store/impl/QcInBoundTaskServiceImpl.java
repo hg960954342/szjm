@@ -116,16 +116,17 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			weight = Double.valueOf(inBoundRequest.getWeight())/10.00;
 		}
 
-		if(weight > limitWeight) {
+		if(weight > limitWeight || detection != 1) {
 			return this.addMcsTask(false,1,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重");
 		}
+
 
 		String state ="";
 		//state =(weight>=limitWeight)?"超重":"正常";
 		//state=(detection!=1)?"尺寸异常":"正常";
 		if(weight>=limitWeight){
 			state="超重";
-		}else if (detection!=1){
+		}else if (detection != 1){
 			state="尺寸异常";
 		}else{
 			state="正常";

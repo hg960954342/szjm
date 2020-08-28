@@ -99,7 +99,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		containerTask.setSource(source);
 		containerTask.setSourceType(1);
 		containerTask.setTarget(target);
-		containerTask.setTargetType(OutBoundEnum.TargetType.SSX.getNumber());
+		containerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber());
 		containerTask.setSourceType(1);
 		containerTask.setTaskState(1);
 		containerTask.setQty(1d);
