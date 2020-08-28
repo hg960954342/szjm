@@ -117,7 +117,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}
 
 		if(weight > limitWeight || detection != 1) {
-			return this.addMcsTask(false,1,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重");
+			return this.addMcsTask(false,1,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重或者尺寸异常");
 		}
 
 

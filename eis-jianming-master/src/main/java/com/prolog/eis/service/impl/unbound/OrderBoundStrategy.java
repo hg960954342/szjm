@@ -17,11 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
-
 /**
  * 订单出库 未指定拣选站
  */
@@ -56,6 +54,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
     @Autowired
     PortInfoMapper portInfoMapper;
+    @Autowired
+    PickStainStrategy pickStainStrategy;
 
 
 
@@ -63,11 +63,9 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     @Override
     public void unbound(OutboundTask outboundTask) {
 
-        List<PickStation> lists=getAvailablePickStation();
-        if(lists.size()<1) { LogServices.logSysBusiness("无可用拣选站");return;}
-
+        List<PickStation> listPickStations=getAvailablePickStation();
+        if(listPickStations.size()<1) { LogServices.logSysBusiness("无可用拣选站");return;}
         SimilarityDataEntityLoadInterface similarityDataEntityListLoad=getsimilarityDataEntityListLoad(outboundTask);
-
         List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList();
 
 
@@ -87,27 +85,24 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 Float countQty=qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
                 if(countQty==null) countQty=0f;
                 if (countQty<last) {LogServices.logSysBusiness("库存:"+countQty+"不够出:"+last+"！"); return; }
-               //更新任务锁
-              //  agvStorageLocation.setTaskLock(1);
-              //  agvStorageLocationMapper.update(agvStorageLocation);
 
-              //  if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
-                 /*   List<String> listBillNos=new ArrayList<String>();
-                    listBillNos.addAll(similarityDataEntityListLoad.currentBillNoList);
-                    int seqno=0;*/
                 List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
+                String bill_no_String=detailDataBeand.getBillNo();
 
+                List<String> listBillNo=Arrays.asList(bill_no_String.split(","));
+                List<String> listBillNoRemove=new ArrayList<>();
+                for (String remove:listBillNo){
+                    listBillNoRemove.add(String.format("'%s'",remove));
+                }
                 for (Map<String, Object> sxStore1 : listSxStore) {
-                    int randomElementIndex = ThreadLocalRandom.current().nextInt(lists.size()) % lists.size();
-                    String pickCode=lists.get(randomElementIndex).getDeviceNo();
+                    int index=pickStainStrategy.getIndexPickStain(listPickStations.size());
+                    String pickCode=listPickStations.get(index).getDeviceNo();
                     AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
-                    if(agvStorageLocation==null){ LogServices.logSysBusiness(pickCode+"拣选站点位已经锁定！");break ;}
                     int  LocationType= agvStorageLocation.getLocationType();
-
+                    if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
                     if (((BigDecimal) sxStore1.get("qty")).floatValue() <= last && (LocationType == 3 || LocationType == 5)) { //出整托
                         //出整托
                         last = last - ((BigDecimal) sxStore1.get("qty")).floatValue();
-
                         String target = agvStorageLocation.getRcsPositionCode();
                         ordercontainerTask.setTarget(target);
                         ordercontainerTask.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
@@ -115,30 +110,34 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                        // ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
+                        ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
                         containerTaskMapper.save(ordercontainerTask);
-                  List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.
-                          put("billNo",detailDataBeand.getBillNo())
-                          .put("itemId",detailDataBeand.getItemId()).put("ownerId",detailDataBeand.getOwnerId()
-                          ).put("lotId",detailDataBeand.getLotId()).getMap(),OutboundTaskDetail.class);
-                      for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetailList){
-                          ContainerTaskDetail containerTaskDetail=new ContainerTaskDetail();
-                          BeanUtils.copyProperties(detailDataBeand,containerTaskDetail);
-                          containerTaskDetail.setBillNo(outboundTaskDetail.getBillNo());
-                          containerTaskDetail.setSeqNo(outboundTaskDetail.getSeqNo());
-                          containerTaskDetail.setContainerCode((String) sxStore1.get("containerNo"));
-                          containerTaskDetail.setCreateTime(new java.util.Date());
-                          if(((BigDecimal) sxStore1.get("qty")).floatValue()<outboundTaskDetail.getQty()){
-                              containerTaskDetail.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
-                          }else{
-                              containerTaskDetail.setQty(outboundTaskDetail.getQty());
-                          }
+                        //出明细
+                        for(String billNo:listBillNo){
+                            List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.
+                                    put("billNo",billNo)
+                                    .put("itemId",detailDataBeand.getItemId()).put("ownerId",detailDataBeand.getOwnerId()
+                                    ).put("lotId",detailDataBeand.getLotId()).getMap(),OutboundTaskDetail.class);
+                            for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetailList){
+                                ContainerTaskDetail containerTaskDetail=new ContainerTaskDetail();
+                                BeanUtils.copyProperties(detailDataBeand,containerTaskDetail);
+                                containerTaskDetail.setBillNo(billNo);
+                                containerTaskDetail.setSeqNo(outboundTaskDetail.getSeqNo());
+                                containerTaskDetail.setContainerCode((String) sxStore1.get("containerNo"));
+                                containerTaskDetail.setCreateTime(new java.util.Date());
+                                if(((BigDecimal) sxStore1.get("qty")).floatValue()<outboundTaskDetail.getQty()){
+                                    containerTaskDetail.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
+                                }else{
+                                    containerTaskDetail.setQty(outboundTaskDetail.getQty());
+                                }
 
-                          containerTaskDetailMapperMapper.save(containerTaskDetail);
-                      }
+                                containerTaskDetailMapperMapper.save(containerTaskDetail);
+                            }
+                        }
 
-                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.getCrrentBillNoList()));
-                        similarityDataEntityListLoad.getCrrentBillNoList().remove(String.format("'%s'",detailDataBeand.getBillNo()));
+                        if(listBillNoRemove!=null&&listBillNoRemove.size()>0){
+                            outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", listBillNoRemove));}
+                        similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);
 
                       if (last <= 0) break;
                     }
@@ -152,36 +151,39 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                        // ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
+                         ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
                         containerTaskMapper.save(ordercontainerTask);
 
+                        for(String billNo:listBillNo){
+                            List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.
+                                    put("billNo",billNo)
+                                    .put("itemId",detailDataBeand.getItemId()).put("ownerId",detailDataBeand.getOwnerId()
+                                    ).put("lotId",detailDataBeand.getLotId()).getMap(),OutboundTaskDetail.class);
+                            for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetailList){
+                                ContainerTaskDetail containerTaskDetail=new ContainerTaskDetail();
+                                BeanUtils.copyProperties(detailDataBeand,containerTaskDetail);
+                                containerTaskDetail.setBillNo(billNo);
+                                containerTaskDetail.setSeqNo(outboundTaskDetail.getSeqNo());
+                                containerTaskDetail.setContainerCode((String) sxStore1.get("containerNo"));
+                                containerTaskDetail.setCreateTime(new Date(System.currentTimeMillis()));
+                                if(((BigDecimal) sxStore1.get("qty")).floatValue()<outboundTaskDetail.getQty()){
+                                    containerTaskDetail.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
+                                }else{
+                                    containerTaskDetail.setQty(outboundTaskDetail.getQty());
+                                }
 
-                        List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.
-                                put("billNo",detailDataBeand.getBillNo())
-                                .put("itemId",detailDataBeand.getItemId()).put("ownerId",detailDataBeand.getOwnerId()
-                                ).put("lotId",detailDataBeand.getLotId()).getMap(),OutboundTaskDetail.class);
-                        for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetailList){
-                            ContainerTaskDetail containerTaskDetail=new ContainerTaskDetail();
-                            BeanUtils.copyProperties(detailDataBeand,containerTaskDetail);
-                            containerTaskDetail.setBillNo(outboundTaskDetail.getBillNo());
-                            containerTaskDetail.setSeqNo(outboundTaskDetail.getSeqNo());
-                            containerTaskDetail.setContainerCode((String) sxStore1.get("containerNo"));
-                            containerTaskDetail.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
-                            if(((BigDecimal) sxStore1.get("qty")).floatValue()<outboundTaskDetail.getQty()){
-                                containerTaskDetail.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
-                            }else{
-                                containerTaskDetail.setQty(outboundTaskDetail.getQty());
+                                containerTaskDetailMapperMapper.save(containerTaskDetail);
                             }
-
-                            containerTaskDetailMapperMapper.save(containerTaskDetail);
                         }
 
-                        outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", similarityDataEntityListLoad.getCrrentBillNoList()));
-                        similarityDataEntityListLoad.getCrrentBillNoList().remove(String.format("'%s'",detailDataBeand.getBillNo()));
-                       break;
+
+                        if(listBillNoRemove!=null&&listBillNoRemove.size()>0){
+                            outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", listBillNoRemove));}
+                        similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);
+                        break;
                     }
 
-                }
+                }}
 
 
 
