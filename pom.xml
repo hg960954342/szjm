@@ -61,18 +61,18 @@
 		</plugins>
 	</build>
 
-	<!--<repositories>
-		<repository>               &lt;!&ndash; 仓库地址   &ndash;&gt;
+	<repositories>
+		<repository>               <!-- 仓库地址   -->
 			<id>nexus</id>
 			<name>Team Nexus Repository </name >
 			<url>http://10.5.90.47:9088/nexus/content/groups/public</url>
 		</repository>
-	</repositories>-->
-	<!--<pluginRepositories>
-		<pluginRepository>               &lt;!&ndash;  插件地址   &ndash;&gt;
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>               <!--  插件地址   -->
 			<id>nexus</id>
 			<name>Team Nexus Repository </name >
 			<url>http://10.5.90.47:9088/nexus/content/groups/public</url>
 		</pluginRepository>
-	</pluginRepositories >-->
+	</pluginRepositories >
 </project>

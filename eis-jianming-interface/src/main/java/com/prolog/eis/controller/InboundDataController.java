@@ -13,6 +13,7 @@ import com.prolog.eis.util.PrologApiJsonHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,8 @@ public class InboundDataController {
 
 
     /**
-     *业务入库 推送eis
+     * 业务入库 推送eis
+     *
      * @param str json串
      * @return JsonResult json串
      * @throws Exception
@@ -45,7 +47,7 @@ public class InboundDataController {
     public JsonResult inboundTaskPush(@RequestBody String str) throws Exception {
 
 
-            PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
         try {
             FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS入库请求" + str);
@@ -56,50 +58,58 @@ public class InboundDataController {
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageId);
 
             JsonResult rejson = new JsonResult();
-            String string= "";
+            String string = "";
 
-            if(wmsEisIdempotents.size() != 0){
+            if (wmsEisIdempotents.size() != 0) {
                 string = wmsEisIdempotents.get(0).getRejson();
                 PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
-            }else{
+            } else {
                 List<InboundTask> data = inboundTaskDto.getData();
                 for (InboundTask datum : data) {
-                    try {
+                    if ((Integer.parseInt(datum.getCeng()) == 3 && datum.getAgvLoc().contains("XY")) || (Integer.parseInt(datum.getCeng()) == 4 && datum.getAgvLoc().contains("AB"))) {
 
-                        datum.setWmsPush(1);
-                        datum.setReBack(1);
-                        datum.setEmptyContainer(0);
-                        datum.setTaskType(2);
-                        long l = System.currentTimeMillis();
-                        Date t = new Date(l);
-                        java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
 
-                        datum.setCreateTime(ctime);
-                        datum.setTaskState(0);
+                        try {
 
-                        inboundDataService.insertInboundTask(datum);
+                            datum.setWmsPush(1);
+                            datum.setReBack(1);
+                            datum.setEmptyContainer(0);
+                            long l = System.currentTimeMillis();
+                            Date t = new Date(l);
+                            java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
 
-                    }catch (Exception e){
+                            datum.setCreateTime(ctime);
+                            datum.setTaskState(0);
 
-                        rejson.setCode("-1");
-                        rejson.setMessage("false");
+                            inboundDataService.insertInboundTask(datum);
 
-                        WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
-                        wmsEisIdempotent.setMessageId(messageId);
-                        long l = System.currentTimeMillis();
-                        Date t = new Date(l);
-                        java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
-                        wmsEisIdempotent.setLocDate(ltime);
+                        } catch (Exception e) {
 
-                        string = JSONObject.toJSONString(rejson);
-                        wmsEisIdempotent.setRejson(string);
-                        eisIdempotentService.insertReport(wmsEisIdempotent);
+                            rejson.setCode("-1");
+                            rejson.setMessage("false");
 
-                        FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS入库返回" + rejson);
+                            WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
+                            wmsEisIdempotent.setMessageId(messageId);
+                            long l = System.currentTimeMillis();
+                            Date t = new Date(l);
+                            java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
+                            wmsEisIdempotent.setLocDate(ltime);
 
-                        e.printStackTrace();
+                            string = JSONObject.toJSONString(rejson);
+                            wmsEisIdempotent.setRejson(string);
+                            eisIdempotentService.insertReport(wmsEisIdempotent);
+
+                            FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS入库返回" + rejson);
+
+                            e.printStackTrace();
+                            return rejson;
+                        }
+                    }else {
+                        JsonResult resultStr = new JsonResult();
+                        resultStr.setCode("-1");
+                        resultStr.setMessage("agv小车不能跨层!!!");
                         return rejson;
                     }
                 }
@@ -121,9 +131,9 @@ public class InboundDataController {
                 return rejson;
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             FileLogHelper.WriteLog("WmsInStockTaskError", "入库异常，错误信息：\n" + e.toString());
-            JsonResult resultStr =new JsonResult();
+            JsonResult resultStr = new JsonResult();
             resultStr.setCode("-1");
             resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS返回" + resultStr);
@@ -135,6 +145,7 @@ public class InboundDataController {
 
     /**
      * 业务空托入库 推送eis
+     *
      * @param str json串
      * @return JsonResult json串
      * @throws Exception
@@ -155,51 +166,57 @@ public class InboundDataController {
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
             JsonResult rejson = new JsonResult();
-            String string= "";
+            String string = "";
 
-            if(wmsEisIdempotents.size() != 0){
+            if (wmsEisIdempotents.size() != 0) {
                 string = wmsEisIdempotents.get(0).getRejson();
                 PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
-            }else{
+            } else {
                 List<InboundTask> data = inboundTaskDto.getData();
                 for (InboundTask datum : data) {
-                    try {
+                    if (StringUtils.isEmpty(data)) {
+                        try {
 
-                        String uuid = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
-                        datum.setBillNo(uuid);
-                        datum.setWmsPush(1);
-                        datum.setReBack(0);
-                        datum.setEmptyContainer(1);
-                        datum.setTaskState(0);
-                        long l = System.currentTimeMillis();
-                        Date t = new Date(l);
-                        java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
+                            String uuid = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+                            datum.setBillNo(uuid);
+                            datum.setWmsPush(1);
+                            datum.setReBack(0);
+                            datum.setEmptyContainer(1);
+                            datum.setTaskState(0);
+                            long l = System.currentTimeMillis();
+                            Date t = new Date(l);
+                            java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
 
-                        datum.setCreateTime(ctime);
+                            datum.setCreateTime(ctime);
 
-                        inboundDataService.insertEmptyBoxInStockTask(datum);
+                            inboundDataService.insertEmptyBoxInStockTask(datum);
 
-                    }catch (Exception e){
+                        } catch (Exception e) {
 
-                        rejson.setCode("-1");
-                        rejson.setMessage("false");
+                            rejson.setCode("-1");
+                            rejson.setMessage("false");
 
-                        WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
-                        wmsEisIdempotent.setMessageId(messageID);
-                        long l = System.currentTimeMillis();
-                        Date t = new Date(l);
-                        java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
-                        wmsEisIdempotent.setLocDate(ltime);
+                            WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
+                            wmsEisIdempotent.setMessageId(messageID);
+                            long l = System.currentTimeMillis();
+                            Date t = new Date(l);
+                            java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
+                            wmsEisIdempotent.setLocDate(ltime);
 
-                        string = JSONObject.toJSONString(rejson);
-                        wmsEisIdempotent.setRejson(string);
-                        eisIdempotentService.insertReport(wmsEisIdempotent);
-                        FileLogHelper.WriteLog("WmsEmptyBoxInStockTask", "WMS->EIS空托入库返回" + rejson);
+                            string = JSONObject.toJSONString(rejson);
+                            wmsEisIdempotent.setRejson(string);
+                            eisIdempotentService.insertReport(wmsEisIdempotent);
+                            FileLogHelper.WriteLog("WmsEmptyBoxInStockTask", "WMS->EIS空托入库返回" + rejson);
 
-                        e.printStackTrace();
-                        return rejson;
+                            e.printStackTrace();
+                            return rejson;
+                        }
+                    }else {
+                        JsonResult resultStr = new JsonResult();
+                        resultStr.setCode("-1");
+                        resultStr.setMessage("空托入库信息为空！！！");
                     }
                 }
 
@@ -220,9 +237,9 @@ public class InboundDataController {
 
                 return rejson;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FileLogHelper.WriteLog("WmsEmptyBoxInStockTaskError", "空托入库异常，错误信息：\n" + e.toString());
-            JsonResult resultStr =new JsonResult();
+            JsonResult resultStr = new JsonResult();
             resultStr.setCode("-1");
             resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsEmptyBoxInStockTask", "WMS->EIS返回" + resultStr);
