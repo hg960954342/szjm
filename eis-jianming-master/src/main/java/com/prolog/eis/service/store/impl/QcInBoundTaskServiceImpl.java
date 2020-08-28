@@ -116,11 +116,6 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			weight = Double.valueOf(inBoundRequest.getWeight())/10.00;
 		}
 
-		if(weight > limitWeight || detection != 1) {
-			return this.addMcsTask(false,1,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重或者尺寸异常");
-		}
-
-
 		String state ="";
 		//state =(weight>=limitWeight)?"超重":"正常";
 		//state=(detection!=1)?"尺寸异常":"正常";
@@ -160,6 +155,12 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 			}
 		}
+
+
+		if(weight > limitWeight || detection != 1) {
+			return this.addMcsTask(false,1,containerNo,source,"-1",inBoundRequest.getStockId()+"托盘超重或者尺寸异常");
+		}
+
 
 		// 找port口
 		List<PortInfo> portInfos = portInfoMapper.findByMap(MapUtils.put("layer", sourceLayer).put("x", sourceX).put("y", sourceY).getMap(), PortInfo.class);
