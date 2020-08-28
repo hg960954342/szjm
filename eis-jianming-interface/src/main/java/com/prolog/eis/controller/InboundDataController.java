@@ -68,50 +68,44 @@ public class InboundDataController {
             } else {
                 List<InboundTask> data = inboundTaskDto.getData();
                 for (InboundTask datum : data) {
-                    if ((Integer.parseInt(datum.getCeng()) == 3 && datum.getAgvLoc().contains("XY")) || (Integer.parseInt(datum.getCeng()) == 4 && datum.getAgvLoc().contains("AB"))) {
 
 
-                        try {
+                    try {
 
-                            datum.setWmsPush(1);
-                            datum.setReBack(1);
-                            datum.setEmptyContainer(0);
-                            long l = System.currentTimeMillis();
-                            Date t = new Date(l);
-                            java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
+                        datum.setWmsPush(1);
+                        datum.setReBack(1);
+                        datum.setEmptyContainer(0);
+                        long l = System.currentTimeMillis();
+                        Date t = new Date(l);
+                        java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
 
-                            datum.setCreateTime(ctime);
-                            datum.setTaskState(0);
+                        datum.setCreateTime(ctime);
+                        datum.setTaskState(0);
 
-                            inboundDataService.insertInboundTask(datum);
+                        inboundDataService.insertInboundTask(datum);
 
-                        } catch (Exception e) {
+                    } catch (Exception e) {
 
-                            rejson.setCode("-1");
-                            rejson.setMessage("false");
+                        rejson.setCode("-1");
+                        rejson.setMessage("false");
 
-                            WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
-                            wmsEisIdempotent.setMessageId(messageId);
-                            long l = System.currentTimeMillis();
-                            Date t = new Date(l);
-                            java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
-                            wmsEisIdempotent.setLocDate(ltime);
+                        WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
+                        wmsEisIdempotent.setMessageId(messageId);
+                        long l = System.currentTimeMillis();
+                        Date t = new Date(l);
+                        java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
+                        wmsEisIdempotent.setLocDate(ltime);
 
-                            string = JSONObject.toJSONString(rejson);
-                            wmsEisIdempotent.setRejson(string);
-                            eisIdempotentService.insertReport(wmsEisIdempotent);
+                        string = JSONObject.toJSONString(rejson);
+                        wmsEisIdempotent.setRejson(string);
+                        eisIdempotentService.insertReport(wmsEisIdempotent);
 
-                            FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS入库返回" + rejson);
+                        FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS入库返回" + rejson);
 
-                            e.printStackTrace();
-                            return rejson;
-                        }
-                    } else {
-                        JsonResult resultStr = new JsonResult();
-                        resultStr.setCode("-1");
-                        resultStr.setMessage("agv小车不能跨层!!!");
+                        e.printStackTrace();
                         return rejson;
                     }
+
                 }
 
                 rejson.setCode("0");
