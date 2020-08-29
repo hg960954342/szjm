@@ -56,6 +56,11 @@ public class InboundTask {
     @JsonProperty("ITEMID")
     private String itemId;
 
+    @Column("item_name")
+    @ApiModelProperty("商品名称")
+    @JsonProperty("SPMCH")
+    private String itemName;
+
     @Column("qty")
     @ApiModelProperty("数量（重量）")
     @JsonProperty("QTY")
