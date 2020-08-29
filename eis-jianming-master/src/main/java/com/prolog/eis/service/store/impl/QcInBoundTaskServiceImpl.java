@@ -135,7 +135,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			if(ledShow != null){
 				PrologLedController prologLedController = new PrologLedController();
 				try {
-					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",weight,containerTask.getLotId(),state);
+					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),containerTask.getItemName(),weight,containerTask.getLotId(),state);
 				}catch (Exception e){
 					LogServices.logSys(e);
 				}
@@ -148,7 +148,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			if(ledShow != null){
 				PrologLedController prologLedController = new PrologLedController();
 				try {
-					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",weight,containerTask.getLotId(),state);
+					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),containerTask.getItemName(),weight,containerTask.getLotId(),state);
 				}catch (Exception e){
 					LogServices.logSys(e);
 				}
@@ -613,7 +613,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			if(ledShow != null){
 				PrologLedController prologLedController = new PrologLedController();
 				try {
-					prologLedController.outStore(ledShow.getLedIp(),ledShow.getPort(),"板蓝根",containerTask.getQty(),containerTask.getLotId(),station);
+					prologLedController.outStore(ledShow.getLedIp(),ledShow.getPort(),containerTask.getItemName(),containerTask.getQty(),containerTask.getLotId(),station);
 				}catch (Exception e){
 					LogServices.logSys(e);
 				}
