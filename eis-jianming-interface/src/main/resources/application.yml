@@ -2,7 +2,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://39.96.69.213:8761/eureka/
+      defaultZone: http://10.5.90.227:8761/eureka/
   instance:
     # 注册时使用ip而不是主机名
     preferIpAddress: true
@@ -27,7 +27,6 @@ spring:
     url: jdbc:mysql://10.5.90.227:3306/jianmin
     username: root
     password: eis888
-    #password: 123456
     driver-class-name: com.mysql.jdbc.Driver
     #初始化大小
     initialSize: 0

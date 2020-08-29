@@ -2,7 +2,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://39.96.69.213:8761/eureka/
+      defaultZone: http://10.5.90.227:8761/eureka/
   instance: 
     # 注册时使用ip而不是主机名
     preferIpAddress: true
@@ -25,11 +25,9 @@ spring:
       enabled: true
 
   datasource:
-#    url: jdbc:mysql://127.0.0.1:3306/jianmin
-    url: jdbc:mysql://39.96.69.213:3306/jianmin
+    url: jdbc:mysql://10.5.90.227:3306/jianmin
     username: root
-    password: eisalicloud
-    #password: 123456
+    password: eis888
     driver-class-name: com.mysql.jdbc.Driver
     #初始化大小
     initialSize: 0
@@ -55,11 +53,11 @@ prolog:
      ip: 10.5.90.211
      port: 81
   mcs:
-     url: http://   
-     port: 127.0.0.1:20318
+     url: 10.5.90.229
+     port: 80
   wms:
      url: 192.168.30.151
-     port: 8091
+     port: 8909
   dao: 
     dialect: mysql
     pagehelper: #pagehelper分页插件配置
@@ -79,6 +77,6 @@ prolog:
       maxRequestSize: 100MB
 
 # 登录wms 用户名 密码
-userCode: root
-userPass: root
+userCode: admin
+userPass: 1
   
