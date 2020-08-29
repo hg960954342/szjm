@@ -19,7 +19,6 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
     public  Set<String> currentBillNoList=Collections.synchronizedSet(new HashSet<>()); //当前执行的billNoString
     public  int  maxSize=1; //订单池处理最大数量*/
 
-    private Set<String> billNoList=Collections.synchronizedSet(new HashSet<>());
 
 
     @Autowired
@@ -45,11 +44,9 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
      */
     @Override
     public synchronized void addOutboundTask(OutboundTask outboundTask) {
-         if(billNoList.size()<=maxSize&&outboundTask.getSfReq()==1) {
-             //billNoList.addAll(outBoundTaskMapper.getOutBoudTaskPickCodeBillNoOverTimeStringList(overTime));
-             billNoList.add("'"+outboundTask.getBillNo()+"'");
-             getCrrentBillNoList().add("'"+outboundTask.getBillNo()+"'");
-          }
+         if(getCrrentBillNoList().size()<=maxSize&&outboundTask.getSfReq()==1) {
+              getCrrentBillNoList().add("'"+outboundTask.getBillNo()+"'");
+           }
 
 
     }
@@ -70,9 +67,9 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
     private OutboundTask getSimilarityDataList(){
         List<OutboundTask> outboundTaskList=outBoundTaskMapper.getListOutboundTask();
         List<SimilarityDataEntity> list=new ArrayList<SimilarityDataEntity>();
-        float count=outBoundTaskDetailMapper.getPoolItemCount(String.join(",", billNoList));
+        float count=outBoundTaskDetailMapper.getPoolItemCount(String.join(",", getCrrentBillNoList()));
         for (OutboundTask outboundTask:outboundTaskList) {
-            float  countSame= outBoundTaskDetailMapper.getPoolSameItemCount(String.join(",", billNoList),outboundTask.getBillNo());
+            float  countSame= outBoundTaskDetailMapper.getPoolSameItemCount(String.join(",", getCrrentBillNoList()),outboundTask.getBillNo());
             float currentCount=outBoundTaskDetailMapper.getPoolItemCount("'"+outboundTask.getBillNo()+"'");
             count=currentCount>=count?currentCount:count;
             float similarity=countSame/count;

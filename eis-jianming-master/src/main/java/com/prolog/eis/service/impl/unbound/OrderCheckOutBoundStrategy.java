@@ -80,7 +80,7 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
            task.setTarget(PrologLocationUtils.splicingXYStr(portInfo.getLayer(),portInfo.getX(),portInfo.getY()));
            task.setTargetType(OutBoundEnum.TargetType.SSX.getNumber());
 
-           task.setTaskCode(PrologStringUtils.newGUID());
+
            task.setCreateTime(new Date());
            containerTaskMapper.save(task);
            CheckOutTask checkOutTask=new CheckOutTask();
