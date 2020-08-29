@@ -50,6 +50,11 @@ public class OutboundTaskDetail {
     @JsonProperty("ITEMID")
     private String itemId;
 
+    @Column("item_name")
+    @ApiModelProperty("商品名称")
+    @JsonProperty("SPMCH")
+    private String itemName;
+
     @Column("lot_id")
     @ApiModelProperty("wms批号")
     @JsonProperty("LOTID")
