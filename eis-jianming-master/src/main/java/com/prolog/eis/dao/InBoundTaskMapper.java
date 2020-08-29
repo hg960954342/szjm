@@ -26,6 +26,7 @@ public interface InBoundTaskMapper  extends BaseMapper<InboundTask>{
             @Result(property = "emptyContainer",  column = "empty_container") ,
             @Result(property = "taskType",  column = "task_type") ,
             @Result(property = "itemId",  column = "item_id") ,
+            @Result(property = "itemName",  column = "item_name") ,
             @Result(property = "qty",  column = "qty") ,
             @Result(property = "lotId",  column = "lot_id") ,
             @Result(property = "ceng",  column = "ceng") ,

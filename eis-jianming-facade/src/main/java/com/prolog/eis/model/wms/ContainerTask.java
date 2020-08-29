@@ -51,6 +51,10 @@ public class ContainerTask {
     @ApiModelProperty("wms商品id")
     private String itemId;
 
+	@Column("item_name")
+	@ApiModelProperty("wms商品名称")
+    private String itemName;
+
     @Column("lot_id")
     @ApiModelProperty("wms批号")
     private String lotId;
@@ -166,6 +170,14 @@ public class ContainerTask {
 		this.itemId = itemId;
 	}
 
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
 	public String getLotId() {
 		return lotId;
 	}
@@ -230,27 +242,28 @@ public class ContainerTask {
         this.endTime = endTime;
     }
 
-    @Override
-    public String toString() {
-        return "ContainerTask{" +
-                "id=" + id +
-                ", containerCode=" + containerCode +
-                ", taskType=" + taskType +
-                ", source='" + source + '\'' +
-                ", sourceType='" + sourceType + '\'' +
-                ", target='" + target + '\'' +
-                ", targetType='" + targetType + '\'' +
-                ", taskState='" + taskState + '\'' +
-                ", taskCode='" + taskCode + '\'' +
-                ", itemId='" + itemId + '\'' +
-                ", lotId='" + lotId + '\'' +
-                ", ownerId='" + ownerId + '\'' +
-                ", qty=" + qty +
-                ", createTime=" + createTime +
-                ", sendTime=" + sendTime +
-                ", startTime=" + startTime +
-                ", moveTime=" + moveTime +
-                ", endTime=" + endTime +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "ContainerTask{" +
+				"id=" + id +
+				", containerCode='" + containerCode + '\'' +
+				", taskType=" + taskType +
+				", source='" + source + '\'' +
+				", sourceType=" + sourceType +
+				", target='" + target + '\'' +
+				", targetType=" + targetType +
+				", taskState=" + taskState +
+				", taskCode='" + taskCode + '\'' +
+				", itemId='" + itemId + '\'' +
+				", itemName='" + itemName + '\'' +
+				", lotId='" + lotId + '\'' +
+				", ownerId='" + ownerId + '\'' +
+				", qty=" + qty +
+				", createTime=" + createTime +
+				", sendTime=" + sendTime +
+				", startTime=" + startTime +
+				", moveTime=" + moveTime +
+				", endTime=" + endTime +
+				'}';
+	}
 }

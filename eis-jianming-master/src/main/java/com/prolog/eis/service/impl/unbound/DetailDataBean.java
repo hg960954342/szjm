@@ -9,6 +9,7 @@ public class DetailDataBean {
 
     private String ownerId;
     private String itemId;
+    private String itemName;
     private String lotId;
     private String pickCode;
     private float qty;  //总量
@@ -53,6 +54,14 @@ public class DetailDataBean {
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     public String getLotId() {

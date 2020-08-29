@@ -75,6 +75,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 ordercontainerTask.setCreateTime(new Date(System.currentTimeMillis()));
                 ordercontainerTask.setOwnerId(detailDataBeand.getOwnerId());
                 ordercontainerTask.setItemId(detailDataBeand.getItemId());
+                ordercontainerTask.setItemName(detailDataBeand.getItemName());
                 ordercontainerTask.setTaskType(1);
                 ordercontainerTask.setSourceType(1);
 
