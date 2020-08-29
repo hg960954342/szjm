@@ -27,6 +27,7 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
 		@Result(property = "taskState",  column = "task_state"),
 		@Result(property = "taskCode",  column = "task_code"),
 		@Result(property = "itemId",  column = "item_id"),
+		@Result(property = "itemName",  column = "item_name"),
 		@Result(property = "lotId",  column = "lot_id"),
 		@Result(property = "ownerId",  column = "owner_id"),
 		@Result(property = "qty",  column = "qty"),
