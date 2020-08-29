@@ -22,35 +22,35 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
             @Result(property = "billNo",  column = "bill_no")
 
     })
-    @Select(
+   /* @Select(
         " SELECT \n" +
                 "                  sum(d.qty) qty, \n" +
                 "                  sum(d.finish_qty) finish_qty, \n" +
                 "                  sum(d.qty_) cqty ,\n" +
                 "                  d.owner_id,d.item_id,d.item_name,d.lot_id,d.pick_code,d.bill_no\n" +
                 "                FROM  \n" +
-                "               (select d.qty,d.finish_qty,c.qty qty_, d.owner_id,d.item_id,d.item_name,d.lot_id,d.pick_code,d.bill_no\n" +
+                "               (select d.qty,d.finish_qty,c.qty qty_, d.owner_id,d.item_id,d.lot_id,d.item_name,d.pick_code,d.bill_no\n" +
                 "                  from outbound_task_detail d   \n" +
                 "                INNER JOIN outbound_task t ON t.bill_no = d.bill_no and d.bill_no IN (${bill_no_string} ) \n" +
-                "                left JOIN container_task_detail c ON c.bill_no = d.bill_no )d GROUP BY d.owner_id,d.item_id,d.item_name,d.lot_id,d.pick_code,d.bill_no "
+                "                left JOIN container_task_detail c ON c.bill_no = d.bill_no )d GROUP BY d.owner_id,d.item_id,d.lot_id,d.item_name,d.pick_code,d.bill_no "
     )
      @Deprecated
      List<DetailDataBean> getOuntBoundDetailAll(@Param("bill_no_string") String billNoString);
 
-    @ResultMap("map")
+    @ResultMap("map")*/
     @Select(
             " SELECT \n" +
                     "                  sum(d.qty) qty, \n" +
                     "                  sum(d.finish_qty) finish_qty, \n" +
                     "                  sum(d.qty_) cqty ,\n" +
-                    "                  d.owner_id,d.item_id,d.lot_id,d.pick_code,group_concat(d.bill_no) bill_no\n" +
+                    "                  d.owner_id,d.item_id,d.lot_id,d.item_name,d.item_name,d.pick_code,group_concat(d.bill_no) bill_no\n" +
                     "                FROM  \n" +
-                    "               (select d.qty,d.finish_qty,c.qty qty_, d.owner_id,d.item_id,d.lot_id,d.pick_code,d.bill_no\n" +
+                    "               (select d.qty,d.finish_qty,c.qty qty_, d.owner_id,d.item_id,d.lot_id,d.item_name,d.pick_code,d.bill_no\n" +
                     "                  from outbound_task_detail d   \n" +
                     "                INNER JOIN outbound_task t ON t.bill_no = d.bill_no and d.bill_no IN (${bill_no_string} ) \n" +
-                    "                left JOIN container_task_detail c ON c.bill_no = d.bill_no )d GROUP BY d.owner_id,d.item_id,d.lot_id,d.pick_code"
+                    "                left JOIN container_task_detail c ON c.bill_no = d.bill_no )d GROUP BY d.owner_id,d.item_id,d.lot_id,d.item_name,d.pick_code"
     )
-    List<DetailDataBean> getOuntBoundDetailAll2(@Param("bill_no_string") String billNoString);
+    List<DetailDataBean> getOuntBoundDetailAll(@Param("bill_no_string") String billNoString);
 
 
 
