@@ -91,7 +91,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		SxStoreDto sxStoreDto = list.get(0);
 		String source = PrologCoordinateUtils.splicingStr(sxStoreDto.getX(),sxStoreDto.getY(),sxStoreDto.getLayer());
 
-		//生成托盘任务，自带出库口
+		//生成空托任务，自带出库口
 		ContainerTask containerTask = new ContainerTask();
 		containerTask.getId();
 		containerTask.setContainerCode(sxStoreDto.getContainerNo());
@@ -99,7 +99,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		containerTask.setSource(source);
 		containerTask.setSourceType(1);
 		containerTask.setTarget(target);
-		containerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber());
+		containerTask.setTargetType(OutBoundEnum.TargetType.SSX.getNumber());
 		containerTask.setSourceType(1);
 		containerTask.setTaskState(1);
 		containerTask.setQty(1d);
