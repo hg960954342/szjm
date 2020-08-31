@@ -186,6 +186,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}
 
 		if(result.getResultType() == 2) {
+			//解锁agv点位
+			clearAgvLock(containerTask);
 			//入库成功，删除agv区域的托盘
 			clearAgvLocationComtainer(containerNo);
 			//生成库存并入库
@@ -369,6 +371,14 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private void clearAgvLocationComtainer(String containerNo) {
 		containerTaskMapper.deleteByMap(MapUtils.put("containerCode", containerNo).getMap(), ContainerTask.class);
 	}
+
+	private void clearAgvLock(ContainerTask containerTask) {
+		AgvStorageLocation agvLocation = agvStorageLocationMapper.findByRcs(containerTask.getSource());
+		agvLocation.setTaskLock(0);
+		agvLocation.setLocationLock(0);
+		agvStorageLocationMapper.update(agvLocation);
+	}
+
 
 	private McsRequestTaskDto emptyContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
 		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,3,1,1);

@@ -212,8 +212,12 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         containerTask.setSource(agvTarget);
                         containerTaskService.update(containerTask);
                      }
-                    targetPosition.setTaskLock(0);
-                    targetPosition.setLocationLock(0);
+                    if ("T010103".equals(targetPosition.getDeviceNo()) || "T020103".equals(targetPosition.getDeviceNo())){
+                        targetPosition.setLocationLock(1);
+                    }else {
+                        targetPosition.setTaskLock(0);
+                        targetPosition.setLocationLock(0);
+                    }
                     agvStorageLocationMapper.update(targetPosition);
                 } catch (Exception e) {
                     e.printStackTrace();
