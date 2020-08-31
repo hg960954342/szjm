@@ -7,6 +7,7 @@ import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.EisSendRcsTaskService;
 import com.prolog.eis.service.rcs.RcsRequestService;
+import com.prolog.eis.util.PrologStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,9 +34,10 @@ public class EisSendRcsTaskServiceSend   {
         for (ContainerTask containerTask : containerTasks) {
             //获取参数
             String taskCode = containerTask.getTaskCode();
-            if (StringUtils.isEmpty(taskCode)) {
-                taskCode = UUID.randomUUID().toString().replaceAll("-", "");
-            }
+           /* if (StringUtils.isEmpty(taskCode)) {
+                taskCode = PrologStringUtils.newGUID();
+                containerTask.setTaskCode(taskCode);
+            }*/
             String containerCode = containerTask.getContainerCode();
             String source = containerTask.getSource();
             String target = containerTask.getTarget();
