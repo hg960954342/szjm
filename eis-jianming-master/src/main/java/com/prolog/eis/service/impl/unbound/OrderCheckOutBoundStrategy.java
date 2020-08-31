@@ -64,7 +64,7 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
 
     @Override
     public void unbound(OutboundTask outboundTask){
-        if(checkOutTaskMapper.getCount()!=null)  {LogServices.logSysBusiness("上次盘点任务还未结束"); return;}
+        if(checkOutTaskMapper.getCount()>0)  {LogServices.logSysBusiness("上次盘点任务还未结束"); return;}
        List<CheckOutResult> list= qcSxStoreMapper.getCheckOutByOutBoundTaskDetail(outboundTask.getBillNo());
        for(CheckOutResult checkOutResult:list){
            ContainerTask task=new ContainerTask();

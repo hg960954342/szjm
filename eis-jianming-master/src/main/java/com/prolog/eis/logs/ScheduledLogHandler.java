@@ -35,6 +35,7 @@ public class ScheduledLogHandler {
         Object result = joinPoint.proceed();
         Date endTime = new Date();
 
+
         Signature sig = joinPoint.getSignature();
         MethodSignature msig = null;
         if (!(sig instanceof MethodSignature)) {
