@@ -65,6 +65,13 @@ public class MCSLineServiceImpl implements MCSLineService{
 			LogServices.logSysBusiness("splitOutBoundInfo"+ "已经有往出库口送的任务" + deviceNo);
 			return;
 		}
+        //检查是否已经存在空托盘
+        List<ContainerTask> nulltasks = containerTaskMapper.findByMap(MapUtils.put("target", target).put("targetType", 2).getMap(), ContainerTask.class);
+        if(!nulltasks.isEmpty()) {
+            //已经有往拆盘机口送的送空托盘了
+            LogServices.logSysBusiness("splitOutBoundInfo"+ "已经有往出库口送空托盘任务" + deviceNo);
+            return;
+        }
 		
 		List<SxStoreDto> list = sxStoreMapper.getEmptyContainerCode();
 		if(list.isEmpty()) {
@@ -91,7 +98,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		SxStoreDto sxStoreDto = list.get(0);
 		String source = PrologCoordinateUtils.splicingStr(sxStoreDto.getX(),sxStoreDto.getY(),sxStoreDto.getLayer());
 
-		//生成托盘任务，自带出库口
+		//生成空托任务，自带出库口
 		ContainerTask containerTask = new ContainerTask();
 		containerTask.getId();
 		containerTask.setContainerCode(sxStoreDto.getContainerNo());
@@ -99,7 +106,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		containerTask.setSource(source);
 		containerTask.setSourceType(1);
 		containerTask.setTarget(target);
-		containerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber());
+		containerTask.setTargetType(OutBoundEnum.TargetType.SSX.getNumber());
 		containerTask.setSourceType(1);
 		containerTask.setTaskState(1);
 		containerTask.setQty(1d);
