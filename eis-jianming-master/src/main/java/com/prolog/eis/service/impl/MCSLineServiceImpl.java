@@ -59,7 +59,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		String target = PrologCoordinateUtils.splicingStr(deviceJunctionPort.getX(), deviceJunctionPort.getY(), deviceJunctionPort.getLayer());
 		
 		//检查是否已经存在出库任务，否则找到空托盘
-		List<ContainerTask> tasks = containerTaskMapper.findByMap(MapUtils.put("target", target).put("targetType", 1).getMap(), ContainerTask.class);
+		List<ContainerTask> tasks = containerTaskMapper.findByMap(MapUtils.put("target", target).put("targetType", 2).getMap(), ContainerTask.class);
 		if(!tasks.isEmpty()) {
 			//已经有往拆盘机口送的出库任务了
 			LogServices.logSysBusiness("splitOutBoundInfo"+ "已经有往出库口送的任务" + deviceNo);
@@ -99,7 +99,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		containerTask.setSource(source);
 		containerTask.setSourceType(1);
 		containerTask.setTarget(target);
-		containerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber());
+		containerTask.setTargetType(OutBoundEnum.TargetType.SSX.getNumber());
 		containerTask.setSourceType(1);
 		containerTask.setTaskState(1);
 		containerTask.setQty(1d);
