@@ -54,4 +54,9 @@ public class TestServiceImpl implements TestService{
 			return null;
 		}
 	}
+
+
+	public Integer updateIsLockByLayer(int isLock,int layer){
+		return sxStoreLocationGroupMapper.updateIsLockByLayer(isLock,layer);
+	}
 }

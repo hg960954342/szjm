@@ -84,4 +84,7 @@ public interface SxStoreLocationGroupMapper extends BaseMapper<SxStoreLocationGr
 
     @Select("select slg2.id from sx_store_location_group slg2 INNER JOIN sx_store_location sl on sl.STORE_LOCATION_GROUP_ID = slg2.id inner join sx_store s on s.STORE_LOCATION_ID = sl.ID  ")
     List<SxStoreLocationGroup> findHaveStore();
+
+    @Update("update sx_store_location_group set IS_LOCK = #{isLock} where layer=#{layer}")
+    Integer updateIsLockByLayer(@Param("isLock") int isLock,@Param("layer") int layer);
 }
