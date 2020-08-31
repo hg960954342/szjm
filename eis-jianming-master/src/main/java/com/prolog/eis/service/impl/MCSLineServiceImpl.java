@@ -65,6 +65,13 @@ public class MCSLineServiceImpl implements MCSLineService{
 			LogServices.logSysBusiness("splitOutBoundInfo"+ "已经有往出库口送的任务" + deviceNo);
 			return;
 		}
+        //检查是否已经存在空托盘
+        List<ContainerTask> nulltasks = containerTaskMapper.findByMap(MapUtils.put("target", target).put("targetType", 2).getMap(), ContainerTask.class);
+        if(!nulltasks.isEmpty()) {
+            //已经有往拆盘机口送的送空托盘了
+            LogServices.logSysBusiness("splitOutBoundInfo"+ "已经有往出库口送空托盘任务" + deviceNo);
+            return;
+        }
 		
 		List<SxStoreDto> list = sxStoreMapper.getEmptyContainerCode();
 		if(list.isEmpty()) {
