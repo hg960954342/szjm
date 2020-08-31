@@ -1,0 +1,197 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Eis调试界面</title>
+    <script src="js/jquery.js"></script>
+    <script src="js/axios.min.js"></script>
+
+    <style type="text/css">
+        input, button {
+            border: none;
+            outline: none;
+        }
+
+        .tl-price-input {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 7px 0;
+            background: #F4F4F7;
+            border-radius: 3px;
+            padding-left: 5px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+        }
+
+        .tl-price-input:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+        }
+
+        .ant-btn {
+            line-height: 1.499;
+            position: relative;
+            display: inline-block;
+            font-weight: 400;
+            white-space: nowrap;
+            text-align: center;
+            background-image: none;
+            border: 1px solid transparent;
+            -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+            cursor: pointer;
+            -webkit-transition: all .3s cubic-bezier(.645, .045, .355, 1);
+            transition: all .3s cubic-bezier(.645, .045, .355, 1);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            height: 32px;
+            padding: 0 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            color: rgba(0, 0, 0, 0.65);
+            background-color: #fff;
+            border-color: #d9d9d9;
+        }
+
+        .ant-btn-primary {
+            color: #fff;
+            background-color: #1890ff;
+            border-color: #1890ff;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+            -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        }
+
+        .ant-btn-red {
+            color: #fff;
+            background-color: #FF5A44;
+            border-color: #FF5A44;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+            -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        }
+    </style>
+    <script type="text/javascript">
+        function deletestore() {
+            if( $("#deletestore").val()==""){
+                alert("托盘号必须填写！");
+                return;
+            }
+            result=confirm("删除库存危险！请确认？")
+            if(result){
+                axios({
+                    method:'post',
+                    url:'/api/v1/master/sxk/test/deletestore'
+                },{
+                    containerNo:$("#deletestore").value
+                }).then(function(result){
+                    $("#inputResult").val(result);
+                });
+            }
+        };
+        function inPut3() {
+            if($("#inPut3inPut4Task").val()==""){
+                alert("托盘号必须填写！");
+                return;
+            }
+            axios({
+                method:'post',
+                url:'api/v1/master/view/inPut3'
+            },{
+                containerCode:$("#inPut3inPut4Task").val()
+            }).then(function(result){
+                if(!result.result){$("#inputResult").val(result);}
+            });
+        };
+        function inPut4Task() {
+            if( $("#inPut3inPut4Task").val()==""){
+                alert("托盘号必须填写！");
+                return;
+            }
+            axios({
+                method:'post',
+                url:'api/v1/master/view/inPut4Task'
+            },{
+                containerCode:$("#inPut3inPut4Task").val()
+            }).then(function(result){
+                if(!result.result){$("#inputResult").val(result);}
+            });
+        };
+        function inPut4Empty() {
+
+            if($("#inputResult4").val()==""){
+                alert("托盘号必须填写！");
+                return;
+            }
+            axios({
+                method:'post',
+                url:'api/v1/master/view/inPut4Empty'
+            },{
+                containerCode:$("#inputResult4").val()
+            }).then(function(result){
+                debugger;
+                if(!result.result){$("#inputResult").val(result);}
+            });
+        };
+       function btnClick(layer,isLock) {
+            result= confirm("危险系数高，确定操作吗！");
+            if(result){
+                axios({
+                    method:'post',
+                    url:'api/v1/master/view/sxStoreLock'
+                },{
+                    layer:layer,
+                    isLock:isLock
+                }).then(function(result){
+                    if(!result.result){$("#inputResult").val(result);}
+                });
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+<div id="eis">
+
+    </br>
+    <div style="width: 100%;float: left;"><input class="tl-price-input" id="inputResult" type="text" placeholder="执行结果">
+    </div>
+    </br></br></br>
+    <div style="width: 20px;float: left;text-align: center"></div>
+    <button onclick="btnClick(1,1)" class="ant-btn ant-btn-red">锁1层货位</button>
+    <button onclick="btnClick(1,0)" class="ant-btn ant-btn-primary">解锁1层货位</button>
+    <button onclick="btnClick(2,1)" class="ant-btn ant-btn-red">锁2层货位</button>
+    <button onclick="btnClick(2,0)" class="ant-btn ant-btn-primary">解锁2层货位</button>
+    <button onclick="btnClick(3,1)" class="ant-btn ant-btn-red">锁3层货位</button>
+    <button onclick="btnClick(3,0)" class="ant-btn ant-btn-primary">解锁3层货位</button>
+    </br>
+    </br></br></br>
+    <div style="width: 10%;float: left;">
+        <input class="tl-price-input" type="text" id="inputResult4" placeholder="输入托盘号" ref="inputResult4" >
+    </div>
+    <button onclick="inPut4Empty()" class="ant-btn ant-btn-red">4楼空托入库前进</button>
+    </br></br></br>
+    <div style="width: 10%;float: left;">
+        <input class="tl-price-input" type="text" placeholder="输入托盘号" id="inPut3inPut4Task" ref="inPut3inPut4Task">
+    </div>
+    <button onclick="inPut3()" class="ant-btn ant-btn-primary" ref="inPut3">3楼入库前进</button>
+    <button onclick="inPut4Task()" class="ant-btn ant-btn-red" ref="inPut4Task">4楼入库前进</button>
+    </br></br></br>
+    <div style="width: 10%;float: left;">
+        <input class="tl-price-input" type="text" placeholder="输入托盘号" id="deletestore">
+    </div>
+    <button onclick="deletestore()" class="ant-btn ant-btn-primary">4楼删除库存</button>
+</div>
+
+
+</body>
+</html>
