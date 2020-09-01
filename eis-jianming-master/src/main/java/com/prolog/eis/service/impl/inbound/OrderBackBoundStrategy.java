@@ -6,6 +6,7 @@ import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.dao.InBoundTaskMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.dto.base.Coordinate;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.InboundTask;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
  */
 @Component(InBoundType.TASK_TYPE+50)
 @Transactional(rollbackFor=Exception.class)
-@Slf4j
 public class OrderBackBoundStrategy implements InBoundStragtegy {
 
     @Autowired
@@ -68,7 +68,7 @@ public class OrderBackBoundStrategy implements InBoundStragtegy {
                 }).collect(Collectors.toList());
 
             if(listPortInfo.size()==0) {
-                log.error("没有找到taskType："+taskType+"入口");
+                LogServices.logSysBusiness("没有找到taskType："+taskType+"入口");
                 return;  }
                 //查找最近的入库口
                  AgvStorageLocation distinPortInfo=listPortInfo.stream().sorted((s1,s2)->{
