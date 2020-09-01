@@ -4,13 +4,17 @@ import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.JsonResult;
 import com.prolog.eis.service.AgvStorageLocationService;
+import com.prolog.eis.service.enums.AgvMove;
+import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
+import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +33,8 @@ public class ViewTestController {
 
     @Autowired
     private TestService testService;
+    @Autowired
+    private RcsRequestService rcsRequestService;
 
 
     /**
@@ -102,30 +108,28 @@ public class ViewTestController {
 
     @ApiOperation(value = "库存删除接口", notes = "库存删除接口")
     @PostMapping("/deletestore")
-    public void deleteStore(@RequestParam("containerNo")String containerNo, HttpServletResponse response) throws Exception {
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("application/json; charset=utf-8");
-        OutputStream out = response.getOutputStream();
-        try {
-            testService.deleteStore(containerNo);
-            JSONObject jsonObject = new JSONObject();
-            out.write(jsonObject.toString().getBytes("UTF-8"));
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            out.write(e.getMessage().getBytes("UTF-8"));
-            out.flush();
-            out.close();
-        }
+    public Object deleteStore(@RequestParam("containerNo")String containerNo, HttpServletResponse response) throws Exception {
+        testService.deleteStore(containerNo);
+        return MapUtils.put("result",true).put("msg","").getMap();
+
     }
 
 
     //入库失败更新库存测试接口
     @PostMapping("/update")
     @ResponseBody
-    public String updateInBound(@RequestParam("id")String containerNo)throws Exception{
+    public Object updateInBound(@RequestParam("id")String containerNo)throws Exception{
 
-        return PrologApiJsonHelper.toJson(qcInBoundTaskService.rukuSxStoreUpdate(containerNo));
+        return qcInBoundTaskService.rukuSxStoreUpdate(containerNo);
+    }
+
+    //调用agv前进
+    @PostMapping("/agvMove")
+    @ResponseBody
+    public Object agvMove(@RequestParam("startP")String startP,@RequestParam("endP")String endP)throws Exception{
+        String containerCode= PrologStringUtils.newGUID();
+        String taskCode= AgvMove.agvMoveTaskCode; //手动调用Agv搬运 taskCode暂时定为prolog PrologRcsController回告已经修改
+        return rcsRequestService.sendTask(taskCode, containerCode, startP, endP, "F01", "1");
     }
 
 }
