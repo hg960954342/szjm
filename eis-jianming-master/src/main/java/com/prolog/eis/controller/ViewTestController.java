@@ -5,7 +5,6 @@ import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.enums.AgvMove;
 import com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy;
-import com.prolog.eis.service.impl.unbound.OutBoundType;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
@@ -13,7 +12,6 @@ import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +35,6 @@ public class ViewTestController {
     private PrologJmMCSController prologJmMCSController;
 
     @Autowired
-    @Qualifier(OutBoundType.TASK_TYPE+1)
     private DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy;
 
 

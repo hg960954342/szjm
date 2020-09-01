@@ -7,8 +7,8 @@ import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.model.wms.PickStation;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  *  * IF_PICKCODE_EXISTS 是否指定拣选站 1指定 0不指定
  */
 @Component(OutBoundType.TASK_TYPE+1)
-@Slf4j
+@Primary
 public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
 
     @Autowired
