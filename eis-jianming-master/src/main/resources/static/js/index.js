@@ -89,11 +89,14 @@ function agvMove() {
         return;
     }
 
-    if (($("#startP").val() .indexOf("AB")>0&&$("#endP").val() .indexOf("AB")>0)||
-        ( $("#startP").val() .indexOf("XY")>0&&$("#endP").val() .indexOf("XY")>0)) {
+    if (($("#startP").val().indexOf("AB") > 0 && $("#endP").val().indexOf("AB") > 0) ||
+        ($("#startP").val().indexOf("XY") > 0 && $("#endP").val().indexOf("XY") > 0)) {
         jConfirm("AGV调用危险！请确认？", "确认窗口", function (result) {
             if (result) {
-                $.post("api/v1/master/view/agvMove", {startP: $("#startP").val(),endP: $("#endP").val()}, function (result) {
+                $.post("api/v1/master/view/agvMove", {
+                        startP: $("#startP").val(),
+                        endP: $("#endP").val()
+                    }, function (result) {
                         $("#inputResult").val(JSON.stringify(result));
                     }
                 );
@@ -101,10 +104,22 @@ function agvMove() {
 
             }
         });
-    }else{
+    } else {
         jAlert("不能跨楼层或者坐标有误！", "警告");
         return;
     }
 
+}
+    function foldInBoundMove() {
+        jConfirm("4楼碟盘机入库失败才能使用！请确认？", "确认窗口", function (result) {
+            if (result) {
+                $.post("api/v1/master/view/foldInBoundMove", {containerNo: "999999", deviceNo: "D01"}, function (result) {
+                        $("#inputResult").val(JSON.stringify(result));
+                    }
+                );
 
-};
+
+            }
+        });
+    };
+

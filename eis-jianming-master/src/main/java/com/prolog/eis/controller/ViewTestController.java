@@ -1,5 +1,6 @@
 package com.prolog.eis.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.JsonResult;
@@ -13,7 +14,6 @@ import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +35,9 @@ public class ViewTestController {
     private TestService testService;
     @Autowired
     private RcsRequestService rcsRequestService;
+
+    @Autowired
+    private PrologJmMCSController prologJmMCSController;
 
 
     /**
@@ -130,6 +133,16 @@ public class ViewTestController {
         String containerCode= PrologStringUtils.newGUID();
         String taskCode= PrologStringUtils.newGUID()+AgvMove.agvMoveTaskCodeEndPrex; //手动调用Agv搬运 taskCode暂时定为prolog PrologRcsController回告已经修改
         return rcsRequestService.sendTask(taskCode, containerCode, startP, endP, "F01", "1");
+    }
+
+
+    //碟盘机入库失败给前进指令
+    @PostMapping("/foldInBoundMove")
+    @ResponseBody
+    public void foldInBoundMove(@RequestParam("deviceNo") String deviceNo,@RequestParam("containerNo") String containerNo, HttpServletResponse response)throws Exception{
+       Map map=MapUtils.put("deviceNo",deviceNo).put("containerNo",containerNo).getMap();
+       String json= JSONObject.toJSONString(map);
+        prologJmMCSController.foldInBound(json,  response);
     }
 
 }
