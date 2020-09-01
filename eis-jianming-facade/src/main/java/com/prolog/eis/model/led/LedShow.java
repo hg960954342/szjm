@@ -5,14 +5,8 @@ import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Table("led_port")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class LedShow {
 
     @Id
@@ -31,4 +25,37 @@ public class LedShow {
     @Column("message")
     @ApiModelProperty("led屏信息")
     private String message;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLedIp() {
+        return ledIp;
+    }
+
+    public void setLedIp(String ledIp) {
+        this.ledIp = ledIp;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

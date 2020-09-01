@@ -1,15 +1,10 @@
 package com.prolog.eis.model.wms;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class OutboundTaskDto {
 
     private List<OutboundTask> data;
@@ -18,4 +13,29 @@ public class OutboundTaskDto {
 
     @JsonProperty("MessageID")
     private String messageId;
+
+
+    public List<OutboundTask> getData() {
+        return data;
+    }
+
+    public void setData(List<OutboundTask> data) {
+        this.data = data;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
 }
