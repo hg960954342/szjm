@@ -5,6 +5,7 @@ import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
 import com.prolog.eis.dto.eis.mcs.TaskReturnInBoundRequestResponse;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.service.MCSLineService;
+import com.prolog.eis.service.enums.SSX;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
 import com.prolog.eis.service.mcs.impl.McsTaskWithOutPathAsycDto;
 import com.prolog.eis.service.store.QcInBoundTaskService;
@@ -12,6 +13,7 @@ import com.prolog.eis.util.PrologApiJsonHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -108,7 +110,7 @@ public class PrologJmMCSController {
 				hashMap.put(inBoundRequest.getSource(),inBoundRequest);
 			}else {
 				//判断后面的条码是否为noRead
-				if(!"noRead".equals(inBoundRequest.getStockId())) {
+				if(!SSX.noRead.equals(inBoundRequest.getStockId())) {
 					hashMap.put(inBoundRequest.getSource(),inBoundRequest);
 				}
 			}
@@ -211,10 +213,10 @@ public class PrologJmMCSController {
 
 			String deviceNo = helper.getString("deviceNo");
 			String containerNo = helper.getString("containerNo");
-
-			//生成空托盘入库任务
-			qcInBoundTaskService.foldInBound(deviceNo, containerNo);
-			
+			if(StringUtils.isNotEmpty(containerNo)&&!SSX.noRead.equals(containerNo)){
+					//生成空托盘入库任务
+				qcInBoundTaskService.foldInBound(deviceNo, containerNo);
+			}
 			String resultStr = this.getJmMcsValue(true,"请求成功","200",null);
 
 			out.write(resultStr.getBytes("UTF-8"));
