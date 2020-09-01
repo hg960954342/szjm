@@ -1,4 +1,4 @@
-input, button {
+input, button,textarea {
     border: none;
     outline: none;
 }
