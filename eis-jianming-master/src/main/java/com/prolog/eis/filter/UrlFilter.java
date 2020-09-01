@@ -29,9 +29,9 @@ public class UrlFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
         String requestparmas=printRequestLog(request);
         String result=printResponseLog((ResponseWrapper) response);
-        boolean is=request.getRequestURI().toLowerCase().endsWith("js")||request.getRequestURI().toLowerCase().endsWith("html")
-        ||request.getRequestURI().toLowerCase().endsWith("css")||request.getRequestURI().toLowerCase().endsWith("ico");
-        if(!is){
+        boolean is=request.getRequestURI().toLowerCase().indexOf(".js")!=-1&&request.getRequestURI().toLowerCase().indexOf("html")!=-1
+        &&request.getRequestURI().toLowerCase().indexOf("css")!=-1&&request.getRequestURI().toLowerCase().indexOf("ico")!=-1;
+        if(is){
             LogServices.logEis(request.getRequestURI().toString(),requestparmas,"",result);
         }
 
