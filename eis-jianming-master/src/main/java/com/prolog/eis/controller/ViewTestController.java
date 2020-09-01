@@ -1,27 +1,22 @@
 package com.prolog.eis.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.model.wms.AgvStorageLocation;
-import com.prolog.eis.model.wms.JsonResult;
-import com.prolog.eis.model.wms.PickStation;
 import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.enums.AgvMove;
 import com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy;
+import com.prolog.eis.service.impl.unbound.OutBoundType;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
 import java.util.Map;
 
 @RestController
@@ -42,7 +37,8 @@ public class ViewTestController {
     private PrologJmMCSController prologJmMCSController;
 
     @Autowired
-    private com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy;
+    @Qualifier(OutBoundType.TASK_TYPE+1)
+    private DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy;
 
 
     /**
