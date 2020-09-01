@@ -34,10 +34,10 @@ public class EisSendRcsTaskServiceSend   {
         for (ContainerTask containerTask : containerTasks) {
             //获取参数
             String taskCode = containerTask.getTaskCode();
-           /* if (StringUtils.isEmpty(taskCode)) {
+           if (StringUtils.isEmpty(taskCode)) {
                 taskCode = PrologStringUtils.newGUID();
                 containerTask.setTaskCode(taskCode);
-            }*/
+            }
             String containerCode = containerTask.getContainerCode();
             String source = containerTask.getSource();
             String target = containerTask.getTarget();
