@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.JsonResult;
+import com.prolog.eis.model.wms.PickStation;
 import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.enums.AgvMove;
+import com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
@@ -38,6 +40,9 @@ public class ViewTestController {
 
     @Autowired
     private PrologJmMCSController prologJmMCSController;
+
+    @Autowired
+    private com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy;
 
 
     /**
@@ -143,6 +148,13 @@ public class ViewTestController {
        Map map=MapUtils.put("deviceNo",deviceNo).put("containerNo",containerNo).getMap();
        String json= JSONObject.toJSONString(map);
         prologJmMCSController.foldInBound(json,  response);
+    }
+
+    //查询所有可用拣选站
+    @PostMapping("/queryPickStation")
+    @ResponseBody
+    public Object queryPickStation()throws Exception{
+       return defaultOutBoundPickCodeStrategy.getAvailablePickStation();
     }
 
 }
