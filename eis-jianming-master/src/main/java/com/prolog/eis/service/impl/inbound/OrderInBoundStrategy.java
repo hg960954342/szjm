@@ -82,6 +82,8 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
                 ContainerTask containerTask=new ContainerTask();
                 BeanUtils.copyProperties(task,containerTask);
 
+                //copyProperties转换数量不成功,手动set,get
+                containerTask.setQty(task.getQty());
                 containerTask.setTarget(PrologLocationUtils.splicingXYStr(distinPortInfo.getCeng(),distinPortInfo.getX(),distinPortInfo.getY()));
                 containerTask.setSource(agvLoc);
 

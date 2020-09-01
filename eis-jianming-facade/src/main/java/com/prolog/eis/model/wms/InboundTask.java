@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Table("inbound_task")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class InboundTask {
 
 
@@ -107,4 +104,155 @@ public class InboundTask {
     private Date endTime;
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
+
+    public int getWmsPush() {
+        return wmsPush;
+    }
+
+    public void setWmsPush(int wmsPush) {
+        this.wmsPush = wmsPush;
+    }
+
+    public int getReBack() {
+        return reBack;
+    }
+
+    public void setReBack(int reBack) {
+        this.reBack = reBack;
+    }
+
+    public int getEmptyContainer() {
+        return emptyContainer;
+    }
+
+    public void setEmptyContainer(int emptyContainer) {
+        this.emptyContainer = emptyContainer;
+    }
+
+    public String getContainerCode() {
+        return containerCode;
+    }
+
+    public void setContainerCode(String containerCode) {
+        this.containerCode = containerCode;
+    }
+
+    public int getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public float getQty() {
+        return qty;
+    }
+
+    public void setQty(float qty) {
+        this.qty = qty;
+    }
+
+    public String getLotId() {
+        return lotId;
+    }
+
+    public void setLotId(String lotId) {
+        this.lotId = lotId;
+    }
+
+    public String getCeng() {
+        return ceng;
+    }
+
+    public void setCeng(String ceng) {
+        this.ceng = ceng;
+    }
+
+    public String getAgvLoc() {
+        return agvLoc;
+    }
+
+    public void setAgvLoc(String agvLoc) {
+        this.agvLoc = agvLoc;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public int getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(int taskState) {
+        this.taskState = taskState;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getRukuTime() {
+        return rukuTime;
+    }
+
+    public void setRukuTime(Date rukuTime) {
+        this.rukuTime = rukuTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 }
