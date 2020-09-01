@@ -29,7 +29,12 @@ public class UrlFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
         String requestparmas=printRequestLog(request);
         String result=printResponseLog((ResponseWrapper) response);
-        LogServices.logEis(request.getRequestURI().toString(),requestparmas,"",result);
+        boolean is=request.getRequestURI().toLowerCase().endsWith("js")||request.getRequestURI().toLowerCase().endsWith("html")
+        ||request.getRequestURI().toLowerCase().endsWith("css")||request.getRequestURI().toLowerCase().endsWith("ico");
+        if(!is){
+            LogServices.logEis(request.getRequestURI().toString(),requestparmas,"",result);
+        }
+
     }
 
     private String printRequestLog(final HttpServletRequest request) {
