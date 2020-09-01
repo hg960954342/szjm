@@ -58,7 +58,10 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     PickStainStrategy pickStainStrategy;
 
 
-
+    public static void main(String[] args) {
+        float x=2.0f-2f;
+        System.out.println(x<=0);
+    }
 
     @Override
     public void unbound(OutboundTask outboundTask) {
@@ -111,7 +114,6 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                        ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
                         containerTaskMapper.save(ordercontainerTask);
                         //出明细
                         for(String billNo:listBillNo){
@@ -152,8 +154,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                         ordercontainerTask.setTaskCode(PrologStringUtils.newGUID());
-                        containerTaskMapper.save(ordercontainerTask);
+                         containerTaskMapper.save(ordercontainerTask);
 
                         for(String billNo:listBillNo){
                             List<OutboundTaskDetail> listOutBoundTaskDetailList=outBoundTaskDetailMapper.findByMap(MapUtils.

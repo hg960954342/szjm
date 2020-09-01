@@ -68,16 +68,13 @@ public class WriteProgramTextCaptionWithStyle implements BxFileWriterListener<Bx
 
     @Override
     public void fileFinish(Bx5GScreen owner, String fileName, int total) {
-        System.out.println(fileName + " fileFinish:" + total);
-    }
+     }
 
     @Override
     public void fileWriting(Bx5GScreen owner, String fileName, int total) {
-        System.out.println(fileName + " fileWriting:" + total);
-    }
+     }
 
     @Override
     public void progressChanged(Bx5GScreen owner, String fileName, int write, int total) {
-        System.out.println(fileName + " progressChanged:" + write + "/" + total);
-    }
+     }
 }

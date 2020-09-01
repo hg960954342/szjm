@@ -40,9 +40,7 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
                 //更新发送给设备的时间
                 //获取参数
                 String taskCode = containerTask.getTaskCode();
-                if (StringUtils.isEmpty(taskCode)) {
-                    taskCode = UUID.randomUUID().toString().replaceAll("-", "");
-                }
+
                 containerTask.setSendTime(new Date());
                 containerTask.setTaskCode(taskCode);
                 //更新任务状态

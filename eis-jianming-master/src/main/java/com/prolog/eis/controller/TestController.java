@@ -154,40 +154,5 @@ public class TestController {
 	}
 
 	
-	@ApiOperation(value = "库存删除接口", notes = "库存删除接口")
-	@PostMapping("/deletestore")
-	public void deleteStore(@RequestBody String json, HttpServletResponse response) throws Exception {
-		response.setCharacterEncoding("utf-8");
-		response.setContentType("application/json; charset=utf-8");
-		OutputStream out = response.getOutputStream();
-		PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(json);
 
-		try {
-			FileLogHelper.WriteLog("deletestore", json);
-			String containerNo = helper.getString("containerNo");
-			
-			testService.deleteStore(containerNo);
-			
-			JSONObject jsonObject = new JSONObject();
-
-			out.write(jsonObject.toString().getBytes("UTF-8"));
-			out.flush();
-			out.close();
-		} catch (Exception e) {
-			FileLogHelper.WriteLog("deletestoreError", "异常："+e.getMessage());
-			out.write(e.getMessage().getBytes("UTF-8"));
-			out.flush();
-			out.close();
-		}
-	}
-
-	@Autowired
-	QcInBoundTaskService qcInBoundTaskService;
-	//入库失败更新库存测试接口
-	@RequestMapping("/update")
-	@ResponseBody
-	public String updateInBound(@RequestParam("id")String containerNo)throws Exception{
-
-		return PrologApiJsonHelper.toJson(qcInBoundTaskService.rukuSxStoreUpdate(containerNo));
-	}
 }

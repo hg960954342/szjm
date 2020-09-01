@@ -100,7 +100,7 @@ public class EmptyContainerInBoundStrategy implements InBoundStragtegy {
                 containerTask.setSourceType(2);
                 containerTask.setTargetType(2);
 
-                containerTask.setTaskCode(PrologStringUtils.newGUID());
+                //containerTask.setTaskCode(PrologStringUtils.newGUID());
 
                 containerTaskMapper.save(containerTask);
                 //更新入库状态
