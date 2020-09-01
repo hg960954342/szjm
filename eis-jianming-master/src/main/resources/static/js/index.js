@@ -59,7 +59,7 @@ function btnClick(layer,isLock) {
 };
 function updateInBound() {
     if ($("#deletestore").val() == "") {
-        jAlert("托盘号必须填写！");
+        jAlert("托盘号必须填写！","警告");
         return;
     }
     jConfirm("更新库存危险！请确认？","确认窗口",function(result){
