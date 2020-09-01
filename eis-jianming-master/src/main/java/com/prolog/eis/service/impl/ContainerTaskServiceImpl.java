@@ -40,7 +40,7 @@ public class ContainerTaskServiceImpl implements ContainerTaskService {
 
     @Override
     public List<ContainerTask> selectByTaskType(String taskType) {
-        Map<String, Object> map = MapUtils.put("taskType", taskType).getMap();
+        Map<String, Object> map = MapUtils.put("taskType", taskType).put("targetType","0").getMap();
         return containerTaskMapper.findByMap(map,ContainerTask.class);
     }
 

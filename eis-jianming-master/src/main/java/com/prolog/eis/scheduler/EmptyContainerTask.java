@@ -66,7 +66,6 @@ public class EmptyContainerTask {
                     ContainerTask containerTask = containerTasks.get(0);
                     containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
                     containerTask.setTargetType(1);
-                    containerTask.setTaskCode(UUID.randomUUID().toString().replaceAll("-", ""));
                     containerTaskService.update(containerTask);
 
 
