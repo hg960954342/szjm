@@ -4,16 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Table("outbound_task_detail")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class OutboundTaskDetail {
 
     @Column("id")
@@ -82,5 +76,115 @@ public class OutboundTaskDetail {
     @ApiModelProperty("结束时间")
     private Date endTime;
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
+
+    public String getSeqNo() {
+        return seqNo;
+    }
+
+    public void setSeqNo(String seqNo) {
+        this.seqNo = seqNo;
+    }
+
+    public int getCtReq() {
+        return ctReq;
+    }
+
+    public void setCtReq(int ctReq) {
+        this.ctReq = ctReq;
+    }
+
+    public int getContainerCode() {
+        return containerCode;
+    }
+
+    public void setContainerCode(int containerCode) {
+        this.containerCode = containerCode;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getLotId() {
+        return lotId;
+    }
+
+    public void setLotId(String lotId) {
+        this.lotId = lotId;
+    }
+
+    public float getQty() {
+        return qty;
+    }
+
+    public void setQty(float qty) {
+        this.qty = qty;
+    }
+
+    public float getFinishQty() {
+        return finishQty;
+    }
+
+    public void setFinishQty(float finishQty) {
+        this.finishQty = finishQty;
+    }
+
+    public String getPickCode() {
+        return pickCode;
+    }
+
+    public void setPickCode(String pickCode) {
+        this.pickCode = pickCode;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 }

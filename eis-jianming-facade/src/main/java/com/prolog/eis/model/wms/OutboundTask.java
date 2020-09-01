@@ -6,17 +6,11 @@ import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Table("outbound_task")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class OutboundTask {
 
     @Id
@@ -79,4 +73,115 @@ public class OutboundTask {
     private Date endTime;
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
+
+    public int getWmsPush() {
+        return wmsPush;
+    }
+
+    public void setWmsPush(int wmsPush) {
+        this.wmsPush = wmsPush;
+    }
+
+    public int getReBack() {
+        return reBack;
+    }
+
+    public void setReBack(int reBack) {
+        this.reBack = reBack;
+    }
+
+    public int getEmptyContainer() {
+        return emptyContainer;
+    }
+
+    public void setEmptyContainer(int emptyContainer) {
+        this.emptyContainer = emptyContainer;
+    }
+
+    public int getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
+    }
+
+    public int getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(int taskState) {
+        this.taskState = taskState;
+    }
+
+    public int getSfReq() {
+        return sfReq;
+    }
+
+    public void setSfReq(int sfReq) {
+        this.sfReq = sfReq;
+    }
+
+    public float getQty() {
+        return qty;
+    }
+
+    public void setQty(float qty) {
+        this.qty = qty;
+    }
+
+    public String getPickCode() {
+        return pickCode;
+    }
+
+    public void setPickCode(String pickCode) {
+        this.pickCode = pickCode;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public List<OutboundTaskDetail> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<OutboundTaskDetail> details) {
+        this.details = details;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 }
