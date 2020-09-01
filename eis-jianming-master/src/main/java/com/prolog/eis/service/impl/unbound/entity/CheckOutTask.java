@@ -5,14 +5,9 @@ import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 @Table("checkout_task")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class CheckOutTask {
 
     @Id
@@ -29,9 +24,35 @@ public class CheckOutTask {
     @ApiModelProperty("接口地址")
     private String state;
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public String getContainerCode() {
+        return containerCode;
+    }
 
+    public void setContainerCode(String containerCode) {
+        this.containerCode = containerCode;
+    }
 
+    public String getBillNo() {
+        return billNo;
+    }
 
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 }

@@ -13,7 +13,12 @@ function deletestore() {
         ;
     })
 };
+function queryPickStation(){
+    $.post("api/v1/master/view/queryPickStation", {}, function (result) {
+        $("#inputResult").val(JSON.stringify(result));
 
+    });
+}
 function inPut3() {
     if ($("#inPut3inPut4Task").val() == "") {
         jAlert("托盘号必须填写！", "警告");
