@@ -57,8 +57,9 @@ public class OutboundDataController {
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             }else{
-                List<OutboundTask> data = outboundTaskDto.getData();
-                for (OutboundTask datum : data) {
+                //List<OutboundTask> data = outboundTaskDto.getData();
+                List<Outbt> data = outboundTaskDto.getData();
+                for (Outbt datum : data) {
                     try {
 
                         datum.setWmsPush(1);
@@ -178,8 +179,9 @@ public class OutboundDataController {
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             }else{
-                List<OutboundTask> data = moveTaskData.getData();
-                for (OutboundTask datum : data) {
+                //List<OutboundTask> data = moveTaskData.getData();
+                List<Outbt> data = moveTaskData.getData();
+                for (Outbt datum : data) {
                     try {
 
                         datum.setWmsPush(1);
@@ -292,8 +294,9 @@ public class OutboundDataController {
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             }else{
-                List<OutboundTask> data = outboundTaskDto.getData();
-                for (OutboundTask datum : data) {
+                //List<OutboundTask> data = outboundTaskDto.getData();
+                List<Outbt> data = outboundTaskDto.getData();
+                for (Outbt datum : data) {
                     try {
 
                         datum.setWmsPush(1);
@@ -403,8 +406,9 @@ public class OutboundDataController {
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             }else{
-                List<OutboundTask> data = outboundTaskDto.getData();
-                for (OutboundTask datum : data) {
+                //List<OutboundTask> data = outboundTaskDto.getData();
+                List<Outbt> data = outboundTaskDto.getData();
+                for (Outbt datum : data) {
                     try {
 
                         datum.setWmsPush(1);

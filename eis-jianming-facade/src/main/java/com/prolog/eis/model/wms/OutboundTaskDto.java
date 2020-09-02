@@ -7,7 +7,7 @@ import java.util.List;
 
 public class OutboundTaskDto {
 
-    private List<OutboundTask> data;
+    private List<Outbt> data;
 
     private int size;
 
@@ -15,11 +15,11 @@ public class OutboundTaskDto {
     private String messageId;
 
 
-    public List<OutboundTask> getData() {
+    public List<Outbt> getData() {
         return data;
     }
 
-    public void setData(List<OutboundTask> data) {
+    public void setData(List<Outbt> data) {
         this.data = data;
     }
 

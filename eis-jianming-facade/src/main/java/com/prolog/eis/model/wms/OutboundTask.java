@@ -62,8 +62,6 @@ public class OutboundTask {
     private String ownerId;
 
 
-    private List<OutboundTaskDetail> details;
-
     @Column("create_time")
     @ApiModelProperty("创建时间")
     private Date createTime;
@@ -161,13 +159,6 @@ public class OutboundTask {
         this.ownerId = ownerId;
     }
 
-    public List<OutboundTaskDetail> getDetails() {
-        return details;
-    }
-
-    public void setDetails(List<OutboundTaskDetail> details) {
-        this.details = details;
-    }
 
     public Date getCreateTime() {
         return createTime;
