@@ -195,23 +195,7 @@ public class AgvCallbackServiceImpl implements AgvCallbackService {
                         //删除空托入库任务
                         inboundTaskMapper.deleteByMap(MapUtils.put("containerCode", containerTask.getContainerCode()).getMap(), InboundTask.class);
                     }
-                    if (containerTask.getTaskType() ==3) { //盘点出库
 
-                        //更新入库口的状态
-                        Criteria criteria=Criteria.forClass(CheckOutTask.class);
-                        criteria.setRestriction(Restrictions.eq("containerCode",containerTask.getContainerCode()));
-                        List<CheckOutTask> listCheckOut=checkOutTaskMapper.findByCriteria(criteria);
-                        if(listCheckOut.size()>1) {LogServices.logSysBusiness("一个托盘同时被两个盘点任务盘点！"); return;}
-                        CheckOutTask checkOutTask=listCheckOut.get(0);
-                        checkOutTask.setState("2");
-                        checkOutTaskMapper.update(checkOutTask);
-                        //转换容器任务
-                        String target =containerTask.getTarget();
-                        Coordinate coordinate=PrologCoordinateUtils.analysis(target);
-                        String agvTarget=PrologLocationUtils.splicingXYStr(coordinate.getLayer(), coordinate.getX(), coordinate.getY());
-                        containerTask.setSource(agvTarget);
-                        containerTaskService.update(containerTask);
-                     }
                     if ("T010103".equals(targetPosition.getDeviceNo()) || "T020103".equals(targetPosition.getDeviceNo())){
                         targetPosition.setLocationLock(1);
                     }else {

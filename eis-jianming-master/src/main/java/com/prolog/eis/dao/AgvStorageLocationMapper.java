@@ -35,4 +35,7 @@ public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation>
 
     @Select("select remarks from agv_storagelocation where rcs_position_code = #{target}")
     String  queryPickStationByCode(String target);
+
+
+
 }

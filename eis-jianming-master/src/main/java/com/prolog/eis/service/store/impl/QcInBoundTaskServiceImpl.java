@@ -31,6 +31,7 @@ import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.CallBackCheckOutService;
 import com.prolog.eis.service.EisCallbackService;
+import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.base.SysParameService;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.service.mcs.McsInterfaceService;
@@ -40,8 +41,11 @@ import com.prolog.eis.service.sxk.SxInStoreService;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.eis.util.PrologLocationUtils;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.eis.util.detetionlayer.DetetionLayerHelper;
+import com.prolog.framework.core.restriction.Criteria;
+import com.prolog.framework.core.restriction.Restrictions;
 import com.prolog.framework.utils.MapUtils;
 import com.prolog.framework.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +61,9 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 	@Autowired
 	private InboundTaskMapper inboundTaskMapper;
+	@Autowired
+	InBoundTaskService inBoundTaskService;
+
 	@Autowired
 	private SxStoreMapper sxStoreMapper;
 	@Autowired
@@ -644,6 +651,29 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			containerTask.setStartTime(null);
 			containerTask.setMoveTime(null);
 			containerTask.setEndTime(null);
+
+
+			if(containerTask.getTaskType()==3){
+
+				//更新任务状态
+				Criteria criteria=Criteria.forClass(CheckOutTask.class);
+				criteria.setRestriction(Restrictions.eq("containerCode",containerTask.getContainerCode()));
+				List<CheckOutTask> listCheckOut=checkOutTaskMapper.findByCriteria(criteria);
+				if(listCheckOut.size()>1) {LogServices.logSysBusiness("一个托盘同时被两个盘点任务盘点！"); return;}
+				CheckOutTask checkOutTask=listCheckOut.get(0);
+				checkOutTask.setState("2");
+				checkOutTaskMapper.update(checkOutTask);
+               //转换出库任务到入库任务
+				Coordinate Coordinate=PrologLocationUtils.analysis(agvStorageLocations.get(0).getRcsPositionCode());
+				Coordinate.setLayer(4);
+				AgvStorageLocation agvStorageLocation=inBoundTaskService.getInBound(Coordinate);
+				containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
+				containerTask.setTargetType(2);
+				containerTask.setTaskState(0);
+			}
+
+
+
 			containerTaskMapper.update(containerTask);
 		}else {
 			//非agv的出库口到位

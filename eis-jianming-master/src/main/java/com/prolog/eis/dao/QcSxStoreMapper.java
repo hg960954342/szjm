@@ -186,6 +186,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 				@Result(property = "itemId",  column = "item_id"),
 				@Result(property = "lotId",  column = "lot_id"),
 			    @Result(property = "ownerId",  column = "owner_id"),
+			   @Result(property = "containerCode",  column = "CONTAINER_NO"),
 			    @Result(property = "qty",  column = "qty")
       })
 	  @Select("select d.*,a.*,l.*,g.* from \n" +

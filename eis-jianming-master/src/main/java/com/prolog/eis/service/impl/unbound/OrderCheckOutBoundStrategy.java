@@ -13,6 +13,7 @@ import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.PrologLocationUtils;
 import com.prolog.eis.util.PrologStringUtils;
+import com.prolog.framework.utils.MapUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,12 +74,15 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
            task.setTaskState(1);
            task.setSource(PrologCoordinateUtils.splicingStr(checkOutResult.getX(),checkOutResult.getY(),checkOutResult.getLayer()));
            task.setSourceType(1);
-            //获取所在4楼层的入库口
-           List<PortInfo> listPort=portInfoMapper.getPortInfoInBy(1,2);
-           if(list.size()==0) {LogServices.logSysBusiness("没有可用的入库口用于盘点！");break;}
-           PortInfo portInfo=listPort.get(0);
-           task.setTarget(PrologLocationUtils.splicingXYStr(portInfo.getLayer(),portInfo.getX(),portInfo.getY()));
-           task.setTargetType(OutBoundEnum.TargetType.SSX.getNumber());
+           //健民只有一个任务出库口
+           List<PortInfo> portList = portInfoMapper.findByMap(MapUtils.put("portType", 2).put("taskType", 1).put("portlock", 2).put("taskLock", 2).getMap(), PortInfo.class);
+           if(portList.isEmpty()) {
+               return;
+           }
+           PortInfo ckPortInfo = portList.get(0);
+           AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(ckPortInfo.getJunctionPort(),0,0);
+           task.setTarget(agvStorageLocation.getRcsPositionCode());
+           task.setTargetType(OutBoundEnum.TargetType.AGV.getNumber());
 
 
            task.setCreateTime(new Date());

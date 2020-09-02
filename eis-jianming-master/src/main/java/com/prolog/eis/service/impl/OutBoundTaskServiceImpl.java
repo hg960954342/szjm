@@ -62,7 +62,6 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
             OutboundTask OutboundTask=outboundTaskList.get(i);
             UnBoundStragtegy unBoundStragtegy=this.getUnBoundStragtegy(OutboundTask);
             if(null!=unBoundStragtegy){
-                log.info(unBoundStragtegy.getClass().getName());
             unBoundStragtegy.unbound(OutboundTask);
             }
         }

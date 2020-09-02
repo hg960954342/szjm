@@ -16,6 +16,8 @@ import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.service.enums.OutBoundEnum;
+import com.prolog.eis.service.impl.unbound.OutBoundType;
 import com.prolog.eis.service.sxk.SxInStoreService;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
@@ -107,7 +109,7 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 			//需要给mcs发送任务
 			//往mcs重发表里写一条重发数据
 			String targetPosiion = ckContainerTask.getTarget();
-			if(ckContainerTask.getTargetType() == 1) {
+			if(ckContainerTask.getTargetType() == OutBoundEnum.TargetType.AGV.getNumber()) {
 				targetPosiion = PrologCoordinateUtils.splicingStr(ckPortInfo.getX(), ckPortInfo.getY(), ckPortInfo.getLayer());
 			}
 
