@@ -14,6 +14,7 @@ import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
+import com.prolog.eis.service.rcs.ledshow.LedShowDto;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @SuppressWarnings("all")
@@ -49,6 +52,9 @@ public class EndMethod implements AgvMethod {
     private InboundTaskMapper inboundTaskMapper;
     @Autowired
     private LedShowMapper ledShowMapper;
+
+    @Resource
+    private LedShowDto LedShowDto;
 
     @Override
     public void doAction(String taskCode, String method) {
@@ -77,53 +83,23 @@ public class EndMethod implements AgvMethod {
                 pQty = 0.0;
             }
             double rQty = containerTask.getQty() - pQty;
-            if ("057200AB048300".equals(containerTask.getSource())) {
-                LedShow ledShow = ledShowMapper.findById(4, LedShow.class);
+
+
+            Map<String,LedShowDto> mapLedShows= LedShowDto.getLedShowDtoMap();
+            if(mapLedShows.containsKey(containerTask.getSource())){
+                LedShowDto ledShowDtoS=mapLedShows.get(containerTask.getSource());
+                LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
                 if (ledShow != null) {
                     PrologLedController prologLedController = new PrologLedController();
                     try {
-                        prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), pQty, containerTask.getLotId(), rQty,"一站");
+                        prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), pQty, containerTask.getLotId(), rQty,ledShowDtoS.getPickStation());
                     } catch (Exception e) {
                         LogServices.logSys(e);
                     }
                 }
             }
 
-            if ("054320AB048300".equals(containerTask.getSource())) {
-                LedShow ledShow = ledShowMapper.findById(5, LedShow.class);
-                if (ledShow != null) {
-                    PrologLedController prologLedController = new PrologLedController();
-                    try {
-                        prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), pQty, containerTask.getLotId(), rQty,"二站");
-                    } catch (Exception e) {
-                        LogServices.logSys(e);
-                    }
-                }
-            }
 
-            if ("051440AB047200".equals(containerTask.getSource())) {
-                LedShow ledShow = ledShowMapper.findById(6, LedShow.class);
-                if (ledShow != null) {
-                    PrologLedController prologLedController = new PrologLedController();
-                    try {
-                        prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), pQty, containerTask.getLotId(), rQty,"三站");
-                    } catch (Exception e) {
-                        LogServices.logSys(e);
-                    }
-                }
-            }
-
-            if("050000AB051200".equals(containerTask.getSource())){
-                LedShow ledShow = ledShowMapper.findById(6,LedShow.class);
-                if(ledShow != null){
-                    PrologLedController prologLedController = new PrologLedController();
-                    try {
-                        prologLedController.pick(ledShow.getLedIp(),ledShow.getPort(),containerTask.getItemName(),pQty,containerTask.getLotId(),rQty,"四站");
-                    }catch (Exception e){
-                        LogServices.logSys(e);
-                    }
-                }
-            }
 
 
             //任务类型 业务出库
