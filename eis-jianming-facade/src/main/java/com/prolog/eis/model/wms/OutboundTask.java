@@ -49,7 +49,7 @@ public class OutboundTask {
     @JsonProperty("SFREQUIREMENT")
     private int sfReq;
 
-    private float qty;
+    //private float qty;
 
     @Column("pick_code")
     @ApiModelProperty("拣选站")
@@ -135,13 +135,13 @@ public class OutboundTask {
         this.sfReq = sfReq;
     }
 
-    public float getQty() {
+    /*public float getQty() {
         return qty;
     }
 
     public void setQty(float qty) {
         this.qty = qty;
-    }
+    }*/
 
     public String getPickCode() {
         return pickCode;

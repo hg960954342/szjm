@@ -432,7 +432,7 @@ public class OutboundDataController {
                         detail.setCtReq(0);
                         detail.setSeqNo("1");
 
-                        detail.setQty(datum.getQty());
+                        //detail.setQty(datum.getQty());
                         detail.setFinishQty(0);
                         String pickcode = datum.getPickCode();
                         detail.setPickCode(pickcode);
