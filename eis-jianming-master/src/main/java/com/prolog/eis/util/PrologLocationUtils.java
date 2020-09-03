@@ -13,10 +13,16 @@ public class PrologLocationUtils {
 
     public static Coordinate analysis(String coordinateStr) {
         Coordinate coordinate = new Coordinate();
-        int layer  = 0;
         int x = Integer.valueOf(coordinateStr.substring(0,6));
         int y = Integer.valueOf(coordinateStr.substring(8,14));
-        coordinate.setLayer(layer);
+
+        Layer[] layers=Layer.values();
+        Map<String,Integer> map=new HashMap<String,Integer>();
+        for(Layer l:layers){
+            map.put(l.name(),l.getLayer());
+        }
+        String XY=coordinateStr.substring(6,8);
+        coordinate.setLayer(map.get(XY));
         coordinate.setX(x);
         coordinate.setY(y);
         return coordinate;
@@ -35,12 +41,8 @@ public class PrologLocationUtils {
     }
 
     public static void main(String[] args) {
-        Layer[] layers=Layer.values();
-        Map map=new HashMap<Integer,Layer>();
-        for(Layer l:layers){
-            map.put(l.getLayer(),l);
-        }
-        System.out.println(map.get(4));
+        Coordinate Coordinate= PrologLocationUtils.analysis("057200AB054000");
+        System.out.println(Coordinate.getLayer());
     }
 }
 enum Layer{

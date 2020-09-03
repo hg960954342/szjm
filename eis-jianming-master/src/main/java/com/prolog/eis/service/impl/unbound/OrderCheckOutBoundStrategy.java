@@ -83,8 +83,10 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
            AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(ckPortInfo.getJunctionPort(),0,0);
            task.setTarget(agvStorageLocation.getRcsPositionCode());
            task.setTargetType(OutBoundEnum.TargetType.AGV.getNumber());
-
-
+           List<String> listItemNames=outBoundTaskDetailMapper.getItemNamesByBillNo(outboundTask.getBillNo());
+           if(listItemNames.size()>0){
+               task.setItemName(listItemNames.get(0));
+           }
            task.setCreateTime(new Date());
            containerTaskMapper.save(task);
            CheckOutTask checkOutTask=new CheckOutTask();

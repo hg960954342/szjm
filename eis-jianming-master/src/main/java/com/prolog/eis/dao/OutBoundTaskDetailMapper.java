@@ -148,4 +148,9 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
 
 
 
+ @Select("select item_name from outbound_task_detail where bill_no=#{bill_no} ")
+ List<String> getItemNamesByBillNo(@Param("bill_no")String billNo);
+
+
+
 }

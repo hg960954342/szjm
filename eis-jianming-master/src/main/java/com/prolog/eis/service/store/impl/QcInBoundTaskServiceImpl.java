@@ -34,6 +34,7 @@ import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.base.SysParameService;
 import com.prolog.eis.service.impl.inbound.InBoundContainerService;
+import com.prolog.eis.service.impl.inbound.InBoundType;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
@@ -273,9 +274,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		
 		//检查是否存在入库任务
 		List<InboundTask> temInboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerNo).getMap(), InboundTask.class);
-		List<CheckOutTask> checkOutTasks= checkOutTaskMapper.findByMap(MapUtils.put("containerCode", containerNo).getMap(), CheckOutTask.class);
 
-		if(temInboundTasks.isEmpty()&&checkOutTasks.isEmpty()) {
+		if(temInboundTasks.isEmpty()) {
 			String mString = String.format("托盘%s无入库任务", containerNo);
             LogServices.logSysBusiness("mcsRequestError"+ mString);
 
@@ -283,14 +283,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			result.setMsg(mString);
 			return result;
 		}
-		if(!temInboundTasks.isEmpty()&&!checkOutTasks.isEmpty()) {
-			String mString = String.format("托盘%s同事被两个任务使用逻辑错误！", containerNo);
-			LogServices.logSysBusiness("mcsRequestError"+ mString);
 
-			result.setSuccess(false);
-			result.setMsg(mString);
-			return result;
-		}
 
 
 
@@ -574,15 +567,11 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		if(null != sxStoreLocation) {
 			//检查有无入库库存
 			List<InboundTask> inboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), InboundTask.class);
-			List<CheckOutTask> checkOutTasks= checkOutTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), CheckOutTask.class);
-			if(inboundTasks.isEmpty()&&checkOutTasks.isEmpty()){
+ 			if(inboundTasks.isEmpty()){
 				LogServices.logSysBusiness(String.format("托盘%s无入库任务", containerCode));
 				return;
 			}
-			if(!inboundTasks.isEmpty()&&!checkOutTasks.isEmpty()){
-				LogServices.logSysBusiness(String.format("托盘%s既有盘点任务又有入库任务，代码逻辑错误！", containerCode));
-				return;
-			}
+
 			//修改库存 货位组相关属性
 			rukuSxStore(containerCode);
 			//调用回告入库的方法
@@ -665,13 +654,35 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 				CheckOutTask checkOutTask=listCheckOut.get(0);
 				checkOutTask.setState("2");
 				checkOutTaskMapper.update(checkOutTask);
-               //转换出库任务到入库任务
+               //转换出库托盘到入库托盘
 				Coordinate Coordinate=PrologLocationUtils.analysis(agvStorageLocations.get(0).getRcsPositionCode());
 				Coordinate.setLayer(4);
 				AgvStorageLocation agvStorageLocation=inBoundContainerService.getInBound(Coordinate);
 				containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
 				containerTask.setTargetType(2);
-				containerTask.setTaskState(0);
+				containerTask.setTaskState(1);
+				//生成入库InBoundTask
+				InboundTask inboundTask=new InboundTask();
+				inboundTask.setTaskState(1);
+				inboundTask.setCreateTime(new Date());
+				inboundTask.setEmptyContainer(0);
+				inboundTask.setReBack(0); //不回传WMS
+				inboundTask.setTaskType(2);//入库任务
+				inboundTask.setBillNo(PrologStringUtils.newGUID());
+				inboundTask.setWmsPush(0);
+				inboundTask.setContainerCode(containerTask.getContainerCode());
+				inboundTask.setItemId(containerTask.getItemId());
+				inboundTask.setLotId(containerTask.getLotId());
+				inboundTask.setOwnerId(containerTask.getOwnerId());
+				inboundTask.setQty((float)containerTask.getQty());
+				if(containerTask.getSourceType()== 2) //Agv区域
+				{
+					String sourceAgv=containerTask.getSource();
+					Coordinate CoordinateAgv=PrologLocationUtils.analysis(sourceAgv);
+					inboundTask.setCeng(CoordinateAgv.getLayer()+"");
+				}
+				 inboundTaskMapper.save(inboundTask);
+
 			}
 
 
