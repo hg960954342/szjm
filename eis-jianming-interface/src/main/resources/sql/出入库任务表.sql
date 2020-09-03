@@ -84,7 +84,7 @@ CREATE TABLE `outbound_task_detail` (
   `bill_no` varchar(255) NOT NULL COMMENT '出库单号',
   `seqno` varchar(255) NOT NULL COMMENT '明细行号',
   `ctreq` int NOT NULL DEFAULT '0' COMMENT '是否指定托盘 0不指定 1指定',
-  `container_code` int NOT NULL DEFAULT '0' COMMENT '容器号',
+  `container_code` varchar(255) DEFAULT NULL COMMENT '容器号',
   `owner_id` varchar(20) DEFAULT NULL COMMENT '货主',
   `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
   `item_name` varchar(255) DEFAULT NULL COMMENT '商品名称',

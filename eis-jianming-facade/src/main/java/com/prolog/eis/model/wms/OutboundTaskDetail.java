@@ -32,7 +32,7 @@ public class OutboundTaskDetail {
     @Column("container_code")
     @ApiModelProperty("母托盘编号")
     @JsonProperty("CONTAINERCODE")
-    private int containerCode;
+    private String containerCode;
 
     @Column("owner_id")
     @ApiModelProperty("wms业主")
@@ -108,11 +108,11 @@ public class OutboundTaskDetail {
         this.ctReq = ctReq;
     }
 
-    public int getContainerCode() {
+    public String getContainerCode() {
         return containerCode;
     }
 
-    public void setContainerCode(int containerCode) {
+    public void setContainerCode(String containerCode) {
         this.containerCode = containerCode;
     }
 
