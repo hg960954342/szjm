@@ -48,12 +48,14 @@ public class MCSCallBackRuKu implements MCSCallBack {
     @Autowired
     private QcInBoundTaskService qcInBoundTaskService;
 
+    @Autowired
+    CallBackService callBackService;
 
 
     @Override
     public void container(String containerCode, int targetLayer, int targetX, int targetY, String address) throws Exception{
         //检查到位的托盘
-        SxStoreLocation sxStoreLocation =qcInBoundTaskService.getStoreLocation(targetLayer,targetX,targetY);
+        SxStoreLocation sxStoreLocation =callBackService.getStoreLocation(targetLayer,targetX,targetY);
         if(null != sxStoreLocation) {
             //检查有无入库库存
             List<InboundTask> inboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), InboundTask.class);
@@ -63,7 +65,7 @@ public class MCSCallBackRuKu implements MCSCallBack {
             }
 
             //修改库存 货位组相关属性
-            qcInBoundTaskService.rukuSxStore(containerCode);
+            callBackService.rukuSxStore(containerCode);
             //调用回告入库的方法
             eisCallbackService.inBoundReport(containerCode);
             //更新盘点任务状态

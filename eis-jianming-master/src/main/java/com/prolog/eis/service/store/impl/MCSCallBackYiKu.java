@@ -31,14 +31,16 @@ public class MCSCallBackYiKu implements MCSCallBack {
     @Autowired
     private SxStoreTaskFinishService sxStoreTaskFinishService;
 
+
+
     @Autowired
-    private QcInBoundTaskService qcInBoundTaskService;
+    CallBackService callBackService;
 
     @Override
     public void container(String containerCode, int targetLayer, int targetX, int targetY, String address) throws Exception {
 
         //检查是否存在点位
-        SxStoreLocation sxStoreLocation = qcInBoundTaskService.getStoreLocation(targetLayer,targetX,targetY);
+        SxStoreLocation sxStoreLocation = callBackService.getStoreLocation(targetLayer,targetX,targetY);
 
         if(null != sxStoreLocation) {
             //更新库存

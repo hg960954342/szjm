@@ -487,7 +487,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		int targetX = coordinate.getX();
 		int targetY = coordinate.getY();
 
-        MCSCallBack mCSCallBack=MCSCallBackMap.get(CallBackStatus.MCSCallBack_STATUS+2+CallBackStatus.TYPE+type);
+        MCSCallBack mCSCallBack=MCSCallBackMap.get(CallBackStatus.MCSCallBack_STATUS+status+CallBackStatus.TYPE+type);
         if(mCSCallBack!=null){
             mCSCallBack.container(containerNo,targetLayer,targetX,targetY,address);
         }
@@ -515,55 +515,15 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	}
 
 
-
+	@Autowired
+	CallBackService callBackService;
      @Override
 	public SxStore rukuSxStoreUpdate(String containerNo) throws Exception{
-       return rukuSxStore(containerNo);
+       return callBackService.rukuSxStore(containerNo);
 	}
 
 
 
-    //判断有无库存
-    @Override
-    public SxStore rukuSxStore(String containerNo) throws Exception {
-        List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(),
-                SxStore.class);
-        if (sxStores.size() == 1) {
-            SxStore sxStore = sxStores.get(0);
-            if(sxStore.getStoreState() != 10) {
-                LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("托盘%s入库库存状态异常%s", containerNo,String.valueOf(sxStore.getStoreState())));
-            }
-            //修改库存为已上架
-            sxStore.setStoreState(20);
-            sxStoreMapper.update(sxStore);
-
-            Integer storeLocationId = sxStore.getStoreLocationId();
-            SxStoreLocation cksxStoreLocation = sxStoreLocationMapper.findById(storeLocationId, SxStoreLocation.class);
-            // 根据出库任务类型转换
-            sxStoreLocationMapper.updateMapById(storeLocationId, MapUtils.put("actualWeight", 0).getMap(),
-                    SxStoreLocation.class);
-            sxStoreTaskFinishService.computeLocation(sxStore);
-            sxStoreLocationGroupMapper.updateMapById(cksxStoreLocation.getStoreLocationGroupId(),
-                    MapUtils.put("ascentLockState", 0).getMap(), SxStoreLocationGroup.class);
-
-            return sxStore;
-        }else {
-            return null;
-        }
-    }
-
-	@Override
-	public  SxStoreLocation getStoreLocation(int layer,int x,int y) {
-		List<SxStoreLocation> list = sxStoreLocationMapper.findByMap(MapUtils.put("layer", layer).put("x", x).put("y", y).getMap(), SxStoreLocation.class);
-		if(list.isEmpty()) {
-			return null;
-		}else if(list.size() > 1) {
-			LogServices.logSysBusiness("查询出多个货位");
-			return null;
-		}else {
-			return list.get(0);
-		}
-	}
 
 	private McsRequestTaskDto addMcsTask(boolean success,int mcsType,String stockId,String source,String target,String errorMessage) {
 		McsRequestTaskDto mcsSendTaskDto = new McsRequestTaskDto();

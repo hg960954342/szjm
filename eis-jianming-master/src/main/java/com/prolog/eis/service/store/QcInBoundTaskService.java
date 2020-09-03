@@ -45,7 +45,4 @@ public interface QcInBoundTaskService {
 	public SxStore rukuSxStoreUpdate(String containerNo) throws Exception;
 
 
-	public SxStoreLocation getStoreLocation(int layer, int x, int y);
-
-	public SxStore rukuSxStore(String containerNo) throws Exception;
 }
