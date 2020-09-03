@@ -40,7 +40,7 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
     @Autowired
     PortInfoMapper portInfoMapper;
     @Autowired
-    InBoundTaskService inBoundTaskService;
+    InBoundContainerService inBoundContainerService;
     @Override
     public void inbound(InboundTask inboundTask) {
         {
@@ -49,7 +49,7 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
                 Coordinate CoordinateAgv= PrologLocationUtils.analysis(agvLoc);
                 //暂时定入库任务状态开始为0
 
-            AgvStorageLocation  distinPortInfo=inBoundTaskService.getInBound(CoordinateAgv);
+            AgvStorageLocation  distinPortInfo=inBoundContainerService.getInBound(CoordinateAgv);
             if(distinPortInfo==null){
                 LogServices.logSysBusiness("没有找到可用入口");
                 return;

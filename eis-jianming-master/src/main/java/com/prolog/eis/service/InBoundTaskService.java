@@ -14,5 +14,4 @@ public interface InBoundTaskService {
 
     void update(InboundTask inboundTask);
     void delete(InboundTask inboundTask);
-    public AgvStorageLocation getInBound(Coordinate CoordinateAgv);
-}
+ }

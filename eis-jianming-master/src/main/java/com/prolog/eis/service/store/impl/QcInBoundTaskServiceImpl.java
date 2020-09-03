@@ -33,6 +33,7 @@ import com.prolog.eis.service.CallBackCheckOutService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.base.SysParameService;
+import com.prolog.eis.service.impl.inbound.InBoundContainerService;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
@@ -61,8 +62,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 	@Autowired
 	private InboundTaskMapper inboundTaskMapper;
-	@Autowired
-	InBoundTaskService inBoundTaskService;
+
 
 	@Autowired
 	private SxStoreMapper sxStoreMapper;
@@ -98,6 +98,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private CallBackCheckOutService callBackCheckOutService;
 	@Autowired
 	CheckOutTaskMapper checkOutTaskMapper;
+	@Autowired
+	InBoundContainerService inBoundContainerService;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -666,7 +668,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
                //转换出库任务到入库任务
 				Coordinate Coordinate=PrologLocationUtils.analysis(agvStorageLocations.get(0).getRcsPositionCode());
 				Coordinate.setLayer(4);
-				AgvStorageLocation agvStorageLocation=inBoundTaskService.getInBound(Coordinate);
+				AgvStorageLocation agvStorageLocation=inBoundContainerService.getInBound(Coordinate);
 				containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
 				containerTask.setTargetType(2);
 				containerTask.setTaskState(0);
