@@ -10,7 +10,7 @@ CREATE TABLE `container_task` (
   `task_state` int NOT NULL COMMENT '1 到位 2已发送给下游设备 3下游设备回告开始 4离开原存储位 后面可以扩充',
   `task_code` varchar(50) NULL COMMENT '任务号',
   `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
-  `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品名称',
+  `item_name` varchar(255) DEFAULT NULL COMMENT 'wms商品名称',
   `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms批号',
   `owner_id` varchar(255) DEFAULT NULL COMMENT 'wms业主',
   `qty` decimal DEFAULT NULL COMMENT '数量（重量）',

@@ -9,8 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
-@Table("outbound_task_detail")
-public class OutboundTaskDetail {
+@Table("outbound_task_detail_history")
+public class OutboundTaskDetailHistory {
 
     @Id
     @ApiModelProperty("主键")
@@ -35,7 +35,7 @@ public class OutboundTaskDetail {
     @Column("container_code")
     @ApiModelProperty("母托盘编号")
     @JsonProperty("CONTAINERCODE")
-    private String containerCode;
+    private int containerCode;
 
     @Column("owner_id")
     @ApiModelProperty("wms业主")
@@ -111,11 +111,11 @@ public class OutboundTaskDetail {
         this.ctReq = ctReq;
     }
 
-    public String getContainerCode() {
+    public int getContainerCode() {
         return containerCode;
     }
 
-    public void setContainerCode(String containerCode) {
+    public void setContainerCode(int containerCode) {
         this.containerCode = containerCode;
     }
 

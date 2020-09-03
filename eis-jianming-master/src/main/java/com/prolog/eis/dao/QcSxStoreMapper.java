@@ -3,12 +3,10 @@ package com.prolog.eis.dao;
 import com.prolog.eis.dto.eis.SxStoreDto;
 import com.prolog.eis.dto.eis.YiWeiCountDto;
 import com.prolog.eis.model.sxk.SxStore;
+import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResult;
 import com.prolog.framework.dao.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -197,5 +195,15 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"and g.IS_LOCK=0 and a.STORE_STATE=20 ORDER BY dept_num asc,qty asc ")
 	List<CheckOutResult> getCheckOutByOutBoundTaskDetail(@Param("billNo") String billNo );
 
-
+      @ResultMap("SxStore")
+      @Select("SELECT\n" +
+			  "\t* \n" +
+			  "FROM\n" +
+			  "\tsx_store ss\n" +
+			  "\tINNER JOIN sx_store_location sl ON ss.store_location_id = sl.id\n" +
+			  "\tINNER JOIN sx_store_location_group slg ON sl.store_location_group_id = slg.id \n" +
+			  "\tAND slg.IS_LOCK = 0 \n" +
+			  "\tAND ss.STORE_STATE = 20 \n" +
+			  "\tAND CONTAINER_NO=#{containerCode} and ss.item_id = #{itemId} and ss.lot_id = #{lotId}  ORDER BY dept_num asc,qty asc")
+	  Map<String,Object> findSxStore(@Param("containerCode") String containerCode,@Param("lotId") String lotId, @Param("itemId") String itemId);
 }

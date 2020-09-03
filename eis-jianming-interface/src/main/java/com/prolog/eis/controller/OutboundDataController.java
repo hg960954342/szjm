@@ -2,6 +2,7 @@ package com.prolog.eis.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.model.wms.*;
+import com.prolog.eis.service.CheckContainerTaskService;
 import com.prolog.eis.service.EisIdempotentService;
 import com.prolog.eis.service.OutboundDataService;
 import com.prolog.eis.util.FileLogHelper;
@@ -9,6 +10,7 @@ import com.prolog.eis.util.PrologApiJsonHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +30,12 @@ public class OutboundDataController {
     @Autowired
     private OutboundDataService outboundDataService;
 
+    @Autowired
+    private CheckContainerTaskService checkContainerTaskService;
+
     /**
      * 业务出库 推送eis
+     *
      * @param str json串
      * @return JsonResult json串
      * @throws Exception
@@ -49,14 +55,14 @@ public class OutboundDataController {
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
             JsonResult rejson = new JsonResult();
-            String string= "";
+            String string = "";
 
-            if(wmsEisIdempotents.size() != 0){
+            if (wmsEisIdempotents.size() != 0) {
                 string = wmsEisIdempotents.get(0).getRejson();
                 PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
-            }else{
+            } else {
                 //List<OutboundTask> data = outboundTaskDto.getData();
                 List<Outbt> data = outboundTaskDto.getData();
                 for (Outbt datum : data) {
@@ -97,7 +103,7 @@ public class OutboundDataController {
                             outboundDataService.insertOutboundTaskDetail(detail);
                         }
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                         rejson.setCode("-1");
                         rejson.setMessage("false");
@@ -137,9 +143,9 @@ public class OutboundDataController {
                 return rejson;
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             FileLogHelper.WriteLog("WmsOutStockTaskError", "出库异常，错误信息：\n" + e.toString());
-            JsonResult resultStr =new JsonResult();
+            JsonResult resultStr = new JsonResult();
             resultStr.setCode("-1");
             resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsOutStockTask", "WMS->EIS返回" + resultStr);
@@ -152,6 +158,7 @@ public class OutboundDataController {
 
     /**
      * 业务移库 推送eis
+     *
      * @param str json串
      * @return JsonResult json串
      * @throws Exception
@@ -171,14 +178,14 @@ public class OutboundDataController {
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
             JsonResult rejson = new JsonResult();
-            String string= "";
+            String string = "";
 
-            if(wmsEisIdempotents.size() != 0){
+            if (wmsEisIdempotents.size() != 0) {
                 string = wmsEisIdempotents.get(0).getRejson();
                 PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
-            }else{
+            } else {
                 //List<OutboundTask> data = moveTaskData.getData();
                 List<Outbt> data = moveTaskData.getData();
                 for (Outbt datum : data) {
@@ -187,7 +194,7 @@ public class OutboundDataController {
                         datum.setWmsPush(1);
                         datum.setReBack(1);
                         datum.setEmptyContainer(0);
-                        datum.setTaskType(2);
+                        datum.setTaskType(0);
                         datum.setTaskState(0);
 
                         long l = System.currentTimeMillis();
@@ -199,24 +206,31 @@ public class OutboundDataController {
                         outboundDataService.insertMoveTask(datum);
 
                         List<OutboundTaskDetail> details = datum.getDetails();
-                        for (OutboundTaskDetail detail : details) {
+                        List<String> containerCodes = checkContainerTaskService.findByContainerCode(details);
+                        if (containerCodes.size() == 0) {
+                            for (OutboundTaskDetail detail : details) {
+                                String billno = datum.getBillNo();
+                                detail.setCtReq(1);
+                                detail.setFinishQty(0);
 
-                            String billno = datum.getBillNo();
-                            detail.setCtReq(1);
-                            detail.setFinishQty(0);
+                                detail.setBillNo(billno);
 
-                            detail.setBillNo(billno);
+                                long l1 = System.currentTimeMillis();
+                                Date t1 = new Date(l1);
+                                java.sql.Timestamp createtime = new java.sql.Timestamp(t1.getTime());
 
-                            long l1 = System.currentTimeMillis();
-                            Date t1 = new Date(l1);
-                            java.sql.Timestamp createtime = new java.sql.Timestamp(t1.getTime());
+                                detail.setCreateTime(createtime);
 
-                            detail.setCreateTime(createtime);
-
-                            outboundDataService.insertMoveTaskDetail(detail);
+                                outboundDataService.insertMoveTaskDetail(detail);
+                            }
+                        }else {
+                            rejson.setCode("-1");
+                            rejson.setMessage("托盘号："+containerCodes.toString()+"正在执行其他任务");
+                            FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS移库返回" + rejson);
+                            return rejson;
                         }
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                         rejson.setCode("-1");
                         rejson.setMessage("false");
@@ -254,9 +268,9 @@ public class OutboundDataController {
 
                 return rejson;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FileLogHelper.WriteLog("WmsMoveStockTaskError", "移库异常，错误信息：\n" + e.toString());
-            JsonResult resultStr =new JsonResult();
+            JsonResult resultStr = new JsonResult();
             resultStr.setCode("-1");
             resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS返回" + resultStr);
@@ -267,6 +281,7 @@ public class OutboundDataController {
 
     /**
      * 业务盘点 推送eis
+     *
      * @param str json串
      * @return JsonResult json串
      * @throws Exception
@@ -286,14 +301,14 @@ public class OutboundDataController {
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
             JsonResult rejson = new JsonResult();
-            String string= "";
+            String string = "";
 
-            if(wmsEisIdempotents.size() != 0){
+            if (wmsEisIdempotents.size() != 0) {
                 string = wmsEisIdempotents.get(0).getRejson();
                 PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
-            }else{
+            } else {
                 //List<OutboundTask> data = outboundTaskDto.getData();
                 List<Outbt> data = outboundTaskDto.getData();
                 for (Outbt datum : data) {
@@ -329,7 +344,7 @@ public class OutboundDataController {
                             outboundDataService.insertCheckOutTaskDetail(detail);
                         }
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                         rejson.setCode("-1");
                         rejson.setMessage("false");
@@ -366,9 +381,9 @@ public class OutboundDataController {
 
                 return rejson;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FileLogHelper.WriteLog("WmsCheckOutTaskError", "盘库异常，错误信息：\n" + e.toString());
-            JsonResult resultStr =new JsonResult();
+            JsonResult resultStr = new JsonResult();
             resultStr.setCode("-1");
             resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsCheckOutTask", "WMS->EIS返回" + resultStr);
@@ -379,6 +394,7 @@ public class OutboundDataController {
 
     /**
      * 业务空托出库 推送eis
+     *
      * @param str json串
      * @return JsonResult json串
      * @throws Exception
@@ -398,14 +414,14 @@ public class OutboundDataController {
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
 
             JsonResult rejson = new JsonResult();
-            String string= "";
+            String string = "";
 
-            if(wmsEisIdempotents.size() != 0){
+            if (wmsEisIdempotents.size() != 0) {
                 string = wmsEisIdempotents.get(0).getRejson();
                 PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
-            }else{
+            } else {
                 //List<OutboundTask> data = outboundTaskDto.getData();
                 List<Outbt> data = outboundTaskDto.getData();
                 for (Outbt datum : data) {
@@ -445,7 +461,7 @@ public class OutboundDataController {
 
                         outboundDataService.insertEmptyBoxOutStockTaskDetail(detail);
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                         rejson.setCode("-1");
                         rejson.setMessage("false");
@@ -482,9 +498,9 @@ public class OutboundDataController {
 
                 return rejson;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FileLogHelper.WriteLog("WmsEmptyBoxOutStockTaskError", "空托出库异常，错误信息：\n" + e.toString());
-            JsonResult resultStr =new JsonResult();
+            JsonResult resultStr = new JsonResult();
             resultStr.setCode("-1");
             resultStr.setMessage("false");
             FileLogHelper.WriteLog("WmsEmptyBoxOutStockTask", "WMS->EIS返回" + resultStr);

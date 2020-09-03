@@ -67,8 +67,6 @@ public class EmptyContainerTask {
                     containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
                     containerTask.setTargetType(1);
                     containerTaskService.update(containerTask);
-
-
                 }
             }
 

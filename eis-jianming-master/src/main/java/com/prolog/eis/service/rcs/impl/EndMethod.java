@@ -108,7 +108,7 @@ public class EndMethod implements AgvMethod {
                 eisCallbackService.outBoundReport(containerTask);
             }
             //任务类型 移库出库
-            if (containerTask.getTaskType() == 2) {
+            if (containerTask.getTaskType() == 0) {
                 eisCallbackService.moveBoundReport(containerTask);
             }
             //锁定拣选站
