@@ -1,20 +1,16 @@
 package com.prolog.eis.service.rcs.impl;
 
-import com.prolog.eis.controller.led.PrologLedController;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.CheckOutTaskMapper;
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
-import com.prolog.eis.dao.led.LedShowMapper;
 import com.prolog.eis.dao.wms.InboundTaskMapper;
 import com.prolog.eis.logs.LogServices;
-import com.prolog.eis.model.led.LedShow;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisCallbackService;
-import com.prolog.eis.service.rcs.ledshow.LedShowDto;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +21,6 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @SuppressWarnings("all")
@@ -50,11 +45,9 @@ public class EndMethod implements AgvMethod {
     private QcInBoundTaskService qcInBoundTaskService;
     @Autowired
     private InboundTaskMapper inboundTaskMapper;
-    @Autowired
-    private LedShowMapper ledShowMapper;
 
-    @Resource
-    private LedShowDto LedShowDto;
+
+
 
     @Override
     public void doAction(String taskCode, String method) {
@@ -76,31 +69,6 @@ public class EndMethod implements AgvMethod {
         containerTaskService.update(containerTask);
         //判断托盘到位 区域 agv
         if (containerTask.getTargetType() == 1) {
-
-            //String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getSource());
-            Double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
-            if (pQty == null) {
-                pQty = 0.0;
-            }
-            double rQty = containerTask.getQty() - pQty;
-
-
-            Map<String,LedShowDto> mapLedShows= LedShowDto.getLedShowDtoMap();
-            if(mapLedShows.containsKey(containerTask.getSource())){
-                LedShowDto ledShowDtoS=mapLedShows.get(containerTask.getSource());
-                LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
-                if (ledShow != null) {
-                    PrologLedController prologLedController = new PrologLedController();
-                    try {
-                        prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), pQty, containerTask.getLotId(), rQty,ledShowDtoS.getPickStation());
-                    } catch (Exception e) {
-                        LogServices.logSys(e);
-                    }
-                }
-            }
-
-
-
 
             //任务类型 业务出库
             if (containerTask.getTaskType() == 1) {

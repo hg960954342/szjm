@@ -1,11 +1,9 @@
 package com.prolog.eis.service.store.impl;
 
-import com.prolog.eis.controller.led.PrologLedController;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.CheckOutTaskMapper;
 import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
-import com.prolog.eis.dao.led.LedShowMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
@@ -13,7 +11,6 @@ import com.prolog.eis.dao.wms.InboundTaskMapper;
 import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.eis.PortInfo;
-import com.prolog.eis.model.led.LedShow;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
@@ -51,8 +48,7 @@ public class MCSCallBackChuKu implements MCSCallBack {
     @Autowired
     private AgvStorageLocationMapper agvStorageLocationMapper;
 
-    @Autowired
-    private LedShowMapper ledShowMapper;
+
     @Autowired
     private CheckOutTaskMapper checkOutTaskMapper;
 
@@ -99,18 +95,7 @@ public class MCSCallBackChuKu implements MCSCallBack {
                 return;
             }
 
-            String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getTarget());
-            LedShow ledShow = ledShowMapper.findById(3,LedShow.class);
 
-            if(ledShow != null){
-                PrologLedController prologLedController = new PrologLedController();
-                try {
-                    prologLedController.outStore(ledShow.getLedIp(),ledShow.getPort(),containerTask.getItemName(),containerTask.getQty(),containerTask.getLotId(),station);
-                }catch (Exception e){
-                    LogServices.logSys(e);
-                }
-
-            }
 
             //清除托盘库库存
             SxStore sxStore = this.clearSxStore(containerCode);

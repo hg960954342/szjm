@@ -1,13 +1,11 @@
 package com.prolog.eis.service.store.impl;
 
-import com.prolog.eis.controller.led.PrologLedController;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.CheckOutTaskMapper;
 import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.dao.DeviceJunctionPortMapper;
 import com.prolog.eis.dao.base.SysParameMapper;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
-import com.prolog.eis.dao.led.LedShowMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
@@ -20,7 +18,6 @@ import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.base.SysParame;
 import com.prolog.eis.model.eis.DeviceJunctionPort;
 import com.prolog.eis.model.eis.PortInfo;
-import com.prolog.eis.model.led.LedShow;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
@@ -31,7 +28,6 @@ import com.prolog.eis.service.CallBackCheckOutService;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.base.SysParameService;
 import com.prolog.eis.service.impl.inbound.InBoundContainerService;
-import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
 import com.prolog.eis.service.store.CallBackStatus;
@@ -40,11 +36,8 @@ import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.sxk.SxInStoreService;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.eis.util.PrologCoordinateUtils;
-import com.prolog.eis.util.PrologLocationUtils;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.eis.util.detetionlayer.DetetionLayerHelper;
-import com.prolog.framework.core.restriction.Criteria;
-import com.prolog.framework.core.restriction.Restrictions;
 import com.prolog.framework.utils.MapUtils;
 import com.prolog.framework.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +84,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 	private McsInterfaceService mcsInterfaceService;
 	@Autowired
 	private DeviceJunctionPortMapper deviceJunctionPortMapper;
-	@Autowired
-	private LedShowMapper ledShowMapper;
+
 	@Autowired
 	private McsInterfaceServiceSend mcsInterfaceServiceSend;
 	@Autowired
@@ -126,45 +118,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			weight = Double.valueOf(inBoundRequest.getWeight())/10.00;
 		}
 
-		String state ="";
-		//state =(weight>=limitWeight)?"超重":"正常";
-		//state=(detection!=1)?"尺寸异常":"正常";
-		if(weight>=limitWeight){
-			state="超重";
-		}else if (detection != 1){
-			state="尺寸异常";
-		}else{
-			state="正常";
-		}
 		//根据托盘码查询入库托盘任务
 		ContainerTask containerTask = containerTaskMapper.queryContainerTaskByConcode(containerNo);
-		//入库,回库显示led屏
-		if(sourceLayer==1){
-			LedShow ledShow = ledShowMapper.findById(1,LedShow.class);
-
-			if(ledShow != null){
-				PrologLedController prologLedController = new PrologLedController();
-				try {
-					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),containerTask.getItemName(),weight,containerTask.getLotId(),state);
-				}catch (Exception e){
-					LogServices.logSys(e);
-				}
-			}
-		}
-
-		if(sourceLayer==2){
-			LedShow ledShow = ledShowMapper.findById(2,LedShow.class);
-
-			if(ledShow != null){
-				PrologLedController prologLedController = new PrologLedController();
-				try {
-					prologLedController.reStore(ledShow.getLedIp(),ledShow.getPort(),containerTask.getItemName(),weight,containerTask.getLotId(),state);
-				}catch (Exception e){
-					LogServices.logSys(e);
-				}
-
-			}
-		}
 
 
 		if(weight > limitWeight || detection != 1) {
