@@ -13,4 +13,6 @@ public interface CheckOutTaskMapper extends BaseMapper<CheckOutTask> {
 
     @Select("select (case when count(*)>=1 then 0 else 1 end) from checkout_task where bill_no=#{bill_no} and state!='3' ")
     public Boolean getCheckoutTaskIsEnd(@Param("bill_no") String billNo);
+
+
 }
