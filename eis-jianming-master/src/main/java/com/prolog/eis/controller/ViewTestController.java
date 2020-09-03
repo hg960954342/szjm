@@ -1,7 +1,9 @@
 package com.prolog.eis.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.model.wms.AgvStorageLocation;
+import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.enums.AgvMove;
 import com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy;
@@ -36,6 +38,8 @@ public class ViewTestController {
 
     @Autowired
     private DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy;
+    @Autowired
+    private ContainerTaskMapper containerTaskMapper;
 
 
     /**
@@ -111,6 +115,9 @@ public class ViewTestController {
     @PostMapping("/deletestore")
     public Object deleteStore(@RequestParam("containerNo")String containerNo, HttpServletResponse response) throws Exception {
         testService.deleteStore(containerNo);
+        //删除containerTask任务
+        ContainerTask containerTask= containerTaskMapper.queryContainerTaskByConcode(containerNo);
+        containerTaskMapper.deleteById(containerTask.getId(),ContainerTask.class);
         return MapUtils.put("result",true).put("msg","").getMap();
 
     }
