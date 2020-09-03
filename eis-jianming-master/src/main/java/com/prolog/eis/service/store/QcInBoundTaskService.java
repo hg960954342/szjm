@@ -3,6 +3,7 @@ package com.prolog.eis.service.store;
 import com.prolog.eis.dto.eis.mcs.InBoundRequest;
 import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
 import com.prolog.eis.model.sxk.SxStore;
+import com.prolog.eis.model.sxk.SxStoreLocation;
 
 public interface QcInBoundTaskService {
 
@@ -42,4 +43,9 @@ public interface QcInBoundTaskService {
 	 * @throws Exception
 	 */
 	public SxStore rukuSxStoreUpdate(String containerNo) throws Exception;
+
+
+	public SxStoreLocation getStoreLocation(int layer, int x, int y);
+
+	public SxStore rukuSxStore(String containerNo) throws Exception;
 }

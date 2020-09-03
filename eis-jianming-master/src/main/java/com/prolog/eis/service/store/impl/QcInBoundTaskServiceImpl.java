@@ -12,7 +12,6 @@ import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
 import com.prolog.eis.dao.wms.InboundTaskMapper;
-import com.prolog.eis.dao.wms.OutboundTaskMapper;
 import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.dto.eis.InStoreValidateDto;
 import com.prolog.eis.dto.eis.mcs.InBoundRequest;
@@ -28,20 +27,18 @@ import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.InboundTask;
-import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.CallBackCheckOutService;
 import com.prolog.eis.service.EisCallbackService;
-import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.base.SysParameService;
 import com.prolog.eis.service.impl.inbound.InBoundContainerService;
-import com.prolog.eis.service.impl.inbound.InBoundType;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
+import com.prolog.eis.service.store.CallBackStatus;
+import com.prolog.eis.service.store.MCSCallBack;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.sxk.SxInStoreService;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
-import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.PrologLocationUtils;
 import com.prolog.eis.util.PrologStringUtils;
@@ -57,8 +54,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
+@SuppressWarnings("all")
 public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 	@Autowired
@@ -244,34 +244,6 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 			return result;
 		}
 
-		//判断入库口类型
-		/*if(taskType == 3) {
-			//空托入库口//创建空托入库任务
-			InboundTask inboundTask = new InboundTask();
-			inboundTask.setBillNo(PrologStringUtils.newGUID());
-			inboundTask.setWmsPush(0);
-			inboundTask.setReBack(0);
-			inboundTask.setEmptyContainer(0);
-			inboundTask.setContainerCode(PrologStringUtils.newGUID());
-			inboundTask.setTaskType(0);
-			inboundTask.setOwnerId("空托");
-			inboundTask.setItemId("空托");
-			inboundTask.setLotId("空托");
-			inboundTask.setQty(0);
-			inboundTask.setTaskState(3);
-			inboundTask.setCreateTime(new Date());
-			inboundTask.setStartTime(new Date());
-			inboundTask.setRukuTime(new Date());
-			inboundTaskMapper.save(inboundTask);
-
-			result.setInboundTask(inboundTask);
-			result.setSuccess(true);
-			result.setResultType(1);
-
-			return result;
-		}else {*/
-		
-		
 		//检查是否存在入库任务
 		List<InboundTask> temInboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerNo).getMap(), InboundTask.class);
 
@@ -486,8 +458,6 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 
 				Integer findLayer = sxInStoreService.findLayer(0,layers, reserveCount, "", "");
 
-				//LayerPortOrigin layerPortOrigin = layerPortOriginService.getPortOrigin(entryCode,findLayer,50,50);
-
 				locationId = sxInStoreService.getInStoreDetail(containerNo, findLayer, itemId,
 						lot, originX, originY, 1,1,200,reserveCount);
 				if(null != locationId) {
@@ -501,6 +471,9 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		return locationId;
 	}
 
+
+    @Autowired
+    private final Map<String, MCSCallBack> MCSCallBackMap = new ConcurrentHashMap<>();
 	@Override
 	@Transactional(rollbackFor = Exception.class,propagation=Propagation.SUPPORTS)
 	public void taskReturn(String taskId,int status,int type,String containerNo,String rgvId,String address) throws Exception{
@@ -514,31 +487,11 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		int targetX = coordinate.getX();
 		int targetY = coordinate.getY();
 
-		//检查当前点位是库内还是接驳口
-		if(status == 2){
-			switch (type) {
-			case 1:
-				//入库
-				this.containerRuKu(containerNo,targetLayer,targetX,targetY,address);
-				break;
-			case 2:
-				//出库
-				this.containerChuKu(containerNo,targetLayer,targetX,targetY,address);
-				break;
-			case 3:
-				//移库
-				this.containerYiKu(containerNo,targetLayer,targetX,targetY,address);
-				break;
-			case 4:
-				//小车换层
-				break;
-			case 5:
-				//输送线行走
-				break;
-			default:
-				break;
-			}
-		}
+        MCSCallBack mCSCallBack=MCSCallBackMap.get(CallBackStatus.MCSCallBack_STATUS+2+CallBackStatus.TYPE+type);
+        if(mCSCallBack!=null){
+            mCSCallBack.container(containerNo,targetLayer,targetX,targetY,address);
+        }
+
 	}
 
 	@Override
@@ -561,238 +514,52 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		}
 	}
 
-	private void containerRuKu(String containerCode,int targetLayer,int targetX,int targetY,String address) throws Exception {
-		//检查到位的托盘
-		SxStoreLocation sxStoreLocation = getStoreLocation(targetLayer,targetX,targetY);
-		if(null != sxStoreLocation) {
-			//检查有无入库库存
-			List<InboundTask> inboundTasks = inboundTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), InboundTask.class);
- 			if(inboundTasks.isEmpty()){
-				LogServices.logSysBusiness(String.format("托盘%s无入库任务", containerCode));
-				return;
-			}
-
-			//修改库存 货位组相关属性
-			rukuSxStore(containerCode);
-			//调用回告入库的方法
-			eisCallbackService.inBoundReport(containerCode);
-			//更新盘点任务状态
-			callBackCheckOutService.updateCallBackCheckOut(containerCode);
-
-		}else {
-            LogServices.logSysBusiness(String.format("点位%s不是托盘库货位", address));
 
 
-			return;
-		}
-	}
-
-	private void containerChuKu(String containerCode,int targetLayer,int targetX,int targetY,String address) throws Exception {
-
-		//任务完成
-		// 找port口
-		List<PortInfo> portInfos = portInfoMapper.findByMap(MapUtils.put("layer", targetLayer).put("x", targetX).put("y", targetY).getMap(), PortInfo.class);
-		if(portInfos.isEmpty()) {
-			LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("点位%s不是托盘库出入口", address));
-
-			return;
-		}
-
-		ContainerTask containerTask = containerTaskMapper.selectStartTaskByContainerCode(containerCode);
-		if(null == containerTask) {
-			//没有正在从托盘库内正在出库的任务
-            LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("托盘%s无容器出库任务", containerCode));
-		}
-
-		PortInfo portInfo = portInfos.get(0);
-		if(portInfo.getCallCar() == 1) {
-			//修改容器任务
-			//获取agv点位坐标
-			List<AgvStorageLocation> agvStorageLocations = agvStorageLocationMapper.findByMap(MapUtils.put("locationType", 2).put("deviceNo",portInfo.getJunctionPort()).getMap(), AgvStorageLocation.class);
-			if(agvStorageLocations.isEmpty()) {
-
-                LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("Agv输送线区域点位不存在%s", portInfo.getJunctionPort()));
-				return;
-			}
-
-			String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getTarget());
-			LedShow ledShow = ledShowMapper.findById(3,LedShow.class);
-
-			if(ledShow != null){
-				PrologLedController prologLedController = new PrologLedController();
-				try {
-					prologLedController.outStore(ledShow.getLedIp(),ledShow.getPort(),containerTask.getItemName(),containerTask.getQty(),containerTask.getLotId(),station);
-				}catch (Exception e){
-					LogServices.logSys(e);
-				}
-
-			}
-
-			//清除托盘库库存
-			SxStore sxStore = this.clearSxStore(containerCode);
-
-			containerTask.setSource(agvStorageLocations.get(0).getRcsPositionCode());
-			containerTask.setSourceType(2);
-			containerTask.setTaskState(1);
-			containerTask.setItemId(sxStore.getItemId());
-			containerTask.setLotId(sxStore.getLotId());
-			containerTask.setOwnerId(sxStore.getOwnerId());
-			containerTask.setQty(sxStore.getQty());
-			containerTask.setCreateTime(new Date());
-			containerTask.setStartTime(null);
-			containerTask.setMoveTime(null);
-			containerTask.setEndTime(null);
-
-
-			if(containerTask.getTaskType()==3){
-
-				//更新任务状态
-				Criteria criteria=Criteria.forClass(CheckOutTask.class);
-				criteria.setRestriction(Restrictions.eq("containerCode",containerTask.getContainerCode()));
-				List<CheckOutTask> listCheckOut=checkOutTaskMapper.findByCriteria(criteria);
-				if(listCheckOut.size()>1) {LogServices.logSysBusiness("一个托盘同时被两个盘点任务盘点！"); return;}
-				CheckOutTask checkOutTask=listCheckOut.get(0);
-				checkOutTask.setState("2");
-				checkOutTaskMapper.update(checkOutTask);
-               //转换出库托盘到入库托盘
-				Coordinate Coordinate=PrologLocationUtils.analysis(agvStorageLocations.get(0).getRcsPositionCode());
-				Coordinate.setLayer(4);
-				AgvStorageLocation agvStorageLocation=inBoundContainerService.getInBound(Coordinate);
-				containerTask.setTarget(agvStorageLocation.getRcsPositionCode());
-				containerTask.setTargetType(2);
-				containerTask.setTaskState(1);
-				//生成入库InBoundTask
-				InboundTask inboundTask=new InboundTask();
-				inboundTask.setTaskState(1);
-				inboundTask.setCreateTime(new Date());
-				inboundTask.setEmptyContainer(0);
-				inboundTask.setReBack(0); //不回传WMS
-				inboundTask.setTaskType(2);//入库任务
-				inboundTask.setBillNo(PrologStringUtils.newGUID());
-				inboundTask.setWmsPush(0);
-				inboundTask.setContainerCode(containerTask.getContainerCode());
-				inboundTask.setItemId(containerTask.getItemId());
-				inboundTask.setLotId(containerTask.getLotId());
-				inboundTask.setOwnerId(containerTask.getOwnerId());
-				inboundTask.setQty((float)containerTask.getQty());
-				if(containerTask.getSourceType()== 2) //Agv区域
-				{
-					String sourceAgv=containerTask.getSource();
-					Coordinate CoordinateAgv=PrologLocationUtils.analysis(sourceAgv);
-					inboundTask.setCeng(CoordinateAgv.getLayer()+"");
-				}
-				 inboundTaskMapper.save(inboundTask);
-
-			}
-
-
-
-			containerTaskMapper.update(containerTask);
-		}else {
-			//非agv的出库口到位
-			//清除托盘库库存
-			this.clearSxStore(containerCode);
-
-			containerTaskMapper.deleteById(containerTask.getId(), ContainerTask.class);
-		}
-	}
-
-	private void containerYiKu(String containerCode,int targetLayer,int targetX,int targetY,String address) throws Exception {
-
-		//检查是否存在点位
-		SxStoreLocation sxStoreLocation = getStoreLocation(targetLayer,targetX,targetY);
-
-		if(null != sxStoreLocation) {
-			//更新库存
-			List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerCode).getMap(),
-					SxStore.class);
-			if (sxStores.size() == 1) {
-				// 修改库存状态为已上架
-				//EIS移位完成
-				SxStore sxStore = sxStores.get(0);
-
-				if(null!= sxStore.getSourceLocationId()) {
-					//sxStoreTaskFinishService.moveTaskFinish(sxStore.getSourceLocationId());
-					SxStoreLocation sourceStoreLocation = sxStoreLocationMapper.findById(sxStore.getSourceLocationId(), SxStoreLocation.class);
-					//解锁原货位组升位锁
-					sxStoreLocationGroupMapper.updateMapById(sourceStoreLocation.getStoreLocationGroupId(), MapUtils.put("ascentLockState", 0).getMap(),
-							SxStoreLocationGroup.class);
-				}
-				sxStoreMapper.updateContainerGround(containerCode);
-				SxStoreLocationGroup sxStoreLocationGroup = sxStoreLocationGroupMapper
-						.findById(sxStoreLocation.getStoreLocationGroupId(), SxStoreLocationGroup.class);
-				int sxStoreLocationGroupId = sxStoreLocationGroup.getId();
-				sxStoreLocationGroupMapper.updateMapById(sxStoreLocationGroupId,
-						MapUtils.put("ascentLockState", 0).getMap(), SxStoreLocationGroup.class);
-				sxStoreTaskFinishService.computeLocation(sxStore);
-			}else {
-                LogServices.logSysBusiness(String.format("托盘%s库存存在多个",containerCode));
-				throw new Exception(String.format("托盘%s库存存在多个",containerCode));
-			}
-		}else {
-            LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("点位%s不是托盘库货位", address));
-		}
-	}
-    @Override
+     @Override
 	public SxStore rukuSxStoreUpdate(String containerNo) throws Exception{
        return rukuSxStore(containerNo);
 	}
-	//判断有无库存
-	private SxStore rukuSxStore(String containerNo) throws Exception {
-		List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(),
-				SxStore.class);
-		if (sxStores.size() == 1) {
-			SxStore sxStore = sxStores.get(0);
-			if(sxStore.getStoreState() != 10) {
+
+
+
+    //判断有无库存
+    @Override
+    public SxStore rukuSxStore(String containerNo) throws Exception {
+        List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(),
+                SxStore.class);
+        if (sxStores.size() == 1) {
+            SxStore sxStore = sxStores.get(0);
+            if(sxStore.getStoreState() != 10) {
                 LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("托盘%s入库库存状态异常%s", containerNo,String.valueOf(sxStore.getStoreState())));
-			}
-			//修改库存为已上架
-			sxStore.setStoreState(20);
-			sxStoreMapper.update(sxStore);
+            }
+            //修改库存为已上架
+            sxStore.setStoreState(20);
+            sxStoreMapper.update(sxStore);
 
-			Integer storeLocationId = sxStore.getStoreLocationId();
-			SxStoreLocation cksxStoreLocation = sxStoreLocationMapper.findById(storeLocationId, SxStoreLocation.class);
-			// 根据出库任务类型转换
-			sxStoreLocationMapper.updateMapById(storeLocationId, MapUtils.put("actualWeight", 0).getMap(),
-					SxStoreLocation.class);
-			sxStoreTaskFinishService.computeLocation(sxStore);
-			sxStoreLocationGroupMapper.updateMapById(cksxStoreLocation.getStoreLocationGroupId(),
-					MapUtils.put("ascentLockState", 0).getMap(), SxStoreLocationGroup.class);
+            Integer storeLocationId = sxStore.getStoreLocationId();
+            SxStoreLocation cksxStoreLocation = sxStoreLocationMapper.findById(storeLocationId, SxStoreLocation.class);
+            // 根据出库任务类型转换
+            sxStoreLocationMapper.updateMapById(storeLocationId, MapUtils.put("actualWeight", 0).getMap(),
+                    SxStoreLocation.class);
+            sxStoreTaskFinishService.computeLocation(sxStore);
+            sxStoreLocationGroupMapper.updateMapById(cksxStoreLocation.getStoreLocationGroupId(),
+                    MapUtils.put("ascentLockState", 0).getMap(), SxStoreLocationGroup.class);
 
-			return sxStore;
-		}else {
-			return null;
-		}
-	}
+            return sxStore;
+        }else {
+            return null;
+        }
+    }
 
-	//判断有无库存
-	private SxStore clearSxStore(String containerNo) throws Exception {
-		List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(),
-				SxStore.class);
-		if (sxStores.size() == 1) {
-			SxStore sxStore = sxStores.get(0);
-			Integer storeLocationId = sxStore.getStoreLocationId();
-			SxStoreLocation cksxStoreLocation = sxStoreLocationMapper.findById(storeLocationId, SxStoreLocation.class);
-			// 根据出库任务类型转换
-			sxStoreMapper.deleteByContainer(containerNo);
-			sxStoreLocationMapper.updateMapById(storeLocationId, MapUtils.put("actualWeight", 0).getMap(),
-					SxStoreLocation.class);
-			sxStoreTaskFinishService.computeLocation(sxStore);
-			sxStoreLocationGroupMapper.updateMapById(cksxStoreLocation.getStoreLocationGroupId(),
-					MapUtils.put("ascentLockState", 0).getMap(), SxStoreLocationGroup.class);
-
-			return sxStore;
-		}else {
-			return null;
-		}
-	}
-
-	private SxStoreLocation getStoreLocation(int layer,int x,int y) throws Exception {
+	@Override
+	public  SxStoreLocation getStoreLocation(int layer,int x,int y) {
 		List<SxStoreLocation> list = sxStoreLocationMapper.findByMap(MapUtils.put("layer", layer).put("x", x).put("y", y).getMap(), SxStoreLocation.class);
 		if(list.isEmpty()) {
 			return null;
 		}else if(list.size() > 1) {
-			throw new Exception("查询出多个货位");
+			LogServices.logSysBusiness("查询出多个货位");
+			return null;
 		}else {
 			return list.get(0);
 		}
