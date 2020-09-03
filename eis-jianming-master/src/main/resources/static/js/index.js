@@ -43,11 +43,7 @@ function inPut4Task() {
 }
 
 function inPut4Empty() {
-    if ($("#inputResult4").val() == "") {
-        jAlert("托盘号必须填写！", "警告");
-        return;
-    }
-    $.post("api/v1/master/view/inPut4Empty", {containerCode: $("#inputResult4").val()}, function (result) {
+    $.post("api/v1/master/view/inPut4Empty", {containerCode:"999999"}, function (result) {
         $("#inputResult").val(JSON.stringify(result));
     });
 
