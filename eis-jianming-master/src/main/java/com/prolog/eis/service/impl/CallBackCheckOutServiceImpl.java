@@ -1,9 +1,14 @@
 package com.prolog.eis.service.impl;
 
 import com.prolog.eis.dao.CheckOutTaskMapper;
+import com.prolog.eis.dao.OutBoundTaskDetailMapper;
+import com.prolog.eis.dao.OutBoundTaskMapper;
 import com.prolog.eis.logs.LogServices;
+import com.prolog.eis.model.wms.OutboundTask;
+import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.service.CallBackCheckOutService;
 import com.prolog.eis.service.EisCallbackService;
+import com.prolog.eis.service.impl.unbound.OutBoundContainerService;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +28,18 @@ public class CallBackCheckOutServiceImpl implements CallBackCheckOutService {
     private CheckOutTaskMapper checkOutTaskMapper;
     @Autowired
     private EisCallbackService eisCallbackService;
+    @Autowired
+    OutBoundTaskMapper outBoundTaskMapper;
+    @Autowired
+    OutBoundTaskDetailMapper outBoundTaskDetailMapper;
 
     @Autowired
     DataSourceTransactionManager dataSourceTransactionManager;
     @Autowired
     TransactionDefinition transactionDefinition;
+
+    @Autowired
+    OutBoundContainerService outBoundContainerService;
 
     public void updateCallBackCheckOut(String containerCode){
 
@@ -49,7 +61,15 @@ public class CallBackCheckOutServiceImpl implements CallBackCheckOutService {
        //盘点任务已经完成
        if(isEnd){  //写入重发表
            eisCallbackService.checkBoundReport(billNo);
-       }
+           //清除已经完成的盘点订单数据并加入历史
+           checkOutTaskMapper.deleteByMap(MapUtils.put("billNo",billNo).getMap(),CheckOutTask.class);
+           List<OutboundTask> list=outBoundTaskMapper.findByMap(MapUtils.put("billNo",billNo).getMap(), OutboundTask.class);
+           for(OutboundTask outboundTask:list){outBoundContainerService.deleteOutBoundAndInsertHistory(outboundTask);}
+           List<OutboundTaskDetail> listOutBoundDetails=outBoundTaskDetailMapper.findByMap(MapUtils.put("billNo",billNo).getMap(), OutboundTaskDetail.class);
+           outBoundContainerService.deleteBatchDetailAndInsertHistory(listOutBoundDetails);
+
+        }
+
 
 
 

@@ -2,7 +2,6 @@ package com.prolog.eis.controller.led;
 
 
 import cn.hutool.core.util.StrUtil;
-import onbon.bx05.Bx5GEnv;
 import onbon.bx05.Bx5GScreenClient;
 import onbon.bx05.Bx5GScreenProfile;
 import onbon.bx05.area.TextCaptionBxArea;
@@ -10,10 +9,7 @@ import onbon.bx05.area.page.TextBxPage;
 import onbon.bx05.file.ProgramBxFile;
 import onbon.bx05.utils.DisplayStyleFactory;
 import onbon.bx05.utils.TextBinary;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import java.awt.*;
 import java.io.IOException;
@@ -101,8 +97,7 @@ public class PrologLedController {
         p000.addArea(tArea4);
 
         if (p000.validate() != null) {
-            System.out.println("P000 out of range");
-            return;
+             return;
         }
         // 创建一个 list
         ArrayList<ProgramBxFile> plist = new ArrayList<ProgramBxFile>();
@@ -195,8 +190,7 @@ public class PrologLedController {
         p000.addArea(tArea4);
 
         if (p000.validate() != null) {
-            System.out.println("P000 out of range");
-            return;
+             return;
         }
         // 创建一个 list
         ArrayList<ProgramBxFile> plist = new ArrayList<ProgramBxFile>();
@@ -290,8 +284,7 @@ public class PrologLedController {
         p000.addArea(tArea4);
 
         if (p000.validate() != null) {
-            System.out.println("P000 out of range");
-            return;
+             return;
         }
         // 创建一个 list
         ArrayList<ProgramBxFile> plist = new ArrayList<ProgramBxFile>();

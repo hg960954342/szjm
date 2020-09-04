@@ -50,9 +50,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     @Autowired
     PickStainStrategy pickStainStrategy;
     @Autowired
-    private OutBoundTaskDetailHistoryMapper outBoundTaskDetailHistoryMapper;
-    @Autowired
-    private OutBoundTaskHistoryMapper outBoundTaskHistoryMapper;
+    OutBoundContainerService outBoundContainerService;
 
     /**
      * 移库出库
@@ -68,7 +66,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             Map<String, Object> sxStore = qcSxStoreMapper.findSxStore(outboundTaskDetail.getContainerCode(), outboundTaskDetail.getLotId(), outboundTaskDetail.getItemId());
             if (sxStore==null){
                 LogServices.logSysBusiness("单号："+outboundTaskDetail.getBillNo()+",托盘号:"+outboundTaskDetail.getContainerCode()+"正在出库中或库存中不存在！！！");
-                deleteDetailAndInsertHistory(outboundTaskDetail);
+                outBoundContainerService.deleteDetailAndInsertHistory(outboundTaskDetail);
                 continue;
             }
             //封装成托盘任务
@@ -112,52 +110,13 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             containerTaskDetailMapperMapper.save(containerTaskDetail);
 
             //转到历史记录
-            deleteDetailAndInsertHistory(outboundTaskDetail, containerTaskDetail);
+            outBoundContainerService.deleteDetailAndInsertHistory(outboundTaskDetail, containerTaskDetail);
 
         }
         //将移库出库订单转入到历史
-        deleteOutBoundAndInsertHistory(outboundTask);
+        outBoundContainerService.deleteOutBoundAndInsertHistory(outboundTask);
     }
 
-    /**
-     * 将以完成的移库移库出库订单转入历史表中
-     * @param outboundTask
-     */
-    private void deleteOutBoundAndInsertHistory(OutboundTask outboundTask) {
-        OutboundTaskHistory outboundTaskHistory = new OutboundTaskHistory();
-        outboundTask.setTaskState(1);
-        BeanUtils.copyProperties(outboundTask,outboundTaskHistory);
-        outBoundTaskHistoryMapper.save(outboundTaskHistory);
-        outBoundTaskMapper.deleteById(outboundTask.getId(),OutboundTask.class);
-    }
-
-    /**
-     * 将生成托盘任务的移库出库明细数据转入历史表中
-     * @param outboundTaskDetail
-     * @param containerTaskDetail
-     */
-    private void deleteDetailAndInsertHistory(OutboundTaskDetail outboundTaskDetail, ContainerTaskDetail containerTaskDetail) {
-        outboundTaskDetail.setFinishQty((float) containerTaskDetail.getQty());
-        outboundTaskDetail.setEndTime(new Date(System.currentTimeMillis()));
-        OutboundTaskDetailHistory outboundTaskDetailHistory = new OutboundTaskDetailHistory();
-        BeanUtils.copyProperties(outboundTaskDetail,outboundTaskDetailHistory);
-        outBoundTaskDetailHistoryMapper.save(outboundTaskDetailHistory);
-        outBoundTaskDetailMapper.deleteById(outboundTaskDetail.getId(),OutboundTaskDetail.class);
-    }
-
-    /**
-     * 将库存中不为已上架状态的移库出库明细数据转入历史表中
-     * @param outboundTaskDetail
-     * @param containerTaskDetail
-     */
-    private void deleteDetailAndInsertHistory(OutboundTaskDetail outboundTaskDetail) {
-        outboundTaskDetail.setFinishQty(0);
-        outboundTaskDetail.setEndTime(new Date(System.currentTimeMillis()));
-        OutboundTaskDetailHistory outboundTaskDetailHistory = new OutboundTaskDetailHistory();
-        BeanUtils.copyProperties(outboundTaskDetail,outboundTaskDetailHistory);
-        outBoundTaskDetailHistoryMapper.save(outboundTaskDetailHistory);
-        outBoundTaskDetailMapper.deleteById(outboundTaskDetail.getId(),OutboundTaskDetail.class);
-    }
 
     /**
      * 将移库出库明细转为托盘任务明细

@@ -55,8 +55,18 @@ public class TestServiceImpl implements TestService{
 		}
 	}
 
-
+	@Override
 	public Integer updateIsLockByLayer(int isLock,int layer){
 		return sxStoreLocationGroupMapper.updateIsLockByLayer(isLock,layer);
+	}
+
+	@Override
+	public List<SxStoreViewDto> getSxStoreViewDto(int layer){
+         return sxStoreMapper.getSxStoreViewDtoByLayer(layer);
+	}
+
+	@Override
+	public List<SxStoreViewSimpleDto> getSxStoreViewDtoSimpleDto(int layer){
+		return sxStoreMapper.getSxStoreViewDtoSimpleByLayer(layer);
 	}
 }

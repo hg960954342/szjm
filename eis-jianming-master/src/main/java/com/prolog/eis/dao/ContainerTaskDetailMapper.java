@@ -53,7 +53,7 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
             @Result(property = "details", column = "item_id=item_id,lot_id=lot_id,bill_no=bill_no",
                     many = @Many(select = "com.prolog.eis.dao.ContainerTaskDetailMapper.getCheckDetail")),
     })
-    @Select("select bill_no,\"2\" type,d.item_id,d.lot_id from outbound_task_detail d where d.bill_no = #{billNo} GROUP BY item_id,lot_id")
+    @Select("select bill_no,\"3\" type,d.item_id,d.lot_id from outbound_task_detail d where d.bill_no = #{billNo} GROUP BY item_id,lot_id")
     List<CheckOutResponse.DataBean> getCheckReportData(@Param("billNo") String billNo);
 
 
@@ -62,7 +62,7 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
             @Result(property = "ITEMID", column = "item_id"),
             @Result(property = "LOTID", column = "lot_id"),
             @Result(property = "CONTAINERCODE", column = "CONTAINER_NO"),
-            @Result(property = "qty", column = "QTY")
+            @Result(property = "QTY", column = "QTY")
     })
     @Select("select d.seqno,s.item_id,s.lot_id,s.CONTAINER_NO,s.WEIGHT qty from outbound_task_detail d ,sx_store s\n" +
             "where d.item_id=s.item_id and d.lot_id=s.lot_id and d.item_id=#{item_id} and d.lot_id=#{lot_id} and d.bill_no=#{bill_no}")

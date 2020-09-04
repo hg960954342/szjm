@@ -13,6 +13,36 @@ function deletestore() {
         ;
     })
 };
+function getSxStoreViewDto() {
+    if ($("#getLayer").val() == "") {
+        jAlert("楼层必须填写！", "警告");
+        return;
+    }
+    if ($("#getLayer").val()!="1"&&$("#getLayer").val()!="2"&&$("#getLayer").val()!="3") {
+        jAlert("楼层只能输入1,2,3！", "警告");
+        return;
+    }
+
+    $.post("api/v1/master/view/getSxStoreViewDto", {layer: $("#getLayer").val()}, function (result) {
+            $("#inputResult").val(JSON.stringify(result,null,2));
+        }
+    );
+};
+function getSxStoreViewDtoSimple() {
+    if ($("#getLayer").val() == "") {
+        jAlert("楼层必须填写！", "警告");
+        return;
+    }
+    if ($("#getLayer").val()!="1"&&$("#getLayer").val()!="2"&&$("#getLayer").val()!="3") {
+        jAlert("楼层只能输入1,2,3！", "警告");
+        return;
+    }
+
+    $.post("api/v1/master/view/getSxStoreViewDtoSimpleDto", {layer: $("#getLayer").val()}, function (result) {
+            $("#inputResult").val(JSON.stringify(result));
+        }
+    );
+};
 function queryPickStation(){
     $.post("api/v1/master/view/queryPickStation", {}, function (result) {
         $("#inputResult").val(JSON.stringify(result));

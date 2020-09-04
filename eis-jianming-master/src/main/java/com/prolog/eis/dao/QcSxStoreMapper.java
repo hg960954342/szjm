@@ -157,6 +157,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
 			"and g.IS_LOCK=0\n" +
 			"and a.STORE_STATE=20\n" +
+			"and g.ASCENT_LOCK_STATE =0 \n"+
 			"and a.item_id = #{itemId}\n" +
 			"and a.lot_id = #{lotId}\n" +
 			"and a.owner_id = #{ownerId}\n" +

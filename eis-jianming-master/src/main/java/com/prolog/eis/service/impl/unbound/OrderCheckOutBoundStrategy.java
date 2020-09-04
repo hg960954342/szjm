@@ -94,6 +94,8 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
            checkOutTask.setContainerCode(checkOutResult.getContainerCode());
            checkOutTask.setState("1");
            checkOutTaskMapper.save(checkOutTask);
+           outboundTask.setTaskState(1);
+           outBoundTaskMapper.update(outboundTask);
 
        }
 

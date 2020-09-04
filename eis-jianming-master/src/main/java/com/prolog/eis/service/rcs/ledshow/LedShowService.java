@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ public class LedShowService {
     ContainerTaskMapper containerTaskMapper;
     @Autowired
     SysParameMapper sysParameMapper;
+    @Resource
+    PrologLedController prologLedController;
 
 
     @Pointcut("execution(* com.prolog.eis.service.store.impl.MCSCallBackChuKu.container(String,int,int,int,String))&&args(containerCode,targetLayer,targetX,targetY,address)")
@@ -83,8 +86,7 @@ public class LedShowService {
                 LedShowDto ledShowDtoS = mapLedShows.get(containerTask.getSource());
                 LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
                 if (ledShow != null) {
-                    PrologLedController prologLedController = new PrologLedController();
-                    try {
+                     try {
                         prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), pQty, containerTask.getLotId(), rQty, ledShowDtoS.getPickStation());
                     } catch (Exception e) {
                         LogServices.logSys(e);
@@ -105,13 +107,13 @@ public class LedShowService {
      */
     @After("container( containerCode,targetLayer,targetX,targetY,address)")
     public void chukuLedShow(String containerCode, int targetLayer, int targetX, int targetY, String address) throws Exception {
-        ContainerTask containerTask = containerTaskMapper.selectStartTaskByContainerCode(containerCode);
+        ContainerTask containerTask = containerTaskMapper.queryContainerTaskByConcode(containerCode);
+        if(containerTask==null) return ;
         String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getTarget());
         LedShow ledShow = ledShowMapper.findById(3, LedShow.class);
 
         if (ledShow != null) {
-            PrologLedController prologLedController = new PrologLedController();
-            try {
+             try {
                 prologLedController.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), containerTask.getQty(), containerTask.getLotId(), station);
             } catch (Exception e) {
                 LogServices.logSys(e);
@@ -154,13 +156,13 @@ public class LedShowService {
         }
         //根据托盘码查询入库托盘任务
         ContainerTask containerTask = containerTaskMapper.queryContainerTaskByConcode(containerNo);
+        if(containerTask==null) return;
         //入库,回库显示led屏
         if (sourceLayer == 1) {
             LedShow ledShow = ledShowMapper.findById(1, LedShow.class);
 
             if (ledShow != null) {
-                PrologLedController prologLedController = new PrologLedController();
-                try {
+                 try {
                     prologLedController.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), weight, containerTask.getLotId(), state);
                 } catch (Exception e) {
                     LogServices.logSys(e);
@@ -171,8 +173,7 @@ public class LedShowService {
             LedShow ledShow = ledShowMapper.findById(2, LedShow.class);
 
             if (ledShow != null) {
-                PrologLedController prologLedController = new PrologLedController();
-                try {
+                 try {
                     prologLedController.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), weight, containerTask.getLotId(), state);
                 } catch (Exception e) {
                     LogServices.logSys(e);

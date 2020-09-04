@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Table("sys_log_business")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class SysBusinessLog {
 
   @Id
@@ -47,5 +44,59 @@ public class SysBusinessLog {
   @ApiModelProperty("创建时间")
   private Date createTime;
 
+  public int getId() {
+    return id;
+  }
 
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getClassName() {
+    return className;
+  }
+
+  public void setClassName(String className) {
+    this.className = className;
+  }
+
+  public String getClassSimpleName() {
+    return classSimpleName;
+  }
+
+  public void setClassSimpleName(String classSimpleName) {
+    this.classSimpleName = classSimpleName;
+  }
+
+  public String getClassMethod() {
+    return classMethod;
+  }
+
+  public void setClassMethod(String classMethod) {
+    this.classMethod = classMethod;
+  }
+
+  public String getLineNumber() {
+    return lineNumber;
+  }
+
+  public void setLineNumber(String lineNumber) {
+    this.lineNumber = lineNumber;
+  }
+
+  public String getError() {
+    return error;
+  }
+
+  public void setError(String error) {
+    this.error = error;
+  }
+
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
 }

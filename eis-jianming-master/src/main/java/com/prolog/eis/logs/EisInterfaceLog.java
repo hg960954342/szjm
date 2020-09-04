@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Table("eis_log_interface")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class EisInterfaceLog {
 
   @Id
@@ -43,4 +40,51 @@ public class EisInterfaceLog {
   private Date createTime;
 
 
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public String getParams() {
+    return params;
+  }
+
+  public void setParams(String params) {
+    this.params = params;
+  }
+
+  public String getError() {
+    return error;
+  }
+
+  public void setError(String error) {
+    this.error = error;
+  }
+
+  public String getResult() {
+    return result;
+  }
+
+  public void setResult(String result) {
+    this.result = result;
+  }
+
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
 }

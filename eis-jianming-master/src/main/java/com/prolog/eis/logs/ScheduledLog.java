@@ -16,9 +16,6 @@ import java.util.Date;
  * @date 2020/8/26 14:25
  */
 @Table("scheduled_log")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ScheduledLog {
     @Id
     @ApiModelProperty("主键")
@@ -41,6 +38,51 @@ public class ScheduledLog {
     @ApiModelProperty("结束时间")
     private Date endTime;
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public String getRunTime() {
+        return runTime;
+    }
+
+    public void setRunTime(String runTime) {
+        this.runTime = runTime;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 }

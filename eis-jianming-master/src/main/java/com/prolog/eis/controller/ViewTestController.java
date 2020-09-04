@@ -157,4 +157,18 @@ public class ViewTestController {
        return defaultOutBoundPickCodeStrategy.getAvailablePickStation();
     }
 
+    //查询指定layer库存
+    @PostMapping("/getSxStoreViewDto")
+    @ResponseBody
+    public Object getSxStoreViewDto(@RequestParam("layer") Integer layer){
+        return testService.getSxStoreViewDto(layer);
+    }
+
+    //查询指定layer库存
+    @PostMapping("/getSxStoreViewDtoSimpleDto")
+    @ResponseBody
+    public Object getSxStoreViewDtoSimpleDto(@RequestParam("layer") Integer layer){
+        return testService.getSxStoreViewDtoSimpleDto(layer);
+    }
+
 }

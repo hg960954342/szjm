@@ -6,11 +6,10 @@ import com.prolog.eis.dto.sxk.SxStoreGroupDto;
 import com.prolog.eis.dto.sxk.SxStoreLock;
 import com.prolog.eis.dto.sxk.SxStoreLocksDto;
 import com.prolog.eis.model.sxk.SxStore;
+import com.prolog.eis.service.test.impl.SxStoreViewDto;
+import com.prolog.eis.service.test.impl.SxStoreViewSimpleDto;
 import com.prolog.framework.dao.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -127,4 +126,37 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
 			"where s.TASK_TYPE = -1 and ta.id is null\n" + 
 			"order by l.dept_num")
 	List<SxStoreDto> getEmptyContainerCode();
+
+
+	@Results(id="SxStore" , value= {
+			@Result(property = "x",  column = "x"),
+			@Result(property = "y",  column = "y"),
+			@Result(property = "containerNo",  column = "CONTAINER_NO"),
+			@Result(property = "uniqueString",  column = "unique_string"),
+			@Result(property = "qty",  column = "qty")
+	})
+	@Select("select l.x,l.y,concat(a.item_id,',',a.lot_id,',',a.owner_id) unique_string,a.CONTAINER_NO,a.qty from sx_store a\n" +
+			"\t\t\t      INNER JOIN sx_store_location l ON a.store_location_id = l.id \n" +
+			"\t\t\t INNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"\t\t\t and g.IS_LOCK=0\n" +
+			"\t\t\t and a.STORE_STATE=20\n" +
+			"\t\t\t and g.ASCENT_LOCK_STATE =0\n" +
+			"\t\t\t and l.layer=#{layer} \n" +
+			"\t\t ORDER BY dept_num asc,qty asc")
+	List<SxStoreViewDto> getSxStoreViewDtoByLayer(@Param("layer")int layer);
+
+	@Results(id="SxStoreViewSimpleDto" , value= {
+			@Result(property = "x",  column = "x"),
+			@Result(property = "y",  column = "y"),
+			@Result(property = "containerNo",  column = "CONTAINER_NO")
+ 	})
+	@Select("select l.x,l.y,a.CONTAINER_NO from sx_store a\n" +
+			"\t\t\t      INNER JOIN sx_store_location l ON a.store_location_id = l.id \n" +
+			"\t\t\t INNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"\t\t\t and g.IS_LOCK=0\n" +
+			"\t\t\t and a.STORE_STATE=20\n" +
+			"\t\t\t and g.ASCENT_LOCK_STATE =0\n" +
+			"\t\t\t and l.layer=#{layer} \n" +
+			"\t\t ORDER BY dept_num asc,qty asc")
+	List<SxStoreViewSimpleDto> getSxStoreViewDtoSimpleByLayer(@Param("layer")int layer);
 }

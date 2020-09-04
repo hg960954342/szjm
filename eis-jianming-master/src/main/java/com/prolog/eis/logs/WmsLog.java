@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Table("wms_log")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class WmsLog {
 
   @Id
@@ -42,5 +39,51 @@ public class WmsLog {
   @ApiModelProperty("创建时间")
   private Date createTime;
 
+  public int getId() {
+    return id;
+  }
 
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getInterfaceAddress() {
+    return interfaceAddress;
+  }
+
+  public void setInterfaceAddress(String interfaceAddress) {
+    this.interfaceAddress = interfaceAddress;
+  }
+
+  public String getParams() {
+    return params;
+  }
+
+  public void setParams(String params) {
+    this.params = params;
+  }
+
+  public String getError() {
+    return error;
+  }
+
+  public void setError(String error) {
+    this.error = error;
+  }
+
+  public String getResult() {
+    return result;
+  }
+
+  public void setResult(String result) {
+    this.result = result;
+  }
+
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
 }

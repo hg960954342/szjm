@@ -82,6 +82,7 @@ public class MCSCallBackChuKu implements MCSCallBack {
         if(null == containerTask) {
             //没有正在从托盘库内正在出库的任务
             LogServices.logSysBusiness("McsInterfaceCallbackError"+ String.format("托盘%s无容器出库任务", containerCode));
+           return;
         }
 
         PortInfo portInfo = portInfos.get(0);
