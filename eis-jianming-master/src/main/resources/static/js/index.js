@@ -1,4 +1,15 @@
-function deletestore() {
+
+function startOnchange(value){
+     $("#startP").val(value);
+};
+
+function endOnchange(value){
+     $("#endP").val(value);
+};
+
+
+
+    function deletestore() {
     if ($("#deletestore").val() == "") {
         jAlert("托盘号必须填写！", "警告");
         return;
@@ -112,11 +123,11 @@ function updateInBound() {
 
 function agvMove() {
     if ($("#startP").val() == "") {
-        jAlert("起点必须填写！", "警告");
+        jAlert("起点必须填写或选择！", "警告");
         return;
     }
     if ($("#endP").val() == "") {
-        jAlert("终点必须填写！", "警告");
+        jAlert("起点必须填写或选择！", "警告");
         return;
     }
 
