@@ -2,9 +2,10 @@ package com.prolog.eis.dao;
 
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
+import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
 
-public interface OutboundDataMapper {
+public interface OutboundDataMapper extends BaseMapper {
 
 
     @Insert("insert into outbound_task (bill_no,wms_push,reback,empty_container,task_type,task_state,sfreq,pick_code,owner_id,create_time) " +

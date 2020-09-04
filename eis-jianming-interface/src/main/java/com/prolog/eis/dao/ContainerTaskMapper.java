@@ -10,4 +10,7 @@ import java.util.Map;
 
 public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
 
+    @Select("select count(*) from container_task where container_code =#{containerCode}")
+    int findByContainerCode(String containerCode);
+
 }

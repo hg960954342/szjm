@@ -1,6 +1,9 @@
 package com.prolog.eis.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.prolog.eis.dao.ContainerTaskMapper;
+import com.prolog.eis.dao.SxStockTaskMapper;
+import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.CheckContainerTaskService;
 import com.prolog.eis.service.EisIdempotentService;
@@ -32,6 +35,12 @@ public class OutboundDataController {
 
     @Autowired
     private CheckContainerTaskService checkContainerTaskService;
+
+    @Autowired
+    private ContainerTaskMapper containerTaskMapper;
+
+    @Autowired
+    private SxStockTaskMapper sxStockTaskMapper;
 
     /**
      * 业务出库 推送eis
@@ -507,6 +516,105 @@ public class OutboundDataController {
 
             return resultStr;
         }
+    }
+
+    /**
+     * 库存盘点调整 推送eis
+     * @param str json串
+     * @return JsonResult json串
+     * @throws Exception
+     */
+    @ApiOperation(value = "库存盘点调整任务数据生成", notes = "库存盘点调整任务数据生成")
+    @PostMapping("/checkstock")
+
+
+    public JsonResult checkStock(@RequestBody String str) throws Exception {
+
+        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+
+        try {
+            FileLogHelper.WriteLog("WmsCheckStock", "WMS->EIS库存盘点调整" + str);
+            CheckStockDto checkStockDto = helper.getObject(CheckStockDto.class);
+
+            String messageId = checkStockDto.getMessageId();
+
+            List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageId);
+
+            JsonResult rejson = new JsonResult();
+            String string = "";
+
+            if (wmsEisIdempotents.size() != 0) {
+                string = wmsEisIdempotents.get(0).getRejson();
+                PrologApiJsonHelper helper1 = PrologApiJsonHelper.createHelper(string);
+                rejson = helper1.getObject(JsonResult.class);
+                return rejson;
+            } else {
+                List<CheckStock> data = checkStockDto.getData();
+                for (CheckStock datum : data) {
+                        try {
+                            String containerCode = datum.getContainerCode();
+                            String ownerId = datum.getOwnerId();
+                            String itemId = datum.getItemId();
+                            String lotId = datum.getLotId();
+                            int count = containerTaskMapper.findByContainerCode(containerCode);
+                            SxStore sxStore = sxStockTaskMapper.queryByCode(containerCode);
+                            if(count==0 && ownerId.equals(sxStore.getOwnerId()) && itemId.equals(sxStore.getItemId()) && lotId.equals(sxStore.getLotId())){
+
+                                sxStockTaskMapper.updateQty(datum.getContainerCode(),datum.getDiffQty());
+                            }else {
+                                rejson.setCode("-1");
+                                rejson.setMessage("当前托盘有任务或指定信息不正确");
+                                FileLogHelper.WriteLog("WmsCheckStockError", "WMS->EIS库存盘点调整失败" + rejson);
+                                return rejson;
+                            }
+
+                        } catch (Exception e) {
+                            rejson.setCode("-1");
+                            rejson.setMessage("false");
+
+                            WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
+                            wmsEisIdempotent.setMessageId(messageId);
+                            long l = System.currentTimeMillis();
+                            Date t = new Date(l);
+                            java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
+                            wmsEisIdempotent.setLocDate(ltime);
+
+                            string = JSONObject.toJSONString(rejson);
+                            wmsEisIdempotent.setRejson(string);
+                            eisIdempotentService.insertReport(wmsEisIdempotent);
+
+                            FileLogHelper.WriteLog("WmsCheckStock", "WMS->EIS库存盘点调整返回" + rejson);
+
+                            e.printStackTrace();
+                            return rejson;
+                        }
+                }
+                rejson.setCode("0");
+                rejson.setMessage("success");
+                WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
+                wmsEisIdempotent.setMessageId(messageId);
+                long l = System.currentTimeMillis();
+                Date t = new Date(l);
+                java.sql.Timestamp ltime = new java.sql.Timestamp(t.getTime());
+                wmsEisIdempotent.setLocDate(ltime);
+                string = JSONObject.toJSONString(rejson);
+                wmsEisIdempotent.setRejson(string);
+                eisIdempotentService.insertReport(wmsEisIdempotent);
+
+                FileLogHelper.WriteLog("WmsCheckStock", "WMS->EIS库存盘点调整返回" + rejson);
+                return rejson;
+            }
+
+        } catch (Exception e) {
+            FileLogHelper.WriteLog("WmsCheckStockError", "库存盘点调整异常，错误信息：\n" + e.toString());
+            JsonResult resultStr = new JsonResult();
+            resultStr.setCode("-1");
+            resultStr.setMessage("false");
+            FileLogHelper.WriteLog("WmsCheckStock", "WMS->EIS返回" + resultStr);
+
+            return resultStr;
+        }
+
     }
 
 }
