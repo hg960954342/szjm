@@ -27,7 +27,7 @@ public class LedShowDto {
       map.put("057200AB048300",new LedShowDto(4,"一站"));
       map.put("054320AB048300",new LedShowDto(5,"二站"));
       map.put("051440AB047200",new LedShowDto(6,"三站"));
-      map.put("050000AB051200",new LedShowDto(6,"四站"));
+      map.put("050000AB052600",new LedShowDto(6,"四站"));
       return map;
 
 
