@@ -87,7 +87,7 @@ public class LedShowService {
                 LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
                 if (ledShow != null) {
                      try {
-                        prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), pQty, containerTask.getLotId(), rQty, ledShowDtoS.getPickStation());
+                        prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), pQty, containerTask.getLotId(), rQty, ledShowDtoS.getPickStation());
                     } catch (Exception e) {
                         LogServices.logSys(e);
                     }
@@ -114,7 +114,7 @@ public class LedShowService {
 
         if (ledShow != null) {
              try {
-                prologLedController.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), containerTask.getQty(), containerTask.getLotId(), station);
+                prologLedController.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), containerTask.getQty(), containerTask.getLotId(), station);
             } catch (Exception e) {
                 LogServices.logSys(e);
             }
@@ -163,7 +163,7 @@ public class LedShowService {
 
             if (ledShow != null) {
                  try {
-                    prologLedController.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), weight, containerTask.getLotId(), state);
+                    prologLedController.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), weight, containerTask.getLotId(), state);
                 } catch (Exception e) {
                     LogServices.logSys(e);
                 }
@@ -174,7 +174,7 @@ public class LedShowService {
 
             if (ledShow != null) {
                  try {
-                    prologLedController.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName(), weight, containerTask.getLotId(), state);
+                    prologLedController.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), weight, containerTask.getLotId(), state);
                 } catch (Exception e) {
                     LogServices.logSys(e);
                 }
