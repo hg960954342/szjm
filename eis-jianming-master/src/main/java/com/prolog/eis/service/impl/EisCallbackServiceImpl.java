@@ -181,7 +181,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
     private String inBoundReportData(InboundTask inboundTask) {
 
         try {
-            String[] str = {"id", "wmsPush", "reBack", "emptyContainer", "ceng", "agvLoc", "lotId", "taskState", "qty", "createTime", "startTime", "rukuTime", "endTime", "class"};
+            String[] str = {"id", "wmsPush", "reBack", "emptyContainer", "ceng", "agvLoc", "lotId", "taskState","itemName", "qty", "createTime", "startTime", "rukuTime", "endTime", "class"};
             NameAndSimplePropertyPreFilter nameAndSimplePropertyPreFilter = new NameAndSimplePropertyPreFilter();
             nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
             Map describe = BeanUtils.describe(inboundTask);

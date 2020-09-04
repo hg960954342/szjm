@@ -254,7 +254,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		inboundTask.setReBack(0);
 		inboundTask.setEmptyContainer(1);
 		inboundTask.setContainerCode(emptyContainNo);
-		inboundTask.setTaskType(0);
+		inboundTask.setTaskType(60);
 		inboundTask.setOwnerId("空托");
 		inboundTask.setItemId("空托");
 		inboundTask.setLotId("空托");
