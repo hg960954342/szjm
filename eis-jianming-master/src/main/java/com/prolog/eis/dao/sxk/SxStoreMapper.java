@@ -7,6 +7,7 @@ import com.prolog.eis.dto.sxk.SxStoreLock;
 import com.prolog.eis.dto.sxk.SxStoreLocksDto;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.service.test.impl.SxStoreViewDto;
+import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.service.test.impl.SxStoreViewSimpleDto;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
@@ -59,7 +60,7 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
     
     /**
      * 查询锁定状态
-     * @param containerNo
+     * @param
      * @return
      */
     @Select("select\n" + 
@@ -159,4 +160,97 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
 			"\t\t\t and l.layer=#{layer} \n" +
 			"\t\t ORDER BY dept_num asc,qty asc")
 	List<SxStoreViewSimpleDto> getSxStoreViewDtoSimpleByLayer(@Param("layer")int layer);
+
+
+
+
+
+
+	@Results(id="SxStoreViewMapDto" , value= {
+			@Result(property = "storeState20",  column = "storeState20"),
+			@Result(property = "storeState10",  column = "storeState10"),
+			@Result(property = "storeState30",  column = "storeState30"),
+			@Result(property = "storeState50",  column = "storeState50")
+	})
+	@Select("SELECT\n" +
+			"\t(\n" +
+			"\tSELECT\n" +
+			"\t\tCONCAT( '[', GROUP_CONCAT( b.unique_string ), ']' ) storeState20 \n" +
+			"\tFROM\n" +
+			"\t\t(\n" +
+			"\t\tSELECT\n" +
+			"\t\t\tconcat( '[', l.x, ',', l.y, ']' ) unique_string \n" +
+			"\t\tFROM\n" +
+			"\t\t\tsx_store a\n" +
+			"\t\t\tINNER JOIN sx_store_location l ON a.store_location_id = l.id\n" +
+			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"\t\t\tAND g.IS_LOCK = 0 \n" +
+			"\t\t\tAND a.STORE_STATE = 20 \n" +
+			"\t\t\tAND g.ASCENT_LOCK_STATE = 0 \n" +
+			"\t\t\tAND l.layer = #{layer} \n" +
+			"\t\t) b \n" +
+			"\t) storeState20,\n" +
+			"\t(\n" +
+			"\tSELECT\n" +
+			"\t\tCONCAT( '[', GROUP_CONCAT( b.unique_string ), ']' ) storeState10 \n" +
+			"\tFROM\n" +
+			"\t\t(\n" +
+			"\t\tSELECT\n" +
+			"\t\t\tconcat( '[', l.x, ',', l.y, ']' ) unique_string \n" +
+			"\t\tFROM\n" +
+			"\t\t\tsx_store a\n" +
+			"\t\t\tINNER JOIN sx_store_location l ON a.store_location_id = l.id\n" +
+			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"\t\t\tAND g.IS_LOCK = 0 \n" +
+			"\t\t\tAND a.STORE_STATE = 10 \n" +
+			"\t\t\tAND g.ASCENT_LOCK_STATE = 0 \n" +
+			"\t\t\tAND l.layer = #{layer} \n" +
+			"\t\t) b \n" +
+			"\t) storeState10,\n" +
+			"\t(\n" +
+			"\tSELECT\n" +
+			"\t\tCONCAT( '[', GROUP_CONCAT( b.unique_string ), ']' ) storeState30 \n" +
+			"\tFROM\n" +
+			"\t\t(\n" +
+			"\t\tSELECT\n" +
+			"\t\t\tconcat( '[', l.x, ',', l.y, ']' ) unique_string \n" +
+			"\t\tFROM\n" +
+			"\t\t\tsx_store a\n" +
+			"\t\t\tINNER JOIN sx_store_location l ON a.store_location_id = l.id\n" +
+			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"\t\t\tAND g.IS_LOCK = 0 \n" +
+			"\t\t\tAND a.STORE_STATE = 30 \n" +
+			"\t\t\tAND g.ASCENT_LOCK_STATE = 0 \n" +
+			"\t\t\tAND l.layer = #{layer} \n" +
+			"\t\t) b \n" +
+			"\t) storeState30,\n" +
+			"\t(\n" +
+			"\tSELECT\n" +
+			"\t\tCONCAT( '[', GROUP_CONCAT( b.unique_string ), ']' ) storeState50 \n" +
+			"\tFROM\n" +
+			"\t\t(\n" +
+			"\t\tSELECT\n" +
+			"\t\t\tconcat( '[', l.x, ',', l.y, ']' ) unique_string \n" +
+			"\t\tFROM\n" +
+			"\t\t\tsx_store a\n" +
+			"\t\t\tINNER JOIN sx_store_location l ON a.store_location_id = l.id\n" +
+			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"\t\t\tAND g.IS_LOCK = 0 \n" +
+			"\t\t\tAND a.STORE_STATE > 30 \n" +
+			"\t\t\tAND g.ASCENT_LOCK_STATE = 0 \n" +
+			"\t\t\tAND l.layer = #{layer} \n" +
+			"\t\t) b \n" +
+			"\t) storeState50 \n" +
+			"FROM\n" +
+			"\tDUAL;")
+	SxStoreViewMapDto getSxStoreViewMapDtoByLayer(@Param("layer")int layer);
+
+
+
+
+
+
+
+
+
 }

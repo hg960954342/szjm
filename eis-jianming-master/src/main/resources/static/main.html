@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>库存监控</title>
+    <link class="include" rel="stylesheet" type="text/css" href="css/jquery.jqplot.min.css"/>
+    <script class="include" type="text/javascript" src="js/jquery.js"></script>
+    <script src="js/jquery.alerts.js"></script>
+    <script src="js/jquery.ui.draggable.js"></script>
+    <link href="css/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="css/index.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="输入层号" id="getEisKuchunLayer">
+</div>
+<button  id="eisKunChunB" class="ant-btn ant-btn-red">动态监控库存</button>
+<div id="kucun" style="height:580px; width:100%;">
+    <div class="scrollbox">
+        正在加载中。。。
+    </div>
+</div>
+<script type="text/javascript" class="code">
+
+    $(document).ready(
+        function () {
+            $("#eisKunChunB").attr("disabled","true");
+            $("#getEisKuchunLayer").val(1);
+            $("#eisKunChunB").click(function(){
+                if ($("#getEisKuchunLayer").val() == "") {
+                    jAlert("层号必须填写！", "警告");
+                    return;
+                }
+                if ($("#getEisKuchunLayer").val() != 1&&$("#getEisKuchunLayer").val() != 2&&$("#getEisKuchunLayer").val() != 3) {
+                    jAlert("层号必须是1,2,3层！", "警告");
+                    return;
+                }
+                Renderer();
+
+            });
+
+            var eiskuncun;
+            function ajaxDataRenderer(url) {
+                var ret = [];
+                $.ajax({
+                    async: false,
+                    type: 'POST',
+                    url: url,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    success: function (data) {
+                        $(".scrollbox").remove();
+                        $("#eisKunChunB").removeAttr("disabled");
+                        if(data){
+                            if (data.storeState20 != null) ret.push(eval(data.storeState20));
+                            if (data.storeState10 != null) ret.push(eval(data.storeState10));
+                            if (data.storeState30 != null) ret.push(eval(data.storeState30));
+                            if (data.storeState50 != null) ret.push(eval(data.storeState50));
+                        }else{
+                            ret.push(eval("[[0,0]]"));
+                        }
+
+
+                    }
+                });
+                return ret;
+            }
+
+            function Renderer() {
+
+                if (eiskuncun) {
+                    $("#kucun").unbind();
+                    $("#kucun").empty();
+                    eiskuncun.replot({clear: true});
+                }
+               var layer= $("#getEisKuchunLayer").val();
+                var url = "api/v1/master/view/getSxStoreViewMap?layer="+layer;
+                eiskuncun = $.jqplot('kucun', url, {
+                    dataRenderer: ajaxDataRenderer,
+                    grid: {
+                        drawBorder: false,
+                        shadow: false,
+                        background: '#FFFFFF',
+                        shadow: true,
+                    },
+                    highlighter: {show: true, showTooltip: true, tooltipLocation: 'nw'},
+                    seriesDefaults: {
+                        shadowAlpha: 0.1,
+                        shadowDepth: 2,
+                        fillToZero: true,
+                        shadow: true
+                    },
+                    title: {
+
+                        show: false,//设置当前图的标题是否显示
+                    },
+                    series: [
+                        {
+                            color: 'blue',
+                            label: '已上架',
+                            showMarker: true,
+                            showLine: false,
+                            markerOptions: {
+                                style: 'filledCircle',
+                                size: 8
+                            },
+                            rendererOptions: {
+                                smooth: true
+                            }
+                        },
+                        {
+                            color: 'red',
+                            label: '入库中',
+                            showMarker: true,
+                            showLine: false,
+                            rendererOptions: {
+                                smooth: true,
+                            },
+                            markerOptions: {
+                                style: 'filledSquare',
+                                size: 8
+                            },
+                        },
+                        {
+                            color: 'yellow',
+                            label: '出库中',
+                            showMarker: true,
+                            showLine: false,
+                            rendererOptions: {
+                                smooth: true,
+                            },
+                            markerOptions: {
+                                style: 'filledSquare',
+                                size: 8
+                            },
+                        },
+                        {
+                            color: 'grey',
+                            label: '其他',
+                            showMarker: true,
+                            showLine: false,
+                            rendererOptions: {
+                                smooth: true,
+                            },
+                            markerOptions: {
+                                style: 'filledSquare',
+                                size: 8
+                            },
+                        }
+                    ],
+                    legend: {
+                        show: true,
+                        location: 'ne',
+                        xoffset: 1,
+                        yoffset: 1,
+                        background: 'red',
+                        textColor: ''
+                    },
+                    axes: {
+                        xaxis: {
+                            pad: 1,
+                            min: 10,
+                            max: 58,
+                            numberTicks: 49,
+                            tickOptions: {
+                                showGridline: true,
+                                showMark: true,
+                                show: true
+                            }
+                        },
+                        yaxis: {
+                            pad: 1,
+                            min: 10,
+                            max: 55,
+                            numberTicks: 46,
+
+                            tickOptions: {
+                                showGridline: true,
+                                showMark: true,
+                                show: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            setInterval(Renderer, 10000);
+
+
+        });
+</script>
+<script class="include" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+<script class="include" type="text/javascript" src="js/jqplot.highlighter.js"></script>
+</body>
+</html>

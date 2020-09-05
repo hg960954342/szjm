@@ -69,4 +69,10 @@ public class TestServiceImpl implements TestService{
 	public List<SxStoreViewSimpleDto> getSxStoreViewDtoSimpleDto(int layer){
 		return sxStoreMapper.getSxStoreViewDtoSimpleByLayer(layer);
 	}
+
+
+	@Override
+	public SxStoreViewMapDto getSxStoreViewMapDtoByLayer(int layer){
+		return sxStoreMapper.getSxStoreViewMapDtoByLayer(layer);
+	}
 }

@@ -1,6 +1,7 @@
 package com.prolog.eis.service.test;
 
 import com.prolog.eis.service.test.impl.SxStoreViewDto;
+import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.service.test.impl.SxStoreViewSimpleDto;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface TestService {
 	 Integer updateIsLockByLayer(int isLock,int layer);
 	 List<SxStoreViewDto> getSxStoreViewDto(int layer);
 	 List<SxStoreViewSimpleDto> getSxStoreViewDtoSimpleDto(int layer);
+	SxStoreViewMapDto getSxStoreViewMapDtoByLayer(int layer);
 }

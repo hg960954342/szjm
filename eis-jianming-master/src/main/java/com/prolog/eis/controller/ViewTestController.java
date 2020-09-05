@@ -10,6 +10,7 @@ import com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
+import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
@@ -169,6 +170,13 @@ public class ViewTestController {
     @ResponseBody
     public Object getSxStoreViewDtoSimpleDto(@RequestParam("layer") Integer layer){
         return testService.getSxStoreViewDtoSimpleDto(layer);
+    }
+    //查询指定layer库存监控
+    @PostMapping("/getSxStoreViewMap")
+    @ResponseBody
+    public Object getSxStoreViewMapDtoByLayer(@RequestParam("layer") Integer layer){
+        SxStoreViewMapDto sxStoreViewMapDto=testService.getSxStoreViewMapDtoByLayer(layer);
+           return sxStoreViewMapDto;
     }
 
 }
