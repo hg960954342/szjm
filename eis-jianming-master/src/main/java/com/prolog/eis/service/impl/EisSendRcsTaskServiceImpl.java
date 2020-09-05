@@ -29,11 +29,11 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
     private AgvStorageLocationMapper agvStorageLocationMapper;
     @Autowired
     EisSendRcsTaskServiceSend eisSendRcsTaskServiceSend;
-    public void updateAgvTask( List<ResultAgvDto> list){
+    public void updateAgvTask(ResultAgvDto rsultAgvDto){
 
-        for(ResultAgvDto resultAgvDto:list){
-            ContainerTask containerTask=resultAgvDto.getContainerTask();
-            RcsRequestResultDto  rcsRequestResultDto =resultAgvDto.getRcsRequestResultDto();
+//        for(ResultAgvDto resultAgvDto:list){
+            ContainerTask containerTask=rsultAgvDto.getContainerTask();
+            RcsRequestResultDto  rcsRequestResultDto =rsultAgvDto.getRcsRequestResultDto();
             String restCode = rcsRequestResultDto.getCode();
 
             if (restCode.equals("0")) {
@@ -57,7 +57,7 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
                 LogServices.logSysBusiness(resultMsg);
 
             }
-        }
+//        }
 
     }
 

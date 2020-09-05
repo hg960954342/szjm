@@ -30,7 +30,6 @@ public class EisSendRcsTaskServiceSend   {
 
 
      public void sendTask(List<ContainerTask> containerTasks) {
-         List<ResultAgvDto> list=new ArrayList<ResultAgvDto>();
         for (ContainerTask containerTask : containerTasks) {
             //获取参数
             String taskCode = containerTask.getTaskCode();
@@ -66,8 +65,7 @@ public class EisSendRcsTaskServiceSend   {
 
                     rsultAgvDto.setRcsRequestResultDto(rcsRequestResultDto);
                     rsultAgvDto.setContainerTask(containerTask);
-                    list.add(rsultAgvDto);
-
+                    eisSendRcsTaskService.updateAgvTask(rsultAgvDto);
                 } catch (Exception e) {
                     //任务下发失败
                     //String resultMsg = "EIS->RCS [RCSInterface] 任务下发 rcs 失败：请求rcs失败";
@@ -77,7 +75,7 @@ public class EisSendRcsTaskServiceSend   {
                 }
             }
         }
-         eisSendRcsTaskService.updateAgvTask(list);
+
 
 
     }
