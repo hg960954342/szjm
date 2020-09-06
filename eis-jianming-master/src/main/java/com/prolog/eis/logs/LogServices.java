@@ -1,16 +1,32 @@
 package com.prolog.eis.logs;
 
+import com.alibaba.druid.sql.builder.SQLBuilder;
+import com.alibaba.druid.sql.builder.impl.SQLBuilderImpl;
 import com.prolog.eis.dao.*;
+import com.prolog.eis.util.BeanUtil;
+import com.prolog.framework.dao.helper.SqlFactory;
 import org.apache.commons.lang.StringUtils;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.JdbcTransactionObjectSupport;
+import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.Date;
 
 @Component
 public class LogServices {
@@ -36,10 +52,8 @@ public class LogServices {
 
     private static LogServices logServices;
 
-    @Autowired
-    DataSourceTransactionManager dataSourceTransactionManager;
-    @Autowired
-    TransactionDefinition transactionDefinition;
+
+
 
     @PostConstruct
     public void init() {
@@ -51,9 +65,8 @@ public class LogServices {
         logServices.logSysBusinessMapper=this.logSysBusinessMapper;
         logServices.wmsLogMapper=this.wmsLogMapper;
         logServices.scheduledLogMapper=this.scheduledLogMapper;
-        logServices.dataSourceTransactionManager=this.dataSourceTransactionManager;
-        logServices.transactionDefinition=this.transactionDefinition;
-    }
+
+     }
 
     /**
      * 记录EIS->MCS接口日志
@@ -62,16 +75,16 @@ public class LogServices {
      * @param error
      * @param result
      */
+
     public static void log(String postUrl,String params,String error,String result ){
-        TransactionStatus transactionStatus = logServices.dataSourceTransactionManager.getTransaction(logServices.transactionDefinition);
-        McsLog mcsLog=new McsLog();
+           McsLog mcsLog=new McsLog();
            mcsLog.setError(spliitString(error));
            mcsLog.setInterfaceAddress(postUrl);
            mcsLog.setResult(spliitString(result));
            mcsLog.setParams(spliitString(params));
            mcsLog.setCreateTime(new java.util.Date());
            logServices.logMapper.save(mcsLog);
-           logServices.dataSourceTransactionManager.commit(transactionStatus);//提交
+
 
     }
 
@@ -81,15 +94,14 @@ public class LogServices {
      * @param error
      */
     public static void log(String postUrl,String error ){
-        TransactionStatus transactionStatus = logServices.dataSourceTransactionManager.getTransaction(logServices.transactionDefinition);
-        McsLog mcsLog=new McsLog();
+         McsLog mcsLog=new McsLog();
         mcsLog.setError(spliitString(error));
         mcsLog.setInterfaceAddress(postUrl);
         mcsLog.setResult("");
         mcsLog.setParams("");
         mcsLog.setCreateTime(new java.util.Date());
         logServices.logMapper.save(mcsLog);
-        logServices.dataSourceTransactionManager.commit(transactionStatus);//提交
+
 
     }
 
@@ -99,15 +111,14 @@ public class LogServices {
      * @param error
      */
     public static void logWms(String postUrl,String params,String error,String result){
-        TransactionStatus transactionStatus = logServices.dataSourceTransactionManager.getTransaction(logServices.transactionDefinition);
-        WmsLog wmsLog = new WmsLog();
+         WmsLog wmsLog = new WmsLog();
         wmsLog.setError(spliitString(error));
         wmsLog.setInterfaceAddress(postUrl);
         wmsLog.setResult(spliitString(result));
         wmsLog.setParams(spliitString(params));
         wmsLog.setCreateTime(new java.util.Date());
         logServices.wmsLogMapper.save(wmsLog);
-        logServices.dataSourceTransactionManager.commit(transactionStatus);//提交
+
     }
 
 
@@ -120,7 +131,6 @@ public class LogServices {
      * @param result
      */
     public static void logEis(String url,String params,String error,String result ){
-        TransactionStatus transactionStatus = logServices.dataSourceTransactionManager.getTransaction(logServices.transactionDefinition);
         EisInterfaceLog eisInterfaceLog=new EisInterfaceLog();
         eisInterfaceLog.setUrl(url);
         eisInterfaceLog.setError(spliitString(error));
@@ -128,7 +138,6 @@ public class LogServices {
         eisInterfaceLog.setResult(spliitString(result));
         eisInterfaceLog.setCreateTime(new java.util.Date());
         logServices.eisInterfaceLogMapper.save(eisInterfaceLog);
-        logServices.dataSourceTransactionManager.commit(transactionStatus);//提交
     }
 
     /**
@@ -139,7 +148,6 @@ public class LogServices {
      * @param result
      */
     public static void logRcs(String postUrl,String params,String error,String result ){
-        TransactionStatus transactionStatus = logServices.dataSourceTransactionManager.getTransaction(logServices.transactionDefinition);
         RcsLog rcsLog=new RcsLog();
         rcsLog.setError(spliitString(error));
         rcsLog.setInterfaceAddress(postUrl);
@@ -147,7 +155,6 @@ public class LogServices {
         rcsLog.setParams(spliitString(params));
         rcsLog.setCreateTime(new java.util.Date());
         logServices.rcsLogMapper.save(rcsLog);
-        logServices.dataSourceTransactionManager.commit(transactionStatus);//提交
 
     }
 
@@ -157,20 +164,25 @@ public class LogServices {
      *
      */
     public static void logSys(Throwable e){
-        TransactionStatus transactionStatus = logServices.dataSourceTransactionManager.getTransaction(logServices.transactionDefinition);
-        SysLog sysLog=new SysLog();
-        String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
-        sysLog.setClassName(className);
-        String classSimpleName = StringUtils.substring(className,StringUtils.lastIndexOf(className,".")+1);
-        sysLog.setClassSimpleName(classSimpleName);
-        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();//调用的方法名
-        sysLog.setClassMethod(methodName);
-        int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
-        sysLog.setLineNumber(lineNumber+"");
-        sysLog.setError(toString_(e));
-        sysLog.setCreateTime(new java.util.Date());
-        logServices.logSysMapper.save(sysLog);
-        logServices.dataSourceTransactionManager.commit(transactionStatus);//提交
+        new Thread( new Runnable(){
+             @Override
+             public void run() {
+                 SysLog sysLog=new SysLog();
+                 String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
+                 sysLog.setClassName(className);
+                 String classSimpleName = StringUtils.substring(className,StringUtils.lastIndexOf(className,".")+1);
+                 sysLog.setClassSimpleName(classSimpleName);
+                 String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();//调用的方法名
+                 sysLog.setClassMethod(methodName);
+                 int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
+                 sysLog.setLineNumber(lineNumber+"");
+                 sysLog.setError(toString_(e));
+                 sysLog.setCreateTime(new java.util.Date());
+                 logServices.logSysMapper.save(sysLog);
+             }
+         }).start();
+
+
     }
 
     /**
@@ -178,7 +190,6 @@ public class LogServices {
      * @param errorMsg
      */
     public static void logSysBusiness(String errorMsg){
-        TransactionStatus transactionStatus = logServices.dataSourceTransactionManager.getTransaction(logServices.transactionDefinition);
         SysBusinessLog sysBusinessLog=new SysBusinessLog();
         String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
         sysBusinessLog.setClassName(className);
@@ -191,8 +202,6 @@ public class LogServices {
         sysBusinessLog.setError(spliitString(errorMsg));
         sysBusinessLog.setCreateTime(new java.util.Date());
         logServices.logSysBusinessMapper.save(sysBusinessLog);
-        logServices.dataSourceTransactionManager.commit(transactionStatus);//提交
-
     }
     private static String toString_(Throwable e){
         StringWriter sw = new StringWriter();
