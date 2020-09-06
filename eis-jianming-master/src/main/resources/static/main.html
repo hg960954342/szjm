@@ -52,11 +52,14 @@
                         $(".scrollbox").remove();
                         $("#eisKunChunB").removeAttr("disabled");
                         if(data){
-                            if (data.storeState20 != null) ret.push(eval(data.storeState20));
-                            if (data.storeState10 != null) ret.push(eval(data.storeState10));
-                            if (data.storeState30 != null) ret.push(eval(data.storeState30));
-                            if (data.storeState50 != null) ret.push(eval(data.storeState50));
+                            if (data.storeState20 != null) {ret.push(eval(data.storeState20));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState10 != null) {ret.push(eval(data.storeState10));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState30 != null) {ret.push(eval(data.storeState30));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState50 != null) {ret.push(eval(data.storeState50));}else{ret.push(eval("[[0,0]]")) }
                         }else{
+                            ret.push(eval("[[0,0]]"));
+                            ret.push(eval("[[0,0]]"));
+                            ret.push(eval("[[0,0]]"));
                             ret.push(eval("[[0,0]]"));
                         }
 
