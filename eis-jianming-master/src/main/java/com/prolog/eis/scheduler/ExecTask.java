@@ -21,9 +21,9 @@ import java.util.List;
 public class ExecTask {
 
 
-
     @Autowired
     private SxStoreCkService sxStoreCkService;
+
 
     @Autowired
     private ContainerTaskService containerTaskService;
@@ -33,15 +33,7 @@ public class ExecTask {
 
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildAndSendSxCkTask()  {
-
-        try {
-            synchronized ("kucun".intern()) {
-                sxStoreCkService.buildSxCkTask();
-            }
-            sxStoreCkService.sendSxCkTask();
-        } catch (Exception e) {
-            LogServices.logSys(e);
-        }
+        sxStoreCkService.sendSxCkTask();
 
     }
 

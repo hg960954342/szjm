@@ -2,14 +2,17 @@ package com.prolog.eis.service.impl.unbound;
 
 import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.model.wms.PickStation;
+import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -50,6 +53,9 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     PortInfoMapper portInfoMapper;
 
     @Autowired
+    private SxStoreCkService sxStoreCkService;
+
+    @Autowired
    private  Map<String, SimilarityDataEntityLoadInterface> similarityDataEntityListLoadMap  ;
 
 
@@ -68,6 +74,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public synchronized void unbound(OutboundTask outboundTask) {
         DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy=this.getDefaultOutBoundPickCodeStrategy(outboundTask);
         SimilarityDataEntityLoadInterface similarityDataEntityLoadStrategy=getsimilarityDataEntityListLoad(outboundTask);
@@ -75,7 +82,16 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
             similarityDataEntityLoadStrategy.addOutboundTask(outboundTask);
              if(similarityDataEntityLoadStrategy.getCrrentBillNoList().size()!=0
                     &&similarityDataEntityLoadStrategy.getCrrentBillNoList().size()==similarityDataEntityLoadStrategy.getMaxSize())
-             {defaultOutBoundPickCodeStrategy.unbound(outboundTask);}
+             {defaultOutBoundPickCodeStrategy.unbound(outboundTask);
+                 synchronized ("kucun".intern()) {
+                     try {
+                         sxStoreCkService.buildSxCkTask();
+                     }catch (Exception e){
+                         LogServices.logSys(e);
+                     }
+
+                 }
+             }
              else if(similarityDataEntityLoadStrategy.getCrrentBillNoList().size()!=0
               &&similarityDataEntityLoadStrategy.getCrrentBillNoList().size()>similarityDataEntityLoadStrategy.getMaxSize()){
                  similarityDataEntityLoadStrategy.getCrrentBillNoList().clear();

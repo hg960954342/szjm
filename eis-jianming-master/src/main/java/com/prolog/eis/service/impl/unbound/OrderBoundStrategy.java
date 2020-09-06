@@ -6,7 +6,6 @@ import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.enums.OutBoundEnum;
 import com.prolog.eis.util.PrologCoordinateUtils;
-import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
