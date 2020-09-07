@@ -212,8 +212,6 @@ public class OutboundDataController {
 
                         datum.setCreateTime(ctime);
 
-                        outboundDataService.insertMoveTask(datum);
-
                         List<OutboundTaskDetail> details = datum.getDetails();
                         List<String> containerCodes = checkContainerTaskService.findByContainerCode(details);
                         if (containerCodes.size() == 0) {
@@ -238,6 +236,8 @@ public class OutboundDataController {
                             FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS移库返回" + rejson);
                             return rejson;
                         }
+
+                        outboundDataService.insertMoveTask(datum);
 
                     } catch (Exception e) {
 
