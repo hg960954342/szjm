@@ -58,7 +58,6 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
      */
     @Override
     public void unbound(OutboundTask outboundTask) {
-        int num= 0;
         //根据订单号查询需要移库的明细
         List<OutboundTaskDetail> outboundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.put("billNo", outboundTask.getBillNo()).getMap(), OutboundTaskDetail.class);
         for (OutboundTaskDetail outboundTaskDetail : outboundTaskDetailList) {
@@ -69,31 +68,30 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 outBoundContainerService.deleteDetailAndInsertHistory(outboundTaskDetail);
                 continue;
             }
+
+            String pickCode = outboundTaskDetail.getPickCode();
+            List<PickStation> listPickStations = null;
+            String target = "" ;
+            AgvStorageLocation agvLocation = null;
+            if (StringUtils.isEmpty(pickCode)){
+                //拣选站要求为空
+                agvLocation = getPickStationAndLock();
+                if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站："+pickCode+"已被锁，不可用");return;}
+                target = agvLocation.getRcsPositionCode();
+            }else {
+                //拣选站不为空
+                agvLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
+                if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站："+pickCode+"已被锁，不可用");return;}
+                target = agvLocation.getRcsPositionCode();
+                agvLocation.setLocationLock(1);
+                agvStorageLocationMapper.update(agvLocation);
+            }
+
             //封装成托盘任务
             ContainerTask containerTask = getContainerTask(outboundTaskDetail, sxStore);
             String sourceLocation = PrologCoordinateUtils.splicingStr((Integer) sxStore.get("x"), (Integer) sxStore.get("y"), (Integer) sxStore.get("layer"));
             containerTask.setSource(sourceLocation);
             containerTask.setTaskState(1);
-
-            String pickCode = outboundTaskDetail.getPickCode();
-            List<PickStation> listPickStations = null;
-            if (StringUtils.isEmpty(pickCode)){
-                //拣选站为空
-                listPickStations=getAvailablePickStation();
-                if(listPickStations.size()<1) { LogServices.logSysBusiness("无可用拣选站");return;}
-//                int index=pickStainStrategy.getIndexPickStain(listPickStations.size());
-                int index=(num + 1) % (listPickStations.size());
-                pickCode =listPickStations.get(index).getDeviceNo();
-                num++;
-            }else {
-                //拣选站不为空
-                listPickStations = pickStationMapper.findByMap(MapUtils.put("deviceNo", pickCode).put("isLock", 0).getMap(), PickStation.class);
-                if(listPickStations.size()<1) { LogServices.logSysBusiness("拣选站："+pickCode+"已被锁，不可用");return;}
-            }
-
-            AgvStorageLocation agvLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
-            if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站agv点位："+agvLocation.getRcsPositionCode()+"已被锁，不可用");return;}
-            String target = agvLocation.getRcsPositionCode();
             containerTask.setTarget(target);
             containerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber()); //Agv目标区域
 
@@ -107,6 +105,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             }
 
             containerTaskMapper.save(containerTask);
+
             containerTaskDetailMapperMapper.save(containerTaskDetail);
 
             //转到历史记录

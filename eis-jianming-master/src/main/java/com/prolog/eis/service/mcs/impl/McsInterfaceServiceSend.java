@@ -157,12 +157,12 @@ public class McsInterfaceServiceSend  {
 			}else {
 				LogServices.log(postUrl,requestData,message,restJson);
 				//FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，响应失败："+message);
-				return false;
+				return true;
 			}
 		} catch (Exception e) {
 			LogServices.logSys(e);
 			//FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，接口调用异常："+e.getMessage());
-			return false;
+			return true;
 		}
 	}
 }

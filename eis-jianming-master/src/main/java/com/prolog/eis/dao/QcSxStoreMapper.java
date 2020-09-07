@@ -197,14 +197,13 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 	List<CheckOutResult> getCheckOutByOutBoundTaskDetail(@Param("billNo") String billNo );
 
       @ResultMap("SxStore")
-      @Select("SELECT\n" +
-			  "\t* \n" +
-			  "FROM\n" +
+      @Select("SELECT * FROM\n" +
 			  "\tsx_store ss\n" +
 			  "\tINNER JOIN sx_store_location sl ON ss.store_location_id = sl.id\n" +
 			  "\tINNER JOIN sx_store_location_group slg ON sl.store_location_group_id = slg.id \n" +
 			  "\tAND slg.IS_LOCK = 0 \n" +
 			  "\tAND ss.STORE_STATE = 20 \n" +
-			  "\tAND CONTAINER_NO=#{containerCode} and ss.item_id = #{itemId} and ss.lot_id = #{lotId}  ORDER BY dept_num asc,qty asc")
+			  "\tAND slg.ASCENT_LOCK_STATE=0\n" +
+			  "\tAND CONTAINER_NO = #{containerCode} and ss.item_id = #{itemId} and ss.lot_id = #{lotId}  ORDER BY dept_num asc,qty asc")
 	  Map<String,Object> findSxStore(@Param("containerCode") String containerCode,@Param("lotId") String lotId, @Param("itemId") String itemId);
 }
