@@ -6,6 +6,7 @@ import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.enums.OutBoundEnum;
+import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.utils.MapUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,10 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     @Autowired
     OutBoundContainerService outBoundContainerService;
 
+    @Autowired
+    SxStoreCkService sxStoreCkService;
+
+
     /**
      * 移库出库
      * @param outboundTask
@@ -76,12 +81,12 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             if (StringUtils.isEmpty(pickCode)){
                 //拣选站要求为空
                 agvLocation = getPickStationAndLock();
-                if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站："+pickCode+"已被锁，不可用");return;}
+                if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站上有托盘或已被锁定，无可用拣选站");return;}
                 target = agvLocation.getRcsPositionCode();
             }else {
                 //拣选站不为空
-                agvLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
-                if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站："+pickCode+"已被锁，不可用");return;}
+                agvLocation = agvStorageLocationMapper.findByPickCodeAndLock("pickStation4", 0, 0);
+                if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站："+pickCode+"上有托盘或已被锁定，不可用");return;}
                 target = agvLocation.getRcsPositionCode();
                 agvLocation.setLocationLock(1);
                 agvStorageLocationMapper.update(agvLocation);
@@ -95,6 +100,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             containerTask.setTarget(target);
             containerTask.setTargetType(OutBoundEnum.TargetType.AGV.getNumber()); //Agv目标区域
 
+            //封装成托盘任务明细
             ContainerTaskDetail containerTaskDetail = getContainerTaskDetail(outboundTaskDetail, sxStore);
 
             if (outboundTaskDetail.getQty()>((BigDecimal) sxStore.get("qty")).floatValue()){
@@ -104,9 +110,12 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 containerTaskDetail.setQty(outboundTaskDetail.getQty());
             }
 
-            containerTaskMapper.save(containerTask);
-
+            containerTask.setTaskCode(null);
+            //保存托盘任务明细
             containerTaskDetailMapperMapper.save(containerTaskDetail);
+            //保存托盘任务
+            containerTaskMapper.save(containerTask);
+            sxStoreCkService.buildSxCkTaskByContainerTask(containerTask);
 
             //转到历史记录
             outBoundContainerService.deleteDetailAndInsertHistory(outboundTaskDetail, containerTaskDetail);

@@ -204,7 +204,8 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			  "\tINNER JOIN sx_store_location_group slg ON sl.store_location_group_id = slg.id \n" +
 			  "\tAND slg.IS_LOCK = 0 \n" +
 			  "\tAND ss.STORE_STATE = 20 \n" +
-			  "\tAND slg.ASCENT_LOCK_STATE=0\n" +
+			  "\tAND sl.ascent_lock_state=0\n" +
+			  "\tAND slg.ASCENT_LOCK_STATE = 0 \n" +
 			  "\tAND CONTAINER_NO = #{containerCode} and ss.item_id = #{itemId} and ss.lot_id = #{lotId}  ORDER BY dept_num asc,qty asc")
 	  Map<String,Object> findSxStore(@Param("containerCode") String containerCode,@Param("lotId") String lotId, @Param("itemId") String itemId);
 }
