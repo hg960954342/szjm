@@ -24,30 +24,15 @@ import java.util.List;
 @Component
 public class TimeTask {
 
-    @Autowired
-    InBoundTaskService inBoundTaskService;
+
     @Autowired
     OutBoundTaskService outBoundTaskService;
+    @Autowired
+    private SxStoreCkService sxStoreCkService;
 
 
 
 
-   /* @Bean
-    public TaskScheduler taskScheduler() {
-        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
-        taskScheduler.setPoolSize(50);
-        return taskScheduler;
-    }*/
-
-    /**
-     * 定时处理入库任务
-     *
-     * @throws Exception
-     */
-    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void buildCkTask()   {
-        inBoundTaskService.inboundTask();
-    }
 
 
     /**
@@ -59,6 +44,20 @@ public class TimeTask {
     public void buildUnTask()   {
 
         outBoundTaskService.unboundTask();
+
+    }
+
+
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void buildAndSendSxCkTask()  {
+        try {
+           // synchronized ("kucun".intern()) {
+              //  sxStoreCkService.buildSxCkTask();
+          //  }
+            sxStoreCkService.sendSxCkTask();
+        } catch (Exception e) {
+            LogServices.logSys(e);
+        }
 
     }
 

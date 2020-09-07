@@ -14,15 +14,15 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Component
 @Scope(SCOPE_SINGLETON)
 public class PickStainStrategy {
-
-    /**
+/*
+    *//**
      * 随机获取
      * @param bound
      * @return
-     */
+     *//*
     public int getIndexPickStain(int bound){
         ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
        return threadLocalRandom.nextInt(bound);
-    }
+    }*/
 
 }

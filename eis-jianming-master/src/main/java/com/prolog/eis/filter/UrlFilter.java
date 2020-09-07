@@ -30,7 +30,7 @@ public class UrlFilter extends OncePerRequestFilter {
         String requestparmas=printRequestLog(request);
         String result=printResponseLog((ResponseWrapper) response);
         String path=request.getRequestURI();
-        if(path.indexOf("images/")==-1&&path.indexOf("js/")==-1&&path.indexOf("css/")==-1&&path.indexOf(".html")==-1&&path.indexOf(".ico")==-1&&!path.endsWith("/"))
+        if(path.indexOf("images/")==-1&&path.indexOf("js/")==-1&&path.indexOf("css/")==-1&&path.indexOf(".html")==-1&&path.indexOf(".ico")==-1&&!path.endsWith("/")&&path.indexOf("api/v1/master/view")==-1)
         LogServices.logEis(request.getRequestURI().toString(),requestparmas,"",result);
 
     }

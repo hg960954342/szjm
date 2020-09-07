@@ -94,6 +94,43 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	public void buildSxCkTaskByContainerTask(ContainerTask containerTask){
+		synchronized ("kucun".intern()) {
+			if (!StringUtils.isEmpty(containerTask.getTaskCode())) {
+				//已经写过一次任务号，可能是超时等什么原因没发成功
+				return;
+			}
+
+			SxStoreLock sxStoreLock = sxStoreMapper.findSxStoreLock(containerTask.getContainerCode());
+			if (null != sxStoreLock) {
+				if (sxStoreLock.getStoreState() == 20 || sxStoreLock.getStoreState() == 31) {
+					//到位状态可以出库
+					//检查货位和货位组锁
+					if (sxStoreLock.getAscentGroupLockState() == 1 || sxStoreLock.getAscentLockState() == 1 || sxStoreLock.getIsLock() == 1) {
+						return;
+					} else {
+						//判断是直接出库还是移位出库
+						if (sxStoreLock.getDeptNum() == 0) {
+							containOutLogic(containerTask);
+						} else {
+							try {
+								containMoveLogic(sxStoreLock, containerTask);
+							} catch (Exception e) {
+								LogServices.logSys(e);
+								return;
+							}
+
+						}
+					}
+				}
+			} else {
+				LogServices.logSysBusiness("buildSxCkTaskError" + String.format("托盘出库无库存%s", containerTask.getContainerCode()));
+				return;
+			}
+		}
+	}
+	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void sendSxCkTask() {
 
 		//健民只有一个任务出库口

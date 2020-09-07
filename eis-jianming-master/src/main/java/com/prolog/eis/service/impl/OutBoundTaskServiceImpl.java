@@ -70,14 +70,6 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
             UnBoundStragtegy unBoundStragtegy=this.getUnBoundStragtegy(OutboundTask);
             if(null!=unBoundStragtegy){
             unBoundStragtegy.unbound(OutboundTask);
-                synchronized ("kucun".intern()) {
-                    try {
-                        sxStoreCkService.buildSxCkTask();
-                    }catch (Exception e){
-                        LogServices.logSys(e);
-                    }
-
-                }
             }
         }
 

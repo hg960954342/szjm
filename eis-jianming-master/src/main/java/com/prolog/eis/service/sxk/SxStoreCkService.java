@@ -1,5 +1,7 @@
 package com.prolog.eis.service.sxk;
 
+import com.prolog.eis.model.wms.ContainerTask;
+
 public interface SxStoreCkService {
 
 	/**
@@ -12,4 +14,6 @@ public interface SxStoreCkService {
 	 * 发送出库任务
 	 */
 	void sendSxCkTask();
+
+	void buildSxCkTaskByContainerTask(ContainerTask containerTask) ;
 }

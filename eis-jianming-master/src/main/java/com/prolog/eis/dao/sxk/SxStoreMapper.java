@@ -186,7 +186,6 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
 			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
 			"\t\t\tAND g.IS_LOCK = 0 \n" +
 			"\t\t\tAND a.STORE_STATE = 20 \n" +
-			"\t\t\tAND g.ASCENT_LOCK_STATE = 0 \n" +
 			"\t\t\tAND l.layer = #{layer} \n" +
 			"\t\t) b \n" +
 			"\t) storeState20,\n" +
@@ -203,7 +202,6 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
 			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
 			"\t\t\tAND g.IS_LOCK = 0 \n" +
 			"\t\t\tAND a.STORE_STATE = 10 \n" +
-			"\t\t\tAND g.ASCENT_LOCK_STATE = 0 \n" +
 			"\t\t\tAND l.layer = #{layer} \n" +
 			"\t\t) b \n" +
 			"\t) storeState10,\n" +
@@ -220,7 +218,6 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
 			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
 			"\t\t\tAND g.IS_LOCK = 0 \n" +
 			"\t\t\tAND a.STORE_STATE = 30 \n" +
-			"\t\t\tAND g.ASCENT_LOCK_STATE = 0 \n" +
 			"\t\t\tAND l.layer = #{layer} \n" +
 			"\t\t) b \n" +
 			"\t) storeState30,\n" +

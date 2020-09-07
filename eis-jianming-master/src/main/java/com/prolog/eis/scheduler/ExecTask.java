@@ -22,19 +22,22 @@ public class ExecTask {
 
 
     @Autowired
-    private SxStoreCkService sxStoreCkService;
-
-
-    @Autowired
     private ContainerTaskService containerTaskService;
 
     @Autowired
     private EisSendRcsTaskServiceSend eisSendRcsTaskServiceSend;
 
-    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void buildAndSendSxCkTask()  {
-        sxStoreCkService.sendSxCkTask();
+    @Autowired
+    InBoundTaskService inBoundTaskService;
 
+    /**
+     * 定时处理入库任务
+     *
+     * @throws Exception
+     */
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void buildCkTask()   {
+        inBoundTaskService.inboundTask();
     }
 
     //定时给agv小车下分任务

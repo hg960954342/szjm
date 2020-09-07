@@ -5,6 +5,7 @@ import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.enums.OutBoundEnum;
+import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.utils.MapUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,9 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
     @Autowired
     PortInfoMapper portInfoMapper;
 
+    @Autowired
+    SxStoreCkService sxStoreCkService;
+
     @Override
     public void unbound(OutboundTask outboundTask) {
 
@@ -94,11 +98,6 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
             String pickCode = detailDataBeand.getPickCode();
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
-            agvStorageLocation.setLocationLock(1);
-            agvStorageLocationMapper.update(agvStorageLocation);
-
-
-
 
             if (agvStorageLocation == null) {
                 LogServices.logSysBusiness(pickCode + "拣选站点位已经锁定！");
@@ -108,6 +107,9 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                 if (listBillNoRemove != null && listBillNoRemove.size() > 0)
                     similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);
                 return;
+            }else{
+                agvStorageLocation.setLocationLock(1);
+                agvStorageLocationMapper.update(agvStorageLocation);
             }
             List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
             for (Map<String, Object> sxStore1 : listSxStore) {
@@ -124,6 +126,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
                         containerTaskMapper.save(ordercontainerTask);
+                        //sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
                         //出明细
                         for (String billNo : listBillNo) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
@@ -164,8 +167,8 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                        containerTaskMapper.save(ordercontainerTask);
-
+                       containerTaskMapper.save(ordercontainerTask);
+                        // sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
                         for (String billNo : listBillNo) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
                                     put("billNo", billNo)

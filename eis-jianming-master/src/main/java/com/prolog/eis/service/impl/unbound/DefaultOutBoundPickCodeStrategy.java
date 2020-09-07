@@ -72,8 +72,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public synchronized void unbound(OutboundTask outboundTask) {
+     public synchronized void unbound(OutboundTask outboundTask) {
         DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy=this.getDefaultOutBoundPickCodeStrategy(outboundTask);
         SimilarityDataEntityLoadInterface similarityDataEntityLoadStrategy=getsimilarityDataEntityListLoad(outboundTask);
         if(null!=defaultOutBoundPickCodeStrategy&&similarityDataEntityLoadStrategy!=null){
