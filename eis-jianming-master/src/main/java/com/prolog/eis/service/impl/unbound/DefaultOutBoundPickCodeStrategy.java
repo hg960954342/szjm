@@ -52,8 +52,6 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     @Autowired
     PortInfoMapper portInfoMapper;
 
-    @Autowired
-    private SxStoreCkService sxStoreCkService;
 
     @Autowired
    private  Map<String, SimilarityDataEntityLoadInterface> similarityDataEntityListLoadMap  ;
@@ -83,14 +81,6 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
              if(similarityDataEntityLoadStrategy.getCrrentBillNoList().size()!=0
                     &&similarityDataEntityLoadStrategy.getCrrentBillNoList().size()==similarityDataEntityLoadStrategy.getMaxSize())
              {defaultOutBoundPickCodeStrategy.unbound(outboundTask);
-                 synchronized ("kucun".intern()) {
-                     try {
-                         sxStoreCkService.buildSxCkTask();
-                     }catch (Exception e){
-                         LogServices.logSys(e);
-                     }
-
-                 }
              }
              else if(similarityDataEntityLoadStrategy.getCrrentBillNoList().size()!=0
               &&similarityDataEntityLoadStrategy.getCrrentBillNoList().size()>similarityDataEntityLoadStrategy.getMaxSize()){
@@ -125,6 +115,21 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         }).collect(Collectors.toList());
         return listPickStation;
     }
+
+    public AgvStorageLocation getPickStationAndLock(){
+        List<PickStation> list=getAvailablePickStation();
+        if(list.size()>0){
+            String stationNo=list.get(0).getDeviceNo();
+            AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo,0,0);
+            agvStorageLocation.setLocationLock(1);
+            agvStorageLocationMapper.update(agvStorageLocation);
+            return agvStorageLocation;
+        }
+        return null;
+    }
+
+
+
 
     /**
      * 判断目标点位是否有任务

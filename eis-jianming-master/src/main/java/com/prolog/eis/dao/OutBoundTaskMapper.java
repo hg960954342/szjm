@@ -25,7 +25,7 @@ public interface OutBoundTaskMapper extends BaseMapper<OutboundTask>{
     })
     @Select("select t.* from outbound_task t where t.task_state=0\r\n" +
             "\r\n" +
-            "order by t.create_time desc")
+            "order by t.create_time asc")
      List<OutboundTask> getListOutboundTask();
 
 

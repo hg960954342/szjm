@@ -91,8 +91,15 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             for (String remove : listBillNo) {
                 listBillNoRemove.add(String.format("'%s'", remove));
             }
+
             String pickCode = detailDataBeand.getPickCode();
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
+            agvStorageLocation.setLocationLock(1);
+            agvStorageLocationMapper.update(agvStorageLocation);
+
+
+
+
             if (agvStorageLocation == null) {
                 LogServices.logSysBusiness(pickCode + "拣选站点位已经锁定！");
                 outboundTask.setTaskState(1);

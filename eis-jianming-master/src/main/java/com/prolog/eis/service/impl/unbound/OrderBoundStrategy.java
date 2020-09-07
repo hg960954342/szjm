@@ -57,10 +57,6 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     PickStainStrategy pickStainStrategy;
 
 
-    public static void main(String[] args) {
-        float x=2.0f-2f;
-        System.out.println(x<=0);
-    }
 
     @Override
     public void unbound(OutboundTask outboundTask) {
@@ -98,9 +94,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                     listBillNoRemove.add(String.format("'%s'",remove));
                 }
                 for (Map<String, Object> sxStore1 : listSxStore) {
-                    int index=pickStainStrategy.getIndexPickStain(listPickStations.size());
-                    String pickCode=listPickStations.get(index).getDeviceNo();
-                    AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
+                    AgvStorageLocation agvStorageLocation= this.getPickStationAndLock();
+                    if(agvStorageLocation==null) {LogServices.logSysBusiness("无可用拣选站");return;}
                     int  LocationType= agvStorageLocation.getLocationType();
                     if(!this.isExistTask(agvStorageLocation.getRcsPositionCode())){
                     if (((BigDecimal) sxStore1.get("qty")).floatValue() <= last && (LocationType == 3 || LocationType == 5)) { //出整托
