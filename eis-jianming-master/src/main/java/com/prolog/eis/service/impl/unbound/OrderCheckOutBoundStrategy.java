@@ -26,7 +26,6 @@ import java.util.UUID;
 
 
 @Component(OutBoundType.TASK_TYPE+3)
-@Transactional(rollbackFor=Exception.class)
 @Slf4j
 @SuppressWarnings("all")
 public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy {
@@ -64,9 +63,11 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
 
 
     @Override
+    @Transactional(rollbackFor=Exception.class)
     public void unbound(OutboundTask outboundTask){
         if(checkOutTaskMapper.getCount()>0)  {LogServices.logSysBusiness("上次盘点任务还未结束"); return;}
        List<CheckOutResult> list= qcSxStoreMapper.getCheckOutByOutBoundTaskDetail(outboundTask.getBillNo());
+
        for(CheckOutResult checkOutResult:list){
            ContainerTask task=new ContainerTask();
            BeanUtils.copyProperties(checkOutResult,task);

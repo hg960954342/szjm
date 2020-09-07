@@ -2,40 +2,76 @@ package com.prolog.eis.service.test.impl;
 
 public class SxStoreViewMapDto {
     //库存状态(10：入库中、 20：已上架、 30：出库中、31:待出库、40：移位中)
-    private String storeState20; //20: 已经上架
-    private String storeState10; //10：入库中
-    private String storeState30;//30:出库中
-    private String storeState50; //其他状态
+    private String storeState20_0; //20_0: 已经上架
+    private String storeState20_1; //20_1: 已经上架被锁定
+    private String storeState10_0; //10：入库中
+    private String storeState10_1; //10：入库中 被锁定
+    private String storeState30_0;//30:出库中
+    private String storeState30_1;//30:出库中被锁定
+    private String storeState50_0; //其他状态
+    private String storeState50_1; //其他状态被锁定
 
-    public String getStoreState20() {
-        return storeState20;
+    public String getStoreState20_0() {
+        return storeState20_0;
     }
 
-    public void setStoreState20(String storeState20) {
-        this.storeState20 = storeState20;
+    public void setStoreState20_0(String storeState20_0) {
+        this.storeState20_0 = storeState20_0;
     }
 
-    public String getStoreState10() {
-        return storeState10;
+    public String getStoreState20_1() {
+        return storeState20_1;
     }
 
-    public void setStoreState10(String storeState10) {
-        this.storeState10 = storeState10;
+    public void setStoreState20_1(String storeState20_1) {
+        this.storeState20_1 = storeState20_1;
     }
 
-    public String getStoreState30() {
-        return storeState30;
+    public String getStoreState10_0() {
+        return storeState10_0;
     }
 
-    public void setStoreState30(String storeState30) {
-        this.storeState30 = storeState30;
+    public void setStoreState10_0(String storeState10_0) {
+        this.storeState10_0 = storeState10_0;
     }
 
-    public String getStoreState50() {
-        return storeState50;
+    public String getStoreState10_1() {
+        return storeState10_1;
     }
 
-    public void setStoreState50(String storeState50) {
-        this.storeState50 = storeState50;
+    public void setStoreState10_1(String storeState10_1) {
+        this.storeState10_1 = storeState10_1;
+    }
+
+    public String getStoreState30_0() {
+        return storeState30_0;
+    }
+
+    public void setStoreState30_0(String storeState30_0) {
+        this.storeState30_0 = storeState30_0;
+    }
+
+    public String getStoreState30_1() {
+        return storeState30_1;
+    }
+
+    public void setStoreState30_1(String storeState30_1) {
+        this.storeState30_1 = storeState30_1;
+    }
+
+    public String getStoreState50_0() {
+        return storeState50_0;
+    }
+
+    public void setStoreState50_0(String storeState50_0) {
+        this.storeState50_0 = storeState50_0;
+    }
+
+    public String getStoreState50_1() {
+        return storeState50_1;
+    }
+
+    public void setStoreState50_1(String storeState50_1) {
+        this.storeState50_1 = storeState50_1;
     }
 }

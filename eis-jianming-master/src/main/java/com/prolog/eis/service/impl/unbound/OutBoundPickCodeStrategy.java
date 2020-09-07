@@ -8,6 +8,7 @@ import com.prolog.eis.service.enums.OutBoundEnum;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.utils.MapUtils;
+import com.prolog.framework.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ import java.util.Map;
  * 订单出库  指定拣选站
  */
 @Component(OutBoundType.TASK_TYPE + 1 + OutBoundType.IF_SfReq + 1)
-@Transactional(rollbackFor = Exception.class)
 @Slf4j
 @SuppressWarnings("all")
 public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
@@ -58,7 +58,10 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
     @Autowired
     SxStoreCkService sxStoreCkService;
 
+
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void unbound(OutboundTask outboundTask) {
 
         SimilarityDataEntityLoadInterface similarityDataEntityListLoad = getsimilarityDataEntityListLoad(outboundTask);
@@ -95,17 +98,22 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             for (String remove : listBillNo) {
                 listBillNoRemove.add(String.format("'%s'", remove));
             }
-
-            String pickCode = detailDataBeand.getPickCode();
+//pickstation给默认值
+            String pickCode = StringUtils.isEmpty(detailDataBeand.getPickCode())?"pickStation4":detailDataBeand.getPickCode();
+            List<PickStation> listPickStations=pickStationMapper.findByMap(MapUtils.put("deviceNo",pickCode).getMap(),PickStation.class);
+            if(listPickStations.size()>1||listPickStations.size()<1){
+                LogServices.logSysBusiness(pickCode + "拣选站已经锁定！");
+                return;
+            }
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
 
             if (agvStorageLocation == null) {
                 LogServices.logSysBusiness(pickCode + "拣选站点位已经锁定！");
-                outboundTask.setTaskState(1);
+            /*    outboundTask.setTaskState(1);
                 outBoundTaskMapper.save(outboundTask);
                 //移除此缓存条目
                 if (listBillNoRemove != null && listBillNoRemove.size() > 0)
-                    similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);
+                    similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);*/
                 return;
             }else{
                 agvStorageLocation.setLocationLock(1);
@@ -126,7 +134,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
                         containerTaskMapper.save(ordercontainerTask);
-                        //sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
+                        sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
                         //出明细
                         for (String billNo : listBillNo) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
@@ -140,10 +148,15 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                                 containerTaskDetail.setSeqNo(outboundTaskDetail.getSeqNo());
                                 containerTaskDetail.setContainerCode((String) sxStore1.get("containerNo"));
                                 containerTaskDetail.setCreateTime(new java.util.Date());
-                                if (((BigDecimal) sxStore1.get("qty")).floatValue() < outboundTaskDetail.getQty()) {
+                                List< ContainerTaskDetail> listContainerTaskDetails=containerTaskDetailMapperMapper.findByMap(MapUtils.
+                                        put("billNo",billNo)
+                                        .put("itemId",detailDataBeand.getItemId()).put("ownerId",detailDataBeand.getOwnerId()
+                                        ).put("lotId",detailDataBeand.getLotId()).getMap(),ContainerTaskDetail.class);
+                                double doubleCurrent= listContainerTaskDetails.stream().mapToDouble(ContainerTaskDetail::getQty).sum();
+                                if(((BigDecimal) sxStore1.get("qty")).floatValue()<(outboundTaskDetail.getQty()-doubleCurrent)){
                                     containerTaskDetail.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
-                                } else {
-                                    containerTaskDetail.setQty(outboundTaskDetail.getQty());
+                                }else{
+                                    containerTaskDetail.setQty((outboundTaskDetail.getQty()-doubleCurrent));
                                 }
 
                                 containerTaskDetailMapperMapper.save(containerTaskDetail);
@@ -155,7 +168,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         }
                         similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);
 
-                        if (last <= 0) break;
+                        if (last <= 0){ break;} else {continue;}
                     }
                     if (((BigDecimal) sxStore1.get("qty")).floatValue() > last && (LocationType == 4 || LocationType == 5)) { //非整托
                         //非整托
@@ -167,8 +180,8 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                       containerTaskMapper.save(ordercontainerTask);
-                        // sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
+                        containerTaskMapper.save(ordercontainerTask);
+                        sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
                         for (String billNo : listBillNo) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
                                     put("billNo", billNo)
@@ -181,12 +194,16 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                                 containerTaskDetail.setSeqNo(outboundTaskDetail.getSeqNo());
                                 containerTaskDetail.setContainerCode((String) sxStore1.get("containerNo"));
                                 containerTaskDetail.setCreateTime(new Date(System.currentTimeMillis()));
-                                if (((BigDecimal) sxStore1.get("qty")).floatValue() < outboundTaskDetail.getQty()) {
+                                List< ContainerTaskDetail> listContainerTaskDetails=containerTaskDetailMapperMapper.findByMap(MapUtils.
+                                        put("billNo",billNo)
+                                        .put("itemId",detailDataBeand.getItemId()).put("ownerId",detailDataBeand.getOwnerId()
+                                        ).put("lotId",detailDataBeand.getLotId()).getMap(),ContainerTaskDetail.class);
+                                double doubleCurrent= listContainerTaskDetails.stream().mapToDouble(ContainerTaskDetail::getQty).sum();
+                                if(((BigDecimal) sxStore1.get("qty")).floatValue()<(outboundTaskDetail.getQty()-doubleCurrent)){
                                     containerTaskDetail.setQty(((BigDecimal) sxStore1.get("qty")).floatValue());
-                                } else {
-                                    containerTaskDetail.setQty(outboundTaskDetail.getQty());
+                                }else{
+                                    containerTaskDetail.setQty(outboundTaskDetail.getQty()-doubleCurrent);
                                 }
-
                                 containerTaskDetailMapperMapper.save(containerTaskDetail);
                             }
                         }

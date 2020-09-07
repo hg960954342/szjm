@@ -172,6 +172,8 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
 			"and g.IS_LOCK=0\n" +
 			"and a.STORE_STATE=20\n" +
+			"and g.ASCENT_LOCK_STATE=0 \n" +
+			"and l.ASCENT_LOCK_STATE=0 \n" +
 			"and a.item_id = #{itemId}\n" +
 			"and a.lot_id = #{lotId}\n" +
 			"and a.owner_id = #{ownerId}\n" +
@@ -194,7 +196,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"inner join sx_store a on d.item_id =a.item_id and d.lot_id=a.lot_id \n" +
 			"INNER JOIN sx_store_location l ON a.store_location_id = l.id  \n" +
 			"INNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id  \n" +
-			"and g.IS_LOCK=0 and a.STORE_STATE=20 ORDER BY dept_num asc,qty asc ")
+			"and g.IS_LOCK=0 and a.STORE_STATE=20 AND l.ASCENT_LOCK_STATE=0  AND g.ASCENT_LOCK_STATE=0 ORDER BY dept_num asc,qty asc ")
 	List<CheckOutResult> getCheckOutByOutBoundTaskDetail(@Param("billNo") String billNo );
 
       @ResultMap("SxStore")

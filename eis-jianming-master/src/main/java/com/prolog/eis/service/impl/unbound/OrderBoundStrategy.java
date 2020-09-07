@@ -24,7 +24,6 @@ import java.util.Map;
  * 订单出库 未指定拣选站
  */
 @Component(OutBoundType.TASK_TYPE+1+OutBoundType.IF_SfReq+0)
-@Transactional(rollbackFor=Exception.class,timeout = 1000)
 @Slf4j
 @SuppressWarnings("all")
 public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
@@ -62,6 +61,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
 
     @Override
+    @Transactional(rollbackFor=Exception.class,timeout = 1000)
     public void unbound(OutboundTask outboundTask) {
 
         List<PickStation> listPickStations=getAvailablePickStation();

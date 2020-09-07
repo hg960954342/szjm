@@ -51,11 +51,20 @@
                     success: function (data) {
                         $("body").mLoading("hide");
                         if(data){
-                            if (data.storeState20 != null) {ret.push(eval(data.storeState20));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState10 != null) {ret.push(eval(data.storeState10));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState30 != null) {ret.push(eval(data.storeState30));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState50 != null) {ret.push(eval(data.storeState50));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState20_0 != null) {ret.push(eval(data.storeState20_0));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState20_1 != null) {ret.push(eval(data.storeState20_1));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState10_0 != null) {ret.push(eval(data.storeState10_0));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState10_1 != null) {ret.push(eval(data.storeState10_1));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState30_0 != null) {ret.push(eval(data.storeState30_0));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState30_1 != null) {ret.push(eval(data.storeState30_1));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState50_0 != null) {ret.push(eval(data.storeState50_0));}else{ret.push(eval("[[0,0]]")) }
+                            if (data.storeState50_1 != null) {ret.push(eval(data.storeState50_1));}else{ret.push(eval("[[0,0]]")) }
+
                         }else{
+                            ret.push(eval("[[0,0]]"));
+                            ret.push(eval("[[0,0]]"));
+                            ret.push(eval("[[0,0]]"));
+                            ret.push(eval("[[0,0]]"));
                             ret.push(eval("[[0,0]]"));
                             ret.push(eval("[[0,0]]"));
                             ret.push(eval("[[0,0]]"));
@@ -103,7 +112,20 @@
                             showMarker: true,
                             showLine: false,
                             markerOptions: {
-                                style: 'filledCircle',
+                                style: 'filledSquare',
+                                size: 8
+                            },
+                            rendererOptions: {
+                                smooth: true
+                            }
+                        },
+                        {
+                            color: '#8A2BE2',
+                            label: '[已上架]',
+                            showMarker: true,
+                            showLine: false,
+                            markerOptions: {
+                                style: 'filledSquare',
                                 size: 8
                             },
                             rendererOptions: {
@@ -119,7 +141,20 @@
                                 smooth: true,
                             },
                             markerOptions: {
-                                style: 'filledSquare',
+                                style: 'circle',
+                                size: 8
+                            },
+                        },
+                        {
+                            color: '#FF6347',
+                            label: '[入库中]',
+                            showMarker: true,
+                            showLine: false,
+                            rendererOptions: {
+                                smooth: true,
+                            },
+                            markerOptions: {
+                                style: 'circle',
                                 size: 8
                             },
                         },
@@ -132,7 +167,20 @@
                                 smooth: true,
                             },
                             markerOptions: {
-                                style: 'filledSquare',
+                                style: 'dimaond',
+                                size: 8
+                            },
+                        },
+                        {
+                            color: '#B8860B',
+                            label: '[出库中]',
+                            showMarker: true,
+                            showLine: false,
+                            rendererOptions: {
+                                smooth: true,
+                            },
+                            markerOptions: {
+                                style: 'dimaond',
                                 size: 8
                             },
                         },
@@ -145,12 +193,25 @@
                                 smooth: true,
                             },
                             markerOptions: {
-                                style: 'filledSquare',
+                                style: 'x',
+                                size: 8
+                            },
+                        },
+                        {
+                            color: '#A9A9A9',
+                            label: '[其他]',
+                            showMarker: true,
+                            showLine: false,
+                            rendererOptions: {
+                                smooth: true,
+                            },
+                            markerOptions: {
+                                style: 'x',
                                 size: 8
                             },
                         }
                     ],
-                    legend: {
+                        legend: {
                         show: true,
                         location: 'ne',
                         xoffset: 1,
@@ -164,6 +225,7 @@
                             min: 10,
                             max: 58,
                             numberTicks: 49,
+                           // tickInterval:11,
                             tickOptions: {
                                 showGridline: true,
                                 showMark: true,
