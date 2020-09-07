@@ -15,6 +15,11 @@ public class InboundDataServiceImpl implements InboundDataService {
 
 
     @Override
+    public Integer findByContainerCode(String containerCode) {
+     return inboundDataMapper.findByContainerCode(containerCode);
+    }
+
+    @Override
     public void insertInboundTask(InboundTask datum) {
         inboundDataMapper.insertInboundTask(datum);
 

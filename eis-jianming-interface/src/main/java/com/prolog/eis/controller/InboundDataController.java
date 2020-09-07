@@ -71,6 +71,15 @@ public class InboundDataController {
                     if ((Integer.parseInt(datum.getCeng()) == 3 && datum.getAgvLoc().contains("XY")) || (Integer.parseInt(datum.getCeng()) == 4 && datum.getAgvLoc().contains("AB"))) {
 
                         try {
+                            //判断任务是否重复
+                            Integer count = inboundDataService.findByContainerCode(datum.getContainerCode());
+                            if (count != 0){
+
+                                rejson.setCode("-1");
+                                rejson.setMessage("【入库任务】托盘号："+datum.getContainerCode()+"任务重复");
+                                FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS入库返回" + rejson);
+                                return rejson;
+                            }
 
                             datum.setWmsPush(1);
                             datum.setReBack(1);
@@ -106,9 +115,9 @@ public class InboundDataController {
                             return rejson;
                         }
                     } else {
-                        JsonResult resultStr = new JsonResult();
-                        resultStr.setCode("-1");
-                        resultStr.setMessage("agv小车不能跨层!!!");
+                        rejson.setCode("-1");
+                        rejson.setMessage("agv小车不能跨层!!!");
+                        FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS入库返回" + rejson);
                         return rejson;
                     }
                 }
