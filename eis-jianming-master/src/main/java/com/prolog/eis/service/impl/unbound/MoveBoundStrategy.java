@@ -68,7 +68,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
         for (OutboundTaskDetail outboundTaskDetail : outboundTaskDetailList) {
             //查询托盘任务表
             Boolean aBoolean = containerTaskMapper.getContainerIsEnd(outboundTaskDetail.getContainerCode());
-            if (aBoolean){
+            if (!aBoolean){
                 LogServices.logSysBusiness("单号："+outboundTaskDetail.getBillNo()+",托盘号:"+outboundTaskDetail.getContainerCode()+"正在出库中！！！");
                 outBoundContainerService.deleteDetailAndInsertHistory(outboundTaskDetail);
                 continue;
