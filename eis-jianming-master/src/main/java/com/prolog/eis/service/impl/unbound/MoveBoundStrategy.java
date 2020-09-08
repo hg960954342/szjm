@@ -66,13 +66,17 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
         //根据订单号查询需要移库的明细
         List<OutboundTaskDetail> outboundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.put("billNo", outboundTask.getBillNo()).getMap(), OutboundTaskDetail.class);
         for (OutboundTaskDetail outboundTaskDetail : outboundTaskDetailList) {
-            //查询库存
-            Map<String, Object> sxStore = qcSxStoreMapper.findSxStore(outboundTaskDetail.getContainerCode(), outboundTaskDetail.getLotId(), outboundTaskDetail.getItemId());
-            if (sxStore==null){
-                LogServices.logSysBusiness("单号："+outboundTaskDetail.getBillNo()+",托盘号:"+outboundTaskDetail.getContainerCode()+"正在出库中或库存中不存在！！！");
+            //查询托盘任务表
+            Boolean aBoolean = containerTaskMapper.getContainerIsEnd(outboundTaskDetail.getContainerCode());
+            if (aBoolean){
+                LogServices.logSysBusiness("单号："+outboundTaskDetail.getBillNo()+",托盘号:"+outboundTaskDetail.getContainerCode()+"正在出库中！！！");
                 outBoundContainerService.deleteDetailAndInsertHistory(outboundTaskDetail);
                 continue;
             }
+            //查询库存
+            Map<String, Object> sxStore = qcSxStoreMapper.findSxStore(outboundTaskDetail.getContainerCode(), outboundTaskDetail.getLotId(), outboundTaskDetail.getItemId());
+            if (sxStore==null){return;}
+            //查询托盘任务表
 
             String pickCode = outboundTaskDetail.getPickCode();
             List<PickStation> listPickStations = null;

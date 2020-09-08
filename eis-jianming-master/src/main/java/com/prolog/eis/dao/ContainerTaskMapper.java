@@ -64,4 +64,7 @@ public interface ContainerTaskMapper extends BaseMapper<ContainerTask> {
     @ResultMap("ContainerTask")
     @Select("select * from container_task where container_code = #{containerNo}")
     ContainerTask queryContainerTaskByConcode(String containerNo);
+
+    @Select("select (case when count(*)>=1 then 0 else 1 end) from container_task where container_code = #{containerCode}")
+    public Boolean getContainerIsEnd(@Param("containerCode") String containerCode);
 }
