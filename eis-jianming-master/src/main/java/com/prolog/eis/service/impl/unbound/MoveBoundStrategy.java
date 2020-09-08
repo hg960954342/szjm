@@ -118,7 +118,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             //保存托盘任务明细
             containerTaskDetailMapperMapper.save(containerTaskDetail);
             //保存托盘任务
-            containerTaskMapper.save(containerTask);
+//            containerTaskMapper.save(containerTask);
             sxStoreCkService.buildSxCkTaskByContainerTask(containerTask);
 
             //转到历史记录
