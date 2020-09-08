@@ -9,6 +9,7 @@ import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.framework.utils.MapUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,10 +75,12 @@ public class TestServiceImpl implements TestService{
 	@Override
 	public SxStoreViewMapDto getSxStoreViewMapDtoByLayer(int layer){
 
-
-
-
-
 		return sxStoreMapper.getSxStoreViewMapDtoByLayer(layer);
+	}
+
+	@Override
+	public String getSxStoreContainerNo(int layer,int x,int y){
+
+		return sxStoreMapper.getSxStoreContainerNo(layer,x,y);
 	}
 }

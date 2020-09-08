@@ -132,6 +132,14 @@ public class ViewTestController {
         return qcInBoundTaskService.rukuSxStoreUpdate(containerNo);
     }
 
+    //入库失败更新库存测试接口
+    @PostMapping("/updateByP")
+    @ResponseBody
+    public Object updateInBound(@RequestParam("layer")int layer,@RequestParam("x")int x,@RequestParam("y")int y)throws Exception{
+        String containerNo= testService.getSxStoreContainerNo(layer,x,y);
+        return qcInBoundTaskService.rukuSxStoreUpdate(containerNo);
+    }
+
     //调用agv前进
     @PostMapping("/agvMove")
     @ResponseBody

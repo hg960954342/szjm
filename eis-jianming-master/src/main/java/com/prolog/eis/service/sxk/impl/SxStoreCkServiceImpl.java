@@ -111,7 +111,20 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 					} else {
 						//判断是直接出库还是移位出库
 						if (sxStoreLock.getDeptNum() == 0) {
-							containOutLogic(containerTask);
+							{
+								// 修改库存状态
+								sxStoreMapper.updateStoreState(containerTask.getContainerCode(), 30);
+								// 修改货位组锁
+								sxStoreLocationGroupMapper.updateState(1, containerTask.getContainerCode());
+								// 修改容器任务
+								// 生成mcs任务
+								String taskCode = PrologStringUtils.newGUID();
+								containerTask.setTaskCode(taskCode);
+								containerTaskMapper.save(containerTask);
+
+							}
+
+
 						} else {
 							try {
 								containMoveLogic(sxStoreLock, containerTask);

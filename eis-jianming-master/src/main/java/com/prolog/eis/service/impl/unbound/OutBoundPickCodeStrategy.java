@@ -133,8 +133,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                        containerTaskMapper.save(ordercontainerTask);
-                        sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
+                         sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
                         //出明细
                         for (String billNo : listBillNo) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
@@ -180,8 +179,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                        containerTaskMapper.save(ordercontainerTask);
-                        sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
+                         sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
                         for (String billNo : listBillNo) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
                                     put("billNo", billNo)

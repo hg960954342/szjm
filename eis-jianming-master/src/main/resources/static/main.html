@@ -246,6 +246,21 @@
                         }
                     }
                 });
+                //鼠标点击键事件
+                $("#kucun").bind("jqplotDataClick", function(ev, si, pi, data) {
+                 jConfirm("更新库存已上架危险！请确认？", "确认窗口", function (result) {
+                        if (result) {
+                            $.post("api/v1/master/view/updateByP", {layer: $("#getEisKuchunLayer").val(),x:data[0],y:data[1]}, function (result) {
+                                $("body").mLoading("hide");
+                                   Renderer();
+                                $("body").mLoading("show");
+                                }
+                            );
+
+
+                        }
+                    });
+                });
             }
 
             setInterval(Renderer, 10000);

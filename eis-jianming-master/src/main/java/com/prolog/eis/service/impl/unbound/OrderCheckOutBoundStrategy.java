@@ -10,6 +10,7 @@ import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.enums.OutBoundEnum;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResult;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
+import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.PrologLocationUtils;
 import com.prolog.eis.util.PrologStringUtils;
@@ -59,6 +60,9 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
     @Autowired
     CheckOutTaskMapper checkOutTaskMapper;
 
+    @Autowired
+    SxStoreCkService sxStoreCkService;
+
 
 
 
@@ -89,7 +93,7 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
                task.setItemName(listItemNames.get(0));
            }
            task.setCreateTime(new Date());
-           containerTaskMapper.save(task);
+            sxStoreCkService.buildSxCkTaskByContainerTask(task);
            CheckOutTask checkOutTask=new CheckOutTask();
            checkOutTask.setBillNo(outboundTask.getBillNo());
            checkOutTask.setContainerCode(checkOutResult.getContainerCode());

@@ -13,4 +13,5 @@ public interface TestService {
 	 List<SxStoreViewDto> getSxStoreViewDto(int layer);
 	 List<SxStoreViewSimpleDto> getSxStoreViewDtoSimpleDto(int layer);
 	SxStoreViewMapDto getSxStoreViewMapDtoByLayer(int layer);
+	public String getSxStoreContainerNo(int layer,int x,int y);
 }
