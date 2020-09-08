@@ -82,8 +82,8 @@ public class LedShowService {
             }
             double rQty = containerTask.getQty() - pQty;
             Map<String, LedShowDto> mapLedShows = LedShowDto.getLedShowDtoMap();
-            if (mapLedShows.containsKey(containerTask.getSource())) {
-                LedShowDto ledShowDtoS = mapLedShows.get(containerTask.getSource());
+            if (mapLedShows.containsKey(containerTask.getTarget())) {
+                LedShowDto ledShowDtoS = mapLedShows.get(containerTask.getTarget());
                 LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
                 if (ledShow != null) {
                      try {

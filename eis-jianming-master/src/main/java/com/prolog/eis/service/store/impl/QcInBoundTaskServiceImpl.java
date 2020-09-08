@@ -116,6 +116,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		Double weight = 0d;
 		if(!StringUtils.isEmpty(inBoundRequest.getWeight())) {
 			weight = Double.valueOf(inBoundRequest.getWeight())/10.00;
+			SysParame weightSysParame = sysParameMapper.findById("CONTAINER_WEIGHT", SysParame.class);
+			weight=weight-Integer.parseInt(weightSysParame.getParameValue());
 		}
 
 		//根据托盘码查询入库托盘任务
