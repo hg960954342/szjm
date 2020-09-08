@@ -35,11 +35,12 @@
                     return;
                 }
                 $("body").mLoading("show");
-                Renderer();
+                reloadRenderer();
 
             });
 
             var eiskuncun;
+            Renderer();
             function ajaxDataRenderer(url) {
                 var ret = [];
                 $.ajax({
@@ -77,13 +78,23 @@
                 return ret;
             }
 
-            function Renderer() {
+            function reloadRenderer(){
+                var layer= $("#getEisKuchunLayer").val();
+                var url = "api/v1/master/view/getSxStoreViewMap?layer="+layer;
+                var chartData=ajaxDataRenderer(url);
+                eiskuncun.series[0].data=chartData[0];
+                eiskuncun.series[1].data=chartData[1];
+                eiskuncun.series[2].data=chartData[2];
+                eiskuncun.series[3].data=chartData[3];
+                eiskuncun.series[4].data=chartData[4];
+                eiskuncun.series[5].data=chartData[5];
+                eiskuncun.series[6].data=chartData[6];
+                eiskuncun.series[7].data=chartData[7];
+                eiskuncun.replot();
+            }
 
-                if (eiskuncun) {
-                    $("#kucun").unbind();
-                    $("#kucun").empty();
-                    eiskuncun.replot({clear: true});
-                }
+
+            function Renderer() {
                var layer= $("#getEisKuchunLayer").val();
                 var url = "api/v1/master/view/getSxStoreViewMap?layer="+layer;
                 eiskuncun = $.jqplot('kucun', url, {
@@ -252,7 +263,7 @@
                         if (result) {
                             $.post("api/v1/master/view/updateByP", {layer: $("#getEisKuchunLayer").val(),x:data[0],y:data[1]}, function (result) {
                                 $("body").mLoading("hide");
-                                   Renderer();
+                                reloadRenderer();
                                 $("body").mLoading("show");
                                 }
                             );
@@ -263,7 +274,7 @@
                 });
             }
 
-            setInterval(Renderer, 10000);
+            setInterval(reloadRenderer, 10000);
 
 
         });

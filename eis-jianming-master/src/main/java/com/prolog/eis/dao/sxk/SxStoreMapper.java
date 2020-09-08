@@ -316,7 +316,7 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
 
 
 @Select("select a.CONTAINER_NO from sx_store a ,sx_store_location l where l.id=a.STORE_LOCATION_ID and l.layer=#{layer} and l.x=#{x} and l.y=#{y} ")
-String getSxStoreContainerNo(@Param("layer")int layer,@Param("x")int x,@Param("x")int y);
+String getSxStoreContainerNo(@Param("layer")int layer,@Param("x")int x,@Param("y")int y);
 
 
 
