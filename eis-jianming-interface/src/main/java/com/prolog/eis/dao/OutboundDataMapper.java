@@ -13,19 +13,19 @@ public interface OutboundDataMapper extends BaseMapper {
     void insertOutboundTask(OutboundTask datum);
 
 
-    @Insert("insert into outbound_task_detail (bill_no,seqno,ctreq,owner_id,item_id,item_name,lot_id,qty,finish_qty,pick_code,create_time)" +
-            " values (#{billNo},#{seqNo},#{ctReq},#{ownerId},#{itemId},#{itemName},#{lotId},#{qty},#{finishQty},#{pickCode},#{createTime})")
+    @Insert("insert into outbound_task_detail (bill_no,seqno,ctreq,owner_id,item_id,item_name,lot_id,lot,qty,finish_qty,pick_code,create_time)" +
+            " values (#{billNo},#{seqNo},#{ctReq},#{ownerId},#{itemId},#{itemName},#{lotId},#{lot},#{qty},#{finishQty},#{pickCode},#{createTime})")
     void insertOutboundTaskDetail(OutboundTaskDetail detail);
 
     @Insert("insert into outbound_task (bill_no,wms_push,reback,empty_container,task_type,task_state,create_time) values (#{billNo},#{wmsPush},#{reBack},#{emptyContainer},#{taskType},#{taskState},#{createTime})")
     void insertMoveTask(OutboundTask datum);
 
-    @Insert("insert into outbound_task_detail (bill_no,seqno,ctreq,item_id,item_name,qty,finish_qty,lot_id,pick_code,container_code,create_time)" +
-            " values (#{billNo},#{seqNo},#{ctReq},#{itemId},#{itemName},#{qty},#{finishQty},#{lotId},#{pickCode},#{containerCode},#{createTime})")
+    @Insert("insert into outbound_task_detail (bill_no,seqno,ctreq,item_id,item_name,qty,finish_qty,lot_id,lot,pick_code,container_code,create_time)" +
+            " values (#{billNo},#{seqNo},#{ctReq},#{itemId},#{itemName},#{qty},#{finishQty},#{lotId},#{lot},#{pickCode},#{containerCode},#{createTime})")
     void insertMoveTaskDetail(OutboundTaskDetail detail);
 
 
-    @Insert("insert into outbound_task_detail (bill_no,seqno,ctreq,item_id,item_name,lot_id,create_time) values (#{billNo},#{seqNo},#{ctReq},#{itemId},#{itemName},#{lotId},#{createTime})")
+    @Insert("insert into outbound_task_detail (bill_no,seqno,ctreq,item_id,item_name,lot_id,lot,create_time) values (#{billNo},#{seqNo},#{ctReq},#{itemId},#{itemName},#{lotId},#{lot},#{createTime})")
     void insertCheckOutTaskDetail(OutboundTaskDetail detail);
 
     @Insert("insert into outbound_task (bill_no,wms_push,reback,empty_container,task_type,task_state,pick_code,create_time) values (#{billNo},#{wmsPush},#{reBack},#{emptyContainer},#{taskType},#{taskState},#{pickCode},#{createTime})")

@@ -61,9 +61,14 @@ public class InboundTask {
     private float qty;
 
     @Column("lot_id")
-    @ApiModelProperty("wms批号")
+    @ApiModelProperty("wms内码")
     @JsonProperty("LOTID")
     private String lotId;
+
+    @Column("lot")
+    @ApiModelProperty("wms批号")
+    @JsonProperty("LOT")
+    private String lot;
 
     @Column("ceng")
     @ApiModelProperty("入库楼层")
@@ -251,5 +256,13 @@ public class InboundTask {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getLot() {
+        return lot;
+    }
+
+    public void setLot(String lot) {
+        this.lot = lot;
     }
 }

@@ -53,9 +53,14 @@ public class OutboundTaskDetail {
     private String itemName;
 
     @Column("lot_id")
-    @ApiModelProperty("wms批号")
+    @ApiModelProperty("wms内码")
     @JsonProperty("LOTID")
     private String lotId;
+
+    @Column("lot")
+    @ApiModelProperty("wms批号")
+    @JsonProperty("LOT")
+    private String lot;
 
     @Column("qty")
     @ApiModelProperty("数量（重量）")
@@ -189,5 +194,13 @@ public class OutboundTaskDetail {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getLot() {
+        return lot;
+    }
+
+    public void setLot(String lot) {
+        this.lot = lot;
     }
 }
