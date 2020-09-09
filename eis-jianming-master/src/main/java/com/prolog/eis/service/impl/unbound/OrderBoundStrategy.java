@@ -142,9 +142,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                             }
                         }
 
-                        if(listBillNoRemove!=null&&listBillNoRemove.size()>0){
-                            outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", listBillNoRemove));}
-                        similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);
+
 
                       if (last <= 0){ break;} else {continue;}
                     }
@@ -188,16 +186,12 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         }
 
 
-                        if(listBillNoRemove!=null&&listBillNoRemove.size()>0){
-                            outBoundTaskMapper.updateOutBoundTaskBySQL(String.join(",", listBillNoRemove));}
-                        similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);
-                        break;
                     }
 
                 }}
 
 
-
+             removeCompleteOrderAndUpdate(listBillNoRemove,similarityDataEntityListLoad);
 
 
 

@@ -12,6 +12,7 @@ import com.prolog.framework.core.restriction.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -140,6 +141,20 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         //if(list!=null&&list.size()>0) return true;
         return false;
     }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+public void removeCompleteOrderAndUpdate(List<String> listBillNoRemove,SimilarityDataEntityLoadInterface similarityDataEntityLoadInterface){
+    for(String billNoString:listBillNoRemove){
+       boolean isComplete= outBoundTaskDetailMapper.isOrderComplete(billNoString);
+       if(isComplete){
+           outBoundTaskMapper.updateOutBoundTaskBySQL(billNoString);
+           similarityDataEntityLoadInterface.getCrrentBillNoList().remove(billNoString);
+       }
+    }
+
+
+
+}
 
 
 }
