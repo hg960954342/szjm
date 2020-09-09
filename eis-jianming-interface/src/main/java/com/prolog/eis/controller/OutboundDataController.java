@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -197,6 +198,7 @@ public class OutboundDataController {
             } else {
                 //List<OutboundTask> data = moveTaskData.getData();
                 List<Outbt> data = moveTaskData.getData();
+                List<String> containerCodeList = new ArrayList<>();
                 for (Outbt datum : data) {
                     try {
 
@@ -231,10 +233,8 @@ public class OutboundDataController {
                                 outboundDataService.insertMoveTaskDetail(detail);
                             }
                         }else {
-                            rejson.setCode("-1");
-                            rejson.setMessage("托盘号："+containerCodes.toString()+"正在执行其他任务");
-                            FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS移库返回" + rejson);
-                            return rejson;
+                            containerCodeList.addAll(containerCodes);
+                            continue;
                         }
 
                         outboundDataService.insertMoveTask(datum);
@@ -261,6 +261,12 @@ public class OutboundDataController {
                     }
                 }
 
+                if (containerCodeList.size()>0){
+                    rejson.setCode("-1");
+                    rejson.setMessage("托盘号："+containerCodeList.toString()+"正在执行其他任务");
+                    FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS移库返回" + rejson);
+                    return rejson;
+                }
                 rejson.setCode("0");
                 rejson.setMessage("success");
 
