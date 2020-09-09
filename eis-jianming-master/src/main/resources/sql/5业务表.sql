@@ -12,6 +12,7 @@ CREATE TABLE `container_task` (
   `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
   `item_name` varchar(255) DEFAULT NULL COMMENT 'wms商品名称',
   `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms批号',
+  `lot` varchar(255) DEFAULT NULL COMMENT '批号',
   `owner_id` varchar(255) DEFAULT NULL COMMENT 'wms业主',
   `qty` decimal DEFAULT NULL COMMENT '数量（重量）',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',

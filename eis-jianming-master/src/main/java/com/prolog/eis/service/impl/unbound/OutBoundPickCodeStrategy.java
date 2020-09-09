@@ -76,6 +76,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             ordercontainerTask.setOwnerId(detailDataBeand.getOwnerId());
             ordercontainerTask.setItemId(detailDataBeand.getItemId());
             ordercontainerTask.setItemName(detailDataBeand.getItemName());
+            ordercontainerTask.setLot(detailDataBeand.getLot());
             ordercontainerTask.setTaskType(1);
             ordercontainerTask.setSourceType(1);
 

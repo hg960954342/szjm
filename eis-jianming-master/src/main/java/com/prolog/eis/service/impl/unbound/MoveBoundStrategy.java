@@ -107,11 +107,16 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             //封装成托盘任务明细
             ContainerTaskDetail containerTaskDetail = getContainerTaskDetail(outboundTaskDetail, sxStore);
 
-            if (outboundTaskDetail.getQty()>((BigDecimal) sxStore.get("qty")).floatValue()){
-                //出库数量大于库存数量
-                containerTaskDetail.setQty(((BigDecimal) sxStore.get("qty")).floatValue());
+            if (outboundTaskDetail.getQty() !=0) {
+                if (outboundTaskDetail.getQty() > ((BigDecimal) sxStore.get("qty")).floatValue()) {
+                    //出库数量大于库存数量
+                    containerTaskDetail.setQty(((BigDecimal) sxStore.get("qty")).floatValue());
+                } else {
+                    containerTaskDetail.setQty(outboundTaskDetail.getQty());
+                }
             }else {
-                containerTaskDetail.setQty(outboundTaskDetail.getQty());
+                //wms下传的qty为0，
+                containerTaskDetail.setQty(((BigDecimal) sxStore.get("qty")).floatValue());
             }
 
             containerTask.setTaskCode(null);
@@ -162,6 +167,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
         containerTask.setLotId(outboundTaskDetail.getLotId());
         containerTask.setItemId(outboundTaskDetail.getItemId());
         containerTask.setItemName(outboundTaskDetail.getItemName());
+        containerTask.setLot(outboundTaskDetail.getLot());
         containerTask.setOwnerId(outboundTaskDetail.getOwnerId());
         containerTask.setQty(((BigDecimal) sxStore.get("qty")).floatValue());
         containerTask.setCreateTime(new Date(System.currentTimeMillis()));

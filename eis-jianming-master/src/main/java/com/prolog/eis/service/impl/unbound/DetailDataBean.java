@@ -11,6 +11,7 @@ public class DetailDataBean {
     private String itemId;
     private String itemName;
     private String lotId;
+    private String lot;
     private String pickCode;
     private float qty;  //总量
     private float cqty; //正在出库的量
@@ -94,5 +95,13 @@ public class DetailDataBean {
 
     public void setFinishQty(float finishQty) {
         this.finishQty = finishQty;
+    }
+
+    public String getLot() {
+        return lot;
+    }
+
+    public void setLot(String lot) {
+        this.lot = lot;
     }
 }

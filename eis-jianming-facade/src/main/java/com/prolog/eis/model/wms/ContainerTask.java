@@ -59,6 +59,10 @@ public class ContainerTask {
     @ApiModelProperty("wms批号")
     private String lotId;
 
+	@Column("lot")
+	@ApiModelProperty("批号")
+	private String lot;
+
     @Column("owner_id")
     @ApiModelProperty("wms业主")
     private String ownerId;
@@ -186,6 +190,14 @@ public class ContainerTask {
 		this.lotId = lotId;
 	}
 
+	public String getLot() {
+		return lot;
+	}
+
+	public void setLot(String lot) {
+		this.lot = lot;
+	}
+
 	public String getOwnerId() {
 		return ownerId;
 	}
@@ -257,6 +269,7 @@ public class ContainerTask {
 				", itemId='" + itemId + '\'' +
 				", itemName='" + itemName + '\'' +
 				", lotId='" + lotId + '\'' +
+				", lot='" + lot + '\'' +
 				", ownerId='" + ownerId + '\'' +
 				", qty=" + qty +
 				", createTime=" + createTime +

@@ -38,7 +38,7 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
             @Result(property = "ownerId", column = "owner_id"),
             @Result(property = "seqNo", column = "seqno"),
             @Result(property = "itemId", column = "item_id"),
-            @Result(property = "itemId", column = "item_id"),
+            @Result(property = "itemName", column = "item_name"),
             @Result(property = "qty", column = "qty"),
             @Result(property = "agvLoc", column = "source")
     })
