@@ -63,6 +63,13 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
      */
     @Override
     public void unbound(OutboundTask outboundTask) {
+
+        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",3).getMap(),OutboundTask.class);
+        if(listCheckOuts.size()>0){
+            //存在盘点任务
+            LogServices.logSysBusiness("盘点任务优先！");
+            return;
+        }
         //根据订单号查询需要移库的明细
         List<OutboundTaskDetail> outboundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.put("billNo", outboundTask.getBillNo()).getMap(), OutboundTaskDetail.class);
         for (OutboundTaskDetail outboundTaskDetail : outboundTaskDetailList) {
