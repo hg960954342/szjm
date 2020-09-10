@@ -63,6 +63,12 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     @Transactional(rollbackFor = Exception.class, timeout = 1000)
     public void unbound(OutboundTask outboundTask) {
 
+        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",3).getMap(),OutboundTask.class);
+        if(listCheckOuts.size()>0){
+            //存在盘点任务
+            LogServices.logSysBusiness("盘点任务优先！");
+            return;
+        }
         List<PickStation> listPickStations = getAvailablePickStation();
         if (listPickStations.size() < 1) {
             LogServices.logSysBusiness("无可用拣选站");

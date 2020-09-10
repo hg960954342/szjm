@@ -64,6 +64,13 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
     @Transactional(rollbackFor = Exception.class)
     public void unbound(OutboundTask outboundTask) {
 
+        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",3).getMap(),OutboundTask.class);
+        if(listCheckOuts.size()>0){
+            //存在盘点任务
+            LogServices.logSysBusiness("盘点任务优先！");
+            return;
+        }
+
         SimilarityDataEntityLoadInterface similarityDataEntityListLoad = getsimilarityDataEntityListLoad(outboundTask);
 
         List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList();

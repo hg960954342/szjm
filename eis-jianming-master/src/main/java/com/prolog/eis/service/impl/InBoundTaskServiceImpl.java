@@ -2,7 +2,10 @@ package com.prolog.eis.service.impl;
 
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.InBoundTaskMapper;
+import com.prolog.eis.dao.OutBoundTaskMapper;
+import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.InboundTask;
+import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.impl.inbound.InBoundStragtegy;
 import com.prolog.eis.service.impl.inbound.InBoundType;
@@ -21,6 +24,8 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
     private InBoundTaskMapper inBoundTaskMapper;
     @Autowired
     AgvStorageLocationMapper agvStorageLocationMapper;
+    @Autowired
+    OutBoundTaskMapper outBoundTaskMapper;
 
 
 
@@ -46,7 +51,14 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
           for(InboundTask inboundTask:list){
               InBoundStragtegy inBoundStragtegy=getInBoundTaskServiceImpl(inboundTask);
               if(null!=inBoundStragtegy){
+                  List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",3).getMap(),OutboundTask.class);
+                  if(listCheckOuts.size()>0){
+                      //存在盘点任务
+                      LogServices.logSysBusiness("盘点任务优先！");
+                      return;
+                  }
                   inBoundStragtegy.inbound(inboundTask);
+
               }
           }
 
