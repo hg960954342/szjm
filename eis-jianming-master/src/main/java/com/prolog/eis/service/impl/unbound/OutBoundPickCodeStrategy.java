@@ -68,7 +68,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
         List<DetailDataBean> list = similarityDataEntityListLoad.getOutDetailList();
 
-
+        List<String> listBillNo = new ArrayList<>();
         for (DetailDataBean detailDataBeand : list) {
             ContainerTask ordercontainerTask = new ContainerTask();
             ordercontainerTask.setLotId(detailDataBeand.getLotId());
@@ -94,27 +94,18 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
             String bill_no_String = detailDataBeand.getBillNo();
 
-            List<String> listBillNo = Arrays.asList(bill_no_String.split(","));
-            List<String> listBillNoRemove = new ArrayList<>();
-            for (String remove : listBillNo) {
-                listBillNoRemove.add(String.format("'%s'", remove));
-            }
-//pickstation给默认值
+             listBillNo = Arrays.asList(bill_no_String.split(","));
+
+            //pickstation给默认值
             String pickCode = StringUtils.isEmpty(detailDataBeand.getPickCode())?"pickStation4":detailDataBeand.getPickCode();
-            List<PickStation> listPickStations=pickStationMapper.findByMap(MapUtils.put("deviceNo",pickCode).getMap(),PickStation.class);
+           /* List<PickStation> listPickStations=pickStationMapper.findByMap(MapUtils.put("deviceNo",pickCode).getMap(),PickStation.class);
             if(listPickStations.size()>1||listPickStations.size()<1){
                 LogServices.logSysBusiness(pickCode + "拣选站已经锁定！");
                 return;
-            }
+            }*/
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
-
             if (agvStorageLocation == null) {
                 LogServices.logSysBusiness(pickCode + "拣选站点位已经锁定！");
-            /*    outboundTask.setTaskState(1);
-                outBoundTaskMapper.save(outboundTask);
-                //移除此缓存条目
-                if (listBillNoRemove != null && listBillNoRemove.size() > 0)
-                    similarityDataEntityListLoad.getCrrentBillNoList().removeAll(listBillNoRemove);*/
                 return;
             }else{
                 agvStorageLocation.setLocationLock(1);
@@ -159,7 +150,8 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                                     containerTaskDetail.setQty((outboundTaskDetail.getQty()-doubleCurrent));
                                 }
 
-                                containerTaskDetailMapperMapper.save(containerTaskDetail);
+                                if((outboundTaskDetail.getQty() - doubleCurrent)!=0){
+                                containerTaskDetailMapperMapper.save(containerTaskDetail);}
                             }
                         }
 
@@ -200,7 +192,8 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                                 }else{
                                     containerTaskDetail.setQty(outboundTaskDetail.getQty()-doubleCurrent);
                                 }
-                                containerTaskDetailMapperMapper.save(containerTaskDetail);
+                                if((outboundTaskDetail.getQty() - doubleCurrent)!=0){
+                                containerTaskDetailMapperMapper.save(containerTaskDetail);}
                             }
                         }
 
@@ -213,12 +206,14 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             }
 
 
-            removeCompleteOrderAndUpdate(listBillNoRemove,similarityDataEntityListLoad);
+
 
         }
 
 
+        removeCompleteOrderAndUpdate(listBillNo, similarityDataEntityListLoad);
     }
+
 
 
 }

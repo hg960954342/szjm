@@ -3,18 +3,18 @@ package com.prolog.eis.service.impl.unbound;
 import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.logs.LogServices;
-import com.prolog.eis.model.wms.AgvStorageLocation;
-import com.prolog.eis.model.wms.OutboundTask;
-import com.prolog.eis.model.wms.PickStation;
+import com.prolog.eis.model.wms.*;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
+import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -142,19 +142,52 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         return false;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-public void removeCompleteOrderAndUpdate(List<String> listBillNoRemove,SimilarityDataEntityLoadInterface similarityDataEntityLoadInterface){
-    for(String billNoString:listBillNoRemove){
-       boolean isComplete= outBoundTaskDetailMapper.isOrderComplete(billNoString);
-       if(isComplete){
-           outBoundTaskMapper.updateOutBoundTaskBySQL(billNoString);
-           similarityDataEntityLoadInterface.getCrrentBillNoList().remove(billNoString);
-       }
+
+
+
+    public void removeCompleteOrderAndUpdate(List<String> listBillNos,SimilarityDataEntityLoadInterface similarityDataEntityLoadInterface){
+       HashSet<String> setList=new HashSet<String>();
+       setList.addAll(listBillNos);
+        for(String billNoString:setList) {
+            //查询订单全部明细
+            List<OutboundTaskDetail> listOutBoundTaskDetails=outBoundTaskDetailMapper.findByMap(MapUtils.put("billNo",billNoString).getMap(),OutboundTaskDetail.class);
+            for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetails){
+                //获取container_task_detatil明细
+                List<ContainerTaskDetail> listContainerTaskDetails = containerTaskDetailMapperMapper.findByMap(MapUtils.
+                        put("billNo", billNoString)
+                        .put("itemId", outboundTaskDetail.getItemId()).put("ownerId", outboundTaskDetail.getOwnerId()
+                        ).put("lotId", outboundTaskDetail.getLotId()).getMap(), ContainerTaskDetail.class);
+                //获取明细总量
+                double doubleCurrent = listContainerTaskDetails.stream().mapToDouble(ContainerTaskDetail::getQty).sum();
+                outboundTaskDetail.setFinishQty((float)doubleCurrent); //回写
+                outBoundTaskDetailMapper.update(outboundTaskDetail);
+            }
+            boolean isComplete= outBoundTaskDetailMapper.isOrderComplete(billNoString);
+            if(isComplete){
+                billNoString=  String.format("'%s'", billNoString);
+                outBoundTaskMapper.updateOutBoundTaskBySQL(billNoString);
+                similarityDataEntityLoadInterface.getCrrentBillNoList().remove(billNoString);
+            }
+        }
+
     }
 
 
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

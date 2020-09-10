@@ -155,44 +155,12 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
 
 
  @Select("SELECT\n" +
-         "\t( CASE WHEN sum(b.qty - b.finish_qty - b.cqty)= 0 THEN 1 ELSE 0 END ) \n" +
+         " \n" +
+         "  CASE WHEN sum(qty-finish_qty)= 0 THEN 1 ELSE 0 END \n" +
          "FROM\n" +
-         "\t(\n" +
-         "\tSELECT\n" +
-         "\t\tsum( d.qty ) qty,\n" +
-         "\t\tsum( d.finish_qty ) finish_qty,\n" +
-         "\t\tsum( d.qty_ ) cqty,\n" +
-         "\t\td.owner_id,\n" +
-         "\t\td.item_id,\n" +
-         "\t\td.lot_id,\n" +
-         "\t\td.item_name,\n" +
-         "\t\td.pick_code,\n" +
-         "\t\tgroup_concat( d.bill_no ) bill_no \n" +
-         "\tFROM\n" +
-         "\t\t(\n" +
-         "\t\tSELECT\n" +
-         "\t\t\td.qty,\n" +
-         "\t\t\td.finish_qty,\n" +
-         "\t\t\tc.qty qty_,\n" +
-         "\t\t\td.owner_id,\n" +
-         "\t\t\td.item_id,\n" +
-         "\t\t\td.lot_id,\n" +
-         "\t\t\td.item_name,\n" +
-         "\t\t\td.pick_code,\n" +
-         "\t\t\td.bill_no \n" +
-         "\t\tFROM\n" +
-         "\t\t\toutbound_task_detail d\n" +
-         "\t\t\tINNER JOIN outbound_task t ON t.bill_no = d.bill_no \n" +
-         "\t\t\tAND d.bill_no in (${bill_no_string}) \n" +
-         "\t\t\tLEFT JOIN container_task_detail c ON c.bill_no = d.bill_no \n" +
-         "\t\t) d \n" +
-         "\tGROUP BY\n" +
-         "\t\td.owner_id,\n" +
-         "\t\td.item_id,\n" +
-         "\t\td.lot_id,\n" +
-         "\t\td.item_name,\n" +
-         "\td.pick_code \n" +
-         "\t)b")
+         "\toutbound_task_detail d \n" +
+         "WHERE\n" +
+         "\td.bill_no = #{bill_no_string} ")
  boolean isOrderComplete(@Param("bill_no_string")String bill_no_string);
 
 
