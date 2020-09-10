@@ -94,7 +94,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
             String bill_no_String = detailDataBeand.getBillNo();
 
-             listBillNo = Arrays.asList(bill_no_String.split(","));
+             listBillNo.addAll(Arrays.asList(bill_no_String.split(","))) ;
 
             //pickstation给默认值
             String pickCode = StringUtils.isEmpty(detailDataBeand.getPickCode())?"pickStation4":detailDataBeand.getPickCode();
