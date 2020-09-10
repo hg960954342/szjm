@@ -159,6 +159,10 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
                                 if((outboundTaskDetail.getQty() - doubleCurrent)!=0){
                                 containerTaskDetailMapperMapper.save(containerTaskDetail);}
+
+
+                                outboundTaskDetail.setFinishQty(outboundTaskDetail.getFinishQty()+(float) containerTaskDetail.getQty());
+                                outBoundTaskDetailMapper.update(outboundTaskDetail);
                             }
                         }
 
@@ -201,6 +205,9 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                                 }
                                 if((outboundTaskDetail.getQty() - doubleCurrent)!=0){
                                 containerTaskDetailMapperMapper.save(containerTaskDetail);}
+
+                                outboundTaskDetail.setFinishQty(outboundTaskDetail.getFinishQty()+(float) containerTaskDetail.getQty());
+                                outBoundTaskDetailMapper.update(outboundTaskDetail);
                             }
                         }
 

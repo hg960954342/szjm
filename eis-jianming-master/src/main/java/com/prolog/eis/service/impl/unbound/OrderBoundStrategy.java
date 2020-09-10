@@ -149,8 +149,11 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                                     containerTaskDetail.setQty((outboundTaskDetail.getQty() - doubleCurrent));
                                 }
                               if((outboundTaskDetail.getQty() - doubleCurrent)!=0){
-                                containerTaskDetailMapperMapper.save(containerTaskDetail);
-                                 }
+                                   containerTaskDetailMapperMapper.save(containerTaskDetail);
+                               }
+
+                                outboundTaskDetail.setFinishQty(outboundTaskDetail.getFinishQty()+(float) containerTaskDetail.getQty());
+                                outBoundTaskDetailMapper.update(outboundTaskDetail);
                             }
 
                         }
@@ -201,6 +204,9 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                                 if((outboundTaskDetail.getQty() - doubleCurrent)!=0){
                                 containerTaskDetailMapperMapper.save(containerTaskDetail);
                                 }
+
+                                outboundTaskDetail.setFinishQty(outboundTaskDetail.getFinishQty()+(float) containerTaskDetail.getQty());
+                                outBoundTaskDetailMapper.update(outboundTaskDetail);
 
 
                             }

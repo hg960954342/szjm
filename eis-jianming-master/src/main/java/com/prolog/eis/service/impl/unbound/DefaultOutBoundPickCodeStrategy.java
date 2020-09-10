@@ -150,7 +150,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
        setList.addAll(listBillNos);
         for(String billNoString:setList) {
             //查询订单全部明细
-            List<OutboundTaskDetail> listOutBoundTaskDetails=outBoundTaskDetailMapper.findByMap(MapUtils.put("billNo",billNoString).getMap(),OutboundTaskDetail.class);
+           /* List<OutboundTaskDetail> listOutBoundTaskDetails=outBoundTaskDetailMapper.findByMap(MapUtils.put("billNo",billNoString).getMap(),OutboundTaskDetail.class);
             for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetails){
                 //获取container_task_detatil明细
                 List<ContainerTaskDetail> listContainerTaskDetails = containerTaskDetailMapperMapper.findByMap(MapUtils.
@@ -161,7 +161,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
                 double doubleCurrent = listContainerTaskDetails.stream().mapToDouble(ContainerTaskDetail::getQty).sum();
                 outboundTaskDetail.setFinishQty((float)doubleCurrent); //回写
                 outBoundTaskDetailMapper.update(outboundTaskDetail);
-            }
+            }*/
             boolean isComplete= outBoundTaskDetailMapper.isOrderComplete(billNoString);
             if(isComplete){
                 billNoString=  String.format("'%s'", billNoString);
