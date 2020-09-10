@@ -212,7 +212,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
     private String outBoundReportData(ContainerTask containerTask) {
         try {
             List<Map<String, Object>> reportData = containerTaskDetailService.selectByContainerCode(containerTask.getContainerCode());
-            String[] str = {"id", "lotId", "create_time", "end_time"};
+            String[] str = {"id", "create_time", "end_time"};
             NameAndSimplePropertyPreFilter nameAndSimplePropertyPreFilter = new NameAndSimplePropertyPreFilter();
             nameAndSimplePropertyPreFilter.getExcludes().addAll(Arrays.asList(str));
             for (Map<String, Object> reportDatum : reportData) {
