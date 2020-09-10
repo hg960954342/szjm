@@ -164,20 +164,20 @@ public class LogServices {
      *
      */
     public static void logSys(Throwable e){
+        SysLog sysLog=new SysLog();
+        String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
+        sysLog.setClassName(className);
+        String classSimpleName = StringUtils.substring(className,StringUtils.lastIndexOf(className,".")+1);
+        sysLog.setClassSimpleName(classSimpleName);
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();//调用的方法名
+        sysLog.setClassMethod(methodName);
+        int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
+        sysLog.setLineNumber(lineNumber+"");
+        sysLog.setError(toString_(e));
+        sysLog.setCreateTime(new java.util.Date());
         new Thread( new Runnable(){
              @Override
              public void run() {
-                 SysLog sysLog=new SysLog();
-                 String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
-                 sysLog.setClassName(className);
-                 String classSimpleName = StringUtils.substring(className,StringUtils.lastIndexOf(className,".")+1);
-                 sysLog.setClassSimpleName(classSimpleName);
-                 String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();//调用的方法名
-                 sysLog.setClassMethod(methodName);
-                 int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
-                 sysLog.setLineNumber(lineNumber+"");
-                 sysLog.setError(toString_(e));
-                 sysLog.setCreateTime(new java.util.Date());
                  logServices.logSysMapper.save(sysLog);
              }
          }).start();
