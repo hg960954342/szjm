@@ -24,9 +24,9 @@ spring:
     restart:
       enabled: true
   datasource:
-    url: jdbc:mysql://10.5.90.227:3306/jianmin
+    url: jdbc:mysql://39.96.69.213:3306/jianmin
     username: root
-    password: eis888
+    password: eisalicloud
     driver-class-name: com.mysql.jdbc.Driver
     #初始化大小
     initialSize: 0

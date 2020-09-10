@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 订单出库 未指定拣选站
@@ -103,7 +100,8 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             List<Map<String, Object>> listSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
             String bill_no_String = detailDataBeand.getBillNo();
             listBillNo .addAll(Arrays.asList(bill_no_String.split(",")));
-
+            HashSet<String> setList=new HashSet<String>();
+            setList.addAll(listBillNo);
 
             for (Map<String, Object> sxStore1 : listSxStore) {
                 AgvStorageLocation agvStorageLocation = this.getPickStationAndLock();
@@ -126,7 +124,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setTaskCode(null);
                         sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
                         //出明细
-                        for (String billNo : listBillNo) {
+                        for (String billNo : setList) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
                                     put("billNo", billNo)
                                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
@@ -148,7 +146,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                                 } else {
                                     containerTaskDetail.setQty((outboundTaskDetail.getQty() - doubleCurrent));
                                 }
-                              if((outboundTaskDetail.getQty() - doubleCurrent)!=0){
+                              if((outboundTaskDetail.getQty() - doubleCurrent)>0){
                                    containerTaskDetailMapperMapper.save(containerTaskDetail);
                                }
 
@@ -177,7 +175,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setTaskCode(null);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
                         sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
-                        for (String billNo : listBillNo) {
+                        for (String billNo : setList) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
                                     put("billNo", billNo)
                                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
@@ -201,7 +199,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                                 } else {
                                     containerTaskDetail.setQty(outboundTaskDetail.getQty() - doubleCurrent);
                                 }
-                                if((outboundTaskDetail.getQty() - doubleCurrent)!=0){
+                                if((outboundTaskDetail.getQty() - doubleCurrent)>0){
                                 containerTaskDetailMapperMapper.save(containerTaskDetail);
                                 }
 
