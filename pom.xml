@@ -59,20 +59,25 @@
 				</configuration>
 			</plugin>
 		</plugins>
+			<resources>
+				<resource>
+					<directory>lib</directory>
+					<targetPath>/BOOT-INF/lib/</targetPath>
+					<includes>
+						<include>**/*.jar</include>
+					</includes>
+				</resource>
+				<resource>
+					<directory>src/main/resources</directory>
+					<targetPath>/BOOT-INF/classes/</targetPath>
+					<includes>
+						<include>**/*.*</include>
+					</includes>
+				</resource>
+			</resources>
+
+
 	</build>
 
-	<repositories>
-		<repository>               <!-- 仓库地址   -->
-			<id>nexus</id>
-			<name>Team Nexus Repository </name >
-			<url>http://10.5.90.146:9088/nexus/content/groups/public</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>               <!--  插件地址   -->
-			<id>nexus</id>
-			<name>Team Nexus Repository </name >
-			<url>http://10.5.90.146:9088/nexus/content/groups/public</url>
-		</pluginRepository>
-	</pluginRepositories >
+
 </project>
