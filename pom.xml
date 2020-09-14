@@ -67,13 +67,6 @@
 						<include>**/*.jar</include>
 					</includes>
 				</resource>
-				<resource>
-					<directory>src/main/resources</directory>
-					<targetPath>/BOOT-INF/classes/</targetPath>
-					<includes>
-						<include>**/*.*</include>
-					</includes>
-				</resource>
 			</resources>
 
 
