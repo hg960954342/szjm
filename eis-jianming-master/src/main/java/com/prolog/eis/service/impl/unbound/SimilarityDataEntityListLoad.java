@@ -68,12 +68,7 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
     private OutboundTask getSimilarityDataList() {
         List<OutboundTask> outboundTaskList = outBoundTaskMapper.getListOutboundTask();
         outboundTaskList= outboundTaskList.stream().filter(x->{
-            if(getCrrentBillNoList().contains( String.format("'%s'", x.getBillNo()))){
-                return false;
-            }else{
-                return true;
-            }
-        }).collect(Collectors.toList());
+            return !getCrrentBillNoList().contains( String.format("'%s'", x.getBillNo()));}).collect(Collectors.toList());
         List<SimilarityDataEntity> list = new ArrayList<SimilarityDataEntity>();
 
         for (OutboundTask outboundTask : outboundTaskList) {
