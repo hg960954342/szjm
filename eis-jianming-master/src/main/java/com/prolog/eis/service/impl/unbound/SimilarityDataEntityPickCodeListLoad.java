@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_SINGLETON;
 
@@ -65,20 +66,30 @@ public class SimilarityDataEntityPickCodeListLoad implements SimilarityDataEntit
      * @return
      */
     private OutboundTask getSimilarityDataList(){
-        List<OutboundTask> outboundTaskList=outBoundTaskMapper.getListOutboundTask();
-        List<SimilarityDataEntity> list=new ArrayList<SimilarityDataEntity>();
-        float count=outBoundTaskDetailMapper.getPoolItemCount(String.join(",", getCrrentBillNoList()));
-        for (OutboundTask outboundTask:outboundTaskList) {
-            float  countSame= outBoundTaskDetailMapper.getPoolSameItemCount(String.join(",", getCrrentBillNoList()),outboundTask.getBillNo());
-            float currentCount=outBoundTaskDetailMapper.getPoolItemCount("'"+outboundTask.getBillNo()+"'");
-            count=currentCount>=count?currentCount:count;
-            float similarity=countSame/count;
-            SimilarityDataEntity similarityDataEntity=new SimilarityDataEntity();
+        List<OutboundTask> outboundTaskList = outBoundTaskMapper.getListOutboundTask();
+        outboundTaskList= outboundTaskList.stream().filter(x->{
+            if(getCrrentBillNoList().contains( String.format("'%s'", x.getBillNo()))){
+                return false;
+            }else{
+                return true;
+            }
+        }).collect(Collectors.toList());
+        List<SimilarityDataEntity> list = new ArrayList<SimilarityDataEntity>();
+
+        for (OutboundTask outboundTask : outboundTaskList) {
+            Float count = outBoundTaskDetailMapper.getPoolItemCount(String.join(",", getCrrentBillNoList()));
+            Float countSame = outBoundTaskDetailMapper.getPoolSameItemCount(String.join(",", getCrrentBillNoList()), outboundTask.getBillNo());
+            Float currentCount = outBoundTaskDetailMapper.getPoolItemCount(String.format("'%s'", outboundTask.getBillNo()));
+            if(countSame==null){ countSame=0f;};
+            if(currentCount==null){ currentCount=0f;};
+            if(count==null){ count=0f;};
+            float similarity = countSame / (currentCount >= count ? currentCount : count);
+            SimilarityDataEntity similarityDataEntity = new SimilarityDataEntity();
             similarityDataEntity.setOutboundTask(outboundTask);
             similarityDataEntity.setSimilarity(similarity);
             list.add(similarityDataEntity);
         }
-       return list.stream().max(Comparator.comparing(SimilarityDataEntity::getSimilarity)).orElse(null).getOutboundTask();
+        return list.stream().max(Comparator.comparing(SimilarityDataEntity::getSimilarity)).orElse(null).getOutboundTask();
 
 
     }

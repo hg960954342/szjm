@@ -78,7 +78,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
      * @return
      */
   @Select("SELECT\n" +
-          "\tsum(count)\n" +
+          "\tsum(b.count)\n" +
           "FROM\n" +
           "\t(\n" +
           "\t\tSELECT\n" +
@@ -94,8 +94,8 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
           "\t\t\towner_id,\n" +
           "\t\t\titem_id,\n" +
           "\t\t\tlot_id\n" +
-          "\t)")
-    float getPoolItemCount(@Param("bill_no_string") String billNoString);
+          "\t)b")
+    Float getPoolItemCount(@Param("bill_no_string") String billNoString);
     /**
      * 获取给定订单的和订单池比较 相同的商品总数目
      * @param billNoString
@@ -145,7 +145,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
          "\t\t\ty.owner_id,\n" +
          "\t\t\ty.lot_id\n" +
          "\t)z\n")
- float getPoolSameItemCount(@Param("bill_no_string") String billNoString, @Param("bill_no")String billNo);
+ Float getPoolSameItemCount(@Param("bill_no_string") String billNoString, @Param("bill_no")String billNo);
 
 
 
