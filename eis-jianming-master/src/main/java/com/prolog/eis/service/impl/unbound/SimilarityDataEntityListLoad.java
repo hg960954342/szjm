@@ -48,8 +48,8 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
      * @return
      */
     public synchronized void addOutboundTask(OutboundTask outboundTask) {
-        if (getCrrentBillNoList().size() <= maxSize && outboundTask.getSfReq() == 0) {
-            getCrrentBillNoList().add("'" + outboundTask.getBillNo() + "'");
+        if (getCrrentBillNoList().size() <maxSize && outboundTask.getSfReq() == 0) {
+            getCrrentBillNoList().add(String.format("'%s'", outboundTask.getBillNo()));
         }
     }
 
@@ -66,6 +66,14 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
      * @return
      */
     private OutboundTask getSimilarityDataList() {
+        //加入超时任务
+        List<OutboundTask> listOverTimeBoundTask= outBoundTaskMapper.getOutBoudTaskOverTime(overTime);
+        listOverTimeBoundTask.stream().forEach(x->{
+            if(getCrrentBillNoList().size()<getMaxSize()){
+                getCrrentBillNoList().add(String.format("'%s'", x.getBillNo())) ;
+            }
+        });
+
         List<OutboundTask> outboundTaskList = outBoundTaskMapper.getListOutboundTask();
         outboundTaskList= outboundTaskList.stream().filter(x->{
             return !getCrrentBillNoList().contains( String.format("'%s'", x.getBillNo()));}).collect(Collectors.toList());
