@@ -19,21 +19,49 @@
 <div style="width: 10%;float: left;">
     <input class="tl-price-input" type="text" placeholder="输入层号" id="getEisKuchunLayer">
 </div>
-<button  id="eisKunChunB" class="ant-btn ant-btn-red">层库存监控</button>
+<div id="image"></div>
+<button id="eisKunChunB" class="ant-btn ant-btn-red">层库存监控</button>
+<button id="eisKunChunView" class="ant-btn ant-btn-red">生成快照</button>
 <div id="kucun" style="height:580px; width:100%;">
 </div>
 <script type="text/javascript" class="code">
 
     $(document).ready(
         function () {
+            $("#kucun").bind("contextmenu", function (e) {
+                return false;
+            });
+            function getFormatDate() {
+                var nowDate = new Date();
+                var year = nowDate.getFullYear();
+                var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+                var date = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+                var hour = nowDate.getHours() < 10 ? "0" + nowDate.getHours() : nowDate.getHours();
+                var minute = nowDate.getMinutes() < 10 ? "0" + nowDate.getMinutes() : nowDate.getMinutes();
+                var second = nowDate.getSeconds() < 10 ? "0" + nowDate.getSeconds() : nowDate.getSeconds();
+                return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+            }
+
             $("body").mLoading("show");
             $("#getEisKuchunLayer").val(1);
-            $("#eisKunChunB").click(function(){
+
+            $("#eisKunChunView").click(function () {
+                var divchart = $("#kucun");
+                if (divchart) {
+                    var str = divchart.jqplotToImageElem();
+                    $(str).attr("alt", getFormatDate());
+                    $("body").append($(str));
+
+                }
+
+            });
+
+            $("#eisKunChunB").click(function () {
                 if ($("#getEisKuchunLayer").val() == "") {
                     jAlert("层号必须填写！", "警告");
                     return;
                 }
-                if ($("#getEisKuchunLayer").val() != 1&&$("#getEisKuchunLayer").val() != 2&&$("#getEisKuchunLayer").val() != 3) {
+                if ($("#getEisKuchunLayer").val() != 1 && $("#getEisKuchunLayer").val() != 2 && $("#getEisKuchunLayer").val() != 3) {
                     jAlert("层号必须是1,2,3层！", "警告");
                     return;
                 }
@@ -44,6 +72,7 @@
 
             var eiskuncun;
             Renderer();
+
             function ajaxDataRenderer(url) {
                 var ret = [];
                 $.ajax({
@@ -54,17 +83,49 @@
                     dataType: 'json',
                     success: function (data) {
                         $("body").mLoading("hide");
-                        if(data){
-                            if (data.storeState20_0 != null) {ret.push(eval(data.storeState20_0));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState20_1 != null) {ret.push(eval(data.storeState20_1));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState10_0 != null) {ret.push(eval(data.storeState10_0));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState10_1 != null) {ret.push(eval(data.storeState10_1));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState30_0 != null) {ret.push(eval(data.storeState30_0));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState30_1 != null) {ret.push(eval(data.storeState30_1));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState50_0 != null) {ret.push(eval(data.storeState50_0));}else{ret.push(eval("[[0,0]]")) }
-                            if (data.storeState50_1 != null) {ret.push(eval(data.storeState50_1));}else{ret.push(eval("[[0,0]]")) }
+                        if (data) {
+                            if (data.storeState20_0 != null) {
+                                ret.push(eval(data.storeState20_0));
+                            } else {
+                                ret.push(eval("[[0,0]]"))
+                            }
+                            if (data.storeState20_1 != null) {
+                                ret.push(eval(data.storeState20_1));
+                            } else {
+                                ret.push(eval("[[0,0]]"))
+                            }
+                            if (data.storeState10_0 != null) {
+                                ret.push(eval(data.storeState10_0));
+                            } else {
+                                ret.push(eval("[[0,0]]"))
+                            }
+                            if (data.storeState10_1 != null) {
+                                ret.push(eval(data.storeState10_1));
+                            } else {
+                                ret.push(eval("[[0,0]]"))
+                            }
+                            if (data.storeState30_0 != null) {
+                                ret.push(eval(data.storeState30_0));
+                            } else {
+                                ret.push(eval("[[0,0]]"))
+                            }
+                            if (data.storeState30_1 != null) {
+                                ret.push(eval(data.storeState30_1));
+                            } else {
+                                ret.push(eval("[[0,0]]"))
+                            }
+                            if (data.storeState50_0 != null) {
+                                ret.push(eval(data.storeState50_0));
+                            } else {
+                                ret.push(eval("[[0,0]]"))
+                            }
+                            if (data.storeState50_1 != null) {
+                                ret.push(eval(data.storeState50_1));
+                            } else {
+                                ret.push(eval("[[0,0]]"))
+                            }
 
-                        }else{
+                        } else {
                             ret.push(eval("[[0,0]]"));
                             ret.push(eval("[[0,0]]"));
                             ret.push(eval("[[0,0]]"));
@@ -81,25 +142,25 @@
                 return ret;
             }
 
-            function reloadRenderer(){
-                var layer= $("#getEisKuchunLayer").val();
-                var url = "api/v1/master/view/getSxStoreViewMap?layer="+layer;
-                var chartData=ajaxDataRenderer(url);
-                eiskuncun.series[0].data=chartData[0];
-                eiskuncun.series[1].data=chartData[1];
-                eiskuncun.series[2].data=chartData[2];
-                eiskuncun.series[3].data=chartData[3];
-                eiskuncun.series[4].data=chartData[4];
-                eiskuncun.series[5].data=chartData[5];
-                eiskuncun.series[6].data=chartData[6];
-                eiskuncun.series[7].data=chartData[7];
+            function reloadRenderer() {
+                var layer = $("#getEisKuchunLayer").val();
+                var url = "api/v1/master/view/getSxStoreViewMap?layer=" + layer;
+                var chartData = ajaxDataRenderer(url);
+                eiskuncun.series[0].data = chartData[0];
+                eiskuncun.series[1].data = chartData[1];
+                eiskuncun.series[2].data = chartData[2];
+                eiskuncun.series[3].data = chartData[3];
+                eiskuncun.series[4].data = chartData[4];
+                eiskuncun.series[5].data = chartData[5];
+                eiskuncun.series[6].data = chartData[6];
+                eiskuncun.series[7].data = chartData[7];
                 eiskuncun.replot();
             }
 
 
             function Renderer() {
-               var layer= $("#getEisKuchunLayer").val();
-                var url = "api/v1/master/view/getSxStoreViewMap?layer="+layer;
+                var layer = $("#getEisKuchunLayer").val();
+                var url = "api/v1/master/view/getSxStoreViewMap?layer=" + layer;
                 eiskuncun = $.jqplot('kucun', url, {
                     dataRenderer: ajaxDataRenderer,
                     grid: {
@@ -108,6 +169,7 @@
                         background: '#F0F8FF',
                         shadow: true,
                     },
+                    captureRightClick: true,
                     highlighter: {show: true, showTooltip: true, tooltipLocation: 'nw'},
                     seriesDefaults: {
                         shadowAlpha: 0.1,
@@ -225,7 +287,7 @@
                             },
                         }
                     ],
-                        legend: {
+                    legend: {
                         show: true,
                         location: 'ne',
                         xoffset: 1,
@@ -239,7 +301,7 @@
                             min: 10,
                             max: 58,
                             numberTicks: 49,
-                           // tickInterval:11,
+                            // tickInterval:11,
                             tickOptions: {
                                 showGridline: true,
                                 showMark: true,
@@ -260,14 +322,41 @@
                         }
                     }
                 });
+                $("#kucun").bind("jqplotRightClick", function (ev, si, pi, data) {
+                    if (data) {
+                        jConfirm("删除库存危险！请确认？", "确认窗口", function (result) {
+                            if (result) {
+                                $.post("api/v1/master/view/deleteSxStoreByPoint", {
+                                        layer: $("#getEisKuchunLayer").val(),
+                                        x: data.data[0],
+                                        y: data.data[1]
+                                    }, function (result) {
+                                        $("body").mLoading("hide");
+                                        reloadRenderer();
+                                        $("body").mLoading("show");
+                                    }
+                                );
+
+
+                            }
+                        });
+                    }
+
+                });
+
+
                 //鼠标点击键事件
-                $("#kucun").bind("jqplotDataClick", function(ev, si, pi, data) {
-                 jConfirm("更新库存已上架危险！请确认？", "确认窗口", function (result) {
+                $("#kucun").bind("jqplotDataClick", function (ev, si, pi, data) {
+                    jConfirm("更新库存已上架危险！请确认？", "确认窗口", function (result) {
                         if (result) {
-                            $.post("api/v1/master/view/updateByP", {layer: $("#getEisKuchunLayer").val(),x:data[0],y:data[1]}, function (result) {
-                                $("body").mLoading("hide");
-                                reloadRenderer();
-                                $("body").mLoading("show");
+                            $.post("api/v1/master/view/updateByP", {
+                                    layer: $("#getEisKuchunLayer").val(),
+                                    x: data[0],
+                                    y: data[1]
+                                }, function (result) {
+                                    $("body").mLoading("hide");
+                                    reloadRenderer();
+                                    $("body").mLoading("show");
                                 }
                             );
 

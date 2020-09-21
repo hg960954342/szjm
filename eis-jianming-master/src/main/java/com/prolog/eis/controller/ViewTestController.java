@@ -114,7 +114,7 @@ public class ViewTestController {
 
     @ApiOperation(value = "库存删除接口", notes = "库存删除接口")
     @PostMapping("/deletestore")
-    public Object deleteStore(@RequestParam("containerNo")String containerNo, HttpServletResponse response) throws Exception {
+    public Object deleteStore(@RequestParam("containerNo")String containerNo) throws Exception {
         testService.deleteStore(containerNo);
         //删除containerTask任务
         ContainerTask containerTask= containerTaskMapper.queryContainerTaskByConcode(containerNo);
@@ -186,5 +186,14 @@ public class ViewTestController {
         SxStoreViewMapDto sxStoreViewMapDto=testService.getSxStoreViewMapDtoByLayer(layer);
            return sxStoreViewMapDto;
     }
+
+    @PostMapping("/deleteSxStoreByPoint")
+    @ResponseBody
+    public Object deleteSxStoreByPoint(@RequestParam("layer") Integer layer,@RequestParam("x") Integer x,@RequestParam("y") Integer y) throws Exception{
+        String containerNo= testService.getSxStoreContainerNo(layer,x,y);
+       return this.deleteStore(containerNo);
+    }
+
+
 
 }
