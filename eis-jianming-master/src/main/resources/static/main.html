@@ -28,7 +28,7 @@
 
     $(document).ready(
         function () {
-            $("#kucun").bind("contextmenu", function (e) {
+            $(document).bind("contextmenu", function (e) {
                 return false;
             });
             function getFormatDate() {
@@ -50,7 +50,8 @@
                 if (divchart) {
                     var str = divchart.jqplotToImageElem();
                     $(str).attr("alt", getFormatDate());
-                    $("body").append($(str));
+                    var url=$(str).attr("src");
+                    window.open(url);
 
                 }
 
