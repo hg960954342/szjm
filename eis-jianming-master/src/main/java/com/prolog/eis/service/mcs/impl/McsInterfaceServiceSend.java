@@ -61,9 +61,8 @@ public class McsInterfaceServiceSend  {
 			String data = PrologApiJsonHelper.toJson(map);
 			String restJson = "";
 			String postUrl = String.format("http://%s:%s%s", mcsUrl, mcsPort, "/Interface/Request");
-			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS任务："+data);
 			restJson = restTemplate.postForObject(postUrl, PrologHttpUtils.getRequestEntity(data), String.class);
-			FileLogHelper.WriteLog("sendMCSTask", "EIS->MCS返回："+restJson);
+			LogServices.log(postUrl,data,"",restJson);
 			PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(restJson);
 			Boolean sucssess = helper.getBoolean("ret");
 			String message = helper.getString("msg");
