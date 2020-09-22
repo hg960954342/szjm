@@ -155,7 +155,12 @@
                 eiskuncun.series[5].data = chartData[5];
                 eiskuncun.series[6].data = chartData[6];
                 eiskuncun.series[7].data = chartData[7];
-                eiskuncun.replot();
+                eiskuncun.replot( {title: {
+                        text:getFormatDate(),
+                        textAlign:'right',
+                        fontSize:12,
+                        show: true
+                } });
             }
 
 
@@ -179,8 +184,10 @@
                         shadow: true
                     },
                     title: {
-
-                        show: false,//设置当前图的标题是否显示
+                        text:getFormatDate(),
+                        textAlign:'right',
+                        fontSize:12,
+                        show: true,//设置当前图的标题是否显示
                     },
                     series: [
                         {
