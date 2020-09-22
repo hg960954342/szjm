@@ -117,7 +117,7 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
     @Update("update sx_store t set t.store_state = 20 , t.HOISTER_NO = NULL , t.CAR_NO = NULL , t.TASK_ID = NULL, t.source_location_id = NULL   where t.CONTAINER_NO = #{containerNo}")
     public void updateContainerGround(@Param("containerNo") String containerNo);
 
-	@Delete("delete from sx_store sx where sx.container_no = #{containerNo}")
+	@Delete("delete from sx_store   where container_no = #{containerNo}")
 	void deleteByContainer(@Param("containerNo") String containerNo);
 
 	@Select("select s.CONTAINER_NO containerNo,l.layer,l.x,l.y,l.dept_num deptNum\n" + 

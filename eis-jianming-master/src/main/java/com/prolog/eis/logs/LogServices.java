@@ -1,32 +1,13 @@
 package com.prolog.eis.logs;
 
-import com.alibaba.druid.sql.builder.SQLBuilder;
-import com.alibaba.druid.sql.builder.impl.SQLBuilderImpl;
 import com.prolog.eis.dao.*;
-import com.prolog.eis.util.BeanUtil;
-import com.prolog.framework.dao.helper.SqlFactory;
 import org.apache.commons.lang.StringUtils;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.JdbcTransactionObjectSupport;
-import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.util.Date;
 
 @Component
 public class LogServices {
