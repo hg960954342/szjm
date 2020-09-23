@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
@@ -192,6 +193,23 @@ public class ViewTestController {
     public Object deleteSxStoreByPoint(@RequestParam("layer") Integer layer,@RequestParam("x") Integer x,@RequestParam("y") Integer y) throws Exception{
         String containerNo= testService.getSxStoreContainerNo(layer,x,y);
        return this.deleteStore(containerNo);
+    }
+
+
+    @PostMapping("/getLogViewMCSData")
+    @ResponseBody
+    public String getLogViewMCSData(@RequestParam int pq_curpage, @RequestParam int pq_rpp) throws Exception{
+
+       return  JSONObject.toJSONString(testService.getLogViewMCSData(pq_curpage,pq_rpp));
+
+    }
+
+    @PostMapping("/getLogViewRCSData")
+    @ResponseBody
+    public String getLogViewRCSData(@RequestParam int pq_curpage, @RequestParam int pq_rpp) throws Exception{
+
+        return  JSONObject.toJSONString(testService.getLogViewRCSData(pq_curpage,pq_rpp));
+
     }
 
 

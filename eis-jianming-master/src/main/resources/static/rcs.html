@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <title>RCS监控日志</title>
+    <link rel="stylesheet" href="css/jquery-ui.css"/>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="css/pqgrid.min.css"/>
+    <script src="js/pqgrid.min.js"></script>
+    <link rel="stylesheet" href="css/themes/office/pqgrid.css"/>
+
+    <script>
+        $(function () {
+            var colM = [
+                {title: "ID", width: '10%', dataIndx: "id"},
+                {title: "起点", width: '15%', dataIndx: "start"},
+                {title: "终点", width: '15%', dataIndx: "end"},
+                {title: "MCS响应", width: '40%', dataIndx: "result", align: "right"},
+                {title: "create_time",width: '10%', dataIndx: "create_time", align: "right"},
+
+            ];
+
+            function getPointValue(point){
+                if(point.indexOf('057200AB048300')){
+                    return "四楼一站";
+                }
+                if(point.indexOf('054320AB048300')){
+                    return "四楼二站";
+                }
+                if(point.indexOf('051440AB047200')){
+                    return "四楼三站";
+                }
+                if(point.indexOf('050000AB052600')){
+                    return "四楼四站";
+                }
+                if(point.indexOf('060080AB054000')){
+                    return "四楼碟盘机入口";
+                }
+                if(point.indexOf('057200AB054000')){
+                    return "四楼出库口";
+                }
+                if(point.indexOf('062960AB050000')){
+                    return "四楼入库口";
+                }
+                if(point.indexOf('073040XY051410')){
+                    return "三楼入库口";
+                }
+                return point;
+            }
+            var dataModel = {
+                location: "remote",
+                dataType: "JSON",
+                method: "POST",
+                url: "api/v1/master/view/getLogViewRCSData",
+                getData: function (dataJSON) {
+                    var data = dataJSON.data;
+                    var len=data.length;
+                    for(var i=0;i<len;i++){
+                        var start =data[i].start;
+                        var end =data[i].end;
+                        data[i].start=getPointValue(start);
+                        data[i].end=getPointValue(end);
+                    }
+
+                    return {curPage: dataJSON.curPage, totalRecords: dataJSON.totalRecords, data: data};
+                }
+            };
+
+            var rcsGrid = $("div#grid_paging").pqGrid({
+                width: '95%', height: 600,
+                dataModel: dataModel,
+                colModel: colM,
+                freezeCols: 0,
+                pageModel: {type: "remote", rPP: 20, strRpp: "{0}"},
+                sortable: true,
+                selectionModel: {swipe: false},
+                wrap: false, hwrap: false,
+                numberCell: {resizable: true, width: 30, title: "#"},
+                title: "MCS Log监控",
+                resizable: true
+            });
+
+            function refresh() {
+                $("#grid_paging").find("div.pq-loading").remove();
+                if(rcsGrid){
+                    rcsGrid.pqGrid("refreshDataAndView");
+                }
+            }
+
+            setInterval(refresh, 10000);
+
+        });
+
+
+    </script>
+</head>
+<body>
+<div id="grid_paging" style="margin:5px auto;"></div>
+</body>
+
+</html>

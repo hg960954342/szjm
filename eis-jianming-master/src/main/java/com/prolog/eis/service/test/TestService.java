@@ -14,4 +14,6 @@ public interface TestService {
 	 List<SxStoreViewSimpleDto> getSxStoreViewDtoSimpleDto(int layer);
 	SxStoreViewMapDto getSxStoreViewMapDtoByLayer(int layer);
 	public String getSxStoreContainerNo(int layer,int x,int y);
+	Object getLogViewMCSData(int pq_curpage, int pq_rpp);
+	Object getLogViewRCSData(int pq_curpage, int pq_rpp);
 }
