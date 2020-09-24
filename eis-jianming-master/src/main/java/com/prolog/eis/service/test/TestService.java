@@ -5,6 +5,7 @@ import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.service.test.impl.SxStoreViewSimpleDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TestService {
 
@@ -16,4 +17,6 @@ public interface TestService {
 	public String getSxStoreContainerNo(int layer,int x,int y);
 	Object getLogViewMCSData(int pq_curpage, int pq_rpp);
 	Object getLogViewRCSData(int pq_curpage, int pq_rpp);
+	List<String> getSxStoreList(String itemName,String itemValue);
+    Object listSxStoreQuery(String item_id ,String lot_id, String owner_id,Integer pq_curpage,Integer pq_rpp);
 }

@@ -1,5 +1,6 @@
 package com.prolog.eis.dao.sxk;
 
+import com.prolog.eis.dao.base.BasePagerMapper;
 import com.prolog.eis.dto.eis.SxStoreDto;
 import com.prolog.eis.dto.sxk.LayerTaskGroupSortDto;
 import com.prolog.eis.dto.sxk.SxStoreGroupDto;
@@ -10,11 +11,13 @@ import com.prolog.eis.service.test.impl.SxStoreViewDto;
 import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.service.test.impl.SxStoreViewSimpleDto;
 import com.prolog.framework.dao.mapper.BaseMapper;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
-public interface SxStoreMapper extends BaseMapper<SxStore> {
+public interface SxStoreMapper extends BaseMapper<SxStore>, BasePagerMapper {
 
 	/**
      * 查询每层任务数分组排序（过滤已上架）
@@ -318,7 +321,37 @@ public interface SxStoreMapper extends BaseMapper<SxStore> {
 @Select("select a.CONTAINER_NO from sx_store a ,sx_store_location l where l.id=a.STORE_LOCATION_ID and l.layer=#{layer} and l.x=#{x} and l.y=#{y} ")
 String getSxStoreContainerNo(@Param("layer")int layer,@Param("x")int x,@Param("y")int y);
 
-
-
+@Select("select DISTINCT(${itemId}) from sx_store a where ${itemId} like '%${itemValue}%'")
+List<String> listSxStore(@Param("itemId")String itemId,@Param("itemValue")String itemValue);
+	@Select({"<script>",
+			"select a.* from (select item_id,lot_id,owner_id,sum(qty) qty ,sum(WEIGHT) weight,group_concat(CONTAINER_NO) container_no, group_concat(qty) qty_ from sx_store GROUP BY item_id,lot_id,owner_id)a ",
+			"WHERE 1=1",
+			"<when test='item_id!=null and item_id!=\"\"'>",
+			" and a.item_id=#{item_id} ",
+			"</when>",
+			"<when test='lot_id!=null and lot_id!=\"\"'>",
+			" and a.lot_id=#{lot_id} ",
+			"</when>",
+			"<when test='owner_id!=null and owner_id!=\"\"'>",
+			" and a.owner_id=#{owner_id} ",
+			"</when>",
+			" limit #{start},#{end}",
+			"</script>"})
+List<Map<String,Object>> listSxStoreQuery(@Param("item_id") String item_id,@Param("lot_id") String lot_id,@Param("owner_id") String owner_id,@Param("start") Integer start,@Param("end") Integer end);
+	@Select({"<script>",
+			"select count(*) from (select * from (select item_id,lot_id,owner_id,sum(qty) qty ,sum(WEIGHT) weight,group_concat(CONTAINER_NO) container_no, group_concat(qty) qty_ from sx_store GROUP BY item_id,lot_id,owner_id)a ",
+			"WHERE 1=1",
+			"<when test='item_id!=null and item_id!=\"\"'>",
+			" and a.item_id=#{item_id} ",
+			"</when>",
+			"<when test='lot_id!=null and lot_id!=\"\"'>",
+			" and a.lot_id=#{lot_id} ",
+			"</when>",
+			"<when test='owner_id!=null and owner_id!=\"\"'>",
+			" and a.owner_id=#{owner_id} ",
+			"</when>",
+		    ")b",
+			"</script>"})
+Long countSxStoreQuery(@Param("item_id") String item_id,@Param("lot_id") String lot_id,@Param("owner_id") String owner_id);
 
 }

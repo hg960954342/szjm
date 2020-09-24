@@ -12,13 +12,16 @@ import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.util.PrologStringUtils;
+import com.prolog.framework.toolkit.MapToolKit;
 import com.prolog.framework.utils.MapUtils;
+import com.prolog.framework.utils.StringUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 import java.util.Map;
 
 @RestController
@@ -212,6 +215,30 @@ public class ViewTestController {
 
     }
 
+    @PostMapping("/getAutoComplete")
+    @ResponseBody
+    public String getAutoComplete(HttpServletRequest req) throws Exception{
+        Enumeration<String> str=req.getParameterNames();
+        while(str.hasMoreElements()){
+            String key=str.nextElement();
+            String value=req.getParameter(key);
+            return JSONObject.toJSONString(testService.getSxStoreList(key,value));
+        }
+
+         return "";
+    }
+
+
+    @PostMapping("/getSxStoreQuery")
+    @ResponseBody
+     public String getSxStoreQuery(@RequestParam(value="item_id",required=false) String item_id ,@RequestParam(value="lot_id",required=false) String lot_id,  @RequestParam(value="owner_id",required=false) String owner_id,@RequestParam Integer pq_curpage,@RequestParam Integer pq_rpp) throws Exception{
+        return JSONObject.toJSONString(testService.listSxStoreQuery(item_id , lot_id,  owner_id, pq_curpage, pq_rpp));
+    }
+
+    public static void main(String[] args) {
+
+
+    }
 
 
 }

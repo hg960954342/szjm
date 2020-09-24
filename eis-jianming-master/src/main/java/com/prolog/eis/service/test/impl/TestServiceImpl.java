@@ -11,6 +11,7 @@ import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.framework.utils.MapUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,7 +94,19 @@ public class TestServiceImpl implements TestService {
         return sxStoreMapper.getSxStoreContainerNo(layer, x, y);
     }
 
+    @Override
+    public List<String> getSxStoreList(String itemName,String itemValue){
+        return sxStoreMapper.listSxStore(itemName,itemValue);
+    }
 
+    @Override
+    public Object listSxStoreQuery(String item_id ,String lot_id, String owner_id,Integer pq_curpage,Integer pq_rpp){
+        int start= 1*pq_curpage;
+        int end=1*pq_curpage+pq_rpp-1;
+        List<Map<String,Object>> list= sxStoreMapper.listSxStoreQuery( item_id , lot_id,  owner_id, start, end);
+        Long count=sxStoreMapper.countSxStoreQuery( item_id , lot_id,  owner_id);
+        return MapUtils.put("totalRecords", count).put("curPage",pq_curpage ).put("data", list).getMap();
+    }
 
 
     @Override
