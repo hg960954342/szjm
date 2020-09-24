@@ -95,22 +95,24 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public List<String> getSxStoreList(String itemName,String itemValue){
-        return sxStoreMapper.listSxStore(itemName,itemValue);
+    public List<String> getSxStoreList(String itemName, String itemValue) {
+        return sxStoreMapper.listSxStore(itemName, itemValue);
     }
 
     @Override
-    public Object listSxStoreQuery(String item_id ,String lot_id, String owner_id,Integer pq_curpage,Integer pq_rpp){
-        Long count=sxStoreMapper.countSxStoreQuery( item_id , lot_id,  owner_id);
+    public Object listSxStoreQuery(String item_id, String lot_id, String owner_id, Integer pq_curpage, Integer pq_rpp) {
+        Long count = sxStoreMapper.countSxStoreQuery(item_id, lot_id, owner_id);
         int start = (pq_rpp * (pq_curpage - 1));
-        if (start >= count)
-        {
-            pq_curpage = (int)Math.ceil(((double)count) / pq_rpp);
+        if (start >= count) {
+            pq_curpage = (int) Math.ceil(((double) count) / pq_rpp);
             start = (pq_rpp * (pq_curpage - 1));
         }
+        if (start < 0) {
+            start = 0;
+        }
 
-        List<Map<String,Object>> list= sxStoreMapper.listSxStoreQuery( item_id , lot_id,  owner_id, start, pq_rpp);
-        return MapUtils.put("totalRecords", count).put("curPage",pq_curpage ).put("data", list).getMap();
+        List<Map<String, Object>> list = sxStoreMapper.listSxStoreQuery(item_id, lot_id, owner_id, start, pq_rpp);
+        return MapUtils.put("totalRecords", count).put("curPage", pq_curpage).put("data", list).getMap();
     }
 
 
@@ -120,35 +122,37 @@ public class TestServiceImpl implements TestService {
         Long countMcs = logMapper.coutMcsLog();
 
         int start = (pq_rpp * (pq_curpage - 1));
-        if (start >= countMcs)
-        {
-            pq_curpage = (int)Math.ceil(((double)countMcs) / pq_rpp);
+        if (start >= countMcs) {
+            pq_curpage = (int) Math.ceil(((double) countMcs) / pq_rpp);
             start = (pq_rpp * (pq_curpage - 1));
         }
-        int end=pq_rpp;
+        if (start < 0) {
+            start = 0;
+        }
+        int end = pq_rpp;
         List<Map<String, Object>> list = logMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "mcs_log", "and interface_address like '%Request'", "order by create_time desc", start, end);
 
         list.parallelStream().forEach(x -> {
             String JSON = (String) x.get("params");
-            String typeOld=(String)x.get("type")==null?"":(String)x.get("type");
-            String containerNoOld=(String)x.get("containerNo")==null?"":(String)x.get("containerNo");
+            String typeOld = (String) x.get("type") == null ? "" : (String) x.get("type");
+            String containerNoOld = (String) x.get("containerNo") == null ? "" : (String) x.get("containerNo");
             EisParams params = JSONObject.parseObject(JSON, EisParams.class);
             List<EisParams.CarryListBean> listEisParams = params.getCarryList();
             listEisParams.parallelStream().forEach(y -> {
                 int Type = y.getType();
                 if (Type == 1) {
-                    x.put("type", String.format("%s 入库",typeOld));
+                    x.put("type", String.format("%s 入库", typeOld));
                 } else if (Type == 2) {
-                    x.put("type", String.format("%s 出库",typeOld));
+                    x.put("type", String.format("%s 出库", typeOld));
                 } else if (Type == 3) {
-                    x.put("type", String.format("%s 同层移位",typeOld));
+                    x.put("type", String.format("%s 同层移位", typeOld));
                 } else if (Type == 4) {
-                    x.put("type", String.format("%s 输送线前进",typeOld));
+                    x.put("type", String.format("%s 输送线前进", typeOld));
                 } else {
-                    x.put("type", String.format("%s 未知状态",typeOld));
+                    x.put("type", String.format("%s 未知状态", typeOld));
                 }
-                String containerNo=y.getContainerNo();
-                x.put("containerNo", String.format("%s %s",containerNoOld,containerNo));
+                String containerNo = y.getContainerNo();
+                x.put("containerNo", String.format("%s %s", containerNoOld, containerNo));
             });
 
 
@@ -157,36 +161,39 @@ public class TestServiceImpl implements TestService {
 
 
     }
+
     @Override
-    public Object getLogViewRCSData(int pq_curpage, int pq_rpp){
+    public Object getLogViewRCSData(int pq_curpage, int pq_rpp) {
         Long coutLog = rcsLogMapper.coutLog();
         int start = (pq_rpp * (pq_curpage - 1));
-        if (start >= coutLog)
-        {
-            pq_curpage = (int)Math.ceil(((double)coutLog) / pq_rpp);
+        if (start >= coutLog) {
+            pq_curpage = (int) Math.ceil(((double) coutLog) / pq_rpp);
             start = (pq_rpp * (pq_curpage - 1));
         }
-        int end=pq_rpp;
+        if (start < 0) {
+            start = 0;
+        }
+        int end = pq_rpp;
         List<Map<String, Object>> list = rcsLogMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "rcs_log", "and interface_address like '%genAgvSchedulingTask'", "order by create_time desc", start, end);
-        list.parallelStream().forEach(x->{
-            String params=(String)x.get("params");
-            RcsParams rcsParams= JSONObject.parseObject(params,RcsParams.class);
-            List<RcsParams.PositionCodePathBean> listRCS=  rcsParams.getPositionCodePath();
-            String startPoint="位置异常";
-            String endPoint="位置异常";
-            if(listRCS.size()==2){
-                startPoint=listRCS.get(0).getPositionCode();
-                endPoint=listRCS.get(1).getPositionCode();
+        list.parallelStream().forEach(x -> {
+            String params = (String) x.get("params");
+            RcsParams rcsParams = JSONObject.parseObject(params, RcsParams.class);
+            List<RcsParams.PositionCodePathBean> listRCS = rcsParams.getPositionCodePath();
+            String startPoint = "位置异常";
+            String endPoint = "位置异常";
+            if (listRCS.size() == 2) {
+                startPoint = listRCS.get(0).getPositionCode();
+                endPoint = listRCS.get(1).getPositionCode();
             }
-            x.put("start",startPoint);
-            x.put("end",endPoint);
+            x.put("start", startPoint);
+            x.put("end", endPoint);
         });
         return MapUtils.put("totalRecords", coutLog).put("curPage", pq_curpage).put("data", list).getMap();
     }
 
 }
 
-class RcsParams{
+class RcsParams {
 
     /**
      * positionCodePath : [{"positionCode":"057200AB054000","type":"00"},{"positionCode":"054320AB048300","type":"00"}]
