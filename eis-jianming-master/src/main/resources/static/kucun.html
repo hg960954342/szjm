@@ -148,6 +148,14 @@
                 refresh();
             });
 
+            $("#clear").on("click",function(){
+                $("#itemId").val("");
+                $("#lotId").val("");
+                $("#ownerId").val("");
+                $("#ceng").val("");
+                $("#query").trigger("click");
+            });
+
 
 
 
@@ -172,6 +180,7 @@
 <!--<div style="width: 10%;float: left;">
     <input class="tl-price-input" type="text" placeholder="层号" id="ceng">
 </div>-->
+<button id="clear" class="ant-btn ant-btn-red">清空查询条件</button>
 <button id="query" class="ant-btn ant-btn-red">查询</button>
 <div id="grid_paging" style="margin:5px auto;"></div>
 </body>

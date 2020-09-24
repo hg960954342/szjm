@@ -231,14 +231,11 @@ public class ViewTestController {
 
     @PostMapping("/getSxStoreQuery")
     @ResponseBody
-     public String getSxStoreQuery(@RequestParam(value="item_id",required=false) String item_id ,@RequestParam(value="lot_id",required=false) String lot_id,  @RequestParam(value="owner_id",required=false) String owner_id,@RequestParam Integer pq_curpage,@RequestParam Integer pq_rpp) throws Exception{
+     public String getSxStoreQuery(@RequestParam(value="ceng",required=false) Integer ceng,@RequestParam(value="item_id",required=false) String item_id ,@RequestParam(value="lot_id",required=false) String lot_id,  @RequestParam(value="owner_id",required=false) String owner_id,@RequestParam Integer pq_curpage,@RequestParam Integer pq_rpp) throws Exception{
         return JSONObject.toJSONString(testService.listSxStoreQuery(item_id , lot_id,  owner_id, pq_curpage, pq_rpp));
     }
 
-    public static void main(String[] args) {
 
-
-    }
 
 
 }
