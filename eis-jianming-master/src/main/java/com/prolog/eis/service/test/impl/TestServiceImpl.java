@@ -101,10 +101,15 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Object listSxStoreQuery(String item_id ,String lot_id, String owner_id,Integer pq_curpage,Integer pq_rpp){
-        int start= 1*pq_curpage;
-        int end=1*pq_curpage+pq_rpp-1;
-        List<Map<String,Object>> list= sxStoreMapper.listSxStoreQuery( item_id , lot_id,  owner_id, start, end);
         Long count=sxStoreMapper.countSxStoreQuery( item_id , lot_id,  owner_id);
+        int start = (pq_rpp * (pq_curpage - 1));
+        if (start >= count)
+        {
+            pq_curpage = (int)Math.ceil(((double)count) / pq_rpp);
+            start = (pq_rpp * (pq_curpage - 1));
+        }
+
+        List<Map<String,Object>> list= sxStoreMapper.listSxStoreQuery( item_id , lot_id,  owner_id, start, pq_rpp);
         return MapUtils.put("totalRecords", count).put("curPage",pq_curpage ).put("data", list).getMap();
     }
 
@@ -112,8 +117,17 @@ public class TestServiceImpl implements TestService {
     @Override
     public Object getLogViewMCSData(int pq_curpage, int pq_rpp) {
 
-        List<Map<String, Object>> list = logMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "mcs_log", "and interface_address like '%Request'", "order by create_time desc", 1 * (pq_curpage), 1 * (pq_curpage) + pq_rpp - 1);
         Long countMcs = logMapper.coutMcsLog();
+
+        int start = (pq_rpp * (pq_curpage - 1));
+        if (start >= countMcs)
+        {
+            pq_curpage = (int)Math.ceil(((double)countMcs) / pq_rpp);
+            start = (pq_rpp * (pq_curpage - 1));
+        }
+        int end=pq_rpp;
+        List<Map<String, Object>> list = logMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "mcs_log", "and interface_address like '%Request'", "order by create_time desc", start, end);
+
         list.parallelStream().forEach(x -> {
             String JSON = (String) x.get("params");
             String typeOld=(String)x.get("type")==null?"":(String)x.get("type");
@@ -145,20 +159,27 @@ public class TestServiceImpl implements TestService {
     }
     @Override
     public Object getLogViewRCSData(int pq_curpage, int pq_rpp){
-        List<Map<String, Object>> list = rcsLogMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "rcs_log", "and interface_address like '%genAgvSchedulingTask'", "order by create_time desc", 1 * (pq_curpage), 1 * (pq_curpage) + pq_rpp - 1);
         Long coutLog = rcsLogMapper.coutLog();
+        int start = (pq_rpp * (pq_curpage - 1));
+        if (start >= coutLog)
+        {
+            pq_curpage = (int)Math.ceil(((double)coutLog) / pq_rpp);
+            start = (pq_rpp * (pq_curpage - 1));
+        }
+        int end=pq_rpp;
+        List<Map<String, Object>> list = rcsLogMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "rcs_log", "and interface_address like '%genAgvSchedulingTask'", "order by create_time desc", start, end);
         list.parallelStream().forEach(x->{
             String params=(String)x.get("params");
             RcsParams rcsParams= JSONObject.parseObject(params,RcsParams.class);
             List<RcsParams.PositionCodePathBean> listRCS=  rcsParams.getPositionCodePath();
-            String start="位置异常";
-            String end="位置异常";
+            String startPoint="位置异常";
+            String endPoint="位置异常";
             if(listRCS.size()==2){
-                 start=listRCS.get(0).getPositionCode();
-                 end=listRCS.get(1).getPositionCode();
+                startPoint=listRCS.get(0).getPositionCode();
+                endPoint=listRCS.get(1).getPositionCode();
             }
-            x.put("start",start);
-            x.put("end",end);
+            x.put("start",startPoint);
+            x.put("end",endPoint);
         });
         return MapUtils.put("totalRecords", coutLog).put("curPage", pq_curpage).put("data", list).getMap();
     }

@@ -32,7 +32,7 @@
                     },
                 minLength:1,
                     select: function( event, ui ) {
-                        $("#itemId").val(ui.item);
+                        $("#itemId").val(ui.item.value);
                     }
             }
 
@@ -54,7 +54,7 @@
                     },
                     minLength:1,
                     select: function( event, ui ) {
-                        $("#lotId").val(ui.item);
+                        $("#lotId").val(ui.item.value);
                     }
                 }
 
@@ -76,7 +76,7 @@
                     },
                     minLength:1,
                     select: function( event, ui ) {
-                        $("#ownerId").val(ui.item);
+                        $("#ownerId").val(ui.item.value);
                     }
                 }
 
@@ -92,7 +92,6 @@
                 {title: "实际数量",width: '5%', dataIndx: "weight", align: "right"},
 
             ];
-
             var dataModel = {
                 location: "remote",
                 dataType: "JSON",
@@ -140,6 +139,7 @@
                     "lot_id":$("#lotId").val(),
                     "owner_id":$("#ownerId").val(),
                     "ceng":$("#ceng").val(),
+
                 }
                 var DM = mcsGrid.pqGrid("option", "dataModel");
                 DM.postData = params;
