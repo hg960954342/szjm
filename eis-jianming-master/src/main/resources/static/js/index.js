@@ -1,3 +1,14 @@
+$(function () {
+    var agvJSON= $.ajax({url:"agv.json",async:false}).responseText;
+    var json=JSON.parse(agvJSON);
+    for(var i in json){
+        var html="<option value='"+i+"'>"+json[i]+"</option>";
+        $("#startS").append(html);
+        $("#endS").append(html);
+
+    }
+});
+
 
 function startOnchange(value){
      $("#startP").val(value);
