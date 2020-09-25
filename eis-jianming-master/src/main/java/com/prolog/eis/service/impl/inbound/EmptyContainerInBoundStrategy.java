@@ -10,6 +10,7 @@ import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.InboundTask;
+import com.prolog.eis.service.enums.ContainerTaskTaskTypeEnum;
 import com.prolog.eis.service.enums.InBoundType;
 import com.prolog.eis.service.enums.PortInfoTaskTypeEnum;
 import com.prolog.eis.util.PrologLocationUtils;
@@ -69,7 +70,7 @@ public class EmptyContainerInBoundStrategy implements InBoundStragtegy {
             //暂时定入库任务类型为5
 
 
-            containerTask.setTaskType(4);
+            containerTask.setTaskType(ContainerTaskTaskTypeEnum.EMPTY_OUT_BOUND.getTaskType());
             containerTask.setTaskState(1);
             containerTask.setSourceType(2);
             containerTask.setTargetType(2);
