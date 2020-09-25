@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/pqgrid.min.css"/>
     <script src="js/pqgrid.min.js"></script>
     <link rel="stylesheet" href="css/themes/office/pqgrid.css"/>
+    <script src="js/eis.js"></script>
 
     <script>
         $(function () {
@@ -21,8 +22,8 @@
                 {title: "create_time",width: '10%', dataIndx: "create_time", align: "right"},
 
             ];
-            var agvJSON= $.ajax({url:"agv.json",async:false}).responseText;
-            var json=JSON.parse(agvJSON);
+
+            var json=$.eis.getAgvJSON();
             $.fn.extend({
                 getPointValue:function(point){
                     for(var i in json){
