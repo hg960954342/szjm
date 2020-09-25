@@ -100,19 +100,19 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Object listSxStoreQuery(String item_id, String lot_id, String owner_id, Integer pq_curpage, Integer pq_rpp) {
-        Long count = sxStoreMapper.countSxStoreQuery(item_id, lot_id, owner_id);
-        int start = (pq_rpp * (pq_curpage - 1));
+   public Object listSxStoreQuery(String itemId, String lotId, String ownerId,String itemName,String lot, Integer pqCurpage, Integer pqRpp){
+        Long count = sxStoreMapper.countSxStoreQuery(itemId, lotId, ownerId,itemName,lot);
+        int start = (pqRpp * (pqCurpage - 1));
         if (start >= count) {
-            pq_curpage = (int) Math.ceil(((double) count) / pq_rpp);
-            start = (pq_rpp * (pq_curpage - 1));
+            pqCurpage = (int) Math.ceil(((double) count) / pqRpp);
+            start = (pqRpp * (pqCurpage - 1));
         }
         if (start < 0) {
             start = 0;
         }
 
-        List<Map<String, Object>> list = sxStoreMapper.listSxStoreQuery(item_id, lot_id, owner_id, start, pq_rpp);
-        return MapUtils.put("totalRecords", count).put("curPage", pq_curpage).put("data", list).getMap();
+        List<Map<String, Object>> list = sxStoreMapper.listSxStoreQuery(itemId, lotId, ownerId,itemName,lot, start, pqRpp);
+        return MapUtils.put("totalRecords", count).put("curPage", pqCurpage).put("data", list).getMap();
     }
 
 

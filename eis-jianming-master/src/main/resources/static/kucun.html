@@ -83,34 +83,40 @@
             );
 
             var colM = [
-                {title: "商品id", width: '10%', dataIndx: "item_id"},
-                {title: "批号", width: '5%', dataIndx: "lot_id"},
+                {title: "商品id", width: '8%', dataIndx: "item_id"},
+                {title: "商品名称", width: '7%', dataIndx: "item_name"},
+                {title: "批号", width: '5%', dataIndx: "lot"},
+                {title: "WMS内码", width: '5%', dataIndx: "lot_id"},
                 {title: "用户id", width: '5%', dataIndx: "owner_id"},
-                {title: "托盘", width: '35%', dataIndx: "container_no"},
-                {title: "托盘对应qty", width: '35%', dataIndx: "qty_"},
+                {title: "托盘", width: '30%', dataIndx: "container_no"},
+                {title: "托盘对应qty", width: '30%', dataIndx: "qty_"},
                 {title: "数量", width: '5%', dataIndx: "qty", align: "right"},
                 {title: "实际数量",width: '5%', dataIndx: "weight", align: "right"},
 
             ];
+            $.fn.extend({getParams:function(){
+                    return {
+                        "itemId":$("#itemId").val(),
+                        "lotId":$("#lotId").val(),
+                        "ownerId":$("#ownerId").val(),
+                        "ceng":$("#ceng").val(),
+
+                    }
+                }})
+
+
+
             var dataModel = {
                 location: "remote",
                 dataType: "JSON",
                 method: "POST",
-                postData:{
-                    "item_id":$("#itemId").val(),
-                    "lot_id":$("#lotId").val(),
-                    "owner_id":$("#ownerId").val(),
-                    "ceng":$("#ceng").val()
-                },
+                postData:{},
                 url: "/api/v1/master/view/getSxStoreQuery",
                 getData: function (dataJSON) {
-                    if(dataJSON==null){
-                        dataJSON={curPage:1,totalRecords:0,data:""};
-                    }
-                    var data = dataJSON.data;
-                    return {curPage: dataJSON.curPage, totalRecords: dataJSON.totalRecords, data: data};
+                    return  dataJSON=null==dataJSON ?{curPage:1,totalRecords:0,data:""}:dataJSON;
                 }
             };
+            $.extend(dataModel.postData,$(this).getParams());
 
             var mcsGrid = $("div#grid_paging").pqGrid({
                 width: '99%', height: 550,
@@ -129,22 +135,14 @@
             function refresh() {
                 if(mcsGrid){
                     mcsGrid.pqGrid("refreshDataAndView");
+
                 }
             }
 
             $("#query").on("click",function(){
                 var url="api/v1/master/view/getSxStoreQuery";
-                var params ={
-                    "item_id":$("#itemId").val(),
-                    "lot_id":$("#lotId").val(),
-                    "owner_id":$("#ownerId").val(),
-                    "ceng":$("#ceng").val(),
-
-                }
                 var DM = mcsGrid.pqGrid("option", "dataModel");
-                DM.postData = params;
-                var  pm = mcsGrid.pqGrid("option", "pageModel");
-
+                $.extend(DM.postData, $(this).getParams());
                 refresh();
             });
 
@@ -165,14 +163,17 @@
     </script>
 </head>
 <body>
-<!--<div style="width: 10%;float: left;">-->
-    <!--<input class="tl-price-input" type="text" placeholder="产品名称" id="itemName">-->
-<!--</div>-->
 <div style="width: 10%;float: left;">
-    <input class="tl-price-input" type="text" placeholder="产品Id" id="itemId">
+    <input class="tl-price-input" type="text" placeholder="商品名称" id="itemName">
 </div>
 <div style="width: 10%;float: left;">
-    <input class="tl-price-input" type="text" placeholder="批号" id="lotId">
+    <input class="tl-price-input" type="text" placeholder="商品Id" id="itemId">
+</div>
+<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="批号" id="lot">
+</div>
+<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="WMS内码" id="lotId">
 </div>
 <div style="width: 10%;float: left;">
     <input class="tl-price-input" type="text" placeholder="用户Id" id="ownerId">

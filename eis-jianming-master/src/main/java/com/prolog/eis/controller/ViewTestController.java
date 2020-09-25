@@ -231,8 +231,8 @@ public class ViewTestController {
 
     @PostMapping("/getSxStoreQuery")
     @ResponseBody
-     public String getSxStoreQuery(@RequestParam(value="ceng",required=false) Integer ceng,@RequestParam(value="item_id",required=false) String item_id ,@RequestParam(value="lot_id",required=false) String lot_id,  @RequestParam(value="owner_id",required=false) String owner_id,@RequestParam Integer pq_curpage,@RequestParam Integer pq_rpp) throws Exception{
-        return JSONObject.toJSONString(testService.listSxStoreQuery(item_id , lot_id,  owner_id, pq_curpage, pq_rpp));
+     public String getSxStoreQuery(@RequestParam(value="ceng",required=false) Integer ceng,@RequestParam(value="itemId",required=false) String itemId ,@RequestParam(value="lotId",required=false) String lotId,  @RequestParam(value="ownerId",required=false) String ownerId,@RequestParam(value="itemName",required=false) String itemName,@RequestParam(value="lot",required=false) String lot, @RequestParam(value="pq_curpage",required = true) Integer pqCurpage,@RequestParam(value="pq_rpp",required = true) Integer pqRpp) throws Exception{
+        return JSONObject.toJSONString(testService.listSxStoreQuery(itemId , lotId,  ownerId,itemName,lot, pqCurpage, pqRpp));
     }
 
 

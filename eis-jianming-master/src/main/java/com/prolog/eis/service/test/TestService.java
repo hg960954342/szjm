@@ -18,5 +18,5 @@ public interface TestService {
 	Object getLogViewMCSData(int pq_curpage, int pq_rpp);
 	Object getLogViewRCSData(int pq_curpage, int pq_rpp);
 	List<String> getSxStoreList(String itemName,String itemValue);
-    Object listSxStoreQuery(String item_id ,String lot_id, String owner_id,Integer pq_curpage,Integer pq_rpp);
+	Object listSxStoreQuery(String itemId, String lotId, String ownerId,String itemName,String lot, Integer pqCurpage, Integer pqRpp);
 }

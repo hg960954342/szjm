@@ -321,10 +321,11 @@ public interface SxStoreMapper extends BaseMapper<SxStore>, BasePagerMapper {
 @Select("select a.CONTAINER_NO from sx_store a ,sx_store_location l where l.id=a.STORE_LOCATION_ID and l.layer=#{layer} and l.x=#{x} and l.y=#{y} ")
 String getSxStoreContainerNo(@Param("layer")int layer,@Param("x")int x,@Param("y")int y);
 
-@Select("select DISTINCT(${itemId}) from sx_store a where ${itemId} like '%${itemValue}%'")
+@Select("select DISTINCT(${itemId}) from (select a.*,b.item_name,b.lot from sx_store a left join inbound_task_history b on a.item_id=b.item_id and a.lot_id=b.lot_id and a.owner_id=b.owner_id)c where ${itemId} like '%${itemValue}%'")
 List<String> listSxStore(@Param("itemId")String itemId,@Param("itemValue")String itemValue);
 	@Select({"<script>",
-			"select a.* from (select item_id,lot_id,owner_id,sum(qty) qty ,sum(WEIGHT) weight,group_concat(CONTAINER_NO) container_no, group_concat(qty) qty_ from sx_store GROUP BY item_id,lot_id,owner_id)a ",
+			"select a.*,b.item_name,b.lot from (select item_id,lot_id,owner_id,sum(qty) qty ,sum(WEIGHT) weight,group_concat(CONTAINER_NO) container_no, group_concat(qty) qty_ from sx_store GROUP BY item_id,lot_id,owner_id)a left join inbound_task_history b on ",
+			" a.item_id=b.item_id and a.lot_id=b.lot_id and a.owner_id=b.owner_id  ",
 			"WHERE 1=1",
 			"<when test='item_id!=null and item_id!=\"\"'>",
 			" and a.item_id=#{item_id} ",
@@ -334,12 +335,18 @@ List<String> listSxStore(@Param("itemId")String itemId,@Param("itemValue")String
 			"</when>",
 			"<when test='owner_id!=null and owner_id!=\"\"'>",
 			" and a.owner_id=#{owner_id} ",
+			"</when>",
+			"<when test='item_name!=null and item_name!=\"\"'>",
+			" and b.item_name=#{item_name} ",
+			"</when>",
+			"<when test='lot!=null and lot!=\"\"'>",
+			" and b.lot=#{lot} ",
 			"</when>",
 			" limit #{start},#{end}",
 			"</script>"})
-List<Map<String,Object>> listSxStoreQuery(@Param("item_id") String item_id,@Param("lot_id") String lot_id,@Param("owner_id") String owner_id,@Param("start") Integer start,@Param("end") Integer end);
+List<Map<String,Object>> listSxStoreQuery(@Param("item_id") String itemId,@Param("lot_id") String lotId,@Param("owner_id") String ownerId,@Param("item_name") String itemName,@Param("lot") String lot,@Param("start") Integer start,@Param("end") Integer end);
 	@Select({"<script>",
-			"select count(*) from (select * from (select item_id,lot_id,owner_id,sum(qty) qty ,sum(WEIGHT) weight,group_concat(CONTAINER_NO) container_no, group_concat(qty) qty_ from sx_store GROUP BY item_id,lot_id,owner_id)a ",
+			"select count(*) from (select a.*,b.item_name,b.lot from (select item_id,lot_id,owner_id,sum(qty) qty ,sum(WEIGHT) weight,group_concat(CONTAINER_NO) container_no, group_concat(qty) qty_ from sx_store GROUP BY item_id,lot_id,owner_id)a left join inbound_task_history b on a.item_id=b.item_id and a.lot_id=b.lot_id and a.owner_id=b.owner_id ",
 			"WHERE 1=1",
 			"<when test='item_id!=null and item_id!=\"\"'>",
 			" and a.item_id=#{item_id} ",
@@ -350,8 +357,14 @@ List<Map<String,Object>> listSxStoreQuery(@Param("item_id") String item_id,@Para
 			"<when test='owner_id!=null and owner_id!=\"\"'>",
 			" and a.owner_id=#{owner_id} ",
 			"</when>",
+			"<when test='item_name!=null and item_name!=\"\"'>",
+			" and b.item_name=#{item_name} ",
+			"</when>",
+			"<when test='lot!=null and lot!=\"\"'>",
+			" and b.lot=#{lot} ",
+			"</when>",
 		    ")b",
 			"</script>"})
-Long countSxStoreQuery(@Param("item_id") String item_id,@Param("lot_id") String lot_id,@Param("owner_id") String owner_id);
+Long countSxStoreQuery(@Param("item_id") String itemId,@Param("lot_id") String lotId,@Param("owner_id") String ownerId,@Param("item_name") String itemName,@Param("lot") String lot);
 
 }
