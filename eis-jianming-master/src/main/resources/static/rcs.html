@@ -24,17 +24,7 @@
             ];
 
             var json=$.eis.getAgvJSON();
-            $.fn.extend({
-                getPointValue:function(point){
-                    for(var i in json){
-                        if(point==i){
-                            return json[i];
-                        }
-                    }
-                        return point;
 
-                }
-            })
 
 
             var dataModel = {
@@ -46,10 +36,11 @@
                     var data = dataJSON.data;
                     var len=data.length;
                     for(var i=0;i<len;i++){
-                        var start =data[i].start;
-                        var end =data[i].end;
-                        data[i].start=$("#grid_paging").getPointValue(start);
-                        data[i].end=$("#grid_paging").getPointValue(end);
+                        var d={
+                            "start":$.eis.getPointValue(data[i].start,json),
+                            "end":$.eis.getPointValue(data[i].end,json)
+                        }
+                        $.extend(data[i],d);
                     }
 
                     return {curPage: dataJSON.curPage, totalRecords: dataJSON.totalRecords, data: data};

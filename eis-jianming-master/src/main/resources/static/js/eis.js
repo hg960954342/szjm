@@ -15,6 +15,18 @@ $.extend({
 
     });
 
+    $.extend($.eis,{
+        getPointValue:function(point,json){
+            for(var i in json){
+                if(point==i){
+                    return json[i];
+                }
+            }
+            return point;
+
+        }
+    })
+
 
 
 });
