@@ -52,8 +52,7 @@ public class Master {
 	public static void main( String[] args ) throws Exception {
 
 		//LED初始化API,此操作只在程序启动时候执行一次即可，多次执行会出现内存错误
-		String path=  Master.class.getClassLoader().getResource("log.properties").getFile();
-		Bx5GEnv.initial(path);
+		Bx5GEnv.initial();
     	SpringApplication.run(Master.class, args);
     }
 }
