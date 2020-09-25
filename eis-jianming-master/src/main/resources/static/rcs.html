@@ -21,34 +21,21 @@
                 {title: "create_time",width: '10%', dataIndx: "create_time", align: "right"},
 
             ];
+            var agvJSON= $.ajax({url:"agv.json",async:false}).responseText;
+            var json=JSON.parse(agvJSON);
+            $.fn.extend({
+                getPointValue:function(point){
+                    for(var i in json){
+                        if(point==i){
+                            return json[i];
+                        }
+                    }
+                        return point;
 
-            function getPointValue(point){
-                if(point.indexOf('057200AB048300')){
-                    return "四楼一站";
                 }
-                if(point.indexOf('054320AB048300')){
-                    return "四楼二站";
-                }
-                if(point.indexOf('051440AB047200')){
-                    return "四楼三站";
-                }
-                if(point.indexOf('050000AB052600')){
-                    return "四楼四站";
-                }
-                if(point.indexOf('060080AB054000')){
-                    return "四楼碟盘机入口";
-                }
-                if(point.indexOf('057200AB054000')){
-                    return "四楼出库口";
-                }
-                if(point.indexOf('062960AB050000')){
-                    return "四楼入库口";
-                }
-                if(point.indexOf('073040XY051410')){
-                    return "三楼入库口";
-                }
-                return point;
-            }
+            })
+
+
             var dataModel = {
                 location: "remote",
                 dataType: "JSON",
@@ -60,8 +47,8 @@
                     for(var i=0;i<len;i++){
                         var start =data[i].start;
                         var end =data[i].end;
-                        data[i].start=getPointValue(start);
-                        data[i].end=getPointValue(end);
+                        data[i].start=$("#grid_paging").getPointValue(start);
+                        data[i].end=$("#grid_paging").getPointValue(end);
                     }
 
                     return {curPage: dataJSON.curPage, totalRecords: dataJSON.totalRecords, data: data};
