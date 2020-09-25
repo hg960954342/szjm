@@ -4,7 +4,6 @@ import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.service.enums.AgvMove;
 import com.prolog.eis.service.rcs.AgvCallbackService;
 import com.prolog.eis.util.PrologApiJsonHelper;
-import com.prolog.eis.util.PrologStringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;

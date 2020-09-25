@@ -4,7 +4,10 @@ import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.*;
+import com.prolog.eis.service.enums.ContainerTaskTaskTypeEnum;
 import com.prolog.eis.service.enums.OutBoundEnum;
+import com.prolog.eis.service.enums.OutBoundType;
+import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.utils.MapUtils;
@@ -50,8 +53,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
     @Autowired
     PortInfoMapper portInfoMapper;
-    @Autowired
-    PickStainStrategy pickStainStrategy;
+
     @Autowired
     SxStoreCkService sxStoreCkService;
 
@@ -60,7 +62,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     @Transactional(rollbackFor = Exception.class, timeout = 1000)
     public void unbound(OutboundTask outboundTask) {
 
-        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",3).getMap(),OutboundTask.class);
+        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",OutBoundEnum.TaskType.ORDER_CHECK_OUT_BOUND.getTaskTypeNumber()).getMap(),OutboundTask.class);
         if(listCheckOuts.size()>0){
             //存在盘点任务
             LogServices.logSysBusiness("盘点任务优先！");
@@ -83,7 +85,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             ordercontainerTask.setItemId(detailDataBeand.getItemId());
             ordercontainerTask.setItemName(detailDataBeand.getItemName());
             ordercontainerTask.setLot(detailDataBeand.getLot());
-            ordercontainerTask.setTaskType(1);
+            ordercontainerTask.setTaskType(ContainerTaskTaskTypeEnum.ORDER_OUT_BOUND.getTaskType());
             ordercontainerTask.setSourceType(1);
 
 

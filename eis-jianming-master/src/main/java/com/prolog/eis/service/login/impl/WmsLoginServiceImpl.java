@@ -3,8 +3,6 @@ package com.prolog.eis.service.login.impl;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.LoginWmsResponse;
 import com.prolog.eis.service.login.WmsLoginService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.HttpUtils;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.PrologHttpUtils;
 import net.sf.json.JSONObject;

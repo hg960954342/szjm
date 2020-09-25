@@ -5,8 +5,6 @@ import com.prolog.eis.model.wms.LoginWmsResponse;
 import com.prolog.eis.model.wms.RepeatReport;
 import com.prolog.eis.service.EisCallbackService;
 import com.prolog.eis.service.login.WmsLoginService;
-import com.prolog.eis.util.FileLogHelper;
-import com.prolog.eis.util.HttpUtils;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.PrologHttpUtils;
 import net.sf.json.JSONObject;
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
 
 @Component
 public class EisCallbackServiceSend {

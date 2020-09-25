@@ -1,4 +1,4 @@
-package com.prolog.eis.service.impl.unbound;
+package com.prolog.eis.service.enums;
 
 public interface OutBoundType {
 

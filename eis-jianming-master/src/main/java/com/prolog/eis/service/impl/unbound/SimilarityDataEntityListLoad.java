@@ -3,6 +3,8 @@ package com.prolog.eis.service.impl.unbound;
 import com.prolog.eis.dao.OutBoundTaskDetailMapper;
 import com.prolog.eis.dao.OutBoundTaskMapper;
 import com.prolog.eis.model.wms.OutboundTask;
+import com.prolog.eis.service.enums.OutBoundType;
+import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,6 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 
 @Component(OutBoundType.IF_SfReq + 0)
 @Scope(SCOPE_SINGLETON)
-@SuppressWarnings("all")
 public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInterface {
 
 

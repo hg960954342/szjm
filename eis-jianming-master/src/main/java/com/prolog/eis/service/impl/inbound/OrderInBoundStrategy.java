@@ -10,20 +10,16 @@ import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.InboundTask;
-import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.service.enums.InBoundType;
 import com.prolog.eis.util.PrologLocationUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 @Component(InBoundType.TASK_TYPE+2)
 @Transactional(rollbackFor=Exception.class)
-@SuppressWarnings("all")
 public class OrderInBoundStrategy implements InBoundStragtegy {
 
     @Autowired
@@ -46,12 +42,12 @@ public class OrderInBoundStrategy implements InBoundStragtegy {
         {
                 InboundTask task = inboundTask;
                 String agvLoc=task.getAgvLoc();
-                Coordinate CoordinateAgv= PrologLocationUtils.analysis(agvLoc);
+                Coordinate coordinateAgv= PrologLocationUtils.analysis(agvLoc);
                 //暂时定入库任务状态开始为0
 
-            AgvStorageLocation  distinPortInfo=inBoundContainerService.getInBound(CoordinateAgv);
+            AgvStorageLocation  distinPortInfo=inBoundContainerService.getInBound(coordinateAgv);
             if(distinPortInfo==null){
-                LogServices.logSysBusiness("没有找到可用入口");
+                LogServices.logSysBusiness("订单入库没有找到可用入口");
                 return;
             }
 

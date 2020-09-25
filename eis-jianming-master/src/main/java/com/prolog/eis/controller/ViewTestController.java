@@ -12,9 +12,8 @@ import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.util.PrologStringUtils;
-import com.prolog.framework.toolkit.MapToolKit;
 import com.prolog.framework.utils.MapUtils;
-import com.prolog.framework.utils.StringUtils;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +24,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 @RestController
+@Api(tags = "EIS前段页面View")
 @RequestMapping("/api/v1/master/view")
 public class ViewTestController {
 

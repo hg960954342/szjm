@@ -8,12 +8,6 @@ import com.prolog.eis.model.wms.InboundTask;
 public interface InBoundStragtegy {
 
 
-
-
-
-
-
-
-    public void inbound(InboundTask inboundTask);
+     void inbound(InboundTask inboundTask);
 
 }

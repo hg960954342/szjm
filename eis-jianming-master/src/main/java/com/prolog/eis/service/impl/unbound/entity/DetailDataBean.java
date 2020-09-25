@@ -1,4 +1,4 @@
-package com.prolog.eis.service.impl.unbound;
+package com.prolog.eis.service.impl.unbound.entity;
 
 /**
  * 出库实体对象

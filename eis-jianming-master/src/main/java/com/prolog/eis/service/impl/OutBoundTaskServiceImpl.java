@@ -4,16 +4,14 @@ import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.dao.ContainerTaskMapper;
 import com.prolog.eis.dao.OutBoundTaskDetailMapper;
 import com.prolog.eis.dao.OutBoundTaskMapper;
-import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.OutBoundTaskService;
-import com.prolog.eis.service.impl.unbound.OutBoundType;
+import com.prolog.eis.service.enums.OutBoundType;
 import com.prolog.eis.service.impl.unbound.UnBoundStragtegy;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;

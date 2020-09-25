@@ -4,6 +4,7 @@ import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dto.base.Coordinate;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
+import com.prolog.eis.service.enums.PortInfoTaskTypeEnum;
 import com.prolog.eis.util.PrologLocationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,22 @@ public class InBoundContainerService {
     @Autowired
     AgvStorageLocationMapper agvStorageLocationMapper;
 
+    /**
+     * 任务托入库口Agv点位
+     * @param CoordinateAgv
+     * @return
+     */
     public AgvStorageLocation getInBound(Coordinate CoordinateAgv){
-        int taskType=1; //定义任务类型 （1任务托 2包材 3 空拖 4质检 ）
+         return getInBound(CoordinateAgv,PortInfoTaskTypeEnum.TASK); //默认任务托
+    }
+    /**
+     * 获取相应类型的入库口Agv点位
+     * @param CoordinateAgv
+     * @return
+     */
+    public AgvStorageLocation getInBound(Coordinate CoordinateAgv,PortInfoTaskTypeEnum taskType){
         //获取所有的入库口
-        List<AgvStorageLocation> listPortInfo=agvStorageLocationMapper.getPortInfoByTaskType(taskType);
+        List<AgvStorageLocation> listPortInfo=agvStorageLocationMapper.getPortInfoByTaskType(taskType.getTaskType());
         //查找同一楼层没有任务占用的入库口集合
         listPortInfo=listPortInfo.stream().filter(listPortInfotemp->{
             int x=listPortInfotemp.getX();

@@ -2,7 +2,7 @@ package com.prolog.eis.dao;
 
 import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
-import com.prolog.eis.service.impl.unbound.DetailDataBean;
+import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 

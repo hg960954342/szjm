@@ -7,8 +7,9 @@ import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.InBoundTaskService;
+import com.prolog.eis.service.enums.OutBoundEnum;
 import com.prolog.eis.service.impl.inbound.InBoundStragtegy;
-import com.prolog.eis.service.impl.inbound.InBoundType;
+import com.prolog.eis.service.enums.InBoundType;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class InBoundTaskServiceImpl implements InBoundTaskService {
           for(InboundTask inboundTask:list){
               InBoundStragtegy inBoundStragtegy=getInBoundTaskServiceImpl(inboundTask);
               if(null!=inBoundStragtegy){
-                  List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",3).getMap(),OutboundTask.class);
+                  List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType", OutBoundEnum.TaskType.ORDER_CHECK_OUT_BOUND.getTaskTypeNumber()).getMap(),OutboundTask.class);
                   if(listCheckOuts.size()>0){
                       //存在盘点任务
                       LogServices.logSysBusiness("盘点任务优先！");

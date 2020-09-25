@@ -1,6 +1,6 @@
 package com.prolog.eis.service.rcs.ledshow;
 
-import com.prolog.eis.controller.led.PrologLedController;
+import com.prolog.eis.controller.led.PrologLedViewService;
 import com.prolog.eis.dao.AgvStorageLocationMapper;
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.dao.ContainerTaskMapper;
@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@SuppressWarnings("all")
 @Aspect
 public class LedShowService {
 
@@ -47,7 +46,7 @@ public class LedShowService {
     @Autowired
     SysParameMapper sysParameMapper;
     @Resource
-    PrologLedController prologLedController;
+    PrologLedViewService prologLedViewService;
 
 
     @Pointcut("execution(* com.prolog.eis.service.store.impl.MCSCallBackChuKu.container(String,int,int,int,String))&&args(containerCode,targetLayer,targetX,targetY,address)")
@@ -87,7 +86,7 @@ public class LedShowService {
                 LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
                 if (ledShow != null) {
                      try {
-                        prologLedController.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), pQty, containerTask.getLot(), rQty, ledShowDtoS.getPickStation());
+                        prologLedViewService.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), pQty, containerTask.getLot(), rQty, ledShowDtoS.getPickStation());
                     } catch (Exception e) {
                         LogServices.logSys(e);
                     }
@@ -114,7 +113,7 @@ public class LedShowService {
 
         if (ledShow != null) {
              try {
-                prologLedController.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), containerTask.getQty(), containerTask.getLot(), station);
+                prologLedViewService.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), containerTask.getQty(), containerTask.getLot(), station);
             } catch (Exception e) {
                 LogServices.logSys(e);
             }
@@ -163,7 +162,7 @@ public class LedShowService {
 
             if (ledShow != null) {
                  try {
-                    prologLedController.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), weight, containerTask.getLot(), state);
+                    prologLedViewService.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), weight, containerTask.getLot(), state);
                 } catch (Exception e) {
                     LogServices.logSys(e);
                 }
@@ -174,7 +173,7 @@ public class LedShowService {
 
             if (ledShow != null) {
                  try {
-                    prologLedController.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), weight, containerTask.getLot(), state);
+                    prologLedViewService.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), weight, containerTask.getLot(), state);
                 } catch (Exception e) {
                     LogServices.logSys(e);
                 }

@@ -5,7 +5,6 @@ import com.prolog.eis.dto.eis.mcs.McsSendTaskDto;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.mcs.MCSTask;
 import com.prolog.eis.service.mcs.McsInterfaceService;
-import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.PrologHttpUtils;
 import com.prolog.eis.util.PrologTaskIdUtils;
@@ -41,7 +40,7 @@ public class McsInterfaceServiceSend  {
 
 	public void sendMcsTaskWithOutPathAsyc(int type, String containerNo, String address, String target, String weight, String priority,int state)
 		{
-		List<McsSendTaskDto> mcsSendTaskDtos = new ArrayList<McsSendTaskDto>();
+		List<McsSendTaskDto> mcsSendTaskDtos = new ArrayList<>();
 		McsTaskWithOutPathAsycDto mcsTaskWithOutPathAsycDto=new McsTaskWithOutPathAsycDto();
 		McsSendTaskDto mcsSendTaskDto = new McsSendTaskDto();
 		String taskId = PrologTaskIdUtils.getTaskId();
@@ -155,13 +154,11 @@ public class McsInterfaceServiceSend  {
 				return isEmpty;
 			}else {
 				LogServices.log(postUrl,requestData,message,restJson);
-				//FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，响应失败："+message);
 				return true;
 			}
 		} catch (Exception e) {
 			LogServices.logSys(e);
-			//FileLogHelper.WriteLog("getExitStatusError", "EIS->MCS接驳口状态查询，接口调用异常："+e.getMessage());
-			return true;
+ 			return true;
 		}
 	}
 }

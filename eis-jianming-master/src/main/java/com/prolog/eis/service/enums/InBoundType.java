@@ -1,4 +1,4 @@
-package com.prolog.eis.service.impl.inbound;
+package com.prolog.eis.service.enums;
 
 public interface InBoundType {
 

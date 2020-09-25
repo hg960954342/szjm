@@ -7,13 +7,14 @@ import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.OutboundTask;
+import com.prolog.eis.service.enums.ContainerTaskTaskTypeEnum;
 import com.prolog.eis.service.enums.OutBoundEnum;
+import com.prolog.eis.service.enums.OutBoundType;
+import com.prolog.eis.service.enums.PortInfoTaskTypeEnum;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResult;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutTask;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
-import com.prolog.eis.util.PrologLocationUtils;
-import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -23,12 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 
 @Component(OutBoundType.TASK_TYPE+3)
 @Slf4j
-@SuppressWarnings("all")
 public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
     @Autowired
@@ -75,12 +74,12 @@ public class OrderCheckOutBoundStrategy extends DefaultOutBoundPickCodeStrategy 
        for(CheckOutResult checkOutResult:list){
            ContainerTask task=new ContainerTask();
            BeanUtils.copyProperties(checkOutResult,task);
-           task.setTaskType(3);
+           task.setTaskType(ContainerTaskTaskTypeEnum.ORDER_CHECK_OUT_BOUND.getTaskType());
            task.setTaskState(1);
            task.setSource(PrologCoordinateUtils.splicingStr(checkOutResult.getX(),checkOutResult.getY(),checkOutResult.getLayer()));
            task.setSourceType(1);
            //健民只有一个任务出库口
-           List<PortInfo> portList = portInfoMapper.findByMap(MapUtils.put("portType", 2).put("taskType", 1).put("portlock", 2).put("taskLock", 2).getMap(), PortInfo.class);
+           List<PortInfo> portList = portInfoMapper.findByMap(MapUtils.put("portType", 2).put("taskType", PortInfoTaskTypeEnum.TASK.getTaskType()).put("portlock", 2).put("taskLock", 2).getMap(), PortInfo.class);
            if(portList.isEmpty()) {
                return;
            }

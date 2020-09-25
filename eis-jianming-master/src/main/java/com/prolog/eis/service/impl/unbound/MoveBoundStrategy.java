@@ -3,14 +3,11 @@ package com.prolog.eis.service.impl.unbound;
 import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.logs.LogServices;
-import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.wms.*;
-import com.prolog.eis.service.enums.OutBoundEnum;
+import com.prolog.eis.service.enums.*;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.utils.MapUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +15,6 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +23,6 @@ import java.util.Map;
  */
 @Component(OutBoundType.TASK_TYPE+0)
 @Transactional(rollbackFor=Exception.class,timeout = 1000)
-@Slf4j
-@SuppressWarnings("all")
 public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
     @Autowired
@@ -48,8 +41,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     QcSxStoreMapper qcSxStoreMapper;
     @Autowired
     PortInfoMapper portInfoMapper;
-    @Autowired
-    PickStainStrategy pickStainStrategy;
+
     @Autowired
     OutBoundContainerService outBoundContainerService;
 
@@ -64,7 +56,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     @Override
     public void unbound(OutboundTask outboundTask) {
 
-        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",3).getMap(),OutboundTask.class);
+        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",OutBoundEnum.TaskType.ORDER_CHECK_OUT_BOUND.getTaskTypeNumber()).getMap(),OutboundTask.class);
         if(listCheckOuts.size()>0){
             //存在盘点任务
             LogServices.logSysBusiness("盘点任务优先！");
@@ -96,10 +88,10 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                 target = agvLocation.getRcsPositionCode();
             }else {
                 //拣选站不为空
-                agvLocation = agvStorageLocationMapper.findByPickCodeAndLock("pickStation4", 0, 0);
+                agvLocation = agvStorageLocationMapper.findByPickCodeAndLock("pickStation4", AgvLocationLocationLockEnum.NO_LOCK.getLockTypeNumber(), AgvLocationTaskLockEnum.NO_LOCK.getLockTypeNumber());
                 if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站："+pickCode+"上有托盘或已被锁定，不可用");return;}
                 target = agvLocation.getRcsPositionCode();
-                agvLocation.setLocationLock(1);
+                agvLocation.setLocationLock(AgvLocationTaskLockEnum.LOCK.getLockTypeNumber());
                 agvStorageLocationMapper.update(agvLocation);
             }
 
@@ -169,7 +161,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
     private ContainerTask getContainerTask(OutboundTaskDetail outboundTaskDetail, Map<String, Object> sxStore) {
         ContainerTask containerTask = new ContainerTask();
         containerTask.setContainerCode((String) sxStore.get("containerNo"));
-        containerTask.setTaskType(0);
+        containerTask.setTaskType(ContainerTaskTaskTypeEnum.MOVE_OUT_BOUND.getTaskType());
         containerTask.setSourceType(1);
         containerTask.setLotId(outboundTaskDetail.getLotId());
         containerTask.setItemId(outboundTaskDetail.getItemId());

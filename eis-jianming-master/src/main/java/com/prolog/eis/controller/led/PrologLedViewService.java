@@ -9,19 +9,19 @@ import onbon.bx05.area.page.TextBxPage;
 import onbon.bx05.file.ProgramBxFile;
 import onbon.bx05.utils.DisplayStyleFactory;
 import onbon.bx05.utils.TextBinary;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@RestController
-public class PrologLedController {
+@Component
+public class PrologLedViewService {
 
     private static DisplayStyleFactory.DisplayStyle[] styles = DisplayStyleFactory.getStyles().toArray(new DisplayStyleFactory.DisplayStyle[0]);
 
 
-    public void reStore(String ip,int port,String itemName,double weight,String lotId,String state) throws Exception {
+    public void reStore(String ip, int port, String itemName, double weight, String lotId, String state) throws Exception {
         //Bx5GEnv.initial("log.properties");
 
         Bx5GScreenClient screen = new Bx5GScreenClient("MyScreen");
@@ -40,50 +40,50 @@ public class PrologLedController {
         //创建节目
         ProgramBxFile p000 = new ProgramBxFile("P000", profile);
         //创建第一块区域
-        TextCaptionBxArea tArea = new TextCaptionBxArea(0,0,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea);
+        TextCaptionBxArea tArea = new TextCaptionBxArea(0, 0, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea);
 
-        int size =8;
-        String padChar="    ";
-        String s1 = StrUtil.center(itemName, size,padChar);
+        int size = 8;
+        String padChar = "    ";
+        String s1 = StrUtil.center(itemName, size, padChar);
 
         //创建数据页
-        TextBxPage page = new TextBxPage("  品名："+s1);
-        PrologLedController.setPageStyle(page);
+        TextBxPage page = new TextBxPage("  品名：" + s1);
+        PrologLedViewService.setPageStyle(page);
 
         //创建第二块区域
-        TextCaptionBxArea tArea2 = new TextCaptionBxArea(0,24,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea2);
+        TextCaptionBxArea tArea2 = new TextCaptionBxArea(0, 24, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea2);
 
-        String padChar1="   ";
-        String newWeight =weight+"公斤";
-        String s2 = StrUtil.center(newWeight, size,padChar1);
+        String padChar1 = "   ";
+        String newWeight = weight + "公斤";
+        String s2 = StrUtil.center(newWeight, size, padChar1);
 
         //创建数据页
-        TextBxPage page2 = new TextBxPage("  重量："+s2);
-        PrologLedController.setPageStyle(page2);
+        TextBxPage page2 = new TextBxPage("  重量：" + s2);
+        PrologLedViewService.setPageStyle(page2);
 
         //创建第三块区域
-        TextCaptionBxArea tArea3 = new TextCaptionBxArea(0,48,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea3);
+        TextCaptionBxArea tArea3 = new TextCaptionBxArea(0, 48, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea3);
 
-        String padChar2="    ";
-        String s3 = StrUtil.center(lotId, size,padChar2);
+        String padChar2 = "    ";
+        String s3 = StrUtil.center(lotId, size, padChar2);
 
         //创建数据页
-        TextBxPage page3 = new TextBxPage("  批号："+s3);
-        PrologLedController.setPageStyle(page3);
+        TextBxPage page3 = new TextBxPage("  批号：" + s3);
+        PrologLedViewService.setPageStyle(page3);
 
         //创建第四块区域
-        TextCaptionBxArea tArea4 = new TextCaptionBxArea(0,72,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea4);
+        TextCaptionBxArea tArea4 = new TextCaptionBxArea(0, 72, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea4);
 
-        String padChar3="     ";
-        String s4 = StrUtil.center(state, size,padChar3);
+        String padChar3 = "     ";
+        String s4 = StrUtil.center(state, size, padChar3);
 
         //创建数据页
-        TextBxPage page4 = new TextBxPage("  状态："+s4);
-        PrologLedController.setPageStyle(page4);
+        TextBxPage page4 = new TextBxPage("  状态：" + s4);
+        PrologLedViewService.setPageStyle(page4);
 
         tArea.addPage(page);
         tArea2.addPage(page2);
@@ -97,7 +97,7 @@ public class PrologLedController {
         p000.addArea(tArea4);
 
         if (p000.validate() != null) {
-             return;
+            return;
         }
         // 创建一个 list
         ArrayList<ProgramBxFile> plist = new ArrayList<ProgramBxFile>();
@@ -114,7 +114,7 @@ public class PrologLedController {
 
     }
 
-    public void outStore(String ip,int port,String itemName,double weight,String lotId,String pickStation) throws Exception {
+    public void outStore(String ip, int port, String itemName, double weight, String lotId, String pickStation) throws Exception {
         //Bx5GEnv.initial("log.properties");
 
         Bx5GScreenClient screen = new Bx5GScreenClient("MyScreen");
@@ -133,50 +133,50 @@ public class PrologLedController {
         //创建节目
         ProgramBxFile p000 = new ProgramBxFile("P000", profile);
         //创建第一块区域
-        TextCaptionBxArea tArea = new TextCaptionBxArea(0,0,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea);
+        TextCaptionBxArea tArea = new TextCaptionBxArea(0, 0, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea);
 
-        int size =8;
-        String padChar="    ";
-        String s1 = StrUtil.center(itemName, size,padChar);
+        int size = 8;
+        String padChar = "    ";
+        String s1 = StrUtil.center(itemName, size, padChar);
 
         //创建数据页
-        TextBxPage page = new TextBxPage("  品名："+s1);
-        PrologLedController.setPageStyle(page);
+        TextBxPage page = new TextBxPage("  品名：" + s1);
+        PrologLedViewService.setPageStyle(page);
 
         //创建第二块区域
-        TextCaptionBxArea tArea2 = new TextCaptionBxArea(0,24,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea2);
+        TextCaptionBxArea tArea2 = new TextCaptionBxArea(0, 24, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea2);
 
-        String padChar1="   ";
-        String newWeight =weight+"公斤";
-        String s2 = StrUtil.center(newWeight, size,padChar1);
+        String padChar1 = "   ";
+        String newWeight = weight + "公斤";
+        String s2 = StrUtil.center(newWeight, size, padChar1);
 
         //创建数据页
-        TextBxPage page2 = new TextBxPage("  重量："+s2);
-        PrologLedController.setPageStyle(page2);
+        TextBxPage page2 = new TextBxPage("  重量：" + s2);
+        PrologLedViewService.setPageStyle(page2);
 
         //创建第三块区域
-        TextCaptionBxArea tArea3 = new TextCaptionBxArea(0,48,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea3);
+        TextCaptionBxArea tArea3 = new TextCaptionBxArea(0, 48, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea3);
 
-        String padChar2="    ";
-        String s3 = StrUtil.center(lotId, size,padChar2);
+        String padChar2 = "    ";
+        String s3 = StrUtil.center(lotId, size, padChar2);
 
         //创建数据页
-        TextBxPage page3 = new TextBxPage("  批号："+s3);
-        PrologLedController.setPageStyle(page3);
+        TextBxPage page3 = new TextBxPage("  批号：" + s3);
+        PrologLedViewService.setPageStyle(page3);
 
         //创建第四块区域
-        TextCaptionBxArea tArea4 = new TextCaptionBxArea(0,72,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea4);
+        TextCaptionBxArea tArea4 = new TextCaptionBxArea(0, 72, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea4);
 
-        String padChar3="     ";
-        String s4 = StrUtil.center(pickStation, size,padChar3);
+        String padChar3 = "     ";
+        String s4 = StrUtil.center(pickStation, size, padChar3);
 
         //创建数据页
-        TextBxPage page4 = new TextBxPage("  站点："+s4);
-        PrologLedController.setPageStyle(page4);
+        TextBxPage page4 = new TextBxPage("  站点：" + s4);
+        PrologLedViewService.setPageStyle(page4);
 
         tArea.addPage(page);
         tArea2.addPage(page2);
@@ -190,7 +190,7 @@ public class PrologLedController {
         p000.addArea(tArea4);
 
         if (p000.validate() != null) {
-             return;
+            return;
         }
         // 创建一个 list
         ArrayList<ProgramBxFile> plist = new ArrayList<ProgramBxFile>();
@@ -207,7 +207,7 @@ public class PrologLedController {
 
     }
 
-    public void pick(String ip,int port,String itemName,double pickWeight,String lotId,double reWeight,String pickStation) throws Exception {
+    public void pick(String ip, int port, String itemName, double pickWeight, String lotId, double reWeight, String pickStation) throws Exception {
         //Bx5GEnv.initial("log.properties");
 
         Bx5GScreenClient screen = new Bx5GScreenClient("MyScreen");
@@ -226,51 +226,51 @@ public class PrologLedController {
         //创建节目
         ProgramBxFile p000 = new ProgramBxFile("P000", profile);
         //创建第一块区域
-        TextCaptionBxArea tArea = new TextCaptionBxArea(0,0,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea);
+        TextCaptionBxArea tArea = new TextCaptionBxArea(0, 0, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea);
 
-        int size =8;
-        String padChar="    ";
-        String ps="  "+pickStation;
-        String s1 = StrUtil.center(itemName, size,padChar);
+        int size = 8;
+        String padChar = "    ";
+        String ps = "  " + pickStation;
+        String s1 = StrUtil.center(itemName, size, padChar);
 
         //创建数据页
-        TextBxPage page = new TextBxPage(ps+"："+s1);
-        PrologLedController.setPageStyle(page);
+        TextBxPage page = new TextBxPage(ps + "：" + s1);
+        PrologLedViewService.setPageStyle(page);
 
         //创建第二块区域
-        TextCaptionBxArea tArea2 = new TextCaptionBxArea(0,24,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea2);
+        TextCaptionBxArea tArea2 = new TextCaptionBxArea(0, 24, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea2);
 
-        String padChar1="   ";
-        String pWeight =pickWeight+"公斤";
-        String s2 = StrUtil.center(pWeight, size,padChar1);
+        String padChar1 = "   ";
+        String pWeight = pickWeight + "公斤";
+        String s2 = StrUtil.center(pWeight, size, padChar1);
 
         //创建数据页
-        TextBxPage page2 = new TextBxPage("  拣重："+s2);
-        PrologLedController.setPageStyle(page2);
+        TextBxPage page2 = new TextBxPage("  拣重：" + s2);
+        PrologLedViewService.setPageStyle(page2);
 
         //创建第三块区域
-        TextCaptionBxArea tArea3 = new TextCaptionBxArea(0,48,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea3);
+        TextCaptionBxArea tArea3 = new TextCaptionBxArea(0, 48, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea3);
 
-        String padChar2="    ";
-        String s3 = StrUtil.center(lotId, size,padChar2);
+        String padChar2 = "    ";
+        String s3 = StrUtil.center(lotId, size, padChar2);
 
         //创建数据页
-        TextBxPage page3 = new TextBxPage("  批号："+s3);
-        PrologLedController.setPageStyle(page3);
+        TextBxPage page3 = new TextBxPage("  批号：" + s3);
+        PrologLedViewService.setPageStyle(page3);
 
         //创建第四块区域
-        TextCaptionBxArea tArea4 = new TextCaptionBxArea(0,72,192,24,screen.getProfile());
-        PrologLedController.setAreaStyle(tArea4);
+        TextCaptionBxArea tArea4 = new TextCaptionBxArea(0, 72, 192, 24, screen.getProfile());
+        PrologLedViewService.setAreaStyle(tArea4);
 
-        String rWeight =reWeight+"公斤";
-        String s4 = StrUtil.center(rWeight, size,padChar1);
+        String rWeight = reWeight + "公斤";
+        String s4 = StrUtil.center(rWeight, size, padChar1);
 
         //创建数据页
-        TextBxPage page4 = new TextBxPage("  回重："+s4);
-        PrologLedController.setPageStyle(page4);
+        TextBxPage page4 = new TextBxPage("  回重：" + s4);
+        PrologLedViewService.setPageStyle(page4);
 
         tArea.addPage(page);
         tArea2.addPage(page2);
@@ -284,7 +284,7 @@ public class PrologLedController {
         p000.addArea(tArea4);
 
         if (p000.validate() != null) {
-             return;
+            return;
         }
         // 创建一个 list
         ArrayList<ProgramBxFile> plist = new ArrayList<ProgramBxFile>();
@@ -309,7 +309,7 @@ public class PrologLedController {
         tarea.loadFrameImage(1);
     }
 
-    public static void setPageStyle(TextBxPage page){
+    public static void setPageStyle(TextBxPage page) {
         // 设置文本水平对齐方式
         page.setHorizontalAlignment(TextBinary.Alignment.NEAR);
         // 设置文本垂直居中方式

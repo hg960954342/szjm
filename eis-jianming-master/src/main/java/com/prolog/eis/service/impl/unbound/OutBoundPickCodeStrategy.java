@@ -4,12 +4,14 @@ import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.*;
+import com.prolog.eis.service.enums.ContainerTaskTaskTypeEnum;
 import com.prolog.eis.service.enums.OutBoundEnum;
+import com.prolog.eis.service.enums.OutBoundType;
+import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.utils.MapUtils;
 import com.prolog.framework.utils.StringUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,8 +25,6 @@ import java.util.*;
  * 订单出库  指定拣选站
  */
 @Component(OutBoundType.TASK_TYPE + 1 + OutBoundType.IF_SfReq + 1)
-@Slf4j
-@SuppressWarnings("all")
 public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
     @Autowired
@@ -61,7 +61,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
     @Transactional(rollbackFor = Exception.class)
     public void unbound(OutboundTask outboundTask) {
 
-        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",3).getMap(),OutboundTask.class);
+        List<OutboundTask> listCheckOuts=outBoundTaskMapper.findByMap(MapUtils.put("taskType",OutBoundEnum.TaskType.ORDER_CHECK_OUT_BOUND.getTaskTypeNumber()).getMap(),OutboundTask.class);
         if(listCheckOuts.size()>0){
             //存在盘点任务
             LogServices.logSysBusiness("盘点任务优先！");
@@ -81,7 +81,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             ordercontainerTask.setItemId(detailDataBeand.getItemId());
             ordercontainerTask.setItemName(detailDataBeand.getItemName());
             ordercontainerTask.setLot(detailDataBeand.getLot());
-            ordercontainerTask.setTaskType(1);
+            ordercontainerTask.setTaskType(ContainerTaskTaskTypeEnum.ORDER_OUT_BOUND.getTaskType());
             ordercontainerTask.setSourceType(1);
 
 
@@ -103,11 +103,6 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             setList.addAll(listBillNo);
             //pickstation给默认值
             String pickCode = StringUtils.isEmpty(detailDataBeand.getPickCode())?"pickStation4":detailDataBeand.getPickCode();
-           /* List<PickStation> listPickStations=pickStationMapper.findByMap(MapUtils.put("deviceNo",pickCode).getMap(),PickStation.class);
-            if(listPickStations.size()>1||listPickStations.size()<1){
-                LogServices.logSysBusiness(pickCode + "拣选站已经锁定！");
-                return;
-            }*/
             AgvStorageLocation agvStorageLocation = agvStorageLocationMapper.findByPickCodeAndLock(pickCode, 0, 0);
             if (agvStorageLocation == null) {
                 LogServices.logSysBusiness(pickCode + "拣选站点位已经锁定！");

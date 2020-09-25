@@ -2,17 +2,15 @@ package com.prolog.eis.service.impl.unbound;
 
 import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
-import com.prolog.eis.logs.LogServices;
-import com.prolog.eis.model.wms.*;
-import com.prolog.eis.service.sxk.SxStoreCkService;
+import com.prolog.eis.model.wms.AgvStorageLocation;
+import com.prolog.eis.model.wms.OutboundTask;
+import com.prolog.eis.model.wms.PickStation;
+import com.prolog.eis.service.enums.*;
 import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
-import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -97,16 +95,21 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     public List<PickStation> getAvailablePickStation(){
         //获取所有能用的拣选站
         Criteria pickStationCriteria=Criteria.forClass(PickStation.class);
-        Long[] ios=new Long[]{1L,3L};
-        Long[] taskTypes=new Long[]{1L,3L,5L,7L};
+        Integer[] ios=new Integer[]{PickStationIOTypeEnum.IN.getIoType(),PickStationIOTypeEnum.IN_OUT.getIoType()};
+        Integer[] taskTypes=new Integer[]{
+                PickStationTaskTypeEnum.ORDER_TASK_TYPE.getTaskType(),
+                PickStationTaskTypeEnum.ORDER_AND_MOVE_TASK_TYPE.getTaskType(),
+                PickStationTaskTypeEnum.ORDER_AND_EMPTY_TASK_TYPE.getTaskType(),
+                PickStationTaskTypeEnum.ALL_TASK_TYPE.getTaskType()
+                };
         pickStationCriteria.setRestriction(Restrictions.in("io",ios));
         pickStationCriteria.setRestriction(Restrictions.in("taskType",taskTypes));
-        pickStationCriteria.setRestriction(Restrictions.eq("isLock",0 ));
+        pickStationCriteria.setRestriction(Restrictions.eq("isLock", PickStationLockEnum.NO_LOCK.getLockTypeNumber()));
         List<PickStation> listPickStation= pickStationMapper.findByCriteria(pickStationCriteria);
         //过滤掉不能用的拣选站
         listPickStation=listPickStation.stream().filter(x->{
             String stationNo=x.getDeviceNo();
-            AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo,0,0);
+            AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo, AgvLocationLocationLockEnum.NO_LOCK.getLockTypeNumber(), AgvLocationTaskLockEnum.NO_LOCK.getLockTypeNumber());
             if(null!=agvStorageLocation){
 
                 return true;
@@ -120,7 +123,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
         List<PickStation> list=getAvailablePickStation();
         if(list.size()>0){
             String stationNo=list.get(0).getDeviceNo();
-            AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo,0,0);
+            AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo,AgvLocationLocationLockEnum.NO_LOCK.getLockTypeNumber(),AgvLocationTaskLockEnum.NO_LOCK.getLockTypeNumber());
             agvStorageLocation.setLocationLock(1);
             agvStorageLocationMapper.update(agvStorageLocation);
             return agvStorageLocation;
@@ -149,19 +152,6 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
        HashSet<String> setList=new HashSet<String>();
        setList.addAll(listBillNos);
         for(String billNoString:setList) {
-            //查询订单全部明细
-           /* List<OutboundTaskDetail> listOutBoundTaskDetails=outBoundTaskDetailMapper.findByMap(MapUtils.put("billNo",billNoString).getMap(),OutboundTaskDetail.class);
-            for(OutboundTaskDetail outboundTaskDetail:listOutBoundTaskDetails){
-                //获取container_task_detatil明细
-                List<ContainerTaskDetail> listContainerTaskDetails = containerTaskDetailMapperMapper.findByMap(MapUtils.
-                        put("billNo", billNoString)
-                        .put("itemId", outboundTaskDetail.getItemId()).put("ownerId", outboundTaskDetail.getOwnerId()
-                        ).put("lotId", outboundTaskDetail.getLotId()).getMap(), ContainerTaskDetail.class);
-                //获取明细总量
-                double doubleCurrent = listContainerTaskDetails.stream().mapToDouble(ContainerTaskDetail::getQty).sum();
-                outboundTaskDetail.setFinishQty((float)doubleCurrent); //回写
-                outBoundTaskDetailMapper.update(outboundTaskDetail);
-            }*/
             boolean isComplete= outBoundTaskDetailMapper.isOrderComplete(billNoString);
             if(isComplete){
                 billNoString=  String.format("'%s'", billNoString);

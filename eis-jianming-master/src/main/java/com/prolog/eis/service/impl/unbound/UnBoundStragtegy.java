@@ -8,12 +8,6 @@ import com.prolog.eis.model.wms.OutboundTask;
 public interface UnBoundStragtegy {
 
 
-
-
-
-
-
-
-    public void unbound(OutboundTask outboundTask);
+    void unbound(OutboundTask outboundTask);
 
 }
