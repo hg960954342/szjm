@@ -98,6 +98,19 @@ public class InBoundTaskHistory {
     @ApiModelProperty("结束时间")
     private Date endTime;
 
+    @Column("item_name")
+    @ApiModelProperty("商品名称")
+    @JsonProperty("SPMCH")
+    private String itemName;
+
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
 
     public int getId() {
         return id;

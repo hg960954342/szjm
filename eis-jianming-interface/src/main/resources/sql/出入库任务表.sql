@@ -35,6 +35,7 @@ CREATE TABLE `inbound_task_history` (
   `ceng` varchar(20) DEFAULT NULL COMMENT '入库楼层',
   `agv_loc` varchar(255) DEFAULT NULL COMMENT 'Agv搬运点',
   `item_id` varchar(255) DEFAULT NULL COMMENT 'wms商品id',
+  `item_name` varchar(255) DEFAULT NULL COMMENT '商品名称',
   `lot_id` varchar(255) DEFAULT NULL COMMENT 'wms内码',
   `lot` varchar(255) DEFAULT NULL COMMENT 'wms批号',
   `owner_id` varchar(255) DEFAULT NULL COMMENT 'wms业主',

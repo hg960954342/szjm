@@ -1,6 +1,6 @@
 package com.prolog.eis;
 
-import com.prolog.eis.filter.LogFilter;
+import com.prolog.eis.filter.UrlFilter;
 import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
 import com.prolog.framework.microservice.annotation.EnablePrologService;
 import org.mybatis.spring.annotation.MapperScan;
@@ -30,7 +30,7 @@ public class Interface {
     @Bean
     public FilterRegistrationBean registFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new LogFilter());
+        registration.setFilter(new UrlFilter());
         registration.addUrlPatterns("/*");
         registration.setName("LogFilter");
         registration.setOrder(1);
