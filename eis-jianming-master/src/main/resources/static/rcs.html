@@ -59,7 +59,9 @@
                 title: "MCS Log监控",
                 resizable: true,
                 cellDblClick: function (event, ui) {
-                    $("#details").html(ui.rowData[ui.column.dataIndx]);
+                    var text=ui["$td"].text();
+                    if($.eis.isEmpty(text)) {return;}
+                    $("#details").html(text);
                     $("#details").dialog({
                         closeText: "关闭",
                         width: 600,

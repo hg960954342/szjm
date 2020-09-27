@@ -11,6 +11,7 @@
     <script src="js/pqgrid.min.js"></script>
     <link rel="stylesheet" href="css/themes/office/pqgrid.css"/>
     <link href="css/index.css" rel="stylesheet" type="text/css"/>
+    <script src="js/eis.js"></script>
     <script>
         $(function () {
 
@@ -131,7 +132,9 @@
                 title: "库存查询",
                 resizable: true,
                 cellDblClick: function (event, ui) {
-                    $("#details").html(ui.rowData[ui.column.dataIndx]);
+                    var text=ui["$td"].text();
+                   if($.eis.isEmpty(text)) {return;}
+                    $("#details").html(text);
                     $("#details").dialog({
                         closeText: "关闭",
                         width: 600,

@@ -24,7 +24,20 @@ $.extend({
             }
             return point;
 
-        }
+        },
+      isEmpty:function(obj){
+           if((typeof obj=='string')&&obj.constructor==String){
+               obj.replace(/(^\s*)|(\s*$)/g, '');
+               if (typeof obj === "undefined" || obj == null || obj.trim() == "") {
+                   return true;
+               } else {
+                   return false;
+               }
+           }
+           throw "输入的值不是字符串！";
+
+
+      }
     })
 
 
