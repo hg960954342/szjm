@@ -83,15 +83,15 @@
             );
 
             var colM = [
-                {title: "商品id", width: '8%', dataIndx: "item_id"},
-                {title: "商品名称", width: '7%', dataIndx: "item_name"},
-                {title: "批号", width: '5%', dataIndx: "lot"},
-                {title: "WMS内码", width: '5%', dataIndx: "lot_id"},
-                {title: "用户id", width: '5%', dataIndx: "owner_id"},
-                {title: "托盘", width: '30%', dataIndx: "container_no"},
-                {title: "托盘对应qty", width: '30%', dataIndx: "qty_"},
-                {title: "数量", width: '5%', dataIndx: "qty", align: "right"},
-                {title: "实际数量",width: '5%', dataIndx: "weight", align: "right"},
+                {title: "商品id", width: '8%', dataIndx: "item_id",editable: false},
+                {title: "商品名称", width: '7%', dataIndx: "item_name",editable: false},
+                {title: "批号", width: '5%', dataIndx: "lot",editable: false},
+                {title: "WMS内码", width: '5%', dataIndx: "lot_id",editable: false},
+                {title: "用户id", width: '5%', dataIndx: "owner_id",editable: false},
+                {title: "托盘", width: '30%', dataIndx: "container_no",editable: false},
+                {title: "托盘对应qty", width: '30%', dataIndx: "qty_",editable: false},
+                {title: "数量", width: '5%', dataIndx: "qty", align: "right",editable: false},
+                {title: "实际数量",width: '5%', dataIndx: "weight", align: "right",editable: false},
 
             ];
             $.fn.extend({getParams:function(){
@@ -129,7 +129,23 @@
                 wrap: false, hwrap: false,
                 numberCell: {resizable: true, width: 30, title: "#"},
                 title: "库存查询",
-                resizable: true
+                resizable: true,
+                cellDblClick: function (event, ui) {
+                    $("#details").html(ui.rowData[ui.column.dataIndx]);
+                    $("#details").dialog({
+                        closeText: "关闭",
+                        width: 600,
+                        minHeight: 200,
+                        maxHeight: 600,
+                        title: "详情",
+                        resizable: false,
+                        buttons: {
+                            "关闭": function() {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                }
             });
 
             function refresh() {
@@ -183,7 +199,9 @@
 </div>-->
 <button id="clear" class="ant-btn ant-btn-red">清空查询条件</button>
 <button id="query" class="ant-btn ant-btn-red">查询</button>
-<div id="grid_paging" style="margin:5px auto;"></div>
+<div id="details"></div>
+<div id="grid_paging" style="margin:5px auto;">
+</div>
 </body>
 
 </html>

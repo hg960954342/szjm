@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/jquery-ui.css"/>
     <script src="js/jquery.js"></script>
     <script src="js/jquery-ui.min.js"></script>
-    <script src="js/jquery.alerts.js"></script>
     <link rel="stylesheet" href="css/pqgrid.min.css"/>
     <script src="js/pqgrid.min.js"></script>
     <link rel="stylesheet" href="css/themes/office/pqgrid.css"/>
@@ -20,12 +19,11 @@
                 {title: "起点", width: '15%', dataIndx: "start"},
                 {title: "终点", width: '15%', dataIndx: "end"},
                 {title: "MCS响应", width: '45%', dataIndx: "result", align: "right"},
-                {title: "create_time",width: '10%', dataIndx: "create_time", align: "right"},
+                {title: "create_time", width: '10%', dataIndx: "create_time", align: "right"},
 
             ];
 
-            var json=$.eis.getAgvJSON();
-
+            var json = $.eis.getAgvJSON();
 
 
             var dataModel = {
@@ -35,20 +33,20 @@
                 url: "api/v1/master/view/getLogViewRCSData",
                 getData: function (dataJSON) {
                     var data = dataJSON.data;
-                    var len=data.length;
-                    for(var i=0;i<len;i++){
-                        var d={
-                            "start":$.eis.getPointValue(data[i].start,json),
-                            "end":$.eis.getPointValue(data[i].end,json)
+                    var len = data.length;
+                    for (var i = 0; i < len; i++) {
+                        var getPoints = {
+                            "start": $.eis.getPointValue(data[i].start, json),
+                            "end": $.eis.getPointValue(data[i].end, json)
                         }
-                        $.extend(data[i],d);
+                        $.extend(data[i], getPoints);
                     }
 
                     return {curPage: dataJSON.curPage, totalRecords: dataJSON.totalRecords, data: data};
                 }
             };
 
-            var rcsGrid = $("div#grid_paging").pqGrid({
+            var rcsGrid = $("div#rcsGrid").pqGrid({
                 width: '95%', height: 600,
                 dataModel: dataModel,
                 colModel: colM,
@@ -60,14 +58,27 @@
                 numberCell: {resizable: true, width: 30, title: "#"},
                 title: "MCS Log监控",
                 resizable: true,
-                /*cellSelect: function( event, ui ) {
-                      $("#show").html( ui.rowData[ui.column.dataIndx]);
-                }*/
+                cellDblClick: function (event, ui) {
+                    $("#details").html(ui.rowData[ui.column.dataIndx]);
+                    $("#details").dialog({
+                        closeText: "关闭",
+                        width: 600,
+                        minHeight: 200,
+                        maxHeight: 600,
+                        title: "详情",
+                        resizable: false,
+                        buttons: {
+                            "关闭": function() {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                }
             });
 
             function refresh() {
                 $("#grid_paging").find("div.pq-loading").remove();
-                if(rcsGrid){
+                if (rcsGrid) {
                     rcsGrid.pqGrid("refreshDataAndView");
                 }
             }
@@ -80,8 +91,8 @@
     </script>
 </head>
 <body>
-<div id="show"></div>
-<div id="grid_paging" style="margin:5px auto;"></div>
+<div id="rcsGrid" style="margin:5px auto;"></div>
+<div id="details"></div>
 </body>
 
 </html>

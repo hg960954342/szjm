@@ -46,7 +46,23 @@
                 wrap: false, hwrap: false,
                 numberCell: {resizable: true, width: 30, title: "#"},
                 title: "MCS Log监控",
-                resizable: true
+                resizable: true,
+                cellDblClick: function (event, ui) {
+                    $("#details").html(ui.rowData[ui.column.dataIndx]);
+                    $("#details").dialog({
+                        closeText: "关闭",
+                        width: 600,
+                        minHeight: 200,
+                        maxHeight: 600,
+                        title: "详情",
+                        resizable: false,
+                        buttons: {
+                            "关闭": function() {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                }
             });
 
             function refresh() {
@@ -64,7 +80,9 @@
     </script>
 </head>
 <body>
-<div id="grid_paging" style="margin:5px auto;"></div>
+<div id="grid_paging" style="margin:5px auto;">
+    <div id="details"></div>
+</div>
 </body>
 
 </html>
