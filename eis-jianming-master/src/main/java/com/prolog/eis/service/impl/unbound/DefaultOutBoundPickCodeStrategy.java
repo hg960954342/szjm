@@ -60,14 +60,14 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     @Autowired
     private  Map<String, DefaultOutBoundPickCodeStrategy> strategyMap  ;
 
-    public SimilarityDataEntityLoadInterface getsimilarityDataEntityListLoad(OutboundTask OutboundTask){
-        int isPickCode=OutboundTask.getSfReq();
-        return similarityDataEntityListLoadMap.get(OutBoundType.IF_SfReq+isPickCode);
+    public SimilarityDataEntityLoadInterface getsimilarityDataEntityListLoad(OutboundTask OutBoundTask){
+        int isPickCode=OutBoundTask.getSfReq();
+        return similarityDataEntityListLoadMap.get(OutBoundType.IF_SF_REQ +isPickCode);
     }
 
-    public DefaultOutBoundPickCodeStrategy getDefaultOutBoundPickCodeStrategy(OutboundTask OutboundTask){
-        int isPickCode=OutboundTask.getSfReq();
-        return strategyMap.get(OutBoundType.TASK_TYPE+OutboundTask.getTaskType()+OutBoundType.IF_SfReq+isPickCode);
+    public DefaultOutBoundPickCodeStrategy getDefaultOutBoundPickCodeStrategy(OutboundTask OutBoundTask){
+        int isPickCode=OutBoundTask.getSfReq();
+        return strategyMap.get(OutBoundType.TASK_TYPE+OutBoundTask.getTaskType()+OutBoundType.IF_SF_REQ +isPickCode);
     }
 
     @Override

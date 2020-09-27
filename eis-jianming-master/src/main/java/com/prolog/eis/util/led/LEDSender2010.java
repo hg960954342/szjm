@@ -670,26 +670,22 @@ public class LEDSender2010 {
 		int i;
 		short x;
 		String s;
-	    System.out.print("size="+size+"; "+"data=");
-		for (i=0; i<size; i++){
-			if (stream[i]<0) x=(short)(256+stream[i]); else x=stream[i];
+ 		for (i=0; i<size; i++){
+			if (stream[i]<0) {x=(short)(256+stream[i]);} else { x=stream[i];}
 			s=Integer.toHexString(x);
-			if (s.length()==1) s="0x0"+s; else s="0x"+s;
+			if (s.length()==1){ s="0x0"+s;} else {s="0x"+s;}
 	        System.out.print(s);    
 	        System.out.print(' ');    
 		}
-	    System.out.println();    
-	}
+ 	}
 
 	public void print_stream_ex(byte[] stream, int start, int size){
 		int i;
 		short x;
 	    System.out.print("size="+size+"; "+"data=");
 		for (i=start; i<start+size; i++){
-			if (stream[i]<0) x=(short)(256+stream[i]); else x=stream[i];
-	        System.out.print(x);    
-	        System.out.print(' ');    
-		}
+			if (stream[i]<0) {x=(short)(256+stream[i]);} else {x=stream[i];}
+ 		}
 	    System.out.println();    
 	}
 
@@ -745,7 +741,7 @@ public class LEDSender2010 {
 		int[] mac=new int[6];
 		int i;
 		for(i=0; i<6; i++){
-			if (buffer[index+i]>=0) mac[i]=buffer[index+i]; else mac[i]=(256+buffer[index+i]);
+			if (buffer[index+i]>=0) {mac[i]=buffer[index+i];} else {mac[i]=(256+buffer[index+i]);}
 		}
 		return mac[0]+"-"+mac[1]+"-"+mac[2]+"-"+mac[3]+"-"+mac[4]+"-"+mac[5];
 	}
@@ -763,6 +759,7 @@ public class LEDSender2010 {
 		intFill(buffer, index, time);
 	}
 
+
 	static void dateFill(byte[] buffer, int index, int year, int month, int day){
 		int date;
 		int MonthDays[][]={{31,28,31,30,31,30,31,31,30,31,30,31}, {31,29,31,30,31,30,31,31,30,31,30,31}};
@@ -773,7 +770,7 @@ public class LEDSender2010 {
 		if ((year&3)==0 && ((m&3)==0 || d!=0)) d=1; else d=0;
 		  
 		date=day;
-		for (i=1; i<=month-1; i++) date+=MonthDays[d][i-1];
+		for (i=1; i<=month-1; i++) {date+=MonthDays[d][i-1];}
 		date+=y*365+(y>>2)-(y/100)+(y/400);
 		  
 		intFill(buffer, index, date);

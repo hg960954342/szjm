@@ -48,8 +48,8 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
 
 
     @Results({
-            @Result(property = "BILLNO", column = "bill_no"),
-            @Result(property = "TYPE", column = "type"),
+            @Result(property = "billNo", column = "bill_no"),
+            @Result(property = "type", column = "type"),
             @Result(property = "details", column = "item_id=item_id,lot_id=lot_id,bill_no=bill_no",
                     many = @Many(select = "com.prolog.eis.dao.ContainerTaskDetailMapper.getCheckDetail")),
     })
@@ -58,15 +58,15 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
 
 
     @Results({
-            @Result(property = "SEQNO", column = "seqno"),
-            @Result(property = "ITEMID", column = "item_id"),
-            @Result(property = "LOTID", column = "lot_id"),
-            @Result(property = "CONTAINERCODE", column = "CONTAINER_NO"),
-            @Result(property = "QTY", column = "QTY")
+            @Result(property = "seqNo", column = "seqno"),
+            @Result(property = "itemId", column = "item_id"),
+            @Result(property = "lotId", column = "lot_id"),
+            @Result(property = "containerCode", column = "CONTAINER_NO"),
+            @Result(property = "qty", column = "QTY")
     })
     @Select("select d.seqno,s.item_id,s.lot_id,s.CONTAINER_NO,s.WEIGHT qty from outbound_task_detail d ,sx_store s\n" +
             "where d.item_id=s.item_id and d.lot_id=s.lot_id and d.item_id=#{item_id} and d.lot_id=#{lot_id} and d.bill_no=#{bill_no}")
-    List<CheckOutResponse.DataBean.DetailsBean> getCheckDetail(@Param("item_id") String item_id, @Param("lot_id") String lot_id,@Param("bill_no") String bill_no);
+    List<CheckOutResponse.DataBean.DetailsBean> getCheckDetail(@Param("item_id") String itemId, @Param("lot_id") String lotId,@Param("bill_no") String billNo);
 
     @Select("select sum(qty) from container_task_detail where container_code = #{containerCode}")
     Double queryPickQtyByConcode(String containerCode);

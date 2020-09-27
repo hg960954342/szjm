@@ -9,7 +9,6 @@ import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.service.store.CallBackStatus;
 import com.prolog.eis.service.store.MCSCallBack;
-import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service(CallBackStatus.MCSCallBack_STATUS+2+CallBackStatus.TYPE+3)
+@Service(CallBackStatus.MCS_CALL_BACK_STATUS +2+CallBackStatus.TYPE+3)
 @Transactional(rollbackFor = Exception.class,propagation= Propagation.SUPPORTS)
 public class MCSCallBackYiKu implements MCSCallBack {
     @Autowired

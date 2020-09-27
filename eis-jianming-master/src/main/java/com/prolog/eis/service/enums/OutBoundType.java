@@ -9,6 +9,6 @@ public interface OutBoundType {
     /**
      *     出库任务指定拣选站前缀
      */
-    public static final  String IF_SfReq="sfReq";
+    public static final  String IF_SF_REQ ="sfReq";
 
 }

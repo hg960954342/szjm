@@ -110,7 +110,7 @@ public class PrologJmMCSController {
 				hashMap.put(inBoundRequest.getSource(),inBoundRequest);
 			}else {
 				//判断后面的条码是否为noRead
-				if(!SSX.noRead.equals(inBoundRequest.getStockId())) {
+				if(!SSX.NO_READ.equals(inBoundRequest.getStockId())) {
 					hashMap.put(inBoundRequest.getSource(),inBoundRequest);
 				}
 			}
@@ -213,7 +213,7 @@ public class PrologJmMCSController {
 
 			String deviceNo = helper.getString("deviceNo");
 			String containerNo = helper.getString("containerNo");
-			if(StringUtils.isNotEmpty(containerNo)&&!SSX.noRead.equals(containerNo)){
+			if(StringUtils.isNotEmpty(containerNo)&&!SSX.NO_READ.equals(containerNo)){
 					//生成空托盘入库任务
 				qcInBoundTaskService.foldInBound(deviceNo, containerNo);
 			}

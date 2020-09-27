@@ -31,7 +31,7 @@ public interface AgvStorageLocationMapper extends BaseMapper<AgvStorageLocation>
 
     @ResultMap(value="AgvStorageLocation")
     @Select("select a.* from port_info t,agv_storagelocation a where t.junction_port=a.device_no and t.task_type=#{task_type} and (t.port_type=1 or t.port_type=3)")
-    List<AgvStorageLocation> getPortInfoByTaskType(@Param("task_type")int task_type);
+    List<AgvStorageLocation> getPortInfoByTaskType(@Param("task_type")int taskType);
 
     @Select("select remarks from agv_storagelocation where rcs_position_code = #{target}")
     String  queryPickStationByCode(String target);

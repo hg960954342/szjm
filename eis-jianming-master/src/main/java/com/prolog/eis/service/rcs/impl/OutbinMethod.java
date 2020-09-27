@@ -24,8 +24,8 @@ public class OutbinMethod implements AgvMethod{
 
         //根据任务号 查询 托盘任务
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskCode(taskCode);
-        if (StringUtils.isEmpty(containerTasks)) return;
-        if (containerTasks!=null&&containerTasks.size()==0) return;
+        if (StringUtils.isEmpty(containerTasks)) {return;}
+        if (containerTasks!=null&&containerTasks.size()==0) {return;}
         ContainerTask containerTask = containerTasks.get(0);
 
         AgvStorageLocation currentPosition = agvStorageLocationMapper.findByRcs(containerTask.getSource());

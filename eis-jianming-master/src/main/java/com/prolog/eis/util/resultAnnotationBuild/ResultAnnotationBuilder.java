@@ -36,6 +36,7 @@ public class ResultAnnotationBuilder  implements PackageScanner{
     /**
      *获取指定包下的所有字节码文件的全类名
      */
+    @Override
     public List<String> getFullyQualifiedClassNameList() throws IOException {
 
         return doScan(basePackage, new ArrayList<String>());

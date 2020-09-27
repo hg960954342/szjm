@@ -29,6 +29,7 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
     private AgvStorageLocationMapper agvStorageLocationMapper;
     @Autowired
     EisSendRcsTaskServiceSend eisSendRcsTaskServiceSend;
+    @Override
     public void updateAgvTask(ResultAgvDto rsultAgvDto){
 
 //        for(ResultAgvDto resultAgvDto:list){
@@ -36,7 +37,7 @@ public class EisSendRcsTaskServiceImpl implements EisSendRcsTaskService {
             RcsRequestResultDto  rcsRequestResultDto =rsultAgvDto.getRcsRequestResultDto();
             String restCode = rcsRequestResultDto.getCode();
 
-            if (restCode.equals("0")) {
+            if ("0".equals(restCode)) {
                 //更新发送给设备的时间
                 //获取参数
                 String taskCode = containerTask.getTaskCode();

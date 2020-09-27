@@ -3,6 +3,10 @@ package com.prolog.eis.logs;
 import com.prolog.eis.dao.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -31,8 +35,9 @@ public class LogServices {
     @Autowired
     ScheduledLogMapper scheduledLogMapper;
 
-    private static LogServices logServices;
+    ThreadPoolTaskScheduler taskScheduler;
 
+    private static LogServices logServices;
 
 
 
@@ -46,6 +51,8 @@ public class LogServices {
         logServices.logSysBusinessMapper=this.logSysBusinessMapper;
         logServices.wmsLogMapper=this.wmsLogMapper;
         logServices.scheduledLogMapper=this.scheduledLogMapper;
+        logServices.taskScheduler= new ThreadPoolTaskScheduler();
+
 
      }
 
@@ -146,22 +153,20 @@ public class LogServices {
      */
     public static void logSys(Throwable e){
         SysLog sysLog=new SysLog();
-        String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
+        String className = Thread.currentThread().getStackTrace()[2].getClassName();
         sysLog.setClassName(className);
         String classSimpleName = StringUtils.substring(className,StringUtils.lastIndexOf(className,".")+1);
         sysLog.setClassSimpleName(classSimpleName);
-        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();//调用的方法名
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
         sysLog.setClassMethod(methodName);
-        int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
+        int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();
         sysLog.setLineNumber(lineNumber+"");
-        sysLog.setError(toString_(e));
+        sysLog.setError(toString(e));
         sysLog.setCreateTime(new java.util.Date());
-        new Thread( new Runnable(){
-             @Override
-             public void run() {
-                 logServices.logSysMapper.save(sysLog);
-             }
-         }).start();
+        logServices.taskScheduler.execute(()->{
+            logServices.logSysMapper.save(sysLog);
+        });
+
 
 
     }
@@ -172,19 +177,19 @@ public class LogServices {
      */
     public static void logSysBusiness(String errorMsg){
         SysBusinessLog sysBusinessLog=new SysBusinessLog();
-        String className = Thread.currentThread().getStackTrace()[2].getClassName();//调用的类名
+        String className = Thread.currentThread().getStackTrace()[2].getClassName();
         sysBusinessLog.setClassName(className);
         String classSimpleName = StringUtils.substring(className,StringUtils.lastIndexOf(className,".")+1);
         sysBusinessLog.setClassSimpleName(classSimpleName);
-        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();//调用的方法名
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
         sysBusinessLog.setClassMethod(methodName);
-        int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();//调用的行数
+        int lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();
         sysBusinessLog.setLineNumber(lineNumber+"");
         sysBusinessLog.setError(spliitString(errorMsg));
         sysBusinessLog.setCreateTime(new java.util.Date());
         logServices.logSysBusinessMapper.save(sysBusinessLog);
     }
-    private static String toString_(Throwable e){
+    private static String toString(Throwable e){
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw, true);
         e.printStackTrace(pw);

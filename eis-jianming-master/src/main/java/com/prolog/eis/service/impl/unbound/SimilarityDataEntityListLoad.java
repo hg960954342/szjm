@@ -14,13 +14,18 @@ import java.util.stream.Collectors;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_SINGLETON;
 
-@Component(OutBoundType.IF_SfReq + 0)
+@Component(OutBoundType.IF_SF_REQ + 0)
 @Scope(SCOPE_SINGLETON)
 public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInterface {
 
-
-    public Set<String> currentBillNoList = Collections.synchronizedSet(new HashSet<>());//当前执行的billNoString
-    public int maxSize = 1; //订单池处理最大数量
+    /**
+     *  当前执行的billNoString
+     */
+    public Set<String> currentBillNoList = Collections.synchronizedSet(new HashSet<>());
+    /**
+     * //订单池处理最大数量
+     */
+    public int maxSize = 1;
 
 
     @Autowired
@@ -28,14 +33,16 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
 
     @Autowired
     OutBoundTaskDetailMapper outBoundTaskDetailMapper;
-    //订单超时处理时间默认值 半个小时 单位为min
-    public static final long overTime = 1;
+    /**
+     *  //订单超时处理时间默认值 半个小时 单位为min
+     */
+    public static final long OVER_TIME = 1;
 
-
+    @Override
     public Set<String> getCrrentBillNoList() {
         return currentBillNoList;
     }
-
+    @Override
     public int getMaxSize() {
         return maxSize;
     }
@@ -48,13 +55,14 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
      * @param outboundTask
      * @return
      */
+    @Override
     public synchronized void addOutboundTask(OutboundTask outboundTask) {
         if (getCrrentBillNoList().size() <maxSize && outboundTask.getSfReq() == 0) {
             getCrrentBillNoList().add(String.format("'%s'", outboundTask.getBillNo()));
         }
     }
 
-
+    @Override
     public List<DetailDataBean> getOutDetailList() {
         return outBoundTaskDetailMapper.getOuntBoundDetailAll(String.join(",", getCrrentBillNoList()));
 
@@ -68,7 +76,7 @@ public class SimilarityDataEntityListLoad implements SimilarityDataEntityLoadInt
      */
     private OutboundTask getSimilarityDataList() {
         //加入超时任务
-        List<OutboundTask> listOverTimeBoundTask= outBoundTaskMapper.getOutBoudTaskOverTime(overTime);
+        List<OutboundTask> listOverTimeBoundTask= outBoundTaskMapper.getOutBoudTaskOverTime(OVER_TIME);
         listOverTimeBoundTask.stream().forEach(x->{
             if(getCrrentBillNoList().size()<getMaxSize()){
                 getCrrentBillNoList().add(String.format("'%s'", x.getBillNo())) ;

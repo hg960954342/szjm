@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
-@Service(CallBackStatus.MCSCallBack_STATUS+2+CallBackStatus.TYPE+2)
+@Service(CallBackStatus.MCS_CALL_BACK_STATUS +2+CallBackStatus.TYPE+2)
 @Transactional(rollbackFor = Exception.class,propagation= Propagation.SUPPORTS)
 @SuppressWarnings("all")
 public class MCSCallBackChuKu implements MCSCallBack {

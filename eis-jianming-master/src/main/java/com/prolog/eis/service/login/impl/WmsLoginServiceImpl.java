@@ -70,6 +70,7 @@ public class WmsLoginServiceImpl implements WmsLoginService {
     /**
      * 刷新token
      */
+    @Override
     public void flushToken(){
         String url = String.format("http://%s:%s/api/v1/OAuth/refresh", wmsIp, wmsPort);
         Map<String,Object> map = new HashMap<>();

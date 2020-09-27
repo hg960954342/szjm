@@ -30,7 +30,7 @@ public class PrologRcsController {
 		try {
 			String taskCode = helper.getString("taskCode");
 			String method = helper.getString("method");
-			if(StringUtils.isNotEmpty(taskCode)&&taskCode.endsWith(AgvMove.agvMoveTaskCodeEndPrex)){  //手动调用Agv搬运任务
+			if(StringUtils.isNotEmpty(taskCode)&&taskCode.endsWith(AgvMove.AGV_MOVE_TASK_CODE_END_PREX)){  //手动调用Agv搬运任务
 				return returnSuccess(reqCode);
 			}
 			agvCallbackService.agvCallback(taskCode, method);

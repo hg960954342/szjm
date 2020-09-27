@@ -34,7 +34,7 @@ public class LedShowService {
     @Autowired
     private ContainerTaskService containerTaskService;
     @Autowired
-    private LedShowDto LedShowDto;
+    private LedShowDto ledShowDto;
     @Autowired
     private LedShowMapper ledShowMapper;
     @Autowired
@@ -71,8 +71,8 @@ public class LedShowService {
     public void pickStationShow(String taskCode, String method) {
         //根据任务号 查询 托盘任务
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskCode(taskCode);
-        if (StringUtils.isEmpty(containerTasks)) return;
-        if (containerTasks != null && containerTasks.size() == 0) return;
+        if (StringUtils.isEmpty(containerTasks)) {return;}
+        if (containerTasks != null && containerTasks.size() == 0)  {return;}
         ContainerTask containerTask = containerTasks.get(0);
         if (containerTask.getTargetType() == 1) {
             Double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
@@ -80,7 +80,7 @@ public class LedShowService {
                 pQty = 0.0;
             }
             double rQty = containerTask.getQty() - pQty;
-            Map<String, LedShowDto> mapLedShows = LedShowDto.getLedShowDtoMap();
+            Map<String, LedShowDto> mapLedShows = ledShowDto.getLedShowDtoMap();
             if (mapLedShows.containsKey(containerTask.getTarget())) {
                 LedShowDto ledShowDtoS = mapLedShows.get(containerTask.getTarget());
                 LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
@@ -107,7 +107,7 @@ public class LedShowService {
     @After("container( containerCode,targetLayer,targetX,targetY,address)")
     public void chukuLedShow(String containerCode, int targetLayer, int targetX, int targetY, String address) throws Exception {
         ContainerTask containerTask = containerTaskMapper.queryContainerTaskByConcode(containerCode);
-        if(containerTask==null) return ;
+        if(containerTask==null) {return ;}
         String station = agvStorageLocationMapper.queryPickStationByCode(containerTask.getTarget());
         LedShow ledShow = ledShowMapper.findById(3, LedShow.class);
 
@@ -155,10 +155,10 @@ public class LedShowService {
         }
         //根据托盘码查询入库托盘任务
         ContainerTask containerTask = containerTaskMapper.queryContainerTaskByConcode(containerNo);
-        if(containerTask==null) return;
+        if(containerTask==null) {return;}
         //入库,回库显示led屏
-        if (sourceLayer == 1) {
-            LedShow ledShow = ledShowMapper.findById(1, LedShow.class);
+        if (sourceLayer == 1||sourceLayer==2) {
+            LedShow ledShow = ledShowMapper.findById(sourceLayer, LedShow.class);
 
             if (ledShow != null) {
                  try {
@@ -168,18 +168,7 @@ public class LedShowService {
                 }
             }
         }
-        if (sourceLayer == 2) {
-            LedShow ledShow = ledShowMapper.findById(2, LedShow.class);
 
-            if (ledShow != null) {
-                 try {
-                    prologLedViewService.reStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), weight, containerTask.getLot(), state);
-                } catch (Exception e) {
-                    LogServices.logSys(e);
-                }
-
-            }
-        }
 
     }
 

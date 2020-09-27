@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * 订单出库  指定拣选站
  */
-@Component(OutBoundType.TASK_TYPE + 1 + OutBoundType.IF_SfReq + 1)
+@Component(OutBoundType.TASK_TYPE + 1 + OutBoundType.IF_SF_REQ + 1)
 public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
 
     @Autowired
@@ -89,7 +89,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
             float last = detailDataBeand.getLast();           //获取需要出库的总量
 
             Float countQty = qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
-            if (countQty == null) countQty = 0f;
+            if (countQty == null){ countQty = 0f;}
             if (countQty < last) {
                 LogServices.logSysBusiness("库存:" + countQty + "不够出:" + last + "！");
                 return;

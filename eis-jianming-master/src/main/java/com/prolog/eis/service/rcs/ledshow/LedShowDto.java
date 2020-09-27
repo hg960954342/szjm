@@ -23,7 +23,7 @@ public class LedShowDto {
 
 
     public Map<String,LedShowDto> getLedShowDtoMap(){
-      Map<String,LedShowDto> map=new HashMap<>();
+      Map<String,LedShowDto> map=new HashMap<>(8);
       map.put("057200AB048300",new LedShowDto(4,"一站"));
       map.put("054320AB048300",new LedShowDto(5,"二站"));
       map.put("051440AB047200",new LedShowDto(6,"三站"));
@@ -32,6 +32,8 @@ public class LedShowDto {
 
 
   }
+
+
 
 
     public Integer getId() {

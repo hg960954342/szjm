@@ -1,7 +1,12 @@
 package com.prolog.eis.service.impl.unbound.entity;
 
-import java.util.List;
+import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.List;
+@Setter
+@Getter
 public class CheckOutResponse {
 
 
@@ -12,33 +17,14 @@ public class CheckOutResponse {
      */
 
     private int size;
-    private String MessageID;
+    @JSONField(name="MessageID")
+    private String messageID;
     private List<DataBean> data;
 
-    public int getSize() {
-        return size;
-    }
 
-    public void setSize(int size) {
-        this.size = size;
-    }
 
-    public String getMessageID() {
-        return MessageID;
-    }
-
-    public void setMessageID(String MessageID) {
-        this.MessageID = MessageID;
-    }
-
-    public List<DataBean> getData() {
-        return data;
-    }
-
-    public void setData(List<DataBean> data) {
-        this.data = data;
-    }
-
+    @Setter
+    @Getter
     public static class DataBean {
         /**
          * BILLNO : PDD0000001
@@ -46,34 +32,14 @@ public class CheckOutResponse {
          * details : [{"SEQNO":"1","ITEMID":"SPBH0001","LOTID":"123","CONTAINERCODE":"600001","QTY":123.08},{"SEQNO":"2","ITEMID":"SPBH0001","LOTID":"123","CONTAINERCODE":"600002","QTY":12},{"SEQNO":"3","ITEMID":"SPBH0002","LOTID":"1232","CONTAINERCODE":"600004","QTY":123}]
          */
 
-        private String BILLNO;
-        private String TYPE;
+        @JSONField(name="BILLNO")
+        private String billNo;
+        @JSONField(name="TYPE")
+        private String type;
         private List<DetailsBean> details;
 
-        public String getBILLNO() {
-            return BILLNO;
-        }
-
-        public void setBILLNO(String BILLNO) {
-            this.BILLNO = BILLNO;
-        }
-
-        public String getTYPE() {
-            return TYPE;
-        }
-
-        public void setTYPE(String TYPE) {
-            this.TYPE = TYPE;
-        }
-
-        public List<DetailsBean> getDetails() {
-            return details;
-        }
-
-        public void setDetails(List<DetailsBean> details) {
-            this.details = details;
-        }
-
+        @Setter
+        @Getter
         public static class DetailsBean {
             /**
              * SEQNO : 1
@@ -83,51 +49,16 @@ public class CheckOutResponse {
              * QTY : 123.08
              */
 
-            private String SEQNO;
-            private String ITEMID;
-            private String LOTID;
-            private String CONTAINERCODE;
-            private double QTY;
-
-            public String getSEQNO() {
-                return SEQNO;
-            }
-
-            public void setSEQNO(String SEQNO) {
-                this.SEQNO = SEQNO;
-            }
-
-            public String getITEMID() {
-                return ITEMID;
-            }
-
-            public void setITEMID(String ITEMID) {
-                this.ITEMID = ITEMID;
-            }
-
-            public String getLOTID() {
-                return LOTID;
-            }
-
-            public void setLOTID(String LOTID) {
-                this.LOTID = LOTID;
-            }
-
-            public String getCONTAINERCODE() {
-                return CONTAINERCODE;
-            }
-
-            public void setCONTAINERCODE(String CONTAINERCODE) {
-                this.CONTAINERCODE = CONTAINERCODE;
-            }
-
-            public double getQTY() {
-                return QTY;
-            }
-
-            public void setQTY(double QTY) {
-                this.QTY = QTY;
-            }
+            @JSONField(name="SEQNO")
+            private String seqNo;
+            @JSONField(name="ITEMID")
+            private String itemId;
+            @JSONField(name="LOTID")
+            private String lotId;
+            @JSONField(name="CONTAINERCODE")
+            private String containerCode;
+            @JSONField(name="QTY")
+            private double qty;
         }
     }
 }

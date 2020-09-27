@@ -46,7 +46,13 @@ public class PrologLocationUtils {
     }
 }
 enum Layer{
+    /**
+     * 4楼
+     */
     AB(4),
+    /**
+     * 3楼
+     */
     XY(3);
 
     private int layer;

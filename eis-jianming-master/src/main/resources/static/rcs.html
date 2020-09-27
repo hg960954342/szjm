@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/jquery-ui.css"/>
     <script src="js/jquery.js"></script>
     <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.alerts.js"></script>
     <link rel="stylesheet" href="css/pqgrid.min.css"/>
     <script src="js/pqgrid.min.js"></script>
     <link rel="stylesheet" href="css/themes/office/pqgrid.css"/>
@@ -18,7 +19,7 @@
                 {title: "ID", width: '10%', dataIndx: "id"},
                 {title: "起点", width: '15%', dataIndx: "start"},
                 {title: "终点", width: '15%', dataIndx: "end"},
-                {title: "MCS响应", width: '40%', dataIndx: "result", align: "right"},
+                {title: "MCS响应", width: '45%', dataIndx: "result", align: "right"},
                 {title: "create_time",width: '10%', dataIndx: "create_time", align: "right"},
 
             ];
@@ -58,7 +59,10 @@
                 wrap: false, hwrap: false,
                 numberCell: {resizable: true, width: 30, title: "#"},
                 title: "MCS Log监控",
-                resizable: true
+                resizable: true,
+                /*cellSelect: function( event, ui ) {
+                      $("#show").html( ui.rowData[ui.column.dataIndx]);
+                }*/
             });
 
             function refresh() {
@@ -76,6 +80,7 @@
     </script>
 </head>
 <body>
+<div id="show"></div>
 <div id="grid_paging" style="margin:5px auto;"></div>
 </body>
 

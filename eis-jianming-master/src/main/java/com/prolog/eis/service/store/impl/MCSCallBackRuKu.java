@@ -5,9 +5,7 @@ import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
 import com.prolog.eis.dao.wms.InboundTaskMapper;
 import com.prolog.eis.logs.LogServices;
-import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
-import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.model.wms.InboundTask;
 import com.prolog.eis.service.CallBackCheckOutService;
 import com.prolog.eis.service.EisCallbackService;
@@ -23,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service(CallBackStatus.MCSCallBack_STATUS+2+CallBackStatus.TYPE+1)
+@Service(CallBackStatus.MCS_CALL_BACK_STATUS +2+CallBackStatus.TYPE+1)
 @Transactional(rollbackFor = Exception.class,propagation= Propagation.SUPPORTS)
 @SuppressWarnings("all")
 public class MCSCallBackRuKu implements MCSCallBack {

@@ -211,7 +211,7 @@ public class SxStoreTaskFinishServiceImpl implements SxStoreTaskFinishService {
 						}
 						sxStoreLocationMapper.updateMapById(sxStoreLocation2.getId(),
 								MapUtils.put("deptNum", smallCount).getMap(), SxStoreLocation.class);
-					} else if (bigCount == smallCount && bigCount == 0) {
+					} else if (bigCount .equals(smallCount)   && bigCount == 0) {
 						smallHaveStoreIndex = index - 1;
 						bigHaveStoreIndex = index + 1;
 						sxStoreLocation2.setDeptNum(0);
@@ -483,7 +483,7 @@ public class SxStoreTaskFinishServiceImpl implements SxStoreTaskFinishService {
 							}
 							sxStoreLocationMapper.updateMapById(sxStoreLocation2.getId(),
 									MapUtils.put("deptNum", smallCount).getMap(), SxStoreLocation.class);
-						} else if (bigCount == smallCount && bigCount == 0) {
+						} else if (bigCount .equals(smallCount)  && bigCount == 0) {
 							smallHaveStoreIndex = index - 1;
 							bigHaveStoreIndex = index + 1;
 							sxStoreLocationMapper.updateMapById(sxStoreLocation2.getId(),

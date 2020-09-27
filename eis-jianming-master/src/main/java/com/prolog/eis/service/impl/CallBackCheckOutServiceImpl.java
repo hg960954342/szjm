@@ -40,6 +40,7 @@ public class CallBackCheckOutServiceImpl implements CallBackCheckOutService {
     @Autowired
     OutBoundContainerService outBoundContainerService;
 
+    @Override
     public void updateCallBackCheckOut(String containerCode){
 
         List<CheckOutTask> checkOutTasks= checkOutTaskMapper.findByMap(MapUtils.put("containerCode", containerCode).getMap(), CheckOutTask.class);
@@ -47,7 +48,7 @@ public class CallBackCheckOutServiceImpl implements CallBackCheckOutService {
             LogServices.logSysBusiness("存在多条盘点任务错误！");
             return;
         }
-        if(checkOutTasks.isEmpty()) return;
+        if(checkOutTasks.isEmpty()){ return;}
         CheckOutTask checkOutTask= checkOutTasks.get(0);
         //开启手动
         TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);

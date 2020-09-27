@@ -149,7 +149,7 @@ public class ViewTestController {
     @ResponseBody
     public Object agvMove(@RequestParam("startP")String startP,@RequestParam("endP")String endP)throws Exception{
         String containerCode= PrologStringUtils.newGUID();
-        String taskCode= PrologStringUtils.newGUID()+AgvMove.agvMoveTaskCodeEndPrex; //手动调用Agv搬运 taskCode暂时定为prolog PrologRcsController回告已经修改
+        String taskCode= PrologStringUtils.newGUID()+AgvMove.AGV_MOVE_TASK_CODE_END_PREX; //手动调用Agv搬运 taskCode暂时定为prolog PrologRcsController回告已经修改
         return rcsRequestService.sendTask(taskCode, containerCode, startP, endP, "F01", "1");
     }
 

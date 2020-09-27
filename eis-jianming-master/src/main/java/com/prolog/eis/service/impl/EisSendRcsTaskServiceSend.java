@@ -42,7 +42,7 @@ public class EisSendRcsTaskServiceSend   {
             String target = containerTask.getTarget();
 
             //判断目的地位置不为空
-            if (!containerTask.getTarget().equals("") && containerTask.getTarget() != null) {
+            if (!"".equals(containerTask.getTarget()) && containerTask.getTarget() != null) {
 
                 AgvStorageLocation targetPosition = agvStorageLocationMapper.findByRcs(containerTask.getTarget());
                 if (targetPosition.getTaskLock()==1){continue;}
