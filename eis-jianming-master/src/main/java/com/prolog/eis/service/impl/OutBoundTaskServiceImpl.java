@@ -55,8 +55,8 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
 
 
 
-    public UnBoundStragtegy getUnBoundStragtegy(OutboundTask OutboundTask){
-        return strategyMap.get(OutBoundType.TASK_TYPE+OutboundTask.getTaskType());
+    public UnBoundStragtegy getUnBoundStragtegy(OutboundTask outboundTask){
+        return strategyMap.get(OutBoundType.TASK_TYPE+outboundTask.getTaskType());
     }
 
     @Override
@@ -64,10 +64,10 @@ public class OutBoundTaskServiceImpl implements OutBoundTaskService {
 
         List<OutboundTask> outboundTaskList=outBoundTaskMapper.getListOutboundTask();
         for (int i = 0; i <outboundTaskList.size() ; i++) {
-            OutboundTask OutboundTask=outboundTaskList.get(i);
-            UnBoundStragtegy unBoundStragtegy=this.getUnBoundStragtegy(OutboundTask);
+            OutboundTask outboundTask=outboundTaskList.get(i);
+            UnBoundStragtegy unBoundStragtegy=this.getUnBoundStragtegy(outboundTask);
             if(null!=unBoundStragtegy){
-            unBoundStragtegy.unbound(OutboundTask);
+            unBoundStragtegy.unbound(outboundTask);
             }
         }
 

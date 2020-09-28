@@ -21,8 +21,8 @@ public class PrologLocationUtils {
         for(Layer l:layers){
             map.put(l.name(),l.getLayer());
         }
-        String XY=coordinateStr.substring(6,8);
-        coordinate.setLayer(map.get(XY));
+        String xy=coordinateStr.substring(6,8);
+        coordinate.setLayer(map.get(xy));
         coordinate.setX(x);
         coordinate.setY(y);
         return coordinate;
