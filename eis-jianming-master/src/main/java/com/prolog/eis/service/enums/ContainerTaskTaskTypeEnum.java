@@ -9,13 +9,19 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ContainerTaskTaskTypeEnum {
+    //0移库出库
+    MOVE_OUT_BOUND(0),
+    //1订单出库
+    ORDER_OUT_BOUND(1),
+    //  3 盘点出库
+    ORDER_CHECK_OUT_BOUND(3),
+    //4空托出库
+    EMPTY_OUT_BOUND(4),
 
-          MOVE_OUT_BOUND(0),
-          ORDER_OUT_BOUND(1),
-         ORDER_CHECK_OUT_BOUND(3),
-         EMPTY_OUT_BOUND(4),
-         ORDER_IN_BOUND(5),
-         EMPTY_SUPPLY_BOUND(6);
-          private Integer taskType;
+    // 5托盘入库
+    ORDER_IN_BOUND(5),
+    //  6空托补给
+    EMPTY_SUPPLY_BOUND(6);
+    private Integer taskType;
 
 }

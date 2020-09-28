@@ -9,9 +9,17 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum PickStationIOTypeEnum {
-
-     IN(1),
+    /**
+     * 1入库
+     */
+    IN(1),
+    /**
+     * 2.出库
+     */
      OUT(2),
+    /**
+     * 3.入库+出库
+     */
      IN_OUT(3);
 
 
