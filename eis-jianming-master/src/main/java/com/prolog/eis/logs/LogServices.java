@@ -35,9 +35,16 @@ public class LogServices {
     @Autowired
     ScheduledLogMapper scheduledLogMapper;
 
+    @Autowired
     ThreadPoolTaskScheduler taskScheduler;
 
     private static LogServices logServices;
+
+
+    @Bean
+    public ThreadPoolTaskScheduler getTaskScheduler(){
+        return new ThreadPoolTaskScheduler();
+    }
 
 
 
@@ -51,7 +58,7 @@ public class LogServices {
         logServices.logSysBusinessMapper=this.logSysBusinessMapper;
         logServices.wmsLogMapper=this.wmsLogMapper;
         logServices.scheduledLogMapper=this.scheduledLogMapper;
-        logServices.taskScheduler= new ThreadPoolTaskScheduler();
+        logServices.taskScheduler= this.taskScheduler;
 
 
      }
