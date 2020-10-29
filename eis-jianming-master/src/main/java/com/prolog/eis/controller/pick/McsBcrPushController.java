@@ -61,7 +61,7 @@ public class McsBcrPushController {
     public McsBcrPushDataDto pushData(@RequestBody String pushBcrData) throws Exception {
         JSONObject jsonObject=JSONObject.parseObject(pushBcrData);
         String id= jsonObject.getString("id");
-        String containerId= jsonObject.getString("container_id");
+        String containerId= jsonObject.getString("containerId");
         String billNoCurrent= jsonObject.getString("billNo");
         List<PickingTask> list=pickingTaskMapper.findByMap(MapUtils.put("barCode",containerId).getMap(),PickingTask.class);
         McsBcrPushDataDto mcsBcrPushDataDto=new McsBcrPushDataDto();
@@ -97,8 +97,8 @@ public class McsBcrPushController {
     @PostMapping("/pushCompleteData")
     public McsResultDto pushCompleteData(@RequestBody String pushBcrData) throws Exception {
         JSONObject jsonObject=JSONObject.parseObject(pushBcrData);
-        String slidePort= jsonObject.getString("slidePort");
-        String containerId= jsonObject.getString("container_id");
+        String slidePort= jsonObject.getString("distributePort");
+        String containerId= jsonObject.getString("containerId");
         List<PickingTask> list=pickingTaskMapper.findByMap(MapUtils.put("barCode",containerId).getMap(),PickingTask.class);
         McsResultDto mcsResultDto=new McsResultDto();
         mcsResultDto.setCode("200");
