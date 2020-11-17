@@ -32,7 +32,8 @@ public class WmsPickTaskResultSend {
 
         wmsLoginService.loginWms();
         String token = LoginWmsResponse.accessToken;
-        String url = String.format("http://%s:%s/", wmsIp, wmsPort);
+        //http://192.168.30.14:8091/api/v1/StockMove/StationPull
+        String url = String.format("http://%s:%s/api/v1/StockMove/StationPull", wmsIp, wmsPort);
         String json= JSONObject.toJSONString(wmsPickResultDto);
         String restJson = restTemplate.postForObject(url, PrologHttpUtils.getWmsRequestEntity(json, token), net.sf.json.JSONObject.class).toString();
         //发送回告

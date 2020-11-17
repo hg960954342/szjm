@@ -80,6 +80,8 @@ public class McsBcrPushController {
             String billNo=pickingTask.getBillNo();
             if(billNo.equals(billNoCurrent)){
                 dataBean.setBcrPointValue("1");
+            }else{
+                dataBean.setBcrPointValue("3");
             }
             /**
              * 去异常口
