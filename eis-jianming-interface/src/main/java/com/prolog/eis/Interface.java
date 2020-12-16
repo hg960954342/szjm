@@ -2,8 +2,7 @@ package com.prolog.eis;
 
 import com.prolog.eis.filter.UrlFilter;
 import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
-import com.prolog.framework.microservice.annotation.EnablePrologService;
-import org.mybatis.spring.annotation.MapperScan;
+ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -21,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 @SpringBootApplication()
 @EnableTransactionManagement
 @EnableScheduling
-@EnablePrologService(loadBalanced=false)
+//@EnablePrologService(loadBalanced=false)
 @EnablePrologEmptySecurityServer
 @MapperScan("com.prolog.eis.dao")
 @EnableAsync

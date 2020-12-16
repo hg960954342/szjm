@@ -63,7 +63,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>com.prolog.framework</groupId>
 			<artifactId>plg-fx-microservice</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
