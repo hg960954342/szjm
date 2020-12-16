@@ -2,7 +2,7 @@ package com.prolog.eis;
 
 
 import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
- import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,31 +12,26 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-//import org.springframework.scheduling.TaskScheduler;
-//import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @SpringBootApplication()
 @EnableTransactionManagement
 @EnableScheduling
-
 @EnablePrologEmptySecurityServer
-@MapperScan(value = "com.prolog.eis.dao",sqlSessionTemplateRef = "dynamicSqlSessionTemplate")
+@MapperScan(value = "com.prolog.eis.dao", sqlSessionTemplateRef = "dynamicSqlSessionTemplate")
 @EnableAsync
 public class Application {
 
-	@Bean
-	public RestTemplate restTemplate() {
-		HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		httpRequestFactory.setConnectionRequestTimeout(30000);
-		httpRequestFactory.setConnectTimeout(30000);
-		httpRequestFactory.setReadTimeout(30000);
-		return new RestTemplate(httpRequestFactory);
-	}
+    @Bean
+    public RestTemplate restTemplate() {
+        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        httpRequestFactory.setConnectionRequestTimeout(30000);
+        httpRequestFactory.setConnectTimeout(30000);
+        httpRequestFactory.setReadTimeout(30000);
+        return new RestTemplate(httpRequestFactory);
+    }
 
 
-
-	public static void main( String[] args )
-	{
-		SpringApplication.run(Application.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 }

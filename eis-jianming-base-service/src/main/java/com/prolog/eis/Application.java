@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 
-
 @SpringBootApplication()
 @EnableTransactionManagement
 @EnableScheduling
@@ -30,7 +29,6 @@ public class Application {
         httpRequestFactory.setReadTimeout(30000);
         return new RestTemplate(httpRequestFactory);
     }
-
 
 
     public static void main(String[] args) {

@@ -2,7 +2,7 @@ package com.prolog.eis;
 
 import com.prolog.eis.filter.UrlFilter;
 import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
- import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -35,20 +35,20 @@ public class Interface {
         registration.setOrder(1);
         return registration;
     }
-	@Bean
+
+    @Bean
     public RestTemplate restTemplate() {
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         httpRequestFactory.setConnectionRequestTimeout(5000);
         httpRequestFactory.setConnectTimeout(5000);
         httpRequestFactory.setReadTimeout(5000);
         RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
-        restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 支持中文编码
+        restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 支持中文编码
         return restTemplate;
     }
-	
-	
-	public static void main( String[] args )
-    {
-    	SpringApplication.run(Interface.class, args);
+
+
+    public static void main(String[] args) {
+        SpringApplication.run(Interface.class, args);
     }
 }
