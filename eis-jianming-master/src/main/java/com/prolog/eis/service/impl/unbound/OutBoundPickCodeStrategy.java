@@ -125,7 +125,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                         ordercontainerTask.setSource(sourceLocation);
                         ordercontainerTask.setTaskState(1);
                         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
-                         sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
+                        sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
                         //出明细
                         for (String billNo : setList) {
                             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
@@ -133,6 +133,9 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
                                     ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
                             for (OutboundTaskDetail outboundTaskDetail : listOutBoundTaskDetailList) {
+                                if(StringUtils.isEmpty(ordercontainerTask.getTaskCode())){
+                                    break;
+                                }
                                 ContainerTaskDetail containerTaskDetail = new ContainerTaskDetail();
                                 BeanUtils.copyProperties(detailDataBeand, containerTaskDetail);
                                 containerTaskDetail.setBillNo(billNo);
@@ -180,6 +183,9 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
                                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
                                     ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
                             for (OutboundTaskDetail outboundTaskDetail : listOutBoundTaskDetailList) {
+                                if(StringUtils.isEmpty(ordercontainerTask.getTaskCode())){
+                                    break;
+                                }
                                 ContainerTaskDetail containerTaskDetail = new ContainerTaskDetail();
                                 BeanUtils.copyProperties(detailDataBeand, containerTaskDetail);
                                 containerTaskDetail.setBillNo(billNo);

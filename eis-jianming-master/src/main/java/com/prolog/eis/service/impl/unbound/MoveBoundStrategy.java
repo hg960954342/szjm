@@ -120,11 +120,13 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
 
             containerTask.setTaskCode(null);
             //保存托盘任务明细
-            containerTaskDetailMapperMapper.save(containerTaskDetail);
+
             //保存托盘任务
 //            containerTaskMapper.save(containerTask);
             sxStoreCkService.buildSxCkTaskByContainerTask(containerTask);
-
+            if(!com.prolog.framework.utils.StringUtils.isEmpty(containerTask.getTaskCode())){
+                containerTaskDetailMapperMapper.save(containerTaskDetail);
+            }
             //转到历史记录
             outBoundContainerService.deleteDetailAndInsertHistory(outboundTaskDetail, containerTaskDetail);
 

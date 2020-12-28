@@ -11,6 +11,7 @@ import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.framework.utils.MapUtils;
+import com.prolog.framework.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,6 +133,9 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
                                     ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
                             for (OutboundTaskDetail outboundTaskDetail : listOutBoundTaskDetailList) {
+                                if(StringUtils.isEmpty(ordercontainerTask.getTaskCode())){
+                                    break;
+                                }
                                 ContainerTaskDetail containerTaskDetail = new ContainerTaskDetail();
                                 BeanUtils.copyProperties(detailDataBeand, containerTaskDetail);
                                 containerTaskDetail.setBillNo(billNo);
@@ -183,6 +187,9 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
                                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
                                     ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
                             for (OutboundTaskDetail outboundTaskDetail : listOutBoundTaskDetailList) {
+                                if(StringUtils.isEmpty(ordercontainerTask.getTaskCode())){
+                                    break;
+                                }
                                 float finishQty=0;
                                 ContainerTaskDetail containerTaskDetail = new ContainerTaskDetail();
                                 BeanUtils.copyProperties(detailDataBeand, containerTaskDetail);
