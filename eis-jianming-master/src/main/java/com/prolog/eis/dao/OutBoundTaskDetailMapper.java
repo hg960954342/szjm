@@ -6,6 +6,7 @@ import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail> {
@@ -51,7 +52,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
             @Result(property = "seqNo",  column = "seqno"),
             @Result(property = "endTime",  column = "end_time")
     })
-   @Select("SELECT\n" +
+   @Select("SELECT " +
            "\tx.seqno,\n" +
            "\tx.bill_no,\n" +
            "\tx.item_id,\n" +
@@ -156,13 +157,20 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
 
  @Select("SELECT\n" +
          " \n" +
-         "  CASE WHEN sum(qty-finish_qty)>= 0 THEN 1 ELSE 0 END \n" +
+         "  CASE WHEN sum(qty-finish_qty)= 0 THEN 1 ELSE 0 END \n" +
          "FROM\n" +
          "\toutbound_task_detail d \n" +
          "WHERE\n" +
          "\td.bill_no = #{bill_no_string} ")
  boolean isOrderComplete(@Param("bill_no_string")String bill_no_string);
 
-
+    @Select("SELECT\n" +
+            " \n" +
+            " sum(qty-finish_qty)\n" +
+            "FROM\n" +
+            "\toutbound_task_detail d \n" +
+            "WHERE\n" +
+            "\td.bill_no = #{bill_no_string} ")
+    BigDecimal getLast(@Param("bill_no_string")String bill_no_string);
 
 }

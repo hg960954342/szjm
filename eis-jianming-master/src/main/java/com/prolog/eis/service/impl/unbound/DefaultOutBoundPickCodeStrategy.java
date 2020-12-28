@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -152,7 +153,11 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
        HashSet<String> setList=new HashSet<String>();
        setList.addAll(listBillNos);
         for(String billNoString:setList) {
-            boolean isComplete= outBoundTaskDetailMapper.isOrderComplete(billNoString);
+            boolean isComplete=false;
+            BigDecimal bigDecimal= outBoundTaskDetailMapper.getLast(billNoString);
+            if(bigDecimal.equals(BigDecimal.ZERO)){
+                isComplete=true;
+            }
             if(isComplete){
                 billNoString=  String.format("'%s'", billNoString);
                 outBoundTaskMapper.updateOutBoundTaskBySQL(billNoString);
