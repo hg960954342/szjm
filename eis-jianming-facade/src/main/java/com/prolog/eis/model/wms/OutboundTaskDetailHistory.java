@@ -67,6 +67,11 @@ public class OutboundTaskDetailHistory {
     @JsonProperty("QTY")
     private float qty;
 
+    @Column("standard")
+    @ApiModelProperty("规格")
+    @JsonProperty("STANDARD")
+    private float standard;
+
     @Column("finish_qty")
     @ApiModelProperty("完成数量（重量）")
     private float finishQty;

@@ -52,6 +52,11 @@ public class OutboundTaskDetail {
     @JsonProperty("SPMCH")
     private String itemName;
 
+    @Column("standard")
+    @ApiModelProperty("规格")
+    @JsonProperty("STANDARD")
+    private float standard;
+
     @Column("lot_id")
     @ApiModelProperty("wms内码")
     @JsonProperty("LOTID")
@@ -202,5 +207,13 @@ public class OutboundTaskDetail {
 
     public void setLot(String lot) {
         this.lot = lot;
+    }
+
+    public float getStandard() {
+        return standard;
+    }
+
+    public void setStandard(float standard) {
+        this.standard = standard;
     }
 }

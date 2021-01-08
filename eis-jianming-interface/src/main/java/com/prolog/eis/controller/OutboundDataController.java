@@ -103,6 +103,9 @@ public class OutboundDataController {
                             detail.setPickCode(pickcode);
                             detail.setCtReq(0);
                             detail.setFinishQty(0);
+                            if(detail.getStandard()==0f){
+                                throw new Exception("商品数量规格未传值，无法生成出库任务！");
+                            }
 
                             long l1 = System.currentTimeMillis();
                             Date t1 = new Date(l1);
@@ -116,7 +119,7 @@ public class OutboundDataController {
                     } catch (Exception e) {
 
                         rejson.setCode("-1");
-                        rejson.setMessage("false");
+                        rejson.setMessage(e.getMessage());
 
                         WmsEisIdempotent wmsEisIdempotent = new WmsEisIdempotent();
                         wmsEisIdempotent.setMessageId(messageID);
