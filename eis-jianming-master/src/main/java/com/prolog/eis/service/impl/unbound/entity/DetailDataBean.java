@@ -12,6 +12,7 @@ public class DetailDataBean {
     private String itemName;
     private String lotId;
     private String lot;
+    private float standard; //规格 多少重量一袋
     private String pickCode;
     private float qty;  //总量
     private float cqty; //正在出库的量
@@ -103,5 +104,13 @@ public class DetailDataBean {
 
     public void setLot(String lot) {
         this.lot = lot;
+    }
+
+    public float getStandard() {
+        return standard;
+    }
+
+    public void setStandard(float standard) {
+        this.standard = standard;
     }
 }

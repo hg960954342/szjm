@@ -69,7 +69,7 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
         for (DetailDataBean detailDataBeand : list) {
             String bill_no_String = detailDataBeand.getBillNo();
             listBillNo.addAll(Arrays.asList(bill_no_String.split(",")));
-            outBoundContainerService.buildContainerTaskAndDetails(detailDataBeand,1f,true);
+            outBoundContainerService.buildContainerTaskAndDetails(detailDataBeand,detailDataBeand.getStandard(),true);
         }
         removeCompleteOrderAndUpdate(listBillNo, similarityDataEntityListLoad);
     }
