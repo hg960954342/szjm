@@ -11,9 +11,9 @@ import java.util.Date;
 public class LogTask {
 
     /**
-     * 每天中午12点半清除日志的定时任务
+     * 每个周日 凌晨1点执行 清空日志
      */
-    @Scheduled(cron = "0 30 12 * * ?")
+    @Scheduled(cron = "0 0 1 ? * SUN")
     public void clearLog(){
           LogServices.deteleteLog();
 

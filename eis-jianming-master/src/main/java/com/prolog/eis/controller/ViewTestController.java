@@ -7,6 +7,7 @@ import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.enums.AgvMove;
 import com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy;
+import com.prolog.eis.service.impl.unbound.OutBoundContainerService;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
@@ -24,7 +25,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 @RestController
-@Api(tags = "EIS前段页面View")
+@Api(tags = "EIS页面View")
 @RequestMapping("/api/v1/master/view")
 public class ViewTestController {
 
@@ -42,9 +43,10 @@ public class ViewTestController {
     private PrologJmMCSController prologJmMCSController;
 
     @Autowired
-    private DefaultOutBoundPickCodeStrategy defaultOutBoundPickCodeStrategy;
-    @Autowired
     private ContainerTaskMapper containerTaskMapper;
+
+    @Autowired
+    OutBoundContainerService outBoundContainerService;
 
 
     /**
@@ -166,8 +168,8 @@ public class ViewTestController {
     //查询所有可用拣选站
     @PostMapping("/queryPickStation")
     @ResponseBody
-    public Object queryPickStation()throws Exception{
-       return defaultOutBoundPickCodeStrategy.getAvailablePickStation();
+    public Object queryPickStation() throws Exception{
+       return outBoundContainerService.getAvailablePickStation();
     }
 
     //查询指定layer库存

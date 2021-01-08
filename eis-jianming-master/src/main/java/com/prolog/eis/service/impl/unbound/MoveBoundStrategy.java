@@ -83,7 +83,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             AgvStorageLocation agvLocation = null;
             if (StringUtils.isEmpty(pickCode)){
                 //拣选站要求为空
-                agvLocation = getPickStationAndLock();
+                agvLocation = outBoundContainerService.getPickStationAndLock();
                 if(StringUtils.isEmpty(agvLocation)) { LogServices.logSysBusiness("拣选站上有托盘或已被锁定，无可用拣选站");return;}
                 target = agvLocation.getRcsPositionCode();
             }else {
@@ -124,7 +124,7 @@ public class MoveBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             //保存托盘任务
 //            containerTaskMapper.save(containerTask);
             sxStoreCkService.buildSxCkTaskByContainerTask(containerTask);
-            if(!com.prolog.framework.utils.StringUtils.isEmpty(containerTask.getTaskCode())){
+            if(!StringUtils.isEmpty(containerTask.getTaskCode())){
                 containerTaskDetailMapperMapper.save(containerTaskDetail);
             }
             //转到历史记录

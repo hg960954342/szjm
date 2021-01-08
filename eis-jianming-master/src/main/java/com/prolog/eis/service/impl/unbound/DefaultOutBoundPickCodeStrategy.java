@@ -89,48 +89,7 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
 
     }
 
-    /**
-     *获取所有能够作业的拣选站
-     * @return
-     */
-    public List<PickStation> getAvailablePickStation(){
-        //获取所有能用的拣选站
-        Criteria pickStationCriteria=Criteria.forClass(PickStation.class);
-        Integer[] ios=new Integer[]{PickStationIOTypeEnum.IN.getIoType(),PickStationIOTypeEnum.IN_OUT.getIoType()};
-        Integer[] taskTypes=new Integer[]{
-                PickStationTaskTypeEnum.ORDER_TASK_TYPE.getTaskType(),
-                PickStationTaskTypeEnum.ORDER_AND_MOVE_TASK_TYPE.getTaskType(),
-                PickStationTaskTypeEnum.ORDER_AND_EMPTY_TASK_TYPE.getTaskType(),
-                PickStationTaskTypeEnum.ALL_TASK_TYPE.getTaskType()
-                };
-        pickStationCriteria.setRestriction(Restrictions.in("io",ios));
-        pickStationCriteria.setRestriction(Restrictions.in("taskType",taskTypes));
-        pickStationCriteria.setRestriction(Restrictions.eq("isLock", PickStationLockEnum.NO_LOCK.getLockTypeNumber()));
-        List<PickStation> listPickStation= pickStationMapper.findByCriteria(pickStationCriteria);
-        //过滤掉不能用的拣选站
-        listPickStation=listPickStation.stream().filter(x->{
-            String stationNo=x.getDeviceNo();
-            AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo, AgvLocationLocationLockEnum.NO_LOCK.getLockTypeNumber(), AgvLocationTaskLockEnum.NO_LOCK.getLockTypeNumber());
-            if(null!=agvStorageLocation){
 
-                return true;
-            }
-            return false;
-        }).collect(Collectors.toList());
-        return listPickStation;
-    }
-
-    public AgvStorageLocation getPickStationAndLock(){
-        List<PickStation> list=getAvailablePickStation();
-        if(list.size()>0){
-            String stationNo=list.get(0).getDeviceNo();
-            AgvStorageLocation agvStorageLocation=agvStorageLocationMapper.findByPickCodeAndLock(stationNo,AgvLocationLocationLockEnum.NO_LOCK.getLockTypeNumber(),AgvLocationTaskLockEnum.NO_LOCK.getLockTypeNumber());
-            agvStorageLocation.setLocationLock(1);
-            agvStorageLocationMapper.update(agvStorageLocation);
-            return agvStorageLocation;
-        }
-        return null;
-    }
 
 
 
