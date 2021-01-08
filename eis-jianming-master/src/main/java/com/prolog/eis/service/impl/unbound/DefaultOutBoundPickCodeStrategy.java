@@ -90,33 +90,11 @@ public class DefaultOutBoundPickCodeStrategy implements UnBoundStragtegy {
     }
 
 
-
-
-
-
-    /**
-     * 判断目标点位是否有任务
-     * @param
-     * @return boolean
-     */
-    public boolean isExistTask(String source){
-        //List<ContainerTask> list=containerTaskMapper.selectBySource(source);
-        //if(list!=null&&list.size()>0) return true;
-        return false;
-    }
-
-
-
-
     public void removeCompleteOrderAndUpdate(List<String> listBillNos,SimilarityDataEntityLoadInterface similarityDataEntityLoadInterface){
        HashSet<String> setList=new HashSet<String>();
        setList.addAll(listBillNos);
         for(String billNoString:setList) {
-            boolean isComplete=false;
-            BigDecimal bigDecimal= outBoundTaskDetailMapper.getLast(billNoString);
-            if(bigDecimal.equals(BigDecimal.ZERO)){
-                isComplete=true;
-            }
+            boolean isComplete= outBoundTaskDetailMapper.isOrderComplete(billNoString);
             if(isComplete){
                 billNoString=  String.format("'%s'", billNoString);
                 outBoundTaskMapper.updateOutBoundTaskBySQL(billNoString);

@@ -108,6 +108,7 @@ public class OutBoundContainerService {
     public void buildContainerTaskAndDetails(DetailDataBean detailDataBeand,float miniPackage,boolean isPickStation){
         //需要出库的量
         float last = detailDataBeand.getLast();
+
         if(last==0){
             LogServices.logSysBusiness(String.format("订单:%s错误，出库数量为0!",detailDataBeand.getBillNo()));
             return;
