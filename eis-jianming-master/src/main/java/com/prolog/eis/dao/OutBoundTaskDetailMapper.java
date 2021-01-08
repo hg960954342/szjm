@@ -158,7 +158,7 @@ public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail>
 
  @Select("SELECT\n" +
          " \n" +
-         "  CASE WHEN sum(qty-finish_qty)== 0 THEN 1 ELSE 0 END \n" +
+         "  CASE WHEN sum(qty-finish_qty)= 0 THEN 1 ELSE 0 END \n" +
          "FROM\n" +
          "\toutbound_task_detail d \n" +
          "WHERE\n" +
