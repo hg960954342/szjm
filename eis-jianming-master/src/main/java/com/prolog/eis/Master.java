@@ -1,12 +1,10 @@
 package com.prolog.eis;
 
-import com.prolog.eis.filter.UrlFilter;
 import com.prolog.framework.authority.core.annotation.EnablePrologEmptySecurityServer;
 import onbon.bx05.Bx5GEnv;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -51,16 +49,6 @@ public class Master {
     }
 
 
-
-    @Bean
-    public FilterRegistrationBean registFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new UrlFilter());
-        registration.addUrlPatterns("/*");
-        registration.setName("UrlFilter");
-        registration.setOrder(1);
-        return registration;
-    }
 
     @Bean
     public RestTemplate restTemplate() {
