@@ -131,7 +131,18 @@ public class OutBoundContainerService {
             float z=(float)Math.rint(last/miniPackage);
             //取需要正出的量
             float zc=z*miniPackage;
-            List<Map<String, Object>> zClistSxStore = qcSxStoreMapper.getSxStoreByOrderByZC(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId(),miniPackage,zc);
+            List<Map<String, Object>> zClist = qcSxStoreMapper.getSxStoreByOrderByZC(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId(),miniPackage,zc);
+
+            float qtySum=0;
+            List<Map<String,Object>> zClistSxStore=new ArrayList<>();
+            for(Map<String,Object> x:zClist){
+                float qty=((BigDecimal) x.get("qty")).floatValue();
+                qtySum+=qty;
+                if(qtySum<=last){
+                    zClistSxStore.add(x);
+                }
+            }
+
             Set<String> containerNoSet=new HashSet<>();
             if(!zClistSxStore.isEmpty()){
                 buildList(zClistSxStore,last,detailDataBeand,isPickStation);
