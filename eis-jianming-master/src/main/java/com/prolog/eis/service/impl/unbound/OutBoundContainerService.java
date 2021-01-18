@@ -100,13 +100,13 @@ public class OutBoundContainerService {
 
 
     /**
-     * 出库容器任务和明细生成
+     * TODO 出库容器任务和明细生成
      * @param detailDataBeand 出库汇总实体
      * @param miniPackage 规格
      * @param isPickStation 是否指定拣选站出库 true指定 false不指定
      */
     public void buildContainerTaskAndDetails(DetailDataBean detailDataBeand,float miniPackage,boolean isPickStation){
-        //需要出库的量
+        //TODO 需要出库的量
         float last = detailDataBeand.getLast();
 
         if(last==0){
@@ -117,22 +117,22 @@ public class OutBoundContainerService {
             LogServices.logSysBusiness(String.format("订单:%s待出库库存:%s计算出来错误!",detailDataBeand.getBillNo(),last));
             return;
         }
-        //判断库存是否满足
+        //TODO 判断库存是否满足
         float countQty = qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
         if (countQty < last) {
-            LogServices.logSysBusiness("库存:" + countQty + "不够出:" + last + "！");
+            LogServices.logSysBusiness(String.format("库存:%s，不够订单:%s 出的量:%s!",countQty,detailDataBeand.getBillNo(),last));
             return;
         }
 
         List<Map<String, Object>> bzClistSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
-        //待出库的量大于最小包装数
+        //TODO 待出库的量大于最小包装数
         if(last-miniPackage>=0) {
-            //取除数结果
+            //TODO 取除数结果
             float z=(float)Math.rint(last/miniPackage);
-            //取需要正出的量
+            //TODO 取需要正出的量
             float zc=z*miniPackage;
             List<Map<String, Object>> zClist = qcSxStoreMapper.getSxStoreByOrderByZC(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId(),miniPackage,zc);
-
+            //TODO 添加过滤方法 过滤掉整的所有记录中只和超过出库量的记录
             float qtySum=0;
             List<Map<String,Object>> zClistSxStore=new ArrayList<>();
             for(Map<String,Object> x:zClist){
@@ -147,7 +147,7 @@ public class OutBoundContainerService {
             if(!zClistSxStore.isEmpty()){
                 buildList(zClistSxStore,last,detailDataBeand,isPickStation);
             }
-            //取余数结果
+            //TODO 取余数结果
             float y=last%miniPackage;
             if(y!=last){
                 last=last+y;
@@ -158,7 +158,7 @@ public class OutBoundContainerService {
     }
 
     /**
-     * 批量生成容器任务
+     * TODO 批量生成容器任务
      * @param listStore
      * @param last
      * @param detailDataBeand
@@ -180,14 +180,15 @@ public class OutBoundContainerService {
     }
 
     /**
-     * 生成容器任务
+     * TODO 生成容器任务
      * @param detailDataBeand 出库实体
      * @param sxStore1  库存数据
      * @param isPickStation 是否指定拣选站
      */
     private void build(DetailDataBean detailDataBeand,Map sxStore1,boolean isPickStation){
         String pickCode=null;
-        if(isPickStation){ //指定拣选站 默认pickStation4
+        if(isPickStation){
+            //TODO 业务处理 指定拣选站出库 如果没传则 默认pickStation4
              pickCode = StringUtils.isEmpty(detailDataBeand.getPickCode())?"pickStation4":detailDataBeand.getPickCode();
         }
         AgvStorageLocation agvStorageLocation = this.getPickStationAndLock(pickCode);
@@ -213,7 +214,7 @@ public class OutBoundContainerService {
         ordercontainerTask.setTaskState(1);
         ordercontainerTask.setContainerCode((String) sxStore1.get("containerNo"));
         sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
-        //写明细
+        //TODO 写出库明细
         String bill_no_String = detailDataBeand.getBillNo();
         HashSet<String> setList=new HashSet<String>();
         setList.addAll(Arrays.asList(bill_no_String.split(",")));
@@ -223,6 +224,7 @@ public class OutBoundContainerService {
                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
                     ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
             for (OutboundTaskDetail outboundTaskDetail : listOutBoundTaskDetailList) {
+                //TODO buildSxCkTaskByContainerTask方法未生成containerTask的taskCode 说明contanerTask没有生成 则跳过不保存此任务的明细
                 if(StringUtils.isEmpty(ordercontainerTask.getTaskCode())){
                     break;
                 }
@@ -262,7 +264,7 @@ public class OutBoundContainerService {
     }
 
     /**
-     * 获取拣选站 指定拣选站code
+     * TODO 获取拣选站 指定拣选站code
      * @param pickCode
      * @return
      */
