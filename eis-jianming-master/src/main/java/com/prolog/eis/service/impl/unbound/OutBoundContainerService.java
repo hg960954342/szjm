@@ -123,8 +123,7 @@ public class OutBoundContainerService {
             LogServices.logSysBusiness(String.format("库存:%s，不够订单:%s 出的量:%s!",countQty,detailDataBeand.getBillNo(),last));
             return;
         }
-
-        List<Map<String, Object>> bzClistSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
+        List<Map<String, Object>> bzClistSxStore =new ArrayList<>();
         //TODO 待出库的量大于最小包装数
         if(last-miniPackage>=0) {
             //TODO 取除数结果
@@ -145,6 +144,7 @@ public class OutBoundContainerService {
 
             Set<String> containerNoSet=new HashSet<>();
             if(!zClistSxStore.isEmpty()){
+                zClistSxStore.stream().parallel().forEach(x->{containerNoSet.add((String)x.get("containerNo"));});
                 buildList(zClistSxStore,last,detailDataBeand,isPickStation);
             }
             //TODO 取余数结果
@@ -152,8 +152,13 @@ public class OutBoundContainerService {
             if(y!=last){
                 last=last+y;
             }
+            bzClistSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
             bzClistSxStore=ListHelper.where(bzClistSxStore,x->{return !containerNoSet.contains(x.get("containerNo"));});
+        }else{
+            //TODO 小于包装数 只能出散
+            bzClistSxStore=qcSxStoreMapper.getSxStoreByOrderByLC(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId(),miniPackage);
         }
+
             buildList(bzClistSxStore,last,detailDataBeand,isPickStation);
     }
 

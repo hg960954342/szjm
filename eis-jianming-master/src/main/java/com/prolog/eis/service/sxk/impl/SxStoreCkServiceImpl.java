@@ -125,6 +125,7 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 
 						} else {
 							try {
+								//TODO 执行移位出库 不生成containerTask
 								containMoveLogic(sxStoreLock, containerTask);
 							} catch (Exception e) {
 								LogServices.logSys(e);
