@@ -128,10 +128,12 @@ public class OutBoundContainerService {
         if(last-miniPackage>=0) {
             //TODO 取除数结果
             float z=(float)Math.rint(last/miniPackage);
+            //TODO 取余数结果
+            float y=last%miniPackage;
             //TODO 取需要正出的量
             float zc=z*miniPackage;
             List<Map<String, Object>> zClist = qcSxStoreMapper.getSxStoreByOrderByZC(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId(),miniPackage,zc);
-            //TODO 添加过滤方法 过滤掉整的所有记录中只和超过出库量的记录
+            //TODO 添加过滤方法 过滤掉整的所有记录中之和超过出库量的记录
             float qtySum=0;
             List<Map<String,Object>> zClistSxStore=new ArrayList<>();
             for(Map<String,Object> x:zClist){
@@ -145,22 +147,35 @@ public class OutBoundContainerService {
             Set<String> containerNoSet=new HashSet<>();
             if(!zClistSxStore.isEmpty()){
                 zClistSxStore.stream().parallel().forEach(x->{containerNoSet.add((String)x.get("containerNo"));});
-                buildList(zClistSxStore,last,detailDataBeand,isPickStation);
+                last=buildList(zClistSxStore,last,detailDataBeand,isPickStation);
             }
-            //TODO 取余数结果
-            float y=last%miniPackage;
             if(y!=last){
                 last=last+y;
             }
             bzClistSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
             bzClistSxStore=ListHelper.where(bzClistSxStore,x->{return !containerNoSet.contains(x.get("containerNo"));});
+            //TODO 出整
+            buildList(bzClistSxStore,last,detailDataBeand,isPickStation);
         }else{
             //TODO 小于包装数 只能出散
             bzClistSxStore=qcSxStoreMapper.getSxStoreByOrderByLC(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId(),miniPackage);
+            last=buildList(bzClistSxStore,last,detailDataBeand,isPickStation);
+            //TODO 零散未出完则拆整
+            if(last>0){
+                bzClistSxStore = qcSxStoreMapper.getSxStoreByOrder(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
+                buildList(bzClistSxStore,last,detailDataBeand,isPickStation);
+            }
+
         }
 
-            buildList(bzClistSxStore,last,detailDataBeand,isPickStation);
+
     }
+
+
+
+
+
+
 
     /**
      * TODO 批量生成容器任务
@@ -169,12 +184,12 @@ public class OutBoundContainerService {
      * @param detailDataBeand
      * @param isPickStation
      */
-    private void buildList(List<Map<String,Object>> listStore,float last,DetailDataBean detailDataBeand,boolean isPickStation){
+    private float buildList(List<Map<String,Object>> listStore,float last,DetailDataBean detailDataBeand,boolean isPickStation){
         for(Map<String, Object> w:listStore){
             if (((BigDecimal) w.get("qty")).floatValue() <= last) {
                 last = last - ((BigDecimal) w.get("qty")).floatValue();
                 this.build(detailDataBeand,w,isPickStation);
-                if (last <= 0){ break;} else {continue;}
+                if (last <= 0){break;} else {continue;}
             }
             if (((BigDecimal) w.get("qty")).floatValue() > last) {
                 last = ((BigDecimal) w.get("qty")).floatValue() - last;
@@ -182,6 +197,7 @@ public class OutBoundContainerService {
                 break;
             }
         }
+        return last;
     }
 
     /**
