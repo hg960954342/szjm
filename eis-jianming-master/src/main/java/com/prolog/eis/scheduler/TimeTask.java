@@ -40,7 +40,7 @@ public class TimeTask {
      *
      * @throws Exception
      */
-    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    @Scheduled(initialDelay = 1000, fixedDelay = 1000)
     public void buildUnTask()   {
 
         outBoundTaskService.unboundTask();

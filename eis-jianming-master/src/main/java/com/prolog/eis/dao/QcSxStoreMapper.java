@@ -2,11 +2,14 @@ package com.prolog.eis.dao;
 
 import com.prolog.eis.dto.eis.SxStoreDto;
 import com.prolog.eis.dto.eis.YiWeiCountDto;
+import com.prolog.eis.dto.sxk.OutBoundSxStoreDto;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResult;
+import com.prolog.eis.service.impl.unbound.handler.OutBoundSxStoreHandler;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.ResultSetType;
 
 import java.util.List;
 import java.util.Map;
@@ -166,6 +169,32 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 	List<Map<String,Object>> getSxStoreByOrder(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
 
 
+
+
+
+
+	@ResultType(Map.class)
+	@Options(resultSetType = ResultSetType.FORWARD_ONLY, fetchSize = 1000)
+	@Select("select a.*,#{miniPackage} as miniPackage,l.* from sx_store a\n" +
+			"      INNER JOIN sx_store_location l ON a.store_location_id = l.id \n" +
+			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
+			"and g.IS_LOCK=0\n" +
+			"and a.STORE_STATE=20\n" +
+			"and g.ASCENT_LOCK_STATE =0 \n"+
+			"and l.ASCENT_LOCK_STATE =0 \n"+
+			"and a.item_id = #{itemId}\n" +
+			"and a.lot_id = #{lotId}\n" +
+			"and a.owner_id = #{ownerId}\n" +
+			"ORDER BY dept_num asc,qty asc")
+	void getSxStoreByOrderEntity(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId,@Param("miniPackage") float miniPackage,OutBoundSxStoreHandler handler);
+
+
+
+
+
+
+
+
 	@ResultMap("SxStore")
 	@Select("select * from sx_store a\n" +
 			"      INNER JOIN sx_store_location l ON a.store_location_id = l.id \n" +
@@ -221,6 +250,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			   @Result(property = "containerCode",  column = "CONTAINER_NO"),
 			    @Result(property = "qty",  column = "qty")
       })
+
 	  @Select("select d.*,a.*,l.*,g.* from \n" +
 			"(select d.item_id,d.lot_id from outbound_task_detail d where d.bill_no = #{billNo} GROUP BY d.item_id,d.lot_id)d\n" +
 			"inner join sx_store a on d.item_id =a.item_id and d.lot_id=a.lot_id \n" +
