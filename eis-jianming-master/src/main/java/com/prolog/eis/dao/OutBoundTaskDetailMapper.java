@@ -2,6 +2,7 @@ package com.prolog.eis.dao;
 
 import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
+import com.prolog.eis.mybatis.EisBaseMapper;
 import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
@@ -9,7 +10,7 @@ import org.apache.ibatis.annotations.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface OutBoundTaskDetailMapper extends BaseMapper<OutboundTaskDetail> {
+public interface OutBoundTaskDetailMapper extends EisBaseMapper<OutboundTaskDetail> {
 
     @Results(id="map",value = {
             @Result(property = "ownerId",  column = "owner_id"),

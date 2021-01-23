@@ -126,9 +126,9 @@ public class OutBoundContainerService {
             return;
         }
 
-        float zqty = (float) Math.rint(last / miniPackage) * miniPackage; //出库的整的数量
-        float lqty = last - zqty; //需要零出的量
 
+        float lqty=last%miniPackage;
+        float zqty = last-lqty;
         OutBoundSxStoreHandler handler = new OutBoundSxStoreHandler();
         qcSxStoreMapper.getSxStoreByOrderEntity(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId(), miniPackage, handler);
         List<OutBoundSxStoreDto> list = handler.getList();
@@ -256,7 +256,7 @@ public class OutBoundContainerService {
         String bill_no_String = detailDataBeand.getBillNo();
         HashSet<String> setList = new HashSet<String>();
         setList.addAll(Arrays.asList(bill_no_String.split(",")));
-        int i = 0;
+
         for (String billNo : setList) {
             //TODO buildSxCkTaskByContainerTask方法未生成containerTask的taskCode 说明contanerTask没有生成 则跳过不保存此任务的明细
             if (StringUtils.isEmpty(ordercontainerTask.getTaskCode())) {
@@ -265,8 +265,13 @@ public class OutBoundContainerService {
                 ContainerTaskDetail containerTaskDetail=new ContainerTaskDetail();
                 BeanUtils.copyProperties(detailDataBeand, containerTaskDetail);
                 containerTaskDetail.setBillNo(billNo);
-                i = +1;
-                containerTaskDetail.setSeqNo("" + i);
+                //TODO 设置SeqNo序号
+              OutboundTaskDetail outboundTaskDetailTemp=outBoundTaskDetailMapper.findFirstByMap(MapUtils.
+                    put("billNo", billNo)
+                    .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
+                    ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
+                containerTaskDetail.setSeqNo(outboundTaskDetailTemp.getSeqNo());
+
                 containerTaskDetail.setContainerCode(sxStore1.getContainerNo());
                 containerTaskDetail.setCreateTime(new java.util.Date());
                 containerTaskDetail.setQty(outBoundQty);
