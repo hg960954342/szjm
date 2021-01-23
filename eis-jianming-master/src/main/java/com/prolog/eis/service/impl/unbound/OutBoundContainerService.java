@@ -14,10 +14,12 @@ import com.prolog.framework.core.restriction.Criteria;
 import com.prolog.framework.core.restriction.Restrictions;
 import com.prolog.framework.utils.MapUtils;
 import com.prolog.framework.utils.StringUtils;
+import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -48,6 +50,8 @@ public class OutBoundContainerService {
     AgvStorageLocationMapper agvStorageLocationMapper;
     @Autowired
     PickStationMapper pickStationMapper;
+    @Autowired
+    ContainerTaskMapper containerTaskMapper;
 
     /**
      * 将以完成的出库订单转入历史表中
@@ -140,16 +144,26 @@ public class OutBoundContainerService {
         if (last <= sumLqty) {
              computeL(list, last);
         } else {
-            //TODO 零散出不了全部 则先出要出库的零散 lqty 在整出zqty
-            last=computeL(list, lqty);
-            //TODO 优先出半零散
-            if(last==0){
-                computeZ(zList, zqty);
+            if(last<=miniPackage){
+                //TODO 零散出不了全部 则先出要出库的零散 lqty 在整出zqty
+                last=computeL(list, lqty);
+                //TODO 优先出半零散
+                if(last==0){
+                    computeZ(zList, zqty);
+                }else{
+                    last=computeZ(list, last+zqty);
+                    //TODO 出整
+                    computeZ(zList, last);
+                }
             }else{
-                last=computeZ(list, last+zqty);
-                //TODO 出整
-                computeZ(zList, last);
+                computeL(list, lqty);
+                List<OutBoundSxStoreDto> listx=ListHelper.where(list,x->x.getZqty()!=0);
+                 list.removeAll(listx);
+                 zList=ListUtils.union(listx,zList);
+                 computeZ(zList, listx.isEmpty()?zqty:last);
+
             }
+
 
 
         }
@@ -250,8 +264,8 @@ public class OutBoundContainerService {
         ordercontainerTask.setSource(sxStore1.getStoreNo());
         ordercontainerTask.setTaskState(1);
         ordercontainerTask.setContainerCode(sxStore1.getContainerNo());
-        sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
-
+        //sxStoreCkService.buildSxCkTaskByContainerTask(ordercontainerTask);
+        containerTaskMapper.save(ordercontainerTask);
         //TODO 写出库明细
         String bill_no_String = detailDataBeand.getBillNo();
         HashSet<String> setList = new HashSet<String>();
@@ -259,9 +273,9 @@ public class OutBoundContainerService {
 
         for (String billNo : setList) {
             //TODO buildSxCkTaskByContainerTask方法未生成containerTask的taskCode 说明contanerTask没有生成 则跳过不保存此任务的明细
-            if (StringUtils.isEmpty(ordercontainerTask.getTaskCode())) {
+            /*if (StringUtils.isEmpty(ordercontainerTask.getTaskCode())) {
                 break;
-            }
+            }*/
                 ContainerTaskDetail containerTaskDetail=new ContainerTaskDetail();
                 BeanUtils.copyProperties(detailDataBeand, containerTaskDetail);
                 containerTaskDetail.setBillNo(billNo);

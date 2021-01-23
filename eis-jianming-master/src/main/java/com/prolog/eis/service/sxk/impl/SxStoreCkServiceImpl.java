@@ -118,7 +118,7 @@ public class SxStoreCkServiceImpl implements SxStoreCkService{
 								// 生成mcs任务
 								String taskCode = PrologStringUtils.newGUID();
 								containerTask.setTaskCode(taskCode);
-								containerTaskMapper.save(containerTask);
+
 
 							}
 
