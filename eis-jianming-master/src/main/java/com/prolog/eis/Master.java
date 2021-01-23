@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -49,6 +51,12 @@ public class Master {
     }
 
 
+    @Bean
+    public TaskScheduler taskScheduler(){
+        ThreadPoolTaskScheduler taskScheduler=new ThreadPoolTaskScheduler();
+        taskScheduler.setPoolSize(5);
+        return taskScheduler;
+    }
 
     @Bean
     public RestTemplate restTemplate() {
