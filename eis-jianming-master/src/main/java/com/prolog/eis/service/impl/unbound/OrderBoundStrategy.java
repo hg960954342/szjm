@@ -80,6 +80,7 @@ public class OrderBoundStrategy extends DefaultOutBoundPickCodeStrategy {
             String bill_no_String = detailDataBeand.getBillNo();
             listBillNo.addAll(Arrays.asList(bill_no_String.split(",")));
             outBoundContainerService.buildContainerTaskAndDetails(detailDataBeand,detailDataBeand.getStandard(),false);
+
         }
 
         removeCompleteOrderAndUpdate(listBillNo, similarityDataEntityListLoad);

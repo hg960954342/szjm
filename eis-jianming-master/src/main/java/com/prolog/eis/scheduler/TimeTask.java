@@ -44,13 +44,13 @@ public class TimeTask {
     public void buildUnTask()   {
 
         outBoundTaskService.unboundTask();
-        buildAndSendSxCkTask();
+
 
     }
 
 
-
-    private void buildAndSendSxCkTask()  {
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void buildAndSendSxCkTask()  {
         try {
             synchronized ("kucun".intern()) {
                 sxStoreCkService.buildSxCkTask();

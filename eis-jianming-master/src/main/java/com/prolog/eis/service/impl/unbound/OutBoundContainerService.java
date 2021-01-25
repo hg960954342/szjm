@@ -149,6 +149,9 @@ public class OutBoundContainerService {
                 last=computeL(list, lqty);
                 //TODO 优先出半零散
                 if(last==0){
+                    List<OutBoundSxStoreDto> listx=ListHelper.where(list,x->x.getZqty()!=0);
+                    list.removeAll(listx);
+                    zList=ListUtils.union(listx,zList);
                     computeZ(zList, zqty);
                 }else{
                     last=computeZ(list, last+zqty);
@@ -156,11 +159,12 @@ public class OutBoundContainerService {
                     computeZ(zList, last);
                 }
             }else{
-                computeL(list, lqty);
+                //TODO 零散可能出不完
+                float y=computeL(list, lqty);
                 List<OutBoundSxStoreDto> listx=ListHelper.where(list,x->x.getZqty()!=0);
                  list.removeAll(listx);
                  zList=ListUtils.union(listx,zList);
-                 computeZ(zList, listx.isEmpty()?zqty:last);
+                 computeZ(zList, listx.isEmpty()?zqty+y:last-y);
 
             }
 
