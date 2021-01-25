@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 回告定时任务 一般都是异步任务因为回告超时时间比较长 防止阻塞
@@ -34,6 +35,10 @@ public class RecallBackTask {
     @Autowired
     private McsInterfaceServiceSend mcsInterfaceServiceSend;
 
+    @Autowired
+    AsyncConfiguration asyncConfiguration;
+
+
     /**
      * 回告wms未成功 重复回告
      *
@@ -41,6 +46,27 @@ public class RecallBackTask {
      */
     @Async
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void doAsyncResendReport(){
+        Set<String> asyncSet=asyncConfiguration.getAsyncSet();
+        if(!asyncSet.contains("resendReport")){
+            asyncSet.add("resendReport");
+            resendReport();
+            asyncSet.remove("resendReport");
+        }
+    }
+
+    @Async
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void doResendMcsTask(){
+        Set<String> asyncSet=asyncConfiguration.getAsyncSet();
+        if(!asyncSet.contains("resendMcsTask")){
+            asyncSet.add("resendMcsTask");
+            resendMcsTask();
+            asyncSet.remove("resendMcsTask");
+        }
+    }
+
+
     public void resendReport()   {
 
         List<RepeatReport> repeatReports = repeatReportService.findByState(0);
@@ -53,9 +79,6 @@ public class RecallBackTask {
      }
 
 
-
-    @Async
-    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void resendMcsTask() {
         try {  List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();
             for (MCSTask mcsTask : mcsTasks) {

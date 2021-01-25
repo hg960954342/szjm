@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @description 执行入库出库的定时器
@@ -31,6 +32,11 @@ public class ExecTask {
     @Autowired
     InBoundTaskService inBoundTaskService;
 
+    @Autowired
+    AsyncConfiguration asyncConfiguration;
+
+
+
     /**
      * 定时处理入库任务
      *
@@ -43,7 +49,18 @@ public class ExecTask {
 
     //定时给agv小车下分任务
     @Async
-    @Scheduled(initialDelay = 3000,fixedDelay = 5000)
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
+    public void doAsyncSendTask2Rcs(){
+        Set<String> asyncSet=asyncConfiguration.getAsyncSet();
+        if(!asyncSet.contains("sendTask2Rcs")){
+            asyncSet.add("sendTask2Rcs");
+            sendTask2Rcs();
+            asyncSet.remove("sendTask2Rcs");
+        }
+    }
+
+
+
     public void sendTask2Rcs()  {
 
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");
