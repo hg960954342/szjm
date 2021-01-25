@@ -8,6 +8,7 @@ import com.prolog.eis.service.OutBoundTaskService;
 import com.prolog.eis.service.impl.EisSendRcsTaskServiceSend;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +42,7 @@ public class ExecTask {
     }
 
     //定时给agv小车下分任务
+    @Async
     @Scheduled(initialDelay = 3000,fixedDelay = 5000)
     public void sendTask2Rcs()  {
 

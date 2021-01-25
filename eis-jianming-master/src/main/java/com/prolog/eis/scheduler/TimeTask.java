@@ -51,6 +51,7 @@ public class TimeTask {
 
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildAndSendSxCkTask()  {
+
         try {
             synchronized ("kucun".intern()) {
                 sxStoreCkService.buildSxCkTask();

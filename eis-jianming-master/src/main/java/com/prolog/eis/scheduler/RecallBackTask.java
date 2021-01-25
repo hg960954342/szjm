@@ -9,6 +9,7 @@ import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
 import com.prolog.eis.util.FileLogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +39,7 @@ public class RecallBackTask {
      *
      * @throws Exception
      */
+    @Async
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void resendReport()   {
 
@@ -52,7 +54,7 @@ public class RecallBackTask {
 
 
 
-
+    @Async
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void resendMcsTask() {
         try {  List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();

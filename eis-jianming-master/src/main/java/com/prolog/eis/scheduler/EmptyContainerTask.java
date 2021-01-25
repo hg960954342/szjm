@@ -9,6 +9,7 @@ import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.util.FileLogHelper;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,7 @@ public class EmptyContainerTask {
      *
      * @throws Exception
      */
+
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildEmptyContainerSupply()   {
 
@@ -50,6 +52,7 @@ public class EmptyContainerTask {
     /**
      * 补空托托盘
      */
+
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void replenishContainer()   {
          Map<String, Object> map = MapUtils.put("ceng", 3).put("locationType", 1).put("taskLock", 0).put("locationLock", 0).getMap();
