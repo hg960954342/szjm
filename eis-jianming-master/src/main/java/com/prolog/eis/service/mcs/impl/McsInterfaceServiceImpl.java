@@ -37,7 +37,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			containerTask.setTarget("");
 			containerTask.setTargetType(0);
 			containerTask.setTaskState(1);
-			containerTask.setQty(1d);
+			containerTask.setQty(1f);
 			containerTask.setCreateTime(new Date());
 
 			containerTaskMapper.save(containerTask);

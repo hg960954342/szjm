@@ -13,8 +13,6 @@ public class OutBoundSxStoreHandler implements ResultHandler<Map> {
 
     private List<OutBoundSxStoreDto> list=new ArrayList<>();
 
-
-
     @Override
     public void handleResult(ResultContext<? extends Map> resultContext) {
         Map<String,Object> map=resultContext.getResultObject();
