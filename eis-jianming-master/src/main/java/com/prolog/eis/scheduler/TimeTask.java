@@ -1,22 +1,11 @@
 package com.prolog.eis.scheduler;
 
 import com.prolog.eis.logs.LogServices;
-import com.prolog.eis.model.wms.ContainerTask;
-import com.prolog.eis.service.ContainerTaskService;
-import com.prolog.eis.service.InBoundTaskService;
 import com.prolog.eis.service.OutBoundTaskService;
-import com.prolog.eis.service.impl.EisSendRcsTaskServiceSend;
-import com.prolog.eis.service.login.WmsLoginService;
 import com.prolog.eis.service.sxk.SxStoreCkService;
-import com.prolog.eis.util.FileLogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 写入库出库任务
@@ -42,10 +31,7 @@ public class TimeTask {
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void buildUnTask()   {
-
         outBoundTaskService.unboundTask();
-
-
     }
 
 

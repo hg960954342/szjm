@@ -32,8 +32,7 @@ public class ExecTask {
     @Autowired
     InBoundTaskService inBoundTaskService;
 
-    @Autowired
-    AsyncConfiguration asyncConfiguration;
+
 
 
 
@@ -47,20 +46,11 @@ public class ExecTask {
         inBoundTaskService.inboundTask();
     }
 
+
+
     //定时给agv小车下分任务
     @Async
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void doAsyncSendTask2Rcs(){
-        Set<String> asyncSet=asyncConfiguration.getAsyncSet();
-        if(!asyncSet.contains("sendTask2Rcs")){
-            asyncSet.add("sendTask2Rcs");
-            sendTask2Rcs();
-            asyncSet.remove("sendTask2Rcs");
-        }
-    }
-
-
-
     public void sendTask2Rcs()  {
 
         List<ContainerTask> containerTasks = containerTaskService.selectByTaskStateAndSourceType("1", "2");

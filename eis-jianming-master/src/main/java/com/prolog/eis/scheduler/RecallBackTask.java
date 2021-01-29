@@ -35,8 +35,9 @@ public class RecallBackTask {
     @Autowired
     private McsInterfaceServiceSend mcsInterfaceServiceSend;
 
-    @Autowired
-    AsyncConfiguration asyncConfiguration;
+
+
+
 
 
     /**
@@ -46,29 +47,7 @@ public class RecallBackTask {
      */
     @Async
     @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void doAsyncResendReport(){
-        Set<String> asyncSet=asyncConfiguration.getAsyncSet();
-        if(!asyncSet.contains("resendReport")){
-            asyncSet.add("resendReport");
-            resendReport();
-            asyncSet.remove("resendReport");
-        }
-    }
-
-    @Async
-    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
-    public void doResendMcsTask(){
-        Set<String> asyncSet=asyncConfiguration.getAsyncSet();
-        if(!asyncSet.contains("resendMcsTask")){
-            asyncSet.add("resendMcsTask");
-            resendMcsTask();
-            asyncSet.remove("resendMcsTask");
-        }
-    }
-
-
     public void resendReport()   {
-
         List<RepeatReport> repeatReports = repeatReportService.findByState(0);
         if (repeatReports != null && repeatReports.size() > 0) {
             for (RepeatReport repeatReport : repeatReports) {
@@ -78,7 +57,8 @@ public class RecallBackTask {
 
      }
 
-
+    @Async
+    @Scheduled(initialDelay = 3000, fixedDelay = 5000)
     public void resendMcsTask() {
         try {  List<MCSTask> mcsTasks = mcsInterfaceService.findFailMCSTask();
             for (MCSTask mcsTask : mcsTasks) {
