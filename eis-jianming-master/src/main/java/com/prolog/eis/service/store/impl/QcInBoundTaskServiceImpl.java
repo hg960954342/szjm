@@ -331,7 +331,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		return this.addMcsTask(true,1,containerNo,source,target,"");
 	}
 
-	private McsRequestTaskDto taskContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
+	public McsRequestTaskDto taskContainerInSxStore(InboundTask inboundTask,double weight,PortInfo portInfo,String containerNo,String source,int sourceLayer,int sourceX,int sourceY,int detection) throws Exception {
 
 		Integer locationId = this.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(),inboundTask.getLotId(),containerNo,sourceLayer,detection,null,1,3);
 		//没找到货位
@@ -353,7 +353,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		return this.addMcsTask(true,1,containerNo,source,target,"");
 	}
 
-	private void buildRuKuSxStore(Integer locationId,InboundTask inboundTask,String containerNo,Double weight) throws Exception {
+	@Override
+	public void buildRuKuSxStore(Integer locationId,InboundTask inboundTask,String containerNo,Double weight) throws Exception {
 		//生成入库库存
 		SxStoreLocation sxStoreLocation = sxStoreLocationMapper.findById(locationId, SxStoreLocation.class);
 		// 1.保存到箱库库存2.锁定货位组(修改货位组升位锁)
@@ -391,7 +392,8 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		inboundTaskMapper.updateMapById(inboundTask.getId(), MapUtils.put("taskState", 3).put("rukuTime", new Date()).getMap(), InboundTask.class);
 	}
 
-	private Integer checkHuoWei(String itemId,String lot,String containerNo,int sourceLayer,int detection,Integer defaultReserveCount,int minLayer,int maxLayer) throws Exception {
+	@Override
+	public Integer checkHuoWei(String itemId,String lot,String containerNo,int sourceLayer,int detection,Integer defaultReserveCount,int minLayer,int maxLayer) throws Exception {
 		List<List<Integer>> layerGroups = DetetionLayerHelper.getLayers(detection,minLayer,maxLayer);
 
 		//查找货位

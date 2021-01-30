@@ -5,19 +5,34 @@ import com.prolog.eis.dao.RcsLogMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
+import com.prolog.eis.dao.wms.InboundTaskMapper;
+import com.prolog.eis.dto.base.Coordinate;
+import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
+import com.prolog.eis.dto.sxk.TestBuildSxStoreDto;
+import com.prolog.eis.logs.LogServices;
+import com.prolog.eis.model.eis.DeviceJunctionPort;
+import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
+import com.prolog.eis.model.wms.InboundTask;
+import com.prolog.eis.service.store.QcInBoundTaskService;
+import com.prolog.eis.service.store.impl.CallBackService;
 import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.eis.service.test.ViewMCSResultHandler;
 import com.prolog.eis.service.test.ViewRCSResultHandler;
+import com.prolog.eis.util.PrologCoordinateUtils;
+import com.prolog.eis.util.PrologStringUtils;
+import com.prolog.framework.common.message.RestMessage;
 import com.prolog.framework.utils.MapUtils;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +52,15 @@ public class TestServiceImpl implements TestService {
     com.prolog.eis.dao.LogMapper logMapper;
     @Resource
     RcsLogMapper rcsLogMapper;
+
+    @Autowired
+    CallBackService callBackService;
+
+    @Autowired
+    QcInBoundTaskService qcInBoundTaskService;
+    @Autowired
+    InboundTaskMapper inboundTaskMapper;
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -101,8 +125,8 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-   public Object listSxStoreQuery(String itemId, String lotId, String ownerId,String itemName,String lot, Integer pqCurpage, Integer pqRpp){
-        Long count = sxStoreMapper.countSxStoreQuery(itemId, lotId, ownerId,itemName,lot);
+    public Object listSxStoreQuery(String itemId, String lotId, String ownerId, String itemName, String lot, Integer pqCurpage, Integer pqRpp) {
+        Long count = sxStoreMapper.countSxStoreQuery(itemId, lotId, ownerId, itemName, lot);
         int start = (pqRpp * (pqCurpage - 1));
         if (start >= count) {
             pqCurpage = (int) Math.ceil(((double) count) / pqRpp);
@@ -112,7 +136,7 @@ public class TestServiceImpl implements TestService {
             start = 0;
         }
 
-        List<Map<String, Object>> list = sxStoreMapper.listSxStoreQuery(itemId, lotId, ownerId,itemName,lot, start, pqRpp);
+        List<Map<String, Object>> list = sxStoreMapper.listSxStoreQuery(itemId, lotId, ownerId, itemName, lot, start, pqRpp);
         return MapUtils.put("totalRecords", count).put("curPage", pqCurpage).put("data", list).getMap();
     }
 
@@ -131,9 +155,9 @@ public class TestServiceImpl implements TestService {
             start = 0;
         }
         int end = pq_rpp;
-        ViewMCSResultHandler handler=new ViewMCSResultHandler();
-        logMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "mcs_log", "and interface_address like '%Request'", "order by create_time desc", start, end,handler);
-        List<Map<String, Object>> list =handler.getList();
+        ViewMCSResultHandler handler = new ViewMCSResultHandler();
+        logMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "mcs_log", "and interface_address like '%Request'", "order by create_time desc", start, end, handler);
+        List<Map<String, Object>> list = handler.getList();
 
         return MapUtils.put("totalRecords", countMcs).put("curPage", pq_curpage).put("data", list).getMap();
 
@@ -152,11 +176,56 @@ public class TestServiceImpl implements TestService {
             start = 0;
         }
         int end = pq_rpp;
-        ViewRCSResultHandler handler=new ViewRCSResultHandler();
-        rcsLogMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "rcs_log", "and interface_address like '%genAgvSchedulingTask'", "order by create_time desc", start, end,handler);
-        List<Map<String, Object>> list =handler.getList();
+        ViewRCSResultHandler handler = new ViewRCSResultHandler();
+        rcsLogMapper.getPager("CONCAT(id,'') id,interface_address,params,result,DATE_FORMAT(create_time, \"%Y-%m-%d %H:%i:%S\") create_time", "rcs_log", "and interface_address like '%genAgvSchedulingTask'", "order by create_time desc", start, end, handler);
+        List<Map<String, Object>> list = handler.getList();
         return MapUtils.put("totalRecords", coutLog).put("curPage", pq_curpage).put("data", list).getMap();
     }
+
+    @Override
+    @SneakyThrows
+    public Object buildSxStore(TestBuildSxStoreDto testBuildSxStoreDto) {
+        String containerNo = testBuildSxStoreDto.getContainerCode();
+        //验证
+        List<SxStore> sxStores = sxStoreMapper.findByMap(MapUtils.put("containerNo", containerNo).getMap(), SxStore.class);
+        if (!sxStores.isEmpty()) {
+            LogServices.logSysBusiness("mcsfoldInBoundError" + String.format("容器%s存在库存", containerNo));
+            return RestMessage.newInstance(true, "mcsfoldInBoundError" + String.format("容器%s存在库存", containerNo), MapUtils.put("data", containerNo).getMap());
+        }
+
+        InboundTask inboundTask = new InboundTask();
+        inboundTask.setBillNo(PrologStringUtils.newGUID());
+        inboundTask.setWmsPush(1);
+        inboundTask.setReBack(1);
+        inboundTask.setEmptyContainer(0);
+        inboundTask.setContainerCode(containerNo);
+        inboundTask.setTaskType(2);
+        inboundTask.setOwnerId(testBuildSxStoreDto.getOwnerId());
+        inboundTask.setItemId(testBuildSxStoreDto.getItemId());
+        inboundTask.setLotId(testBuildSxStoreDto.getLotId());
+        inboundTask.setQty(testBuildSxStoreDto.getQty());
+        inboundTask.setTaskState(3);
+        inboundTask.setCreateTime(new Date());
+        inboundTask.setStartTime(new Date());
+        inboundTask.setRukuTime(new Date());
+        inboundTaskMapper.save(inboundTask);
+
+        //优先找1层
+        Integer locationId = qcInBoundTaskService.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(), inboundTask.getLotId(), containerNo, 1, 1, null, 1, 3);
+
+        if (null == locationId) {
+            LogServices.logSysBusiness("mcsfoldInBoundError" + String.format("货位不足"));
+            return RestMessage.newInstance(true, "生成失败，货位不足", MapUtils.put("data", inboundTask).getMap());
+        }
+        //生成入库库存
+        qcInBoundTaskService.buildRuKuSxStore(locationId, inboundTask, containerNo, 200d);
+        //删除入库的任务
+        inboundTaskMapper.deleteByMap(MapUtils.put("containerCode", containerNo).getMap(), InboundTask.class);
+        //TODO 返回数据提示
+        return RestMessage.newInstance(true, "生成成功", MapUtils.put("data", inboundTask).getMap());
+
+    }
+
 
 }
 

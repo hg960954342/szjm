@@ -1,5 +1,6 @@
 package com.prolog.eis.service.test;
 
+import com.prolog.eis.dto.sxk.TestBuildSxStoreDto;
 import com.prolog.eis.service.test.impl.SxStoreViewDto;
 import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.service.test.impl.SxStoreViewSimpleDto;
@@ -19,4 +20,5 @@ public interface TestService {
 	Object getLogViewRCSData(int pq_curpage, int pq_rpp);
 	List<String> getSxStoreList(String itemName,String itemValue);
 	Object listSxStoreQuery(String itemId, String lotId, String ownerId,String itemName,String lot, Integer pqCurpage, Integer pqRpp);
+	Object buildSxStore(TestBuildSxStoreDto testBuildSxStoreDto);
 }

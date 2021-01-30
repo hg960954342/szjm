@@ -2,6 +2,7 @@ package com.prolog.eis.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.dao.ContainerTaskMapper;
+import com.prolog.eis.dto.sxk.TestBuildSxStoreDto;
 import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.AgvStorageLocationService;
@@ -13,10 +14,12 @@ import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.util.PrologStringUtils;
+import com.prolog.framework.common.message.RestMessage;
 import com.prolog.framework.utils.MapUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -238,6 +241,26 @@ public class ViewTestController {
     }
 
 
+    @PostMapping("/buildSxStore")
+    @ResponseBody
+    @ApiOperation(value = "生成库存", notes = "生成库存")
+    public Object buildSxStore(@RequestBody TestBuildSxStoreDto testBuildSxStoreDto) {
+        if(StringUtils.isEmpty(testBuildSxStoreDto.getContainerCode())){
+            return RestMessage.newInstance(true,"getContainerCode为空", testBuildSxStoreDto);
 
+        }
+        if(StringUtils.isEmpty(testBuildSxStoreDto.getItemId())){
+            return RestMessage.newInstance(true,"getItemId为空", testBuildSxStoreDto);
+        }
+        if(StringUtils.isEmpty(testBuildSxStoreDto.getLotId())){
+            return RestMessage.newInstance(true,"getLotId为空", testBuildSxStoreDto);
+        }
+        if(StringUtils.isEmpty(testBuildSxStoreDto.getOwnerId())){
+            return RestMessage.newInstance(true,"getOwnerId为空", testBuildSxStoreDto);
+        }
+
+        return testService.buildSxStore(testBuildSxStoreDto);
+
+    }
 
 }
