@@ -258,6 +258,9 @@ public class ViewTestController {
         if(StringUtils.isEmpty(testBuildSxStoreDto.getOwnerId())){
             return RestMessage.newInstance(true,"getOwnerId为空", testBuildSxStoreDto);
         }
+        if(testBuildSxStoreDto.getLayer()==0){
+            return RestMessage.newInstance(true,"getLayer为空", testBuildSxStoreDto);
+        }
 
         return testService.buildSxStore(testBuildSxStoreDto);
 

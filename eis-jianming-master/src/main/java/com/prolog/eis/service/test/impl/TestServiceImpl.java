@@ -210,8 +210,10 @@ public class TestServiceImpl implements TestService {
         inboundTask.setRukuTime(new Date());
         inboundTaskMapper.save(inboundTask);
 
+        Integer layer=testBuildSxStoreDto.getLayer();
+
         //优先找1层
-        Integer locationId = qcInBoundTaskService.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(), inboundTask.getLotId(), containerNo, 1, 1, null, 1, 3);
+        Integer locationId = qcInBoundTaskService.checkHuoWei(inboundTask.getOwnerId() + "and" + inboundTask.getItemId(), inboundTask.getLotId(), containerNo, layer, 1, 1, layer, layer);
 
         if (null == locationId) {
             LogServices.logSysBusiness("mcsfoldInBoundError" + String.format("货位不足"));

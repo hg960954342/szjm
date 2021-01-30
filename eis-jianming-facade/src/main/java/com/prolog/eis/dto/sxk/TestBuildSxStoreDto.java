@@ -24,6 +24,9 @@ public class TestBuildSxStoreDto {
     private float qty;
 
 
+    @ApiModelProperty(value = "生成的库存在哪一层",required = true)
+    private Integer layer;
+
 
 
     public String getContainerCode() {
@@ -66,5 +69,13 @@ public class TestBuildSxStoreDto {
 
     public void setQty(float qty) {
         this.qty = qty;
+    }
+
+    public Integer getLayer() {
+        return layer;
+    }
+
+    public void setLayer(Integer layer) {
+        this.layer = layer;
     }
 }
