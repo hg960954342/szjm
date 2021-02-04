@@ -179,6 +179,7 @@ public class PrologApiJsonHelper {
 	public <T extends Object> T getObject(Class<T> clazz) throws Exception {
 	   ObjectMapper objectMapper = new ObjectMapper();
 	   // 设置在反序列化时忽略在JSON字符串中存在，而在Java中不存在的属性
+		objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
 	   objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 	   T obj = objectMapper.readValue(jsonOb.toString(), clazz);
 	   return obj;

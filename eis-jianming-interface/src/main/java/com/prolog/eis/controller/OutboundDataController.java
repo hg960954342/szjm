@@ -12,6 +12,7 @@ import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,8 +93,8 @@ public class OutboundDataController {
 
                         outboundDataService.insertOutboundTask(datum);
 
-                        List<OutboundTaskDetail> details = datum.getDetails();
-                        for (OutboundTaskDetail detail : details) {
+                        List<OutboundTaskDetailD> details = datum.getDetails();
+                        for (OutboundTaskDetailD detail : details) {
 
                             String billno = datum.getBillNo();
                             String ownerid = datum.getOwnerId();
@@ -102,13 +104,10 @@ public class OutboundDataController {
                             detail.setOwnerId(ownerid);
                             detail.setPickCode(pickcode);
                             detail.setCtReq(0);
-                            detail.setFinishQty(0);
-                            if(detail.getStandard()==0f){
+                            detail.setFinishQty(BigDecimal.ZERO);
+                            if(detail.getStandard().equals(BigDecimal.ZERO)){
                                 throw new Exception("商品数量规格未传值，无法生成出库任务！");
                             }
-                            //TODO 转换单位KG-》G
-                            detail.setQty(detail.getQty()*1000);
-                            detail.setStandard(detail.getStandard()*1000);
 
                             long l1 = System.currentTimeMillis();
                             Date t1 = new Date(l1);
@@ -116,7 +115,12 @@ public class OutboundDataController {
 
                             detail.setCreateTime(createtime);
 
-                            outboundDataService.insertOutboundTaskDetail(detail);
+                            //TODO 转换单位KG-》G
+                            OutboundTaskDetail outboundTaskDetail=new OutboundTaskDetail();
+                            BeanUtils.copyProperties(detail,outboundTaskDetail);
+                            outboundTaskDetail.setStandard(detail.getStandard().multiply(new BigDecimal("1000")).setScale(1).floatValue());
+                            outboundTaskDetail.setQty(detail.getQty().multiply(new BigDecimal("1000")).setScale(1).floatValue());
+                            outboundDataService.insertOutboundTaskDetail(outboundTaskDetail);
                         }
 
                     } catch (Exception e) {
@@ -220,13 +224,13 @@ public class OutboundDataController {
 
                         datum.setCreateTime(ctime);
 
-                        List<OutboundTaskDetail> details = datum.getDetails();
+                        List<OutboundTaskDetailD> details = datum.getDetails();
                         List<String> containerCodes = checkContainerTaskService.findByContainerCode(details);
                         if (containerCodes.size() == 0) {
-                            for (OutboundTaskDetail detail : details) {
+                            for (OutboundTaskDetailD detail : details) {
                                 String billno = datum.getBillNo();
                                 detail.setCtReq(1);
-                                detail.setFinishQty(0);
+                                detail.setFinishQty(BigDecimal.ZERO);
 
                                 detail.setBillNo(billno);
 
@@ -235,8 +239,12 @@ public class OutboundDataController {
                                 java.sql.Timestamp createtime = new java.sql.Timestamp(t1.getTime());
 
                                 detail.setCreateTime(createtime);
-
-                                outboundDataService.insertMoveTaskDetail(detail);
+                                //TODO 转换单位KG-》G
+                                OutboundTaskDetail outboundTaskDetail=new OutboundTaskDetail();
+                                BeanUtils.copyProperties(detail,outboundTaskDetail);
+                                outboundTaskDetail.setStandard(detail.getStandard().multiply(new BigDecimal("1000")).setScale(1).floatValue());
+                                outboundTaskDetail.setQty(detail.getQty().multiply(new BigDecimal("1000")).setScale(1).floatValue());
+                                outboundDataService.insertMoveTaskDetail(outboundTaskDetail);
                             }
                         }else {
                             containerCodeList.addAll(containerCodes);
@@ -349,8 +357,8 @@ public class OutboundDataController {
 
                         outboundDataService.insertMoveTask(datum);
 
-                        List<OutboundTaskDetail> details = datum.getDetails();
-                        for (OutboundTaskDetail detail : details) {
+                        List<OutboundTaskDetailD> details = datum.getDetails();
+                        for (OutboundTaskDetailD detail : details) {
 
                             String billno = datum.getBillNo();
                             detail.setBillNo(billno);
@@ -362,7 +370,9 @@ public class OutboundDataController {
 
                             detail.setCreateTime(createtime);
 
-                            outboundDataService.insertCheckOutTaskDetail(detail);
+                            OutboundTaskDetail outboundTaskDetail=new OutboundTaskDetail();
+                            BeanUtils.copyProperties(detail,outboundTaskDetail);
+                            outboundDataService.insertCheckOutTaskDetail(outboundTaskDetail);
                         }
 
                     } catch (Exception e) {

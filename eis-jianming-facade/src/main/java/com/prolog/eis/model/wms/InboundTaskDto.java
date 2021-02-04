@@ -8,18 +8,18 @@ import java.util.List;
 
 public class InboundTaskDto {
 
-    private List<InboundTask> data;
+    private List<InboundTaskD> data;
 
     private int size;
 
     @JsonProperty("MessageID")
     private String messageId;
 
-    public List<InboundTask> getData() {
+    public List<InboundTaskD> getData() {
         return data;
     }
 
-    public void setData(List<InboundTask> data) {
+    public void setData(List<InboundTaskD> data) {
         this.data = data;
     }
 
