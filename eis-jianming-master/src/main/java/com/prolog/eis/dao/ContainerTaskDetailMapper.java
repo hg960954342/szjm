@@ -5,6 +5,7 @@ import com.prolog.eis.model.wms.ResultContainer;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResponse;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.session.ResultHandler;
 
 import java.util.List;
 import java.util.Map;
@@ -23,9 +24,10 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
             @Result(property = "qty", column = "qty"),
             @Result(property = "agvLoc", column = "source")
     })
+    @ResultType(Map.class)
     @Select("select d.*,t.task_type,t.source from container_task_detail d ,container_task t " +
             "where d.container_code=t.container_code and t.container_code=#{containerCode}; ")
-    List<Map<String, Object>> getReportData(@Param("containerCode") String containerCode);
+    void getReportData(@Param("containerCode") String containerCode, ResultHandler handler);
 
     @Select("select d.bill_no billno,d.lot_id lotid,d.seqno,d.item_id itemid,d.ownerid,d.qty,t.container_code containercode,ibk.task_type type,t.source agvloc from container_task_detail d ,container_task t, inbound_task ibk where ibk.bill_no=d.bill_no and d.container_code=t.container_code and t.container_code=#{containerCode}; ")
     List<Map<String, Object>> getInBoundReport(@Param("containerCode") String containerCode);

@@ -4,6 +4,7 @@ import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.model.wms.ContainerTaskDetail;
 import com.prolog.eis.model.wms.ResultContainer;
 import com.prolog.eis.service.ContainerTaskDetailService;
+import com.prolog.eis.service.OutBoundQtyConverterHandler;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResponse;
 import com.prolog.framework.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,9 @@ public class ContainerTaskDetailServiceImpl implements ContainerTaskDetailServic
     public List<Map<String,Object>> selectByContainerCode(String containerCode) {
 //        Map<String, Object> map = MapUtils.put("containerCode", containerCode).getMap();
 //        return containerTaskDetailMapper.findByMap(map,ContainerTaskDetail.class);
-        return containerTaskDetailMapper.getReportData(containerCode);
+        OutBoundQtyConverterHandler handler=new OutBoundQtyConverterHandler();
+        containerTaskDetailMapper.getReportData(containerCode,handler);
+        return handler.getList();
     }
 
     @Override

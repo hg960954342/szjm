@@ -80,6 +80,9 @@ public class EisCallbackServiceImpl implements EisCallbackService {
         if (inboundTasks != null && inboundTasks.size() > 0) {
             InboundTask inboundTask = inboundTasks.get(0);
 
+            //TODO 回告修改qty 单位转换g-->kg
+            inboundTask.setQty(inboundTask.getQty()/1000);
+
             //判断是否需要回告wms
             if (inboundTask.getReBack() == 1) {
                 //封装入库回告数据
@@ -260,6 +263,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
 
     /**
      * 盘点出库数据封装
+     * TODO 盘点出口库数据封装回告 暂时不进行单位转换
      *
      * @param billNo
      * @return
