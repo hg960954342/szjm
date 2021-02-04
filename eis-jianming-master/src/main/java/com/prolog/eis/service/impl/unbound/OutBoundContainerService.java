@@ -219,7 +219,7 @@ public class OutBoundContainerService {
         for (OutBoundSxStoreDto outBoundSxStoreDto : list) {
             if (outBoundSxStoreDto.getZqty() != 0 && outBoundSxStoreDto.getZqty() <= last) {
                 outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty() , outBoundSxStoreDto.getZqty()));
-                last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getOutQty());
+                last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getZqty());
                 if (last <= 0) {
                     break;
                 } else {
@@ -229,7 +229,7 @@ public class OutBoundContainerService {
             if (outBoundSxStoreDto.getZqty() != 0 && outBoundSxStoreDto.getZqty() > last) {
                 float outQty = last;
                 outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty() , outQty));
-                last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getOutQty());
+                last=DivideAndRemainderToFloat.subtract(last,outQty);
                 break;
             }
         }
