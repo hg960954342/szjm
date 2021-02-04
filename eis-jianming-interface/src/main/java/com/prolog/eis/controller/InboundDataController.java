@@ -90,7 +90,8 @@ public class InboundDataController {
 
                             datum.setCreateTime(ctime);
                             datum.setTaskState(0);
-
+                            //TODO 转换单位 KG-->G
+                            datum.setQty(datum.getQty()*1000);
                             inboundDataService.insertInboundTask(datum);
 
                         } catch (Exception e) {

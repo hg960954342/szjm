@@ -86,7 +86,7 @@ public class LedShowService {
                 LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
                 if (ledShow != null) {
                      try {
-                        prologLedViewService.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), pQty, containerTask.getLot(), rQty, ledShowDtoS.getPickStation());
+                        prologLedViewService.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), pQty/1000, containerTask.getLot(), rQty/1000, ledShowDtoS.getPickStation());
                     } catch (Exception e) {
                         LogServices.logSys(e);
                     }
@@ -113,7 +113,7 @@ public class LedShowService {
 
         if (ledShow != null) {
              try {
-                prologLedViewService.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), containerTask.getQty(), containerTask.getLot(), station);
+                prologLedViewService.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), containerTask.getQty()/1000, containerTask.getLot(), station);
             } catch (Exception e) {
                 LogServices.logSys(e);
             }
@@ -127,7 +127,6 @@ public class LedShowService {
      */
     @Before("inBoundTask(inBoundRequest)")
     public void rukuLedShow(InBoundRequest inBoundRequest) {
-
         String containerNo = inBoundRequest.getStockId();
         String source = inBoundRequest.getSource();
         Coordinate coordinate = PrologCoordinateUtils.analysis(source);

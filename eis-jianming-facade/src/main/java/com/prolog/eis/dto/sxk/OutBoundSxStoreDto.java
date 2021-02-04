@@ -96,4 +96,20 @@ public class OutBoundSxStoreDto {
     public void setOutQty(float outQty) {
         this.outQty = outQty;
     }
+
+    @Override
+    public String toString() {
+        return "OutBoundSxStoreDto{" +
+                "itemId='" + itemId + '\'' +
+                ", lotId='" + lotId + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", zqty=" + zqty +
+                ", lqty=" + lqty +
+                ", qty=" + qty +
+                ", outOrNo=" + outOrNo +
+                ", containerNo='" + containerNo + '\'' +
+                ", storeNo='" + storeNo + '\'' +
+                ", outQty=" + outQty +
+                '}';
+    }
 }

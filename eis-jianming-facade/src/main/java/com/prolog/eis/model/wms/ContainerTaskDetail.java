@@ -49,7 +49,7 @@ public class ContainerTaskDetail {
 
     @Column("qty")
     @ApiModelProperty("数量重量")
-    private double 	qty ;
+    private float qty ;
 
     @Column("create_time")
     @ApiModelProperty("创建时间")
@@ -113,11 +113,11 @@ public class ContainerTaskDetail {
         this.ownerId = ownerId;
     }
 
-    public double getQty() {
+    public float getQty() {
         return qty;
     }
 
-    public void setQty(double qty) {
+    public void setQty(float qty) {
         this.qty = qty;
     }
 

@@ -1,6 +1,7 @@
 package com.prolog.eis.service.impl.unbound.handler;
 
 import com.prolog.eis.dto.sxk.OutBoundSxStoreDto;
+import com.prolog.eis.service.impl.unbound.DivideAndRemainderToFloat;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 
@@ -13,14 +14,17 @@ public class OutBoundSxStoreHandler implements ResultHandler<Map> {
 
     private List<OutBoundSxStoreDto> list=new ArrayList<>();
 
+
+
     @Override
     public void handleResult(ResultContext<? extends Map> resultContext) {
         Map<String,Object> map=resultContext.getResultObject();
         float qty= ((BigDecimal) map.get("qty")).floatValue();
 
         float miniPackage= ((BigDecimal) map.get("miniPackage")).floatValue();
-        float lqty=qty%miniPackage;
-        float zqty = qty-lqty;
+        BigDecimal[] b= DivideAndRemainderToFloat.divideAndRemainderToFloat(miniPackage,qty);
+        float lqty=b[1].floatValue();
+        float zqty =b[0].floatValue();
         OutBoundSxStoreDto outBoundSxStoreDto=new OutBoundSxStoreDto();
         String itemId=(String)map.get("item_id");
         String lotId=(String)map.get("lot_id");

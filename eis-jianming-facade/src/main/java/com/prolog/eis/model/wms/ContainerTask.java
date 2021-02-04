@@ -206,7 +206,7 @@ public class ContainerTask {
 		this.ownerId = ownerId;
 	}
 
-	public double getQty() {
+	public float getQty() {
 		return qty;
 	}
 

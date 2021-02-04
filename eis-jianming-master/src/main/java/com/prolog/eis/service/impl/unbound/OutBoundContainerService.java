@@ -23,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -109,129 +110,133 @@ public class OutBoundContainerService {
     }
 
 
+
     public void buildContainerTaskAndDetails(DetailDataBean detailDataBeand, float miniPackage, boolean isPickStation) {
         //TODO 需要出库的量
         float last = detailDataBeand.getLast();
         //TODO 需要出库的总量
-        float allLast=last;
+        float allLast = last;
 
         if (last == 0) {
             LogServices.logSysBusiness(String.format("订单:%s错误，出库数量为0!", detailDataBeand.getBillNo()));
             return;
         }
         if (last < 0) {
-            LogServices.logSysBusiness(String.format("订单:%s待出库库存:%s计算出来错误!", detailDataBeand.getBillNo(), last));
+            LogServices.logSysBusiness(String.format("订单:%s待出库库存:%s/1000计算出来错误!", detailDataBeand.getBillNo(), last));
             return;
         }
         //TODO 判断库存是否满足
         float countQty = qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
         if (countQty < last) {
-            LogServices.logSysBusiness(String.format("库存:%s，不够订单:%s 出的量:%s!", countQty, detailDataBeand.getBillNo(), last));
+            LogServices.logSysBusiness(String.format("库存:%s，不够订单:%s 出的量:%s/1000!", countQty, detailDataBeand.getBillNo(), last));
             return;
         }
 
-
-        float lqty=last%miniPackage;
-        float zqty = last-lqty;
+        BigDecimal[] b=DivideAndRemainderToFloat.divideAndRemainderToFloat(miniPackage,last);
+        float lqty = b[1].floatValue();
+        float zqty = b[0].floatValue();
         OutBoundSxStoreHandler handler = new OutBoundSxStoreHandler();
         qcSxStoreMapper.getSxStoreByOrderEntity(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId(), miniPackage, handler);
         List<OutBoundSxStoreDto> list = handler.getList();
-        List<OutBoundSxStoreDto> zList= ListHelper.where(list, x -> x.getLqty()== 0);
+        List<OutBoundSxStoreDto> zList = ListHelper.where(list, x -> x.getLqty() == 0);
         list = ListHelper.where(list, x -> x.getLqty() != 0);
         //TODO 获取零散的全部总量
         float sumLqty = (float) list.parallelStream().mapToDouble(OutBoundSxStoreDto::getLqty).sum();
         //TODO 零散能出全部
         if (last <= sumLqty) {
-             computeL(list, last);
+            computeL(list, last);
         } else {
-            if(last<=miniPackage){
+            if (last <= miniPackage) {
                 //TODO 零散出不了全部 则先出要出库的零散 lqty 在整出zqty
-                last=computeL(list, lqty);
+                last = computeL(list, lqty);
                 //TODO 优先出半零散
-                if(last==0){
-                    List<OutBoundSxStoreDto> listx=ListHelper.where(list,x->x.getZqty()!=0);
+                if (last == 0) {
+                    List<OutBoundSxStoreDto> listx = ListHelper.where(list, x -> x.getZqty() != 0);
                     list.removeAll(listx);
-                    zList=ListUtils.union(listx,zList);
+                    zList = ListUtils.union(listx, zList);
                     computeZ(zList, zqty);
-                }else{
-                    last=computeZ(list, last+zqty);
+                } else {
+                    last = computeZ(list, DivideAndRemainderToFloat.add(last,zqty) );
                     //TODO 出整
                     computeZ(zList, last);
                 }
-            }else{
+            } else {
                 //TODO 零散可能出不完
-                float y=computeL(list, lqty);
-                List<OutBoundSxStoreDto> listx=ListHelper.where(list,x->x.getZqty()!=0);
-                 list.removeAll(listx);
-                 zList=ListUtils.union(listx,zList);
-                 computeZ(zList, listx.isEmpty()?zqty+y:last-y);
+                float y = computeL(list, lqty);
+                float Lsum = (float) list.parallelStream().mapToDouble(OutBoundSxStoreDto::getOutQty).sum();
+                List<OutBoundSxStoreDto> listx = ListHelper.where(list, x -> x.getZqty() != 0);
+                list.removeAll(listx);
+                zList = ListUtils.union(listx, zList);
+                computeZ(zList, listx.isEmpty() ? DivideAndRemainderToFloat.add(zqty,y) : DivideAndRemainderToFloat.subtract(last,Lsum));
 
             }
 
 
-
         }
         //TODO 出库校验
-        List<OutBoundSxStoreDto> resultList=new ArrayList<>();
+        List<OutBoundSxStoreDto> resultList = new ArrayList<>();
 
         resultList.addAll(zList);
         resultList.addAll(list);
 
         float sumQty = (float) resultList.parallelStream().mapToDouble(OutBoundSxStoreDto::getOutQty).sum();
-        if(sumQty<=allLast){
-            for(OutBoundSxStoreDto outBoundSxStoreDto:resultList){
-                if(outBoundSxStoreDto.getOutQty()!=0){
+        if (sumQty <= allLast) {
+            for (OutBoundSxStoreDto outBoundSxStoreDto : resultList) {
+                if (outBoundSxStoreDto.getOutQty() != 0) {
                     this.build(detailDataBeand, outBoundSxStoreDto, outBoundSxStoreDto.getOutQty(), isPickStation);
                 }
             }
         }
 
-
-
     }
+
+
 
     //TODO 计算零散
     private float computeL(List<OutBoundSxStoreDto> list, float last) {
         for (OutBoundSxStoreDto outBoundSxStoreDto : list) {
-            if (outBoundSxStoreDto.getLqty()!=0&&outBoundSxStoreDto.getLqty() <= last) {
-                outBoundSxStoreDto.setOutQty(outBoundSxStoreDto.getOutQty()+outBoundSxStoreDto.getLqty());
-                last = last - outBoundSxStoreDto.getOutQty();
+            if (outBoundSxStoreDto.getLqty() != 0 && outBoundSxStoreDto.getLqty() <= last) {
+                outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty() , outBoundSxStoreDto.getLqty()));
+                last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getOutQty());
                 if (last <= 0) {
                     break;
                 } else {
                     continue;
                 }
             }
-            if (outBoundSxStoreDto.getLqty()!=0&&outBoundSxStoreDto.getLqty() > last) {
-                float outQty=last;
-                outBoundSxStoreDto.setOutQty(outBoundSxStoreDto.getOutQty()+outQty);
-                last = last - outBoundSxStoreDto.getOutQty();
+            if (outBoundSxStoreDto.getLqty() != 0 && outBoundSxStoreDto.getLqty() > last) {
+                float outQty = last;
+                outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty() , outQty));
+                last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getOutQty());
                 break;
             }
         }
         return last;
     }
-   //TODO 计算整包
-    private float computeZ(List<OutBoundSxStoreDto> list,float last) {
+
+    //TODO 计算整包
+    private float computeZ(List<OutBoundSxStoreDto> list, float last) {
         for (OutBoundSxStoreDto outBoundSxStoreDto : list) {
-            if (outBoundSxStoreDto.getZqty()!=0&&outBoundSxStoreDto.getZqty() <= last) {
-                outBoundSxStoreDto.setOutQty(outBoundSxStoreDto.getOutQty()+outBoundSxStoreDto.getZqty());
-                last = last - outBoundSxStoreDto.getOutQty();
+            if (outBoundSxStoreDto.getZqty() != 0 && outBoundSxStoreDto.getZqty() <= last) {
+                outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty() , outBoundSxStoreDto.getZqty()));
+                last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getOutQty());
                 if (last <= 0) {
                     break;
                 } else {
                     continue;
                 }
             }
-            if (outBoundSxStoreDto.getZqty()!=0&&outBoundSxStoreDto.getZqty() > last) {
-                float outQty=last;
-                outBoundSxStoreDto.setOutQty(outBoundSxStoreDto.getOutQty()+outQty);
-                last = last - outBoundSxStoreDto.getOutQty();
+            if (outBoundSxStoreDto.getZqty() != 0 && outBoundSxStoreDto.getZqty() > last) {
+                float outQty = last;
+                outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty() , outQty));
+                last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getOutQty());
                 break;
             }
         }
         return last;
     }
+
+
 
     /**
      * TODO 生成容器任务
@@ -280,26 +285,26 @@ public class OutBoundContainerService {
             /*if (StringUtils.isEmpty(ordercontainerTask.getTaskCode())) {
                 break;
             }*/
-                ContainerTaskDetail containerTaskDetail=new ContainerTaskDetail();
-                BeanUtils.copyProperties(detailDataBeand, containerTaskDetail);
-                containerTaskDetail.setBillNo(billNo);
-                //TODO 设置SeqNo序号
-              OutboundTaskDetail outboundTaskDetailTemp=outBoundTaskDetailMapper.findFirstByMap(MapUtils.
+            ContainerTaskDetail containerTaskDetail = new ContainerTaskDetail();
+            BeanUtils.copyProperties(detailDataBeand, containerTaskDetail);
+            containerTaskDetail.setBillNo(billNo);
+            //TODO 设置SeqNo序号
+            OutboundTaskDetail outboundTaskDetailTemp = outBoundTaskDetailMapper.findFirstByMap(MapUtils.
                     put("billNo", billNo)
                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
                     ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
-                containerTaskDetail.setSeqNo(outboundTaskDetailTemp.getSeqNo());
+            containerTaskDetail.setSeqNo(outboundTaskDetailTemp.getSeqNo());
 
-                containerTaskDetail.setContainerCode(sxStore1.getContainerNo());
-                containerTaskDetail.setCreateTime(new java.util.Date());
-                containerTaskDetail.setQty(outBoundQty);
-                containerTaskDetailMapperMapper.save(containerTaskDetail);
+            containerTaskDetail.setContainerCode(sxStore1.getContainerNo());
+            containerTaskDetail.setCreateTime(new java.util.Date());
+            containerTaskDetail.setQty(outBoundQty);
+            containerTaskDetailMapperMapper.save(containerTaskDetail);
             List<OutboundTaskDetail> listOutBoundTaskDetailList = outBoundTaskDetailMapper.findByMap(MapUtils.
                     put("billNo", billNo)
                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
                     ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
             for (OutboundTaskDetail outboundTaskDetail : listOutBoundTaskDetailList) {
-                outboundTaskDetail.setFinishQty(outboundTaskDetail.getFinishQty() + (float) containerTaskDetail.getQty());
+                outboundTaskDetail.setFinishQty(DivideAndRemainderToFloat.add(outboundTaskDetail.getFinishQty() , (float) containerTaskDetail.getQty()));
                 outBoundTaskDetailMapper.update(outboundTaskDetail);
             }
 

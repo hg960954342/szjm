@@ -106,6 +106,9 @@ public class OutboundDataController {
                             if(detail.getStandard()==0f){
                                 throw new Exception("商品数量规格未传值，无法生成出库任务！");
                             }
+                            //TODO 转换单位KG-》G
+                            detail.setQty(detail.getQty()*1000);
+                            detail.setStandard(detail.getStandard()*1000);
 
                             long l1 = System.currentTimeMillis();
                             Date t1 = new Date(l1);

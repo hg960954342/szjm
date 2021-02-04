@@ -175,7 +175,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 
 	@ResultType(Map.class)
 	@Options(resultSetType = ResultSetType.FORWARD_ONLY, fetchSize = 1000)
-	@Select("select a.*,#{miniPackage} as miniPackage,l.* from sx_store a\n" +
+	@Select("select a.qty as qty,a.item_id,a.lot_id,a.owner_id,a.CONTAINER_NO,#{miniPackage} as miniPackage,l.* from sx_store a\n" +
 			"      INNER JOIN sx_store_location l ON a.store_location_id = l.id \n" +
 			"\t\t\tINNER JOIN sx_store_location_group g ON l.store_location_group_id = g.id \n" +
 			"and g.IS_LOCK=0\n" +
