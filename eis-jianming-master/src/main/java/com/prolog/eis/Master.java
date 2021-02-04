@@ -27,7 +27,7 @@ import java.nio.charset.StandardCharsets;
 @EnableTransactionManagement
 @EnableScheduling
 @EnablePrologEmptySecurityServer
-//@MapperScan("com.prolog.eis.dao")
+@MapperScan("com.prolog.eis.dao")
 @EnableAsync
 @EnableAspectJAutoProxy
 //@EnablePrologService(loadBalanced=false)
