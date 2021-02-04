@@ -30,7 +30,7 @@ public class DetailDataBean {
     }
 
     public float getLast() {
-        return qty-finishQty;
+        return last;
     }
 
 

@@ -2,10 +2,12 @@ package com.prolog.eis.service.impl.unbound;
 
 import com.prolog.eis.dao.*;
 import com.prolog.eis.dao.baseinfo.PortInfoMapper;
+import com.prolog.eis.dto.sxk.OutBoundSxStoreDto;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.service.enums.OutBoundEnum;
 import com.prolog.eis.service.enums.OutBoundType;
+import com.prolog.eis.service.impl.unbound.calculation.CalculationTemplate;
 import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 import com.prolog.eis.service.sxk.SxStoreCkService;
 import com.prolog.framework.utils.MapUtils;
@@ -54,6 +56,8 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
     @Autowired
     OutBoundContainerService outBoundContainerService;
 
+    @Autowired
+    CalculationTemplate calculationTemplate;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -69,7 +73,10 @@ public class OutBoundPickCodeStrategy extends DefaultOutBoundPickCodeStrategy {
         for (DetailDataBean detailDataBeand : list) {
             String bill_no_String = detailDataBeand.getBillNo();
             listBillNo.addAll(Arrays.asList(bill_no_String.split(",")));
-            outBoundContainerService.buildContainerTaskAndDetails(detailDataBeand,detailDataBeand.getStandard(),true);
+            List<OutBoundSxStoreDto> results=calculationTemplate.calculationOutQty(detailDataBeand,detailDataBeand.getStandard(),true);
+            results.forEach(x->{
+                outBoundContainerService.build(detailDataBeand,x,x.getOutQty(),true);
+            });
         }
         removeCompleteOrderAndUpdate(listBillNo, similarityDataEntityListLoad);
     }
