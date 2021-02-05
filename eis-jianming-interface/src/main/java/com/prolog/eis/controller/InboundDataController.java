@@ -93,9 +93,9 @@ public class InboundDataController {
                             datum.setCreateTime(ctime);
                             datum.setTaskState(0);
                             //TODO 转换单位 KG-->G
-                            InboundTask inboundTask=new InboundTask();
+                            InboundTaskDecimal inboundTask=new InboundTaskDecimal();
                             BeanUtils.copyProperties(datum,inboundTask);
-                            inboundTask.setQty(datum.getQty().multiply(new BigDecimal("1000")).setScale(1).floatValue());
+                            inboundTask.setQty(datum.getQty().multiply(new BigDecimal("1000")));
                             inboundDataService.insertInboundTask(inboundTask);
 
                         } catch (Exception e) {
@@ -202,7 +202,7 @@ public class InboundDataController {
                         java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
 
                         datum.setCreateTime(ctime);
-                        InboundTask inboundTask=new InboundTask();
+                        InboundTaskDecimal inboundTask=new InboundTaskDecimal();
                         BeanUtils.copyProperties(datum,inboundTask);
                         inboundDataService.insertEmptyBoxInStockTask(inboundTask);
 

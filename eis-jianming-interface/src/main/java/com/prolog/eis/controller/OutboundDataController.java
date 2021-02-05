@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,12 @@ public class OutboundDataController {
 
     @Autowired
     private SxStockTaskMapper sxStockTaskMapper;
+
+    public static void main(String[] args) {
+        BigDecimal n=new BigDecimal("1123.3347");
+        BigDecimal s=n.multiply(new BigDecimal("1000"));
+        System.out.println(Float.parseFloat("1123334.7"));
+    }
 
     /**
      * 业务出库 推送eis
@@ -116,11 +123,11 @@ public class OutboundDataController {
                             detail.setCreateTime(createtime);
 
                             //TODO 转换单位KG-》G
-                            OutboundTaskDetail outboundTaskDetail=new OutboundTaskDetail();
-                            BeanUtils.copyProperties(detail,outboundTaskDetail);
-                            outboundTaskDetail.setStandard(detail.getStandard().multiply(new BigDecimal("1000")).setScale(1).floatValue());
-                            outboundTaskDetail.setQty(detail.getQty().multiply(new BigDecimal("1000")).setScale(1).floatValue());
-                            outboundDataService.insertOutboundTaskDetail(outboundTaskDetail);
+                            OutboundTaskDetailDto outboundTaskDetailDto=new OutboundTaskDetailDto();
+                            BeanUtils.copyProperties(detail,outboundTaskDetailDto);
+                            outboundTaskDetailDto.setStandard(detail.getStandard().multiply(new BigDecimal("1000")));
+                            outboundTaskDetailDto.setQty(detail.getQty().multiply(new BigDecimal("1000")));
+                            outboundDataService.insertOutboundTaskDetail(outboundTaskDetailDto);
                         }
 
                     } catch (Exception e) {
@@ -240,10 +247,10 @@ public class OutboundDataController {
 
                                 detail.setCreateTime(createtime);
                                 //TODO 转换单位KG-》G
-                                OutboundTaskDetail outboundTaskDetail=new OutboundTaskDetail();
+                                OutboundTaskDetailDto outboundTaskDetail=new OutboundTaskDetailDto();
                                 BeanUtils.copyProperties(detail,outboundTaskDetail);
-                                outboundTaskDetail.setStandard(detail.getStandard().multiply(new BigDecimal("1000")).setScale(1).floatValue());
-                                outboundTaskDetail.setQty(detail.getQty().multiply(new BigDecimal("1000")).setScale(1).floatValue());
+                                outboundTaskDetail.setStandard(detail.getStandard().multiply(new BigDecimal("1000")));
+                                outboundTaskDetail.setQty(detail.getQty().multiply(new BigDecimal("1000")));
                                 outboundDataService.insertMoveTaskDetail(outboundTaskDetail);
                             }
                         }else {
@@ -370,7 +377,7 @@ public class OutboundDataController {
 
                             detail.setCreateTime(createtime);
 
-                            OutboundTaskDetail outboundTaskDetail=new OutboundTaskDetail();
+                            OutboundTaskDetailDto outboundTaskDetail=new OutboundTaskDetailDto();
                             BeanUtils.copyProperties(detail,outboundTaskDetail);
                             outboundDataService.insertCheckOutTaskDetail(outboundTaskDetail);
                         }
@@ -472,7 +479,7 @@ public class OutboundDataController {
 
                         outboundDataService.insertEmptyBoxOutStockTask(datum);
 
-                        OutboundTaskDetail detail = new OutboundTaskDetail();
+                        OutboundTaskDetailDto detail = new OutboundTaskDetailDto();
 
                         String billno = datum.getBillNo();
                         detail.setBillNo(billno);
@@ -480,7 +487,7 @@ public class OutboundDataController {
                         detail.setSeqNo("1");
 
                         //detail.setQty(datum.getQty());
-                        detail.setFinishQty(0);
+                        detail.setFinishQty(BigDecimal.ZERO);
                         String pickcode = datum.getPickCode();
                         detail.setPickCode(pickcode);
 

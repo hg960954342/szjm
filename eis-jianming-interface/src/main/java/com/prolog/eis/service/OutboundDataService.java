@@ -3,22 +3,23 @@ package com.prolog.eis.service;
 import com.prolog.eis.model.wms.CheckStock;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
+import com.prolog.eis.model.wms.OutboundTaskDetailDto;
 
 public interface OutboundDataService {
 
 
     void insertOutboundTask(OutboundTask datum);
 
-    void insertOutboundTaskDetail(OutboundTaskDetail detail);
+    void insertOutboundTaskDetail(OutboundTaskDetailDto detail);
 
     void insertMoveTask(OutboundTask datum);
 
-    void insertMoveTaskDetail(OutboundTaskDetail detail);
+    void insertMoveTaskDetail(OutboundTaskDetailDto detail);
 
-    void insertCheckOutTaskDetail(OutboundTaskDetail detail);
+    void insertCheckOutTaskDetail(OutboundTaskDetailDto detail);
 
     void insertEmptyBoxOutStockTask(OutboundTask datum);
 
-    void insertEmptyBoxOutStockTaskDetail(OutboundTaskDetail detail);
+    void insertEmptyBoxOutStockTaskDetail(OutboundTaskDetailDto detail);
 
 }

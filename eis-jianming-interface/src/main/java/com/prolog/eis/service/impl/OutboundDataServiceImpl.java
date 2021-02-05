@@ -4,6 +4,7 @@ import com.prolog.eis.dao.OutboundDataMapper;
 import com.prolog.eis.model.wms.CheckStock;
 import com.prolog.eis.model.wms.OutboundTask;
 import com.prolog.eis.model.wms.OutboundTaskDetail;
+import com.prolog.eis.model.wms.OutboundTaskDetailDto;
 import com.prolog.eis.service.OutboundDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,19 @@ public class OutboundDataServiceImpl implements OutboundDataService {
     }
 
     @Override
-    public void insertOutboundTaskDetail(OutboundTaskDetail detail) {
+    public void insertOutboundTaskDetail(OutboundTaskDetailDto detail) {
 
         outboundDataMapper.insertOutboundTaskDetail(detail);
     }
 
     @Override
-    public void insertMoveTaskDetail(OutboundTaskDetail detail) {
+    public void insertMoveTaskDetail(OutboundTaskDetailDto detail) {
 
         outboundDataMapper.insertMoveTaskDetail(detail);
     }
 
     @Override
-    public void insertCheckOutTaskDetail(OutboundTaskDetail detail) {
+    public void insertCheckOutTaskDetail(OutboundTaskDetailDto detail) {
         outboundDataMapper.insertCheckOutTaskDetail(detail);
     }
 
@@ -42,7 +43,7 @@ public class OutboundDataServiceImpl implements OutboundDataService {
     }
 
     @Override
-    public void insertEmptyBoxOutStockTaskDetail(OutboundTaskDetail detail) {
+    public void insertEmptyBoxOutStockTaskDetail(OutboundTaskDetailDto detail) {
         outboundDataMapper.insertEmptyBoxOutStockTaskDetail(detail);
     }
 
