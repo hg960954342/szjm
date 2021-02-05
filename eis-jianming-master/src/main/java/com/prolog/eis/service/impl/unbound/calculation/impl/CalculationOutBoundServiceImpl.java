@@ -35,13 +35,13 @@ public class CalculationOutBoundServiceImpl implements CalculationService<OutBou
             return results;
         }
         if (last < 0) {
-            LogServices.logSysBusiness(String.format("订单:%s待出库库存:%s/1000计算出来错误!", detailDataBeand.getBillNo(), last));
+            LogServices.logSysBusiness(String.format("订单:%s待出库库存:%s计算出来错误!", detailDataBeand.getBillNo(), last));
             return results;
         }
         //TODO 判断库存是否满足
         float countQty = qcSxStoreMapper.getSxStoreCount(detailDataBeand.getItemId(), detailDataBeand.getLotId(), detailDataBeand.getOwnerId());
         if (countQty < last) {
-            LogServices.logSysBusiness(String.format("库存:%s，不够订单:%s 出的量:%s/1000!", countQty, detailDataBeand.getBillNo(), last));
+            LogServices.logSysBusiness(String.format("库存:%s，不够订单:%s 出的量:%s!", countQty, detailDataBeand.getBillNo(), last));
             return results;
         }
 
