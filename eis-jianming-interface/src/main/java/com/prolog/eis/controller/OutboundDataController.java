@@ -46,11 +46,7 @@ public class OutboundDataController {
     @Autowired
     private SxStockTaskMapper sxStockTaskMapper;
 
-    public static void main(String[] args) {
-        BigDecimal n=new BigDecimal("1123.3347");
-        BigDecimal s=n.multiply(new BigDecimal("1000"));
-        System.out.println(Float.parseFloat("1123334.7"));
-    }
+
 
     /**
      * 业务出库 推送eis
