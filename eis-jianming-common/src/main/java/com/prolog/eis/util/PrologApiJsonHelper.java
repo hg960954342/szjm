@@ -10,6 +10,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -163,9 +164,18 @@ public class PrologApiJsonHelper {
 		String jsonStr = jsonOb.getString(key);
 		ObjectMapper objectMapper = new ObjectMapper();
 		// 设置在反序列化时忽略在JSON字符串中存在，而在Java中不存在的属性
+		objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		T obj = objectMapper.readValue(jsonStr, clazz);
 		return obj;
+	}
+
+	public static void main(String[] args) throws Exception {
+		String str="{'id':2930.1224}";
+	com.alibaba.fastjson.JSONObject json= com.alibaba.fastjson.JSONObject.parseObject(str);
+		PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+		System.out.println(helper.getObject("id",BigDecimal.class));
+		System.out.println(json.getObject("id",BigDecimal.class));
 	}
 	
 	/**

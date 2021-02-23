@@ -48,12 +48,12 @@ public class InboundDataController {
     public JsonResult inboundTaskPush(@RequestBody String str) throws Exception {
 
 
-        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+
 
         try {
             FileLogHelper.WriteLog("WmsInStockTask", "WMS->EIS入库请求" + str);
-            InboundTaskDto inboundTaskDto = helper.getObject(InboundTaskDto.class);
 
+            InboundTaskDto inboundTaskDto =  JSONObject.parseObject(str,InboundTaskDto.class);
             String messageId = inboundTaskDto.getMessageId();
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageId);
@@ -168,12 +168,12 @@ public class InboundDataController {
     public JsonResult emptyBoxInStockTask(@RequestBody String str) throws Exception {
 
 
-        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+        //PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
         try {
             FileLogHelper.WriteLog("WmsEmptyBoxInStockTask", "WMS->EIS空托入库请求" + str);
-            InboundTaskDto inboundTaskDto = helper.getObject(InboundTaskDto.class);
-
+            //InboundTaskDto inboundTaskDto = helper.getObject(InboundTaskDto.class);
+            InboundTaskDto inboundTaskDto =  JSONObject.parseObject(str,InboundTaskDto.class);
             String messageID = inboundTaskDto.getMessageId();
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);

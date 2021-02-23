@@ -59,11 +59,11 @@ public class OutboundDataController {
     @PostMapping("/outboundtask")
     public JsonResult outboundTaskPush(@RequestBody String str) throws Exception {
 
-        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+       // PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
         try {
             FileLogHelper.WriteLog("WmsOutStockTask", "WMS->EIS出库请求" + str);
-            OutboundTaskDto outboundTaskDto = helper.getObject(OutboundTaskDto.class);
+            OutboundTaskDto outboundTaskDto =  JSONObject.parseObject(str,OutboundTaskDto.class);
 
             String messageID = outboundTaskDto.getMessageId();
 
@@ -190,12 +190,12 @@ public class OutboundDataController {
     @PostMapping("/movestocktask")
     public JsonResult moveTaskPush(@RequestBody String str) throws Exception {
 
-        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+      //  PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
         try {
             FileLogHelper.WriteLog("WmsMoveStockTask", "WMS->EIS移库请求" + str);
-            OutboundTaskDto moveTaskData = helper.getObject(OutboundTaskDto.class);
-
+           // OutboundTaskDto moveTaskData = helper.getObject(OutboundTaskDto.class);
+            OutboundTaskDto moveTaskData =  JSONObject.parseObject(str,OutboundTaskDto.class);
             String messageID = moveTaskData.getMessageId();
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
@@ -322,12 +322,12 @@ public class OutboundDataController {
     @PostMapping("/checkouttask")
     public JsonResult checkOutTaskPush(@RequestBody String str) throws Exception {
 
-        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+        //PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
         try {
             FileLogHelper.WriteLog("WmsCheckOutTask", "WMS->EIS盘库请求" + str);
-            OutboundTaskDto outboundTaskDto = helper.getObject(OutboundTaskDto.class);
-
+           // OutboundTaskDto outboundTaskDto = helper.getObject(OutboundTaskDto.class);
+            OutboundTaskDto outboundTaskDto =  JSONObject.parseObject(str,OutboundTaskDto.class);
             String messageID = outboundTaskDto.getMessageId();
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
@@ -437,12 +437,12 @@ public class OutboundDataController {
     @PostMapping("/emptyboxoutstocktask")
     public JsonResult emptyBoxOutStockTask(@RequestBody String str) throws Exception {
 
-        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+      //  PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
 
         try {
             FileLogHelper.WriteLog("WmsEmptyBoxOutStockTask", "WMS->EIS空托出库请求" + str);
-            OutboundTaskDto outboundTaskDto = helper.getObject(OutboundTaskDto.class);
-
+           // OutboundTaskDto outboundTaskDto = helper.getObject(OutboundTaskDto.class);
+            OutboundTaskDto outboundTaskDto =  JSONObject.parseObject(str,OutboundTaskDto.class);
             String messageID = outboundTaskDto.getMessageId();
 
             List<WmsEisIdempotent> wmsEisIdempotents = eisIdempotentService.queryRejsonById(messageID);
@@ -555,11 +555,12 @@ public class OutboundDataController {
 
     public JsonResult checkStock(@RequestBody String str) throws Exception {
 
-        PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
+
 
         try {
             FileLogHelper.WriteLog("WmsCheckStock", "WMS->EIS库存盘点调整" + str);
-            CheckStockDto checkStockDto = helper.getObject(CheckStockDto.class);
+
+            CheckStockDto checkStockDto =  JSONObject.parseObject(str,CheckStockDto.class);
 
             String messageId = checkStockDto.getMessageId();
 
