@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class McsInterfaceServiceImpl implements McsInterfaceService{
 			containerTask.setTarget("");
 			containerTask.setTargetType(0);
 			containerTask.setTaskState(1);
-			containerTask.setQty(1f);
+			containerTask.setQty(new BigDecimal("1"));
 			containerTask.setCreateTime(new Date());
 
 			containerTaskMapper.save(containerTask);

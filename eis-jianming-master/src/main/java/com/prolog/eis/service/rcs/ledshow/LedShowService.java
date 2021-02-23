@@ -13,6 +13,7 @@ import com.prolog.eis.model.base.SysParame;
 import com.prolog.eis.model.led.LedShow;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
+import com.prolog.eis.service.impl.unbound.DivideAndRemainderToFloat;
 import com.prolog.eis.util.PrologCoordinateUtils;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -75,18 +77,18 @@ public class LedShowService {
         if (containerTasks != null && containerTasks.size() == 0)  {return;}
         ContainerTask containerTask = containerTasks.get(0);
         if (containerTask.getTargetType() == 1) {
-            Double pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
+            BigDecimal pQty = containerTaskDetailMapper.queryPickQtyByConcode(containerTask.getContainerCode());
             if (pQty == null) {
-                pQty = 0.0;
+                pQty =BigDecimal.ZERO;
             }
-            double rQty = containerTask.getQty() - pQty;
+            BigDecimal rQty= DivideAndRemainderToFloat.subtract(containerTask.getQty(),pQty);
             Map<String, LedShowDto> mapLedShows = ledShowDto.getLedShowDtoMap();
             if (mapLedShows.containsKey(containerTask.getTarget())) {
                 LedShowDto ledShowDtoS = mapLedShows.get(containerTask.getTarget());
                 LedShow ledShow = ledShowMapper.findById(ledShowDtoS.getId(), LedShow.class);
                 if (ledShow != null) {
                      try {
-                        prologLedViewService.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), pQty/1000, containerTask.getLot(), rQty/1000, ledShowDtoS.getPickStation());
+                        prologLedViewService.pick(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), pQty.divide(new BigDecimal("1000")), containerTask.getLot(),  rQty.divide(new BigDecimal("1000")), ledShowDtoS.getPickStation());
                     } catch (Exception e) {
                         LogServices.logSys(e);
                     }
@@ -113,7 +115,7 @@ public class LedShowService {
 
         if (ledShow != null) {
              try {
-                prologLedViewService.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), containerTask.getQty()/1000, containerTask.getLot(), station);
+                prologLedViewService.outStore(ledShow.getLedIp(), ledShow.getPort(), containerTask.getItemName()==null?"":containerTask.getItemName(), containerTask.getQty().divide(new BigDecimal("1000")), containerTask.getLot(), station);
             } catch (Exception e) {
                 LogServices.logSys(e);
             }

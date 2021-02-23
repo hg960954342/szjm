@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 @Component
@@ -115,7 +116,7 @@ public class PrologLedViewService {
 
     }
 
-    public void outStore(String ip, int port, String itemName, double weight, String lotId, String pickStation) throws Exception {
+    public void outStore(String ip, int port, String itemName, BigDecimal weight, String lotId, String pickStation) throws Exception {
         //Bx5GEnv.initial("log.properties");
 
         Bx5GScreenClient screen = new Bx5GScreenClient("MyScreen");
@@ -208,7 +209,7 @@ public class PrologLedViewService {
 
     }
 
-    public void pick(String ip, int port, String itemName, double pickWeight, String lotId, double reWeight, String pickStation) throws Exception {
+    public void pick(String ip, int port, String itemName, BigDecimal pickWeight, String lotId, BigDecimal reWeight, String pickStation) throws Exception {
         //Bx5GEnv.initial("log.properties");
 
         Bx5GScreenClient screen = new Bx5GScreenClient("MyScreen");

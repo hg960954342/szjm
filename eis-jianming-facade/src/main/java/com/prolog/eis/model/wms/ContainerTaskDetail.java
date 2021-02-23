@@ -4,6 +4,7 @@ import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -49,7 +50,7 @@ public class ContainerTaskDetail {
 
     @Column("qty")
     @ApiModelProperty("数量重量")
-    private float qty ;
+    private BigDecimal qty ;
 
     @Column("create_time")
     @ApiModelProperty("创建时间")
@@ -113,11 +114,11 @@ public class ContainerTaskDetail {
         this.ownerId = ownerId;
     }
 
-    public float getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(float qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 

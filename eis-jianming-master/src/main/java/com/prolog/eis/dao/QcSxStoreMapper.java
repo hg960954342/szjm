@@ -11,6 +11,7 @@ import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.ResultSetType;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -186,7 +187,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"and a.lot_id = #{lotId}\n" +
 			"and a.owner_id = #{ownerId}\n" +
 			"ORDER BY dept_num asc,qty asc")
-	void getSxStoreByOrderEntity(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId,@Param("miniPackage") float miniPackage,OutBoundSxStoreHandler handler);
+	void getSxStoreByOrderEntity(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId,@Param("miniPackage") BigDecimal miniPackage,OutBoundSxStoreHandler handler);
 
 
 
@@ -237,7 +238,7 @@ public interface QcSxStoreMapper extends BaseMapper<SxStore>{
 			"and a.lot_id = #{lotId}\n" +
 			"and a.owner_id = #{ownerId}\n" +
 			"ORDER BY dept_num asc,qty asc")
-	float getSxStoreCount(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
+	BigDecimal getSxStoreCount(@Param("itemId") String itemId, @Param("lotId") String lotId , @Param("ownerId") String ownerId );
 
 
       @Results(id="checkOutResult" , value= {

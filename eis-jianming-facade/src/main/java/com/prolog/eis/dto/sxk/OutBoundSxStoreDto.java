@@ -8,14 +8,14 @@ public class OutBoundSxStoreDto {
     private String itemId;
     private String lotId;
     private String ownerId;
-    private float zqty; //整的数量
-    private float lqty; //零散的数量
-    private float qty; //总的数量
+    private BigDecimal zqty; //整的数量
+    private BigDecimal lqty; //零散的数量
+    private BigDecimal qty; //总的数量
     private boolean outOrNo; //是否要出库
     private String containerNo; //托盘号
     private String storeNo; //库内坐标
 
-    private float outQty; //出库的量
+    private BigDecimal outQty; //出库的量
 
     public String getItemId() {
         return itemId;
@@ -41,27 +41,27 @@ public class OutBoundSxStoreDto {
         this.ownerId = ownerId;
     }
 
-    public float getZqty() {
+    public BigDecimal getZqty() {
         return zqty;
     }
 
-    public void setZqty(float zqty) {
+    public void setZqty(BigDecimal zqty) {
         this.zqty = zqty;
     }
 
-    public float getLqty() {
+    public BigDecimal getLqty() {
         return lqty;
     }
 
-    public void setLqty(float lqty) {
+    public void setLqty(BigDecimal lqty) {
         this.lqty = lqty;
     }
 
-    public float getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(float qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 
@@ -89,11 +89,11 @@ public class OutBoundSxStoreDto {
         this.containerNo = containerNo;
     }
 
-    public float getOutQty() {
+    public BigDecimal getOutQty() {
         return outQty;
     }
 
-    public void setOutQty(float outQty) {
+    public void setOutQty(BigDecimal outQty) {
         this.outQty = outQty;
     }
 

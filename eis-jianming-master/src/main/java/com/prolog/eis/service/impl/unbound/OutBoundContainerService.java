@@ -75,7 +75,7 @@ public class OutBoundContainerService {
      * @param containerTaskDetail
      */
     public void deleteDetailAndInsertHistory(OutboundTaskDetail outboundTaskDetail, ContainerTaskDetail containerTaskDetail) {
-        outboundTaskDetail.setFinishQty((float) containerTaskDetail.getQty());
+        outboundTaskDetail.setFinishQty( containerTaskDetail.getQty());
         outboundTaskDetail.setEndTime(new Date(System.currentTimeMillis()));
         OutboundTaskDetailHistory outboundTaskDetailHistory = new OutboundTaskDetailHistory();
         BeanUtils.copyProperties(outboundTaskDetail, outboundTaskDetailHistory);
@@ -89,7 +89,7 @@ public class OutBoundContainerService {
      * @param outboundTaskDetail
      */
     public void deleteDetailAndInsertHistory(OutboundTaskDetail outboundTaskDetail) {
-        outboundTaskDetail.setFinishQty(0);
+        outboundTaskDetail.setFinishQty(BigDecimal.ZERO);
         outboundTaskDetail.setEndTime(new Date(System.currentTimeMillis()));
         OutboundTaskDetailHistory outboundTaskDetailHistory = new OutboundTaskDetailHistory();
         BeanUtils.copyProperties(outboundTaskDetail, outboundTaskDetailHistory);
@@ -117,7 +117,7 @@ public class OutBoundContainerService {
      * @param sxStore1        库存数据
      * @param isPickStation   是否指定拣选站
      */
-    public void build(DetailDataBean detailDataBeand, OutBoundSxStoreDto sxStore1, float outBoundQty, boolean isPickStation) {
+    public void build(DetailDataBean detailDataBeand, OutBoundSxStoreDto sxStore1, BigDecimal outBoundQty, boolean isPickStation) {
         String pickCode = null;
         if (isPickStation) {
             //TODO 业务处理 指定拣选站出库 如果没传则 默认pickStation4
@@ -176,7 +176,7 @@ public class OutBoundContainerService {
                     .put("itemId", detailDataBeand.getItemId()).put("ownerId", detailDataBeand.getOwnerId()
                     ).put("lotId", detailDataBeand.getLotId()).getMap(), OutboundTaskDetail.class);
             for (OutboundTaskDetail outboundTaskDetail : listOutBoundTaskDetailList) {
-                outboundTaskDetail.setFinishQty(DivideAndRemainderToFloat.add(outboundTaskDetail.getFinishQty() , (float) containerTaskDetail.getQty()));
+                outboundTaskDetail.setFinishQty(DivideAndRemainderToFloat.add(outboundTaskDetail.getFinishQty() ,  containerTaskDetail.getQty()));
                 outBoundTaskDetailMapper.update(outboundTaskDetail);
             }
 

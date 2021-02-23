@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -109,7 +110,7 @@ public class MCSLineServiceImpl implements MCSLineService{
 		containerTask.setTargetType(OutBoundEnum.TargetType.SSX.getNumber());
 		containerTask.setSourceType(1);
 		containerTask.setTaskState(1);
-		containerTask.setQty(1f);
+		containerTask.setQty(new BigDecimal("1"));
 		containerTask.setCreateTime(new Date());
 
 		containerTaskMapper.save(containerTask);

@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -81,7 +82,7 @@ public class EisCallbackServiceImpl implements EisCallbackService {
             InboundTask inboundTask = inboundTasks.get(0);
 
             //TODO 回告修改qty 单位转换g-->kg
-            inboundTask.setQty(inboundTask.getQty()/1000);
+            inboundTask.setQty(inboundTask.getQty().divide(new BigDecimal("1000")));
 
             //判断是否需要回告wms
             if (inboundTask.getReBack() == 1) {

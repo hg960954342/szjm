@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -72,7 +73,7 @@ public class EmptyListInBoundStrategy implements InBoundStragtegy {
             containerTask.setOwnerId("空托");
             containerTask.setItemId("空托");
             containerTask.setLotId("空托");
-            containerTask.setQty(1);
+            containerTask.setQty(new BigDecimal("1"));
             containerTask.setTaskType(ContainerTaskTaskTypeEnum.ORDER_IN_BOUND.getTaskType());
             containerTask.setTaskState(1);
             containerTask.setSourceType(2);

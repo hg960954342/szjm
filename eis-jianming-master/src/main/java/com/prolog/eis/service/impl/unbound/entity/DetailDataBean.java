@@ -1,5 +1,7 @@
 package com.prolog.eis.service.impl.unbound.entity;
 
+import java.math.BigDecimal;
+
 /**
  * 出库实体对象
  */
@@ -12,13 +14,13 @@ public class DetailDataBean {
     private String itemName;
     private String lotId;
     private String lot;
-    private float standard; //规格 多少重量一袋
+    private BigDecimal standard; //规格 多少重量一袋
     private String pickCode;
-    private float qty;  //总量
-    private float cqty; //正在出库的量
-    private float finishQty;
+    private BigDecimal qty;  //总量
+    private BigDecimal cqty; //正在出库的量
+    private BigDecimal finishQty;
     private String billNo;
-    private float last; //需要出库的总量
+    private BigDecimal last; //需要出库的总量
 
 
     public String getBillNo() {
@@ -29,7 +31,7 @@ public class DetailDataBean {
         this.billNo = billNo;
     }
 
-    public float getLast() {
+    public BigDecimal getLast() {
         return last;
     }
 
@@ -74,27 +76,27 @@ public class DetailDataBean {
         this.lotId = lotId;
     }
 
-    public float getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(float qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 
-    public float getCqty() {
+    public BigDecimal getCqty() {
         return cqty;
     }
 
-    public void setCqty(float cqty) {
+    public void setCqty(BigDecimal cqty) {
         this.cqty = cqty;
     }
 
-    public float getFinishQty() {
+    public BigDecimal getFinishQty() {
         return finishQty;
     }
 
-    public void setFinishQty(float finishQty) {
+    public void setFinishQty(BigDecimal finishQty) {
         this.finishQty = finishQty;
     }
 
@@ -106,11 +108,11 @@ public class DetailDataBean {
         this.lot = lot;
     }
 
-    public float getStandard() {
+    public BigDecimal getStandard() {
         return standard;
     }
 
-    public void setStandard(float standard) {
+    public void setStandard(BigDecimal standard) {
         this.standard = standard;
     }
 }

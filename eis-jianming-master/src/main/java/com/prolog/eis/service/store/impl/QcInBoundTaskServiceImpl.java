@@ -45,6 +45,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -260,7 +261,7 @@ public class QcInBoundTaskServiceImpl implements QcInBoundTaskService{
 		inboundTask.setOwnerId("空托");
 		inboundTask.setItemId("空托");
 		inboundTask.setLotId("空托");
-		inboundTask.setQty(1);
+		inboundTask.setQty(new BigDecimal("1"));
 		inboundTask.setTaskState(3);
 		inboundTask.setCreateTime(new Date());
 		inboundTask.setStartTime(new Date());

@@ -7,6 +7,7 @@ import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Table("inbound_task")
@@ -58,7 +59,7 @@ public class InboundTask {
     @Column("qty")
     @ApiModelProperty("数量（重量）")
     @JsonProperty("QTY")
-    private float qty;
+    private BigDecimal qty;
 
     @Column("lot_id")
     @ApiModelProperty("wms内码")
@@ -178,11 +179,11 @@ public class InboundTask {
         this.itemName = itemName;
     }
 
-    public float getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(float qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 

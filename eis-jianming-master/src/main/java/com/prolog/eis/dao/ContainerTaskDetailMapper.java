@@ -7,6 +7,7 @@ import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.session.ResultHandler;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -71,5 +72,5 @@ public interface ContainerTaskDetailMapper extends BaseMapper<ContainerTaskDetai
     List<CheckOutResponse.DataBean.DetailsBean> getCheckDetail(@Param("item_id") String itemId, @Param("lot_id") String lotId,@Param("bill_no") String billNo);
 
     @Select("select sum(qty) from container_task_detail where container_code = #{containerCode}")
-    Double queryPickQtyByConcode(String containerCode);
+    BigDecimal queryPickQtyByConcode(String containerCode);
 }

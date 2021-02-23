@@ -5,6 +5,7 @@ import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Table("SX_STORE")
@@ -125,7 +126,7 @@ public class SxStore {
 	
 	@Column("qty")
 	@ApiModelProperty("数量")
-	private float qty;
+	private BigDecimal qty;
 	
 	@Column("station_id")
 	@ApiModelProperty("站台Id")
@@ -335,11 +336,11 @@ public class SxStore {
 		this.ownerId = ownerId;
 	}
 
-	public float getQty() {
+	public BigDecimal getQty() {
 		return qty;
 	}
 
-	public void setQty(float qty) {
+	public void setQty(BigDecimal qty) {
 		this.qty = qty;
 	}
 
@@ -364,7 +365,7 @@ public class SxStore {
 			String businessProperty2, String businessProperty3, String businessProperty4, String businessProperty5,
 			int storeState, Date inStoreTime, String hoisterNo, String carNo, String taskId, Integer emptyPalletCount,
 			Integer sourceLocationId, Date createTime, Double weight, String itemId, String lotId, String ownerId,
-			float qty, Integer stationId, int containerState) {
+				   BigDecimal qty, Integer stationId, int containerState) {
 		super();
 		this.id = id;
 		this.containerNo = containerNo;
@@ -422,7 +423,7 @@ public class SxStore {
 		result = prime * result + ((itemId == null) ? 0 : itemId.hashCode());
 		result = prime * result + ((lotId == null) ? 0 : lotId.hashCode());
 		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
-		result = prime * result + Float.floatToIntBits(qty);
+		result = prime * result + ((qty == null) ? 0 : qty.hashCode());
 		result = prime * result + ((sourceLocationId == null) ? 0 : sourceLocationId.hashCode());
 		result = prime * result + ((stationId == null) ? 0 : stationId.hashCode());
 		result = prime * result + ((storeLocationId == null) ? 0 : storeLocationId.hashCode());
@@ -524,7 +525,7 @@ public class SxStore {
 				return false;
 		} else if (!ownerId.equals(other.ownerId))
 			return false;
-		if (Float.floatToIntBits(qty) != Float.floatToIntBits(other.qty))
+		if (!qty.equals(other.qty))
 			return false;
 		if (sourceLocationId == null) {
 			if (other.sourceLocationId != null)

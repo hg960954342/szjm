@@ -19,12 +19,12 @@ public class OutBoundSxStoreHandler implements ResultHandler<Map> {
     @Override
     public void handleResult(ResultContext<? extends Map> resultContext) {
         Map<String,Object> map=resultContext.getResultObject();
-        float qty= ((BigDecimal) map.get("qty")).floatValue();
+        BigDecimal qty= ((BigDecimal) map.get("qty"));
 
-        float miniPackage= ((BigDecimal) map.get("miniPackage")).floatValue();
+        BigDecimal miniPackage= ((BigDecimal) map.get("miniPackage"));
         BigDecimal[] b= DivideAndRemainderToFloat.divideAndRemainderToFloat(miniPackage,qty);
-        float lqty=b[1].floatValue();
-        float zqty =b[0].floatValue();
+        BigDecimal lqty=b[1];
+        BigDecimal zqty =b[0];
         OutBoundSxStoreDto outBoundSxStoreDto=new OutBoundSxStoreDto();
         String itemId=(String)map.get("item_id");
         String lotId=(String)map.get("lot_id");

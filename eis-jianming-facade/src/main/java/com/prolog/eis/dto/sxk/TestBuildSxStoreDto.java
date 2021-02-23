@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @ApiModel("手动生成库存数据实体")
@@ -21,7 +22,7 @@ public class TestBuildSxStoreDto {
     private String lotId;
 
     @ApiModelProperty(value = "qty",required = true)
-    private float qty;
+    private BigDecimal qty;
 
 
     @ApiModelProperty(value = "生成的库存在哪一层",required = true)
@@ -63,11 +64,11 @@ public class TestBuildSxStoreDto {
         this.lotId = lotId;
     }
 
-    public float getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(float qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 

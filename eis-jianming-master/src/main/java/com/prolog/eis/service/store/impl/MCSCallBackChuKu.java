@@ -144,7 +144,7 @@ public class MCSCallBackChuKu implements MCSCallBack {
                 inboundTask.setItemId(containerTask.getItemId());
                 inboundTask.setLotId(containerTask.getLotId());
                 inboundTask.setOwnerId(containerTask.getOwnerId());
-                inboundTask.setQty((float)containerTask.getQty());
+                inboundTask.setQty(containerTask.getQty());
                 if(containerTask.getSourceType()== 2) //Agv区域
                 {
                     String sourceAgv=containerTask.getSource();
