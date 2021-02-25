@@ -1,20 +1,14 @@
 package com.prolog.eis.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prolog.eis.dto.base.BasePagerDto;
-import com.prolog.eis.dto.base.QuerySqlConditionDto;
-import com.prolog.eis.dto.base.QuerySqlOrderDto;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PrologApiJsonHelper {
 
@@ -35,7 +29,7 @@ public class PrologApiJsonHelper {
 	 */
 	public static PrologApiJsonHelper createHelper(String json) {
 		PrologApiJsonHelper helper = new PrologApiJsonHelper();
-		JSONObject objJson = JSONObject.fromObject(json);
+		JSONObject objJson = JSONObject.parseObject(json);
 		helper.jsonOb = objJson;
 		return helper;
 	}
@@ -61,7 +55,7 @@ public class PrologApiJsonHelper {
 	 * @return
 	 */
 	public int getInt(String key) {
-		return jsonOb.optInt(key,0);
+		return jsonOb.getInteger(key);
 	}
 
 	/**
@@ -77,7 +71,7 @@ public class PrologApiJsonHelper {
 		JSONArray jsonArray = jsonOb.getJSONArray(key);
 		List<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i < jsonArray.size(); i++) {
-			Integer obj = jsonArray.getInt(i);
+			Integer obj = jsonArray.getInteger(i);
 			list.add(obj);
 		}
 		return list;
@@ -92,7 +86,7 @@ public class PrologApiJsonHelper {
 	 * @return
 	 */
 	public String getString(String key) {
-		return jsonOb.optString(key,"");
+		return jsonOb.getString(key);
 	}
 
 	/**
@@ -164,18 +158,9 @@ public class PrologApiJsonHelper {
 		String jsonStr = jsonOb.getString(key);
 		ObjectMapper objectMapper = new ObjectMapper();
 		// 设置在反序列化时忽略在JSON字符串中存在，而在Java中不存在的属性
-		objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		T obj = objectMapper.readValue(jsonStr, clazz);
 		return obj;
-	}
-
-	public static void main(String[] args) throws Exception {
-		String str="{'id':2930.1224}";
-	com.alibaba.fastjson.JSONObject json= com.alibaba.fastjson.JSONObject.parseObject(str);
-		PrologApiJsonHelper helper = PrologApiJsonHelper.createHelper(str);
-		System.out.println(helper.getObject("id",BigDecimal.class));
-		System.out.println(json.getObject("id",BigDecimal.class));
 	}
 	
 	/**
@@ -189,10 +174,32 @@ public class PrologApiJsonHelper {
 	public <T extends Object> T getObject(Class<T> clazz) throws Exception {
 	   ObjectMapper objectMapper = new ObjectMapper();
 	   // 设置在反序列化时忽略在JSON字符串中存在，而在Java中不存在的属性
-		objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
 	   objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 	   T obj = objectMapper.readValue(jsonOb.toString(), clazz);
 	   return obj;
+	}
+	
+	/**
+	 * 返回List对象
+	 * @date 2018年9月4日 下午6:27:04
+	 * @author dengss
+	 * @param key
+	 * @param clazz
+	 * @return
+	 * @throws Exception
+	 */
+	public <T extends Object> List<T> getObjectList(Class<T> clazz) throws Exception {
+		JSONArray jsonArray = jsonOb.getJSONArray(jsonOb.toString());
+		List<T> objList = new ArrayList<T>();
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		for (Object object : jsonArray) {
+			JSONObject tObj = (JSONObject) object;
+			String str = tObj.toString();
+			T obj = objectMapper.readValue(str, clazz);
+			objList.add(obj);
+		}
+		return objList;
 	}
 
 	/**
@@ -228,31 +235,8 @@ public class PrologApiJsonHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends Object> List<T> getObjectList(Class<T> clazz) throws Exception {
-		JSONArray jsonArray = jsonOb.getJSONArray(jsonOb.toString());
-		List<T> objList = new ArrayList<T>();
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		for (Object object : jsonArray) {
-			JSONObject tObj = (JSONObject) object;
-			String str = tObj.toString();
-			T obj = objectMapper.readValue(str, clazz);
-			objList.add(obj);
-		}
-		return objList;
-	}
-	
-	/**
-	 * 返回List对象
-	 * @date 2018年9月4日 下午6:27:04
-	 * @author dengss
-	 * @param key
-	 * @param clazz
-	 * @return
-	 * @throws Exception
-	 */
 	public static <T extends Object> List<T> getArrayList(String json, Class<T> clazz) throws Exception {
-		JSONArray jsonArray = JSONArray.fromObject(json);
+		JSONArray jsonArray = JSONArray.parseArray(json);
 		List<T> objList = new ArrayList<T>();
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -265,124 +249,6 @@ public class PrologApiJsonHelper {
 		return objList;
 	}
 
-	/**
-	 * 解析通用分页内容
-	 * 
-	 * @param key
-	 * @return
-	 * @throws Exception
-	 */
-	public Map<String, Object> getPagerDto(String columns, String tableName, String key, Class<BasePagerDto> class1)
-			throws Exception {
-		BasePagerDto parmsMap = getObject(key, class1);
-		// 拆分JSON记录
-		int pageIndex = parmsMap.getPageIndex(); // 当前页数
-		int pageSize = parmsMap.getPageSize();
-		int startRowNum = pageIndex * pageSize + 1;
-		int endRowNum = (pageIndex + 1) * pageSize;
-
-		List<QuerySqlConditionDto> conditionList = parmsMap.getConditions();
-		StringBuilder builder = new StringBuilder();
-		for (QuerySqlConditionDto querySqlConditionDto : conditionList) {
-			String conditionType = String.valueOf(querySqlConditionDto.getConditionType().ordinal());
-			switch (conditionType) {
-			case "0":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" = '")
-						.append(querySqlConditionDto.getValue()).append("'");
-				break;
-			case "1":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" >")
-						.append(querySqlConditionDto.getValue());
-				break;
-			case "2":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" >=")
-						.append(querySqlConditionDto.getValue());
-				break;
-			case "3":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" !=")
-						.append(querySqlConditionDto.getValue());
-				break;
-			case "4":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" <")
-						.append(querySqlConditionDto.getValue());
-				break;
-			case "5":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" <=")
-						.append(querySqlConditionDto.getValue());
-				break;
-			case "6":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" like '")
-						.append(querySqlConditionDto.getValue()).append("'");
-				break;
-			case "7":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" like '%")
-						.append(querySqlConditionDto.getValue()).append("'");
-				break;
-			case "8":
-				String str = querySqlConditionDto.getValues().toString();
-				str = str.replaceAll("\\[", "").replaceAll("\\]", "");
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" in(").append(str).append(")");
-				break;
-			case "9":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" not like '")
-						.append(querySqlConditionDto.getValue()).append("'");
-				break;
-			case "10":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" not like '%")
-						.append(querySqlConditionDto.getValue()).append("'");
-				break;
-			case "11":
-				String notInStr = querySqlConditionDto.getValues().toString();
-				notInStr = notInStr.replaceAll("\\[", "").replaceAll("\\]", "");
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" not in(").append(notInStr)
-						.append(")");
-				break;
-			case "12":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" like '")
-						.append(querySqlConditionDto.getValue()).append("%'");
-				break;
-			case "13":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" not like '")
-						.append(querySqlConditionDto.getValue()).append("%'");
-				break;
-			case "14":
-				builder.append(" and ").append(querySqlConditionDto.getColumn()).append(" like '%")
-						.append(querySqlConditionDto.getValue()).append("%'");
-				break;
-			case "15":
-				builder.append(" and  ").append(querySqlConditionDto.getValue());
-				break;
-			default:
-				break;
-			}
-		}
-		StringBuilder ordersBuilder = new StringBuilder();
-		List<QuerySqlOrderDto> orderList = parmsMap.getOrders();
-		// 如果orders json参数没有值，则取主键列为排序 字段
-		if (orderList.size() == 0) {
-			ordersBuilder.append("order by ").append(parmsMap.getPkColumn());
-		} else {
-			for (int i = 0; i < orderList.size(); i++) {
-				QuerySqlOrderDto querySqlOrderDto = orderList.get(i);
-				if (i == 0)
-					ordersBuilder.append("order by ").append(querySqlOrderDto.getColumn()).append("  ")
-							.append(querySqlOrderDto.getOrderType());
-				else
-					ordersBuilder.append(",").append(querySqlOrderDto.getColumn()).append("  ")
-							.append(querySqlOrderDto.getOrderType());
-			}
-		}
-		String condition = builder.toString();
-		String orders = ordersBuilder.toString();
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("pageIndex", pageIndex);
-		map.put("startRowNum", startRowNum);
-		map.put("endRowNum", endRowNum);
-		map.put("conditions", condition);
-		map.put("orders", orders);
-		return map;
-
-	}
 
 	public Object getObjectValue(String key) {
 		return jsonOb.get(key);
@@ -433,11 +299,13 @@ public class PrologApiJsonHelper {
 		return jsonObject.toString();
 	}
 	
-	public static <T> String getGcsValue(List<T> listResponse) {
+	public static <T> String getGcsValue(T response) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("ret", true);
 		jsonObject.put("msg", "操作成功");
 		jsonObject.put("code", "200");
+		List<T> listResponse = new ArrayList<T>();
+		listResponse.add(response);
 		jsonObject.put("data", listResponse);
 		return jsonObject.toString();
 	}
@@ -461,4 +329,6 @@ public class PrologApiJsonHelper {
 		String oldOb = JSON.toJSONString(list);
 		return JSON.parseArray(oldOb, clazz);
 	}
+	
+	
 }
