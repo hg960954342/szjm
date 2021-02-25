@@ -40,6 +40,7 @@ public class OutBoundSxStoreHandler implements ResultHandler<Map> {
         outBoundSxStoreDto.setStoreNo(storeNo);
         outBoundSxStoreDto.setContainerNo(containerNo);
         outBoundSxStoreDto.setOutOrNo(false);
+        outBoundSxStoreDto.setOutQty(new BigDecimal("0"));
         list.add(outBoundSxStoreDto);
     }
 

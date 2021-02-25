@@ -109,9 +109,12 @@ public class CalculationOutBoundServiceImpl implements CalculationService<OutBou
             if (outBoundSxStoreDto.getLqty().compareTo(BigDecimal.ZERO) != 0 && (outBoundSxStoreDto.getLqty() .compareTo(last)==0||outBoundSxStoreDto.getLqty() .compareTo(last)==-1 )) {
                 outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty() , outBoundSxStoreDto.getLqty()));
                 last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getOutQty());
-                if (last.compareTo(BigDecimal.ZERO) ==0||last.compareTo(BigDecimal.ZERO)==-1) {
+                if (last.compareTo(BigDecimal.ZERO) ==0) {
                     break;
-                } else {
+                } else if( last.compareTo(BigDecimal.ZERO)==-1) {
+                    outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty(),last));
+                    break;
+                }else{
                     continue;
                 }
             }
@@ -131,7 +134,10 @@ public class CalculationOutBoundServiceImpl implements CalculationService<OutBou
             if (outBoundSxStoreDto.getZqty().compareTo(BigDecimal.ZERO) != 0 && (outBoundSxStoreDto.getZqty() .compareTo(last)==0||outBoundSxStoreDto.getLqty() .compareTo(last)==-1 )) {
                 outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty() , outBoundSxStoreDto.getZqty()));
                 last=DivideAndRemainderToFloat.subtract(last,outBoundSxStoreDto.getZqty());
-                if (last.compareTo(BigDecimal.ZERO) ==0||last.compareTo(BigDecimal.ZERO)==-1) {
+                if (last.compareTo(BigDecimal.ZERO) ==0) {
+                    break;
+                }else if( last.compareTo(BigDecimal.ZERO)==-1) {
+                    outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty(),last));
                     break;
                 } else {
                     continue;
