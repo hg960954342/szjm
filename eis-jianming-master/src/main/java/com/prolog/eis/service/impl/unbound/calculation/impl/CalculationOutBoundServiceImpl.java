@@ -113,6 +113,7 @@ public class CalculationOutBoundServiceImpl implements CalculationService<OutBou
                     break;
                 } else if( last.compareTo(BigDecimal.ZERO)==-1) {
                     outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty(),last));
+                    last=BigDecimal.ZERO;
                     break;
                 }else{
                     continue;
@@ -138,6 +139,7 @@ public class CalculationOutBoundServiceImpl implements CalculationService<OutBou
                     break;
                 }else if( last.compareTo(BigDecimal.ZERO)==-1) {
                     outBoundSxStoreDto.setOutQty(DivideAndRemainderToFloat.add(outBoundSxStoreDto.getOutQty(),last));
+                    last=BigDecimal.ZERO;
                     break;
                 } else {
                     continue;
