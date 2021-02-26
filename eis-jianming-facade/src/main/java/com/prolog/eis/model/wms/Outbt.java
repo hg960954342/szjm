@@ -4,13 +4,13 @@ import java.util.List;
 
 public class Outbt extends OutboundTask {
 
-    private List<OutboundTaskDetailD> details;
+    private List<OutboundTaskDetailDto> details;
 
-    public List<OutboundTaskDetailD> getDetails() {
+    public List<OutboundTaskDetailDto> getDetails() {
         return details;
     }
 
-    public void setDetails(List<OutboundTaskDetailD> details) {
+    public void setDetails(List<OutboundTaskDetailDto> details) {
         this.details = details;
     }
 }

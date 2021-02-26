@@ -1,8 +1,6 @@
 package com.prolog.eis.service;
 
-import com.prolog.eis.model.wms.CheckStock;
 import com.prolog.eis.model.wms.OutboundTask;
-import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.model.wms.OutboundTaskDetailDto;
 
 public interface OutboundDataService {

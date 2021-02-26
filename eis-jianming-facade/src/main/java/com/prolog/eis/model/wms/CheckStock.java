@@ -7,8 +7,6 @@ import com.prolog.framework.core.annotation.Id;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
-
 @Table("check_stock")
 public class CheckStock {
 

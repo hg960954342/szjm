@@ -1,6 +1,6 @@
 package com.prolog.eis.model.wms;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class OutboundTaskDto {
 
     private int size;
 
-    @JsonProperty("MessageID")
+    @JSONField(name="MessageID")
     private String messageId;
 
 

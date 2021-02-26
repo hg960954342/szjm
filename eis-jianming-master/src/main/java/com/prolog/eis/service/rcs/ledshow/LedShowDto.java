@@ -2,9 +2,9 @@ package com.prolog.eis.service.rcs.ledshow;
 
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+
 @Component
 public class LedShowDto {
 

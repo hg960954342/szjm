@@ -11,8 +11,6 @@ import onbon.bx05.file.ProgramBxFile;
 import onbon.bx05.utils.DisplayStyleFactory;
 import onbon.bx05.utils.DisplayStyleFactory.DisplayStyle;
 
-import java.awt.*;
-
 public class WriteProgramTextCaptionWithStyle implements BxFileWriterListener<Bx5GScreen> {
 
     public static void main(String[] args) throws Exception {

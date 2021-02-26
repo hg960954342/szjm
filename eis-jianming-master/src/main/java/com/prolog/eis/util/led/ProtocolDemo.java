@@ -1,6 +1,5 @@
 package com.prolog.eis.util.led;
 
-import java.awt.*;
 import java.io.UnsupportedEncodingException;
 
 //import java.util.Calendar;

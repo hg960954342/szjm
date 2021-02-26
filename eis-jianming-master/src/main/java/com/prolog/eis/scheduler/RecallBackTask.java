@@ -7,14 +7,12 @@ import com.prolog.eis.service.RepeatReportService;
 import com.prolog.eis.service.impl.EisCallbackServiceSend;
 import com.prolog.eis.service.mcs.McsInterfaceService;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
-import com.prolog.eis.util.FileLogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 回告定时任务 一般都是异步任务因为回告超时时间比较长 防止阻塞

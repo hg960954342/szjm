@@ -2,9 +2,7 @@ package com.prolog.eis.dao;
 
 import com.prolog.eis.dto.eis.SxStoreDto;
 import com.prolog.eis.dto.eis.YiWeiCountDto;
-import com.prolog.eis.dto.sxk.OutBoundSxStoreDto;
 import com.prolog.eis.model.sxk.SxStore;
-import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResult;
 import com.prolog.eis.service.impl.unbound.handler.OutBoundSxStoreHandler;
 import com.prolog.framework.dao.mapper.BaseMapper;

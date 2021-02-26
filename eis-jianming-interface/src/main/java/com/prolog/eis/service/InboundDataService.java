@@ -1,15 +1,14 @@
 package com.prolog.eis.service;
 
-import com.prolog.eis.model.wms.InboundTask;
-import com.prolog.eis.model.wms.InboundTaskDecimal;
 
+import com.prolog.eis.model.wms.InboundTask;
 
 public interface InboundDataService {
 
     Integer findByContainerCode(String containerCode);
 
-    void insertInboundTask(InboundTaskDecimal datum);
+    void insertInboundTask(InboundTask datum);
 
 
-    void insertEmptyBoxInStockTask(InboundTaskDecimal datum);
+    void insertEmptyBoxInStockTask(InboundTask datum);
 }

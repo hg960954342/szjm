@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <title>库存查询</title>
+    <link rel="stylesheet" href="css/jquery-ui.css"/>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="css/pqgrid.min.css"/>
+    <script src="js/pqgrid.min.js"></script>
+    <link rel="stylesheet" href="css/themes/office/pqgrid.css"/>
+    <link href="css/index.css" rel="stylesheet" type="text/css"/>
+    <script src="js/eis.js"></script>
+    <script>
+        $(function () {
+
+
+
+            $("#itemId").focus().autocomplete( {
+                    source:function(request,response){
+                     $.ajax({
+                         url:'api/v1/master/view/getAutoComplete',
+                         type: 'POST',
+                         dataType:'json',
+                         data:{"item_id":$("#itemId").val()},
+                         success:function(data){
+                             response($.map(data,function(item){
+                                 return {value:item}
+                             }))
+                         }
+                     })
+                    },
+                minLength:1,
+                    select: function( event, ui ) {
+                        $("#itemId").val(ui.item.value);
+                    }
+            }
+
+             );
+
+            $("#lotId").focus().autocomplete( {
+                    source:function(request,response){
+                        $.ajax({
+                            url:'api/v1/master/view/getAutoComplete',
+                            type: 'POST',
+                            dataType:'json',
+                            data:{"lot_id":$("#lotId").val()},
+                            success:function(data){
+                                response($.map(data,function(item){
+                                    return {value:item}
+                                }))
+                            }
+                        })
+                    },
+                    minLength:1,
+                    select: function( event, ui ) {
+                        $("#lotId").val(ui.item.value);
+                    }
+                }
+
+            );
+
+            $("#ownerId").focus().autocomplete( {
+                    source:function(request,response){
+                        $.ajax({
+                            url:'api/v1/master/view/getAutoComplete',
+                            type: 'POST',
+                            dataType:'json',
+                            data:{"owner_id":$("#ownerId").val()},
+                            success:function(data){
+                                response($.map(data,function(item){
+                                    return {value:item}
+                                }))
+                            }
+                        })
+                    },
+                    minLength:1,
+                    select: function( event, ui ) {
+                        $("#ownerId").val(ui.item.value);
+                    }
+                }
+
+            );
+
+            var colM = [
+                {title: "商品id", width: '8%', dataIndx: "item_id",editable: false},
+                {title: "商品名称", width: '7%', dataIndx: "item_name",editable: false},
+                {title: "批号", width: '5%', dataIndx: "lot",editable: false},
+                {title: "WMS内码", width: '5%', dataIndx: "lot_id",editable: false},
+                {title: "用户id", width: '5%', dataIndx: "owner_id",editable: false},
+                {title: "托盘", width: '30%', dataIndx: "container_no",editable: false},
+                {title: "托盘对应qty", width: '30%', dataIndx: "qty_",editable: false},
+                {title: "数量", width: '5%', dataIndx: "qty", align: "right",editable: false},
+                {title: "实际数量",width: '5%', dataIndx: "weight", align: "right",editable: false},
+
+            ];
+            $.fn.extend({getParams:function(){
+                    return {
+                        "itemId":$("#itemId").val(),
+                        "lotId":$("#lotId").val(),
+                        "ownerId":$("#ownerId").val(),
+                        "ceng":$("#ceng").val(),
+
+                    }
+                }})
+
+
+
+            var dataModel = {
+                location: "remote",
+                dataType: "JSON",
+                method: "POST",
+                postData:{},
+                url: "/api/v1/master/view/getSxStoreQuery",
+                getData: function (dataJSON) {
+                    return  dataJSON=null==dataJSON ?{curPage:1,totalRecords:0,data:""}:dataJSON;
+                }
+            };
+            $.extend(dataModel.postData,$(this).getParams());
+
+            var mcsGrid = $("div#grid_paging").pqGrid({
+                width: '99%', height: 550,
+                dataModel: dataModel,
+                colModel: colM,
+                freezeCols: 0,
+                pageModel: {type: "remote", rPP: 20, strRpp: "{0}"},
+                sortable: true,
+                selectionModel: {swipe: false},
+                wrap: false, hwrap: false,
+                numberCell: {resizable: true, width: 30, title: "#"},
+                title: "库存查询",
+                resizable: true,
+                cellDblClick: function (event, ui) {
+                    var text=ui["$td"].text();
+                   if($.eis.isEmpty(text)) {return;}
+                    $("#details").html(text);
+                    $("#details").dialog({
+                        closeText: "关闭",
+                        width: 600,
+                        minHeight: 200,
+                        maxHeight: 600,
+                        title: "详情",
+                        resizable: false,
+                        buttons: {
+                            "关闭": function() {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                }
+            });
+
+            function refresh() {
+                if(mcsGrid){
+                    mcsGrid.pqGrid("refreshDataAndView");
+
+                }
+            }
+
+            $("#query").on("click",function(){
+                var url="api/v1/master/view/getSxStoreQuery";
+                var DM = mcsGrid.pqGrid("option", "dataModel");
+                $.extend(DM.postData, $(this).getParams());
+                refresh();
+            });
+
+            $("#clear").on("click",function(){
+                $("#itemId").val("");
+                $("#lotId").val("");
+                $("#ownerId").val("");
+                $("#ceng").val("");
+                $("#query").trigger("click");
+            });
+
+
+
+
+        });
+
+
+    </script>
+</head>
+<body>
+<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="商品名称" id="itemName">
+</div>
+<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="商品Id" id="itemId">
+</div>
+<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="批号" id="lot">
+</div>
+<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="WMS内码" id="lotId">
+</div>
+<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="用户Id" id="ownerId">
+</div>
+<!--<div style="width: 10%;float: left;">
+    <input class="tl-price-input" type="text" placeholder="层号" id="ceng">
+</div>-->
+<button id="clear" class="ant-btn ant-btn-red">清空查询条件</button>
+<button id="query" class="ant-btn ant-btn-red">查询</button>
+<div id="details"></div>
+<div id="grid_paging" style="margin:5px auto;">
+</div>
+</body>
+
+</html>

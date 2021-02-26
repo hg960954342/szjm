@@ -11,7 +11,6 @@ import com.prolog.eis.service.test.impl.SxStoreViewDto;
 import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.service.test.impl.SxStoreViewSimpleDto;
 import com.prolog.framework.dao.mapper.BaseMapper;
-import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

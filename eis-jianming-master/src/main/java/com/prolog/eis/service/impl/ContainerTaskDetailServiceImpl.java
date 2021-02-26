@@ -2,7 +2,6 @@ package com.prolog.eis.service.impl;
 
 import com.prolog.eis.dao.ContainerTaskDetailMapper;
 import com.prolog.eis.model.wms.ContainerTaskDetail;
-import com.prolog.eis.model.wms.ResultContainer;
 import com.prolog.eis.service.ContainerTaskDetailService;
 import com.prolog.eis.service.OutBoundQtyConverterHandler;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResponse;

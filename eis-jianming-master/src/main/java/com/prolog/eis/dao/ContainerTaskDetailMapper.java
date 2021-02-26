@@ -1,7 +1,6 @@
 package com.prolog.eis.dao;
 
 import com.prolog.eis.model.wms.ContainerTaskDetail;
-import com.prolog.eis.model.wms.ResultContainer;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResponse;
 import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;

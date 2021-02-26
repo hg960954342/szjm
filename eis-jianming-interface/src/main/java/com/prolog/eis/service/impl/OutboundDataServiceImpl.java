@@ -1,9 +1,7 @@
 package com.prolog.eis.service.impl;
 
 import com.prolog.eis.dao.OutboundDataMapper;
-import com.prolog.eis.model.wms.CheckStock;
 import com.prolog.eis.model.wms.OutboundTask;
-import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.model.wms.OutboundTaskDetailDto;
 import com.prolog.eis.service.OutboundDataService;
 import org.springframework.beans.factory.annotation.Autowired;

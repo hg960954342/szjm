@@ -7,7 +7,6 @@ import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.service.MCSLineService;
 import com.prolog.eis.service.enums.SSX;
 import com.prolog.eis.service.mcs.impl.McsInterfaceServiceSend;
-import com.prolog.eis.service.mcs.impl.McsTaskWithOutPathAsycDto;
 import com.prolog.eis.service.store.QcInBoundTaskService;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import io.swagger.annotations.Api;

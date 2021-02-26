@@ -1,0 +1,16 @@
+2021/02/23 17:07:43
+出库异常，错误信息：
+org.springframework.boot.context.properties.ConfigurationPropertiesBindException: Error creating bean with name 'prolog.dao.mybatis-com.prolog.framework.dao.properties.MybatisProperties': Could not bind properties to 'MybatisProperties' : prefix=prolog.dao.mybatis, ignoreInvalidFields=false, ignoreUnknownFields=true; nested exception is org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'prolog.dao.mybatis' to com.prolog.framework.dao.properties.MybatisProperties
+-----------------------
+2021/02/23 17:08:26
+出库异常，错误信息：
+org.springframework.boot.context.properties.ConfigurationPropertiesBindException: Error creating bean with name 'prolog.dao.mybatis-com.prolog.framework.dao.properties.MybatisProperties': Could not bind properties to 'MybatisProperties' : prefix=prolog.dao.mybatis, ignoreInvalidFields=false, ignoreUnknownFields=true; nested exception is org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'prolog.dao.mybatis' to com.prolog.framework.dao.properties.MybatisProperties
+-----------------------
+2021/02/23 17:10:22
+出库异常，错误信息：
+org.springframework.boot.context.properties.ConfigurationPropertiesBindException: Error creating bean with name 'prolog.dao.mybatis-com.prolog.framework.dao.properties.MybatisProperties': Could not bind properties to 'MybatisProperties' : prefix=prolog.dao.mybatis, ignoreInvalidFields=false, ignoreUnknownFields=true; nested exception is org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'prolog.dao.mybatis' to com.prolog.framework.dao.properties.MybatisProperties
+-----------------------
+2021/02/23 17:11:32
+出库异常，错误信息：
+org.springframework.boot.context.properties.ConfigurationPropertiesBindException: Error creating bean with name 'prolog.dao.mybatis-com.prolog.framework.dao.properties.MybatisProperties': Could not bind properties to 'MybatisProperties' : prefix=prolog.dao.mybatis, ignoreInvalidFields=false, ignoreUnknownFields=true; nested exception is org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'prolog.dao.mybatis' to com.prolog.framework.dao.properties.MybatisProperties
+-----------------------

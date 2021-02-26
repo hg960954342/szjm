@@ -1,7 +1,6 @@
 package com.prolog.eis.service;
 
 import com.prolog.eis.model.wms.ContainerTaskDetail;
-import com.prolog.eis.model.wms.ResultContainer;
 import com.prolog.eis.service.impl.unbound.entity.CheckOutResponse;
 
 import java.util.List;

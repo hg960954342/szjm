@@ -2,7 +2,6 @@ package com.prolog.eis.service.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 出入库taskType类型枚举

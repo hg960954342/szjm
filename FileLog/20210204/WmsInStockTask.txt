@@ -1,0 +1,1316 @@
+2021/02/04 20:45:22
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "2101241700218"
+}
+-----------------------
+2021/02/04 20:46:41
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "2101241700218"
+}
+-----------------------
+2021/02/04 20:47:31
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "777777"
+}
+-----------------------
+2021/02/04 20:48:17
+WMS->EIS入库返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 20:49:19
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "777777"
+}
+-----------------------
+2021/02/04 20:55:41
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "333333"
+}
+-----------------------
+2021/02/04 21:04:57
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "333333"
+}
+-----------------------
+2021/02/04 21:05:39
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 21:12:25
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "333333"
+}
+-----------------------
+2021/02/04 21:37:48
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "333333"
+}
+-----------------------
+2021/02/04 21:37:48
+WMS->EIS入库返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 21:38:28
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "333333"
+}
+-----------------------
+2021/02/04 22:15:57
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "333333"
+}
+-----------------------
+2021/02/04 22:16:38
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "77777"
+}
+-----------------------
+2021/02/04 22:17:28
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:18:16
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "888"
+}
+-----------------------
+2021/02/04 22:22:51
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "999"
+}
+-----------------------
+2021/02/04 22:23:18
+WMS->EIS入库返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:23:20
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "999"
+}
+-----------------------
+2021/02/04 22:24:04
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "999"
+}
+-----------------------
+2021/02/04 22:25:15
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:26:29
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "999"
+}
+-----------------------
+2021/02/04 22:28:32
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "999"
+}
+-----------------------
+2021/02/04 22:29:06
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:29:37
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "999"
+}
+-----------------------
+2021/02/04 22:37:01
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "999"
+}
+-----------------------
+2021/02/04 22:37:49
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:40:31
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231123123123,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "5555"
+}
+-----------------------
+2021/02/04 22:43:53
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1231123123123,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "5555"
+}
+-----------------------
+2021/02/04 22:44:21
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:45:03
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "5555"
+}
+-----------------------
+2021/02/04 22:45:39
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:47:53
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:48:17
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:48:49
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:49:18
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:50:24
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:50:41
+WMS->EIS入库返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/02/04 22:53:18
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:53:31
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:53:32
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:54:22
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:54:24
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:54:24
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:54:26
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:54:26
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:55:21
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:56:53
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:57:09
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:57:11
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:58:28
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:58:29
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:59:30
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:59:32
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 22:59:33
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 23:00:10
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 23:00:12
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 23:00:13
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 23:00:28
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 23:00:30
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 23:00:37
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "8898989888"
+}
+-----------------------
+2021/02/04 23:00:47
+WMS->EIS入库请求{
+    "data": [
+        {
+            "BILLNO": "SHD00000985",
+            "SEQNO": 0,
+            "CONTAINERCODE": "802999",
+            "AGVLOC": "069340XY063550",
+            "TASKTYPE": "2",
+            "ITEMID": "143545",
+            "LOTID": "PHI00000000000000002",
+            "CONSIGNOR": "001",
+            "QTY": 1024.1234,
+            "KB": 0,
+            "CENG": "3",
+            "SPMCH": "净苦杏仁",
+            "LOT": "2021-124-2",
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "aaaa"
+}
+-----------------------
+2021/02/04 23:01:00
+WMS->EIS入库返回JsonResult{code='0', message='success'}
+-----------------------

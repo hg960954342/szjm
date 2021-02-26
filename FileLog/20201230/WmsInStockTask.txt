@@ -1,0 +1,258 @@
+2020/12/30 09:38:24
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974103"}
+-----------------------
+2020/12/30 09:38:36
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:39:45
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974106"}
+-----------------------
+2020/12/30 09:39:45
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974108"}
+-----------------------
+2020/12/30 09:39:45
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:39:45
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:39:46
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974113"}
+-----------------------
+2020/12/30 09:39:46
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:39:49
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974114"}
+-----------------------
+2020/12/30 09:39:49
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:39:51
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974115"}
+-----------------------
+2020/12/30 09:39:51
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:39:54
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974117"}
+-----------------------
+2020/12/30 09:39:54
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:39:56
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974118"}
+-----------------------
+2020/12/30 09:39:56
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:39:59
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974119"}
+-----------------------
+2020/12/30 09:39:59
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:40:01
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974120"}
+-----------------------
+2020/12/30 09:40:01
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:40:04
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974121"}
+-----------------------
+2020/12/30 09:40:04
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:40:45
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974129"}
+-----------------------
+2020/12/30 09:40:46
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:40:49
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974127"}
+-----------------------
+2020/12/30 09:40:49
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:40:51
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974131"}
+-----------------------
+2020/12/30 09:40:51
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:40:55
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974132"}
+-----------------------
+2020/12/30 09:40:55
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:40:56
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974133"}
+-----------------------
+2020/12/30 09:40:56
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:00
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974135"}
+-----------------------
+2020/12/30 09:41:00
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:01
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974136"}
+-----------------------
+2020/12/30 09:41:01
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:04
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974137"}
+-----------------------
+2020/12/30 09:41:04
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:06
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974138"}
+-----------------------
+2020/12/30 09:41:06
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:11
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974141"}
+-----------------------
+2020/12/30 09:41:11
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:11
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974140"}
+-----------------------
+2020/12/30 09:41:11
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:14
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974142"}
+-----------------------
+2020/12/30 09:41:14
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:16
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974143"}
+-----------------------
+2020/12/30 09:41:16
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:20
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974144"}
+-----------------------
+2020/12/30 09:41:20
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:21
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974145"}
+-----------------------
+2020/12/30 09:41:21
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:24
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974146"}
+-----------------------
+2020/12/30 09:41:24
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:26
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974148"}
+-----------------------
+2020/12/30 09:41:26
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:29
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974149"}
+-----------------------
+2020/12/30 09:41:29
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:31
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974150"}
+-----------------------
+2020/12/30 09:41:31
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:35
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974152"}
+-----------------------
+2020/12/30 09:41:35
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:36
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974153"}
+-----------------------
+2020/12/30 09:41:36
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:39
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974154"}
+-----------------------
+2020/12/30 09:41:39
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:41
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974155"}
+-----------------------
+2020/12/30 09:41:41
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:41:49
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974157"}
+-----------------------
+2020/12/30 09:41:49
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974156"}
+-----------------------
+2020/12/30 09:41:49
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:43:19
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:43:19
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974159"}
+-----------------------
+2020/12/30 09:43:22
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974166"}
+-----------------------
+2020/12/30 09:43:22
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:43:22
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:43:26
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974169"}
+-----------------------
+2020/12/30 09:43:26
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:43:31
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974170"}
+-----------------------
+2020/12/30 09:43:31
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:43:36
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974171"}
+-----------------------
+2020/12/30 09:43:36
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:43:41
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974173"}
+-----------------------
+2020/12/30 09:43:41
+WMS->EIS入库返回JsonResult{code='-1', message='agv小车不能跨层!!!'}
+-----------------------
+2020/12/30 09:43:46
+WMS->EIS入库请求{"data":[{"BILLNO":"SHD00000593","SEQNO":0,"CONTAINERCODE":"800005","AGVLOC":"66XY","TASKTYPE":"2","ITEMID":"SPH00001363","LOTID":"PHI00000000000000001","CONSIGNOR":"008","QTY":500,"KB":0,"CENG":"3","SPMCH":"注射用青霉素钠","LOT":"1106","IsChecked":0,"ItemState":0,"TOTALCOUNT":0}],"size":1,"MessageID":"2012300974174"}
+-----------------------
+2020/12/30 09:43:46
+WMS->EIS入库返回JsonResult{code='0', message='success'}
+-----------------------

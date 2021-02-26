@@ -1,6 +1,5 @@
 package com.prolog.eis.util.generator;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

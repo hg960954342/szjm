@@ -1,0 +1,82 @@
+#eureka client配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.5.90.227:8761/eureka/
+  instance: 
+    # 注册时使用ip而不是主机名
+    preferIpAddress: true
+    instanceId: ${server.ipAddress}:${server.port}
+    health-check-url-path: /actuator/health
+    # 状态地址为api地址
+    statusPageUrlPath: /${server.servlet.contextpath:}/apidoc.html
+
+server: 
+  ipAddress: 127.0.0.1
+  port: 20203 
+  servlet: 
+    contextpath:    
+        
+spring:
+  application:
+    name: service-eis-master
+  devtools: 
+    restart: 
+      enabled: true
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/jianmin
+    username: root
+    password: eis888
+    driver-class-name: com.mysql.jdbc.Driver
+    #初始化大小
+    initialSize: 0
+    #最小空閒
+    minIdle: 5
+    #最大連接數
+    maxActive: 50
+    #最大等待時間
+    maxWait: 60000
+    #最小生存時間
+    minEvictableIdleTimeMillis: 25200000
+prolog: 
+  resend: 
+     resendcount: 10
+  debug: 
+     debugMode: 1
+  apidoc: #api文档配置文件
+    title: 用户服务
+    basePackage: com.prolog.eis
+    description: 用户服务
+    version: 1.0
+  rcs:
+     ip: 10.5.90.211
+     port: 81
+  mcs:
+     url: 10.5.90.229
+     port: 80
+  wms:
+     url: 192.168.30.151
+     port: 8909
+  dao: 
+    dialect: mysql
+    pagehelper: #pagehelper分页插件配置
+      helperDialect: ${prolog.dao.dialect}
+      reasonable: true
+      supportMethodsArguments: true
+      pageSizeZero: false
+      params: count=countSql
+    #公共配置与profiles选择无关 mapperLocations指的路径是src/main/resources
+    mybatis:
+      typeAliasesPackage: com.prolog.eis.model
+      mapperLocations: classpath:mappers/*.xml
+      
+  web: 
+    multipart:  #文件上传配置
+      maxFileSize: 100MB
+      maxRequestSize: 100MB
+
+# 登录wms 用户名 密码
+userCode: admin
+userPass: 1
+  

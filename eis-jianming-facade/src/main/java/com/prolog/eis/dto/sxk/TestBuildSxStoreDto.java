@@ -3,9 +3,7 @@ package com.prolog.eis.dto.sxk;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @ApiModel("手动生成库存数据实体")
 public class TestBuildSxStoreDto {

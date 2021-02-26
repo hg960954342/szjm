@@ -1,42 +1,26 @@
 package com.prolog.eis.controller.pick;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prolog.eis.dao.pick.PickingTaskMapper;
 import com.prolog.eis.dto.pick.McsBcrPushDataDto;
 import com.prolog.eis.dto.pick.McsResultDto;
-import com.prolog.eis.dto.pick.PushDataDto;
 import com.prolog.eis.dto.pick.WmsPickResultDto;
 import com.prolog.eis.model.pick.PickingTask;
-import com.prolog.eis.model.wms.LoginWmsResponse;
-import com.prolog.eis.model.wms.WmsEisIdempotent;
-import com.prolog.eis.service.login.WmsLoginService;
 import com.prolog.eis.service.pick.EisIdempotentService;
 import com.prolog.eis.service.pick.impl.McsPickTaskSend;
 import com.prolog.eis.service.pick.impl.WmsPickTaskResultSend;
-import com.prolog.eis.util.PrologApiJsonHelper;
 import com.prolog.eis.util.PrologDateUtils;
-import com.prolog.eis.util.PrologHttpUtils;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.utils.MapUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

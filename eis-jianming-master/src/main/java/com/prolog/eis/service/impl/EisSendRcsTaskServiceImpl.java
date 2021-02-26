@@ -8,15 +8,11 @@ import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.ContainerTaskService;
 import com.prolog.eis.service.EisSendRcsTaskService;
-import com.prolog.eis.service.rcs.RcsRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional

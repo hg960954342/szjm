@@ -1,0 +1,6 @@
+[11:16:56:710] [WARN] - org.mybatis.logging.Logger.warn(Logger.java:44) - No MyBatis mapper was found in '[com.prolog.eis.dao]' package. Please check your configuration.
+[11:16:56:928] [WARN] - org.mybatis.logging.Logger.warn(Logger.java:44) - No MyBatis mapper was found in '[com.prolog.eis]' package. Please check your configuration.
+[11:17:00:695] [WARN] - com.netflix.config.sources.URLConfigurationSource.<init>(URLConfigurationSource.java:121) - No URLs will be polled as dynamic configuration sources.
+[11:17:00:706] [WARN] - com.netflix.config.sources.URLConfigurationSource.<init>(URLConfigurationSource.java:121) - No URLs will be polled as dynamic configuration sources.
+[11:17:02:330] [WARN] - com.atomikos.logging.Slf4jLogger.logWarning(Slf4jLogger.java:24) - Thanks for using Atomikos! Evaluate http://www.atomikos.com/Main/ExtremeTransactions for advanced features and professional support
+or register at http://www.atomikos.com/Main/RegisterYourDownload to disable this message and receive FREE tips & advice

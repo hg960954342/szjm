@@ -4,7 +4,6 @@ package com.prolog.eis.service.pick.impl;
 import com.prolog.eis.dao.pick.EisIdempotentMapper;
 import com.prolog.eis.model.wms.WmsEisIdempotent;
 import com.prolog.eis.service.pick.EisIdempotentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

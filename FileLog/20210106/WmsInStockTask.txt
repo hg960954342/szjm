@@ -1,0 +1,24 @@
+2021/01/06 15:19:41
+WMS->EIS入库请求{    "data": [        {            "BILLNO": "A123",            "TYPE": "1",            "PICKCODE": "",            "SFREQUIREMENT": "0",            "CONSIGNOR": "008",            "details": [                {                    "SEQNO": "1",                    "ITEMID": "SPH00018156",                    "LOTID": "PHI00000000000000010",                    "QTY": 16,                    "SPMCH": "大力丸"                }             ]        }    ],    "size": 2,    "MessageID": "A123"}
+-----------------------
+2021/01/06 15:19:42
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/01/06 15:20:05
+WMS->EIS入库请求{    "data": [        {            "BILLNO": "A123",            "TYPE": "1",            "PICKCODE": "",            "SFREQUIREMENT": "0",            "CONSIGNOR": "008",            "details": [                {                    "SEQNO": "1",                    "ITEMID": "SPH00018156",                    "LOTID": "PHI00000000000000010",                    "QTY": 16,                    "SPMCH": "大力丸"                }             ]        }    ],    "size": 1,    "MessageID": "test123"}
+-----------------------
+2021/01/06 15:20:05
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/01/06 15:21:43
+WMS->EIS入库请求{    "data": [        {            "BILLNO": "A123",            "TYPE": "1",            "PICKCODE": "",            "SFREQUIREMENT": "0",            "CONSIGNOR": "008",            "details": [                {                    "SEQNO": "1",                    "ITEMID": "SPH00018156",                    "LOTID": "PHI00000000000000010",                    "QTY": 16,                    "SPMCH": "大力丸"                }             ]        }    ],    "size": 1,    "MessageID": "test123"}
+-----------------------
+2021/01/06 15:22:14
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------
+2021/01/06 15:22:16
+WMS->EIS入库请求{    "data": [        {            "BILLNO": "A123",            "TYPE": "1",            "PICKCODE": "",            "SFREQUIREMENT": "0",            "CONSIGNOR": "008",            "details": [                {                    "SEQNO": "1",                    "ITEMID": "SPH00018156",                    "LOTID": "PHI00000000000000010",                    "QTY": 16,                    "SPMCH": "大力丸"                }             ]        }    ],    "size": 1,    "MessageID": "test123"}
+-----------------------
+2021/01/06 15:23:32
+WMS->EIS返回JsonResult{code='-1', message='false'}
+-----------------------

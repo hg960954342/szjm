@@ -1,6 +1,6 @@
 package com.prolog.eis.model.wms;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.prolog.framework.core.annotation.AutoKey;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
@@ -18,7 +18,7 @@ public class InBoundTaskHistory {
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    @JsonProperty("BILLNO")
+    @JSONField(name="BILLNO")
     private String billNo;
 
     @Column("wms_push")
@@ -35,47 +35,47 @@ public class InBoundTaskHistory {
 
     @Column("container_code")
     @ApiModelProperty("母托盘编号")
-    @JsonProperty("CONTAINERCODE")
+    @JSONField(name="CONTAINERCODE")
     private String containerCode;
 
     @Column("task_type")
     @ApiModelProperty("任务托暂未定   空托的情况 0空托垛入库  1空托碟")
-    @JsonProperty("TASKTYPE")
+    @JSONField(name="TASKTYPE")
     private int taskType;
 
     @Column("item_id")
     @ApiModelProperty("wms商品id")
-    @JsonProperty("ITEMID")
+    @JSONField(name="ITEMID")
     private String itemId;
 
     @Column("qty")
     @ApiModelProperty("数量（重量）")
-    @JsonProperty("QTY")
+    @JSONField(name="QTY")
     private float qty;
 
     @Column("lot_id")
     @ApiModelProperty("wms内码")
-    @JsonProperty("LOTID")
+    @JSONField(name="LOTID")
     private String lotId;
 
     @Column("lot")
     @ApiModelProperty("wms批号")
-    @JsonProperty("LOT")
+    @JSONField(name="LOT")
     private String lot;
 
     @Column("ceng")
     @ApiModelProperty("入库楼层")
-    @JsonProperty("CENG")
+    @JSONField(name="CENG")
     private String ceng;
 
     @Column("agv_loc")
     @ApiModelProperty("Agv搬运点")
-    @JsonProperty("AGVLOC")
+    @JSONField(name="AGVLOC")
     private String agvLoc;
 
     @Column("owner_id")
     @ApiModelProperty("wms业主")
-    @JsonProperty("CONSIGNOR")
+    @JSONField(name="CONSIGNOR")
     private String ownerId;
 
     @Column("task_state")
@@ -100,7 +100,7 @@ public class InBoundTaskHistory {
 
     @Column("item_name")
     @ApiModelProperty("商品名称")
-    @JsonProperty("SPMCH")
+    @JSONField(name="SPMCH")
     private String itemName;
 
 

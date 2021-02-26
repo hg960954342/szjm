@@ -1,0 +1,190 @@
+2021/02/05 13:15:36
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 1123.3347,
+                    "SPMCH": "净党参",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "2102011100010"
+}
+-----------------------
+2021/02/05 13:15:37
+WMS->EIS出库返回JsonResult{code='0', message='success'}
+-----------------------
+2021/02/05 13:16:31
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 1123.3347,
+                    "SPMCH": "净党参",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "1111"
+}
+-----------------------
+2021/02/05 13:18:16
+WMS->EIS出库返回JsonResult{code='0', message='success'}
+-----------------------
+2021/02/05 13:52:41
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 1123.3347,
+                    "SPMCH": "111净党参",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "xxxxxxxx"
+}
+-----------------------
+2021/02/05 13:52:47
+WMS->EIS出库返回JsonResult{code='0', message='success'}
+-----------------------
+2021/02/05 14:01:31
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 12312.3345454547,
+                    "SPMCH": "22222",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "yyyyyyyyyy"
+}
+-----------------------
+2021/02/05 14:01:35
+WMS->EIS出库返回JsonResult{code='0', message='success'}
+-----------------------
+2021/02/05 14:02:43
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 12312.12123,
+                    "SPMCH": "22222",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "zzx"
+}
+-----------------------
+2021/02/05 14:05:12
+WMS->EIS出库返回JsonResult{code='0', message='success'}
+-----------------------

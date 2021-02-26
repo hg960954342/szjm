@@ -3,7 +3,6 @@ package com.prolog.eis.util;
 import com.alibaba.fastjson.serializer.NameFilter;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.prolog.framework.utils.MapUtils;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,6 @@
 package com.prolog.eis.controller.led;
 
 
-
 import cn.hutool.core.util.StrUtil;
 import onbon.bx05.Bx5GScreenClient;
 import onbon.bx05.Bx5GScreenProfile;
@@ -12,7 +11,6 @@ import onbon.bx05.utils.DisplayStyleFactory;
 import onbon.bx05.utils.TextBinary;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;

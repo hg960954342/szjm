@@ -1,14 +1,12 @@
 package com.prolog.eis.util.generator;
 
 
-
 import org.apache.commons.text.CaseUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;

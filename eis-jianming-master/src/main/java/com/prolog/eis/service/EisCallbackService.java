@@ -3,8 +3,6 @@ package com.prolog.eis.service;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.model.wms.RepeatReport;
 
-import java.io.IOException;
-
 public interface EisCallbackService {
     /**
      * eis 业务入库 回告 wms

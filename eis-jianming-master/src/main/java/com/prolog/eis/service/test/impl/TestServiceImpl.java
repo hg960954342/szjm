@@ -1,17 +1,12 @@
 package com.prolog.eis.service.test.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.dao.RcsLogMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationGroupMapper;
 import com.prolog.eis.dao.sxk.SxStoreLocationMapper;
 import com.prolog.eis.dao.sxk.SxStoreMapper;
 import com.prolog.eis.dao.wms.InboundTaskMapper;
-import com.prolog.eis.dto.base.Coordinate;
-import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
 import com.prolog.eis.dto.sxk.TestBuildSxStoreDto;
 import com.prolog.eis.logs.LogServices;
-import com.prolog.eis.model.eis.DeviceJunctionPort;
-import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
@@ -22,7 +17,6 @@ import com.prolog.eis.service.sxk.SxStoreTaskFinishService;
 import com.prolog.eis.service.test.TestService;
 import com.prolog.eis.service.test.ViewMCSResultHandler;
 import com.prolog.eis.service.test.ViewRCSResultHandler;
-import com.prolog.eis.util.PrologCoordinateUtils;
 import com.prolog.eis.util.PrologStringUtils;
 import com.prolog.framework.common.message.RestMessage;
 import com.prolog.framework.utils.MapUtils;

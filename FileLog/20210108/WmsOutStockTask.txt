@@ -1,0 +1,12 @@
+2021/01/08 11:22:20
+WMS->EIS出库请求{    "data": [        {            "BILLNO": "A123",            "TYPE": "1",            "PICKCODE": "",            "SFREQUIREMENT": "1",            "CONSIGNOR": "008",            "details": [                {                    "SEQNO": "1",                    "ITEMID": "SPH00018156",                    "LOTID": "PHI00000000000000010",                    "QTY": 16,                    "SPMCH": "大力丸",                    "STANDARD": 10                }            ]        }    ],    "size": 1,    "MessageID": "test123"}
+-----------------------
+2021/01/08 11:23:50
+WMS->EIS出库请求{    "data": [        {            "BILLNO": "A123",            "TYPE": "1",            "PICKCODE": "",            "SFREQUIREMENT": "1",            "CONSIGNOR": "008",            "details": [                {                    "SEQNO": "1",                    "ITEMID": "SPH00018156",                    "LOTID": "PHI00000000000000010",                    "QTY": 16,                    "SPMCH": "大力丸",                    "STANDARD": 10                }            ]        }    ],    "size": 1,    "MessageID": "test123"}
+-----------------------
+2021/01/08 11:24:08
+WMS->EIS出库请求{    "data": [        {            "BILLNO": "A123",            "TYPE": "1",            "PICKCODE": "",            "SFREQUIREMENT": "1",            "CONSIGNOR": "008",            "details": [                {                    "SEQNO": "1",                    "ITEMID": "SPH00018156",                    "LOTID": "PHI00000000000000010",                    "QTY": 16,                    "SPMCH": "大力丸",                    "STANDARD": 10                }            ]        }    ],    "size": 1,    "MessageID": "test1236"}
+-----------------------
+2021/01/08 11:24:33
+WMS->EIS出库返回JsonResult{code='0', message='success'}
+-----------------------

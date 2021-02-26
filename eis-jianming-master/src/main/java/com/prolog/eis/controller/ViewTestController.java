@@ -7,7 +7,6 @@ import com.prolog.eis.model.wms.AgvStorageLocation;
 import com.prolog.eis.model.wms.ContainerTask;
 import com.prolog.eis.service.AgvStorageLocationService;
 import com.prolog.eis.service.enums.AgvMove;
-import com.prolog.eis.service.impl.unbound.DefaultOutBoundPickCodeStrategy;
 import com.prolog.eis.service.impl.unbound.OutBoundContainerService;
 import com.prolog.eis.service.rcs.RcsRequestService;
 import com.prolog.eis.service.store.QcInBoundTaskService;

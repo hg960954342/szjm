@@ -1,0 +1,143 @@
+2021/02/26 14:15:34
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 2930.1224,
+                    "SPMCH": "净党参",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "2102011100021"
+}
+-----------------------
+2021/02/26 14:44:27
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 2930.1224,
+                    "SPMCH": "净党参",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "2102011100021"
+}
+-----------------------
+2021/02/26 14:44:52
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 2930.1224,
+                    "SPMCH": "净党参",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "2102011100021"
+}
+-----------------------
+2021/02/26 14:45:11
+WMS->EIS出库请求{
+    "data": [
+        {
+            "TYPE": "1",
+            "BILLNO": "SOUT21020101",
+            "SFREQUIREMENT": "0",
+            "SEQNO": 0,
+            "CONSIGNOR": "001",
+            "PLANQTY": 0.0,
+            "LOADDATE": "0001-01-01 00:00:00",
+            "INSERTDATE": "0001-01-01 00:00:00",
+            "details": [
+                {
+                    "SEQNO": "1",
+                    "ITEMID": "143367",
+                    "LOTID": "PHI00000000000000002",
+                    "QTY": 2930.1224,
+                    "SPMCH": "净党参",
+                    "LOT": "201203-06",
+                    "STANDARD": 40.0,
+                    "IsChecked": 0,
+                    "ItemState": 0,
+                    "TOTALCOUNT": 0
+                }
+            ],
+            "IsChecked": 0,
+            "ItemState": 0,
+            "TOTALCOUNT": 0
+        }
+    ],
+    "size": 1,
+    "MessageID": "1232323"
+}
+-----------------------
+2021/02/26 14:46:15
+WMS->EIS出库返回JsonResult{code='0', message='success'}
+-----------------------

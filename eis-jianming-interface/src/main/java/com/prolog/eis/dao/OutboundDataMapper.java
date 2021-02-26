@@ -1,9 +1,7 @@
 package com.prolog.eis.dao;
 
 import com.prolog.eis.model.wms.OutboundTask;
-import com.prolog.eis.model.wms.OutboundTaskDetail;
 import com.prolog.eis.model.wms.OutboundTaskDetailDto;
-import com.prolog.framework.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
 
 public interface OutboundDataMapper{

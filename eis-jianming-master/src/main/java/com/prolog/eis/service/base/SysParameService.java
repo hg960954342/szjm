@@ -1,7 +1,5 @@
 package com.prolog.eis.service.base;
 
-import java.util.List;
-
 public interface SysParameService {
 
 	/**

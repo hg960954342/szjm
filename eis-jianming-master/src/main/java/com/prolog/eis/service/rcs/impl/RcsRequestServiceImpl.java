@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.prolog.eis.dto.rcs.RcsRequestResultDto;
 import com.prolog.eis.logs.LogServices;
 import com.prolog.eis.service.rcs.RcsRequestService;
-import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

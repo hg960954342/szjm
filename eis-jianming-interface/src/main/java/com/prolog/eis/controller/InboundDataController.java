@@ -9,10 +9,8 @@ import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.PrologApiJsonHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,8 +66,8 @@ public class InboundDataController {
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             } else {
-                List<InboundTaskD> data = inboundTaskDto.getData();
-                for (InboundTaskD datum : data) {
+                List<InboundTask> data = inboundTaskDto.getData();
+                for (InboundTask datum : data) {
                     if ((Integer.parseInt(datum.getCeng()) == 3 && datum.getAgvLoc().contains("XY")) || (Integer.parseInt(datum.getCeng()) == 4 && datum.getAgvLoc().contains("AB"))) {
 
                         try {
@@ -93,7 +91,7 @@ public class InboundDataController {
                             datum.setCreateTime(ctime);
                             datum.setTaskState(0);
                             //TODO 转换单位 KG-->G
-                            InboundTaskDecimal inboundTask=new InboundTaskDecimal();
+                            InboundTask inboundTask=new InboundTask();
                             BeanUtils.copyProperties(datum,inboundTask);
                             inboundTask.setQty(datum.getQty().multiply(new BigDecimal("1000")));
                             inboundDataService.insertInboundTask(inboundTask);
@@ -187,8 +185,8 @@ public class InboundDataController {
                 rejson = helper1.getObject(JsonResult.class);
                 return rejson;
             } else {
-                List<InboundTaskD> data = inboundTaskDto.getData();
-                for (InboundTaskD datum : data) {
+                List<InboundTask> data = inboundTaskDto.getData();
+                for (InboundTask datum : data) {
                     try {
 
                         String uuid = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
@@ -202,7 +200,7 @@ public class InboundDataController {
                         java.sql.Timestamp ctime = new java.sql.Timestamp(t.getTime());
 
                         datum.setCreateTime(ctime);
-                        InboundTaskDecimal inboundTask=new InboundTaskDecimal();
+                        InboundTask inboundTask=new InboundTask();
                         BeanUtils.copyProperties(datum,inboundTask);
                         inboundDataService.insertEmptyBoxInStockTask(inboundTask);
 

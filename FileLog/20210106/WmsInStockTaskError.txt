@@ -1,0 +1,16 @@
+2021/01/06 15:19:42
+入库异常，错误信息：
+java.lang.NumberFormatException: null
+-----------------------
+2021/01/06 15:20:05
+入库异常，错误信息：
+java.lang.NumberFormatException: null
+-----------------------
+2021/01/06 15:21:51
+入库异常，错误信息：
+java.lang.NumberFormatException: null
+-----------------------
+2021/01/06 15:23:32
+入库异常，错误信息：
+java.lang.NumberFormatException: null
+-----------------------

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <title>MCS监控日志</title>
+    <link rel="stylesheet" href="css/jquery-ui.css"/>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="css/pqgrid.min.css"/>
+    <script src="js/pqgrid.min.js"></script>
+    <link rel="stylesheet" href="css/themes/office/pqgrid.css"/>
+
+    <script>
+        $(function () {
+            var colM = [
+                {title: "ID", width: '10%', dataIndx: "id",editable: false},
+                // {title: "出入库接口", width: '20%', dataIndx: "interface_address" ,editable: false},
+                {title: "状态", width: '30%', dataIndx: "type",editable: false},
+                {title: "托盘号", width: '30%', dataIndx: "containerNo",editable: false},
+                // {title: "参数", width: '40%', dataIndx: "params",editable: false},
+                {title: "MCS响应", width: '20%', dataIndx: "result", align: "right",editable: false},
+                {title: "create_time",width: '10%', dataIndx: "create_time", align: "right",editable: false},
+
+            ];
+
+            var dataModel = {
+                location: "remote",
+                dataType: "JSON",
+                method: "POST",
+                url: "api/v1/master/view/getLogViewMCSData",
+                getData: function (dataJSON) {
+                    var data = dataJSON.data;
+                    return {curPage: dataJSON.curPage, totalRecords: dataJSON.totalRecords, data: data};
+                }
+            };
+
+            var mcsGrid = $("div#grid_paging").pqGrid({
+                width: '95%', height: 600,
+                dataModel: dataModel,
+                colModel: colM,
+                freezeCols: 0,
+                pageModel: {type: "remote", rPP: 20, strRpp: "{0}"},
+                sortable: true,
+                selectionModel: {swipe: false},
+                wrap: false, hwrap: false,
+                numberCell: {resizable: true, width: 30, title: "#"},
+                title: "MCS Log监控",
+                resizable: true,
+                cellDblClick: function (event, ui) {
+                    var text=ui["$td"].text();
+                    if($.eis.isEmpty(text)) {return;}
+                    $("#details").html(text);
+                    $("#details").dialog({
+                        closeText: "关闭",
+                        width: 600,
+                        minHeight: 200,
+                        maxHeight: 600,
+                        title: "详情",
+                        resizable: false,
+                        buttons: {
+                            "关闭": function() {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                }
+            });
+
+            function refresh() {
+                $("#grid_paging").find("div.pq-loading").remove();
+                if(mcsGrid){
+                    mcsGrid.pqGrid("refreshDataAndView");
+                }
+            }
+
+            setInterval(refresh, 5000);
+
+        });
+
+
+    </script>
+</head>
+<body>
+<div id="grid_paging" style="margin:5px auto;">
+    <div id="details"></div>
+</div>
+</body>
+
+</html>

@@ -5,7 +5,6 @@ import com.prolog.eis.dto.eis.led.LedPortParamDto;
 import com.prolog.eis.util.SpringContextUtils;
 import com.prolog.framework.utils.StringUtils;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;

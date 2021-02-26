@@ -1,6 +1,5 @@
 package com.prolog.eis.service.impl.unbound.calculation;
 
-import com.prolog.eis.dto.sxk.OutBoundSxStoreDto;
 import com.prolog.eis.service.impl.unbound.entity.DetailDataBean;
 
 import java.math.BigDecimal;

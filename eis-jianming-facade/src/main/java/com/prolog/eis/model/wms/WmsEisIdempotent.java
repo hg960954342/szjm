@@ -5,7 +5,6 @@ import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
-
 import java.util.Date;
 
 @Table("wms_eis_idempotent")

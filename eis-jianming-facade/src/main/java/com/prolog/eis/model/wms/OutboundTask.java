@@ -1,6 +1,6 @@
 package com.prolog.eis.model.wms;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.prolog.framework.core.annotation.AutoKey;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
@@ -8,7 +8,6 @@ import com.prolog.framework.core.annotation.Table;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
-import java.util.List;
 
 @Table("outbound_task")
 public class OutboundTask {
@@ -20,7 +19,7 @@ public class OutboundTask {
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    @JsonProperty("BILLNO")
+    @JSONField(name="BILLNO")
     private String billNo;
 
     @Column("wms_push")
@@ -37,7 +36,7 @@ public class OutboundTask {
 
     @Column("task_type")
     @ApiModelProperty("任务托暂未定   空托的情况 0空托垛入库  1空托碟")
-    @JsonProperty("TYPE")
+    @JSONField(name="TYPE")
     private int taskType;
 
     @Column("task_state")
@@ -46,19 +45,19 @@ public class OutboundTask {
 
     @Column("sfreq")
     @ApiModelProperty("站点要求 0 无   1有")
-    @JsonProperty("SFREQUIREMENT")
+    @JSONField(name="SFREQUIREMENT")
     private int sfReq;
 
     //private float qty;
 
     @Column("pick_code")
     @ApiModelProperty("拣选站")
-    @JsonProperty("PICKCODE")
+    @JSONField(name="PICKCODE")
     private String pickCode;
 
     @Column("owner_id")
     @ApiModelProperty("wms业主")
-    @JsonProperty("CONSIGNOR")
+    @JSONField(name="CONSIGNOR")
     private String ownerId;
 
 

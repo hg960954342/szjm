@@ -1,7 +1,6 @@
 package com.prolog.eis.dao;
 
 import com.prolog.eis.model.sxk.SxStore;
-import com.prolog.eis.model.wms.CheckStock;
 import org.apache.ibatis.annotations.*;
 
 public interface SxStockTaskMapper {

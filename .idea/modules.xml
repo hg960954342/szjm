@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/eis-jianming-automatic-updates/eis-jianming-automatic-updates.iml" filepath="$PROJECT_DIR$/eis-jianming-automatic-updates/eis-jianming-automatic-updates.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eis-jianming-base-service/eis-jianming-base-service.iml" filepath="$PROJECT_DIR$/eis-jianming-base-service/eis-jianming-base-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eis-jianming-common/eis-jianming-common.iml" filepath="$PROJECT_DIR$/eis-jianming-common/eis-jianming-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eis-jianming-facade/eis-jianming-facade.iml" filepath="$PROJECT_DIR$/eis-jianming-facade/eis-jianming-facade.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eis-jianming-interface/eis-jianming-interface.iml" filepath="$PROJECT_DIR$/eis-jianming-interface/eis-jianming-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eis-jianming-master/eis-jianming-master.iml" filepath="$PROJECT_DIR$/eis-jianming-master/eis-jianming-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eis-jianming-parent.iml" filepath="$PROJECT_DIR$/eis-jianming-parent.iml" />
+    </modules>
+  </component>
+</project>

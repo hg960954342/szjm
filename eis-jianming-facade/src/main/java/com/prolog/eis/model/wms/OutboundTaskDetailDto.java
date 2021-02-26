@@ -1,6 +1,6 @@
 package com.prolog.eis.model.wms;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.prolog.framework.core.annotation.AutoKey;
 import com.prolog.framework.core.annotation.Column;
 import com.prolog.framework.core.annotation.Id;
@@ -20,57 +20,57 @@ public class OutboundTaskDetailDto {
 
     @Column("bill_no")
     @ApiModelProperty("入库单号")
-    @JsonProperty("BILLNO")
+    @JSONField(name="BILLNO")
     private String billNo;
 
     @Column("seqno")
     @ApiModelProperty("明细行号")
-    @JsonProperty("SEQNO")
+    @JSONField(name="SEQNO")
     private String seqNo;
 
     @Column("ctreq")
     @ApiModelProperty("是否指定托盘 0不指定 1指定")
-    @JsonProperty("CTREQ")
+    @JSONField(name="CTREQ")
     private int ctReq;
 
     @Column("container_code")
     @ApiModelProperty("母托盘编号")
-    @JsonProperty("CONTAINERCODE")
+    @JSONField(name="CONTAINERCODE")
     private String containerCode;
 
     @Column("owner_id")
     @ApiModelProperty("wms业主")
-    @JsonProperty("CONSIGNOR")
+    @JSONField(name="CONSIGNOR")
     private String ownerId;
 
     @Column("item_id")
     @ApiModelProperty("wms商品id")
-    @JsonProperty("ITEMID")
+    @JSONField(name="ITEMID")
     private String itemId;
 
     @Column("item_name")
     @ApiModelProperty("商品名称")
-    @JsonProperty("SPMCH")
+    @JSONField(name="SPMCH")
     private String itemName;
 
     @Column("standard")
     @ApiModelProperty("规格")
-    @JsonProperty("STANDARD")
+    @JSONField(name="STANDARD")
     private BigDecimal standard;
 
     @Column("lot_id")
     @ApiModelProperty("wms内码")
-    @JsonProperty("LOTID")
+    @JSONField(name="LOTID")
     private String lotId;
 
     @Column("lot")
     @ApiModelProperty("wms批号")
-    @JsonProperty("LOT")
+    @JSONField(name="LOT")
     private String lot;
 
     @Column("qty")
     @ApiModelProperty("数量（重量）")
-    @JsonProperty("QTY")
+    @JSONField(name="QTY")
     private BigDecimal qty;
 
     @Column("finish_qty")
@@ -79,7 +79,7 @@ public class OutboundTaskDetailDto {
 
     @Column("pick_code")
     @ApiModelProperty("拣选站  指定拣选站  暂时移库出库用到")
-    @JsonProperty("PICKCODE")
+    @JSONField(name="PICKCODE")
     private String pickCode;
 
     @Column("create_time")

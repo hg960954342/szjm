@@ -4,7 +4,6 @@ import com.prolog.eis.dto.eis.mcs.InBoundRequest;
 import com.prolog.eis.dto.eis.mcs.McsRequestTaskDto;
 import com.prolog.eis.model.eis.PortInfo;
 import com.prolog.eis.model.sxk.SxStore;
-import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.wms.InboundTask;
 
 public interface QcInBoundTaskService {

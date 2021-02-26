@@ -1,25 +1,25 @@
 package com.prolog.eis.model.wms;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.List;
 
 
 public class InboundTaskDto {
 
-    private List<InboundTaskD> data;
+    private List<InboundTask> data;
 
     private int size;
 
-    @JsonProperty("MessageID")
+    @JSONField(name="MessageID")
     private String messageId;
 
-    public List<InboundTaskD> getData() {
+    public List<InboundTask> getData() {
         return data;
     }
 
-    public void setData(List<InboundTaskD> data) {
+    public void setData(List<InboundTask> data) {
         this.data = data;
     }
 

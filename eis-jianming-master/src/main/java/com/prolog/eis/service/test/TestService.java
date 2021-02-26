@@ -6,7 +6,6 @@ import com.prolog.eis.service.test.impl.SxStoreViewMapDto;
 import com.prolog.eis.service.test.impl.SxStoreViewSimpleDto;
 
 import java.util.List;
-import java.util.Map;
 
 public interface TestService {
 

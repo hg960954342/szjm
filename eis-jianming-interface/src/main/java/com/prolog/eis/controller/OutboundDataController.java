@@ -14,14 +14,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,8 +94,8 @@ public class OutboundDataController {
 
                         outboundDataService.insertOutboundTask(datum);
 
-                        List<OutboundTaskDetailD> details = datum.getDetails();
-                        for (OutboundTaskDetailD detail : details) {
+                        List<OutboundTaskDetailDto> details = datum.getDetails();
+                        for (OutboundTaskDetailDto detail : details) {
 
                             String billno = datum.getBillNo();
                             String ownerid = datum.getOwnerId();
@@ -227,10 +225,10 @@ public class OutboundDataController {
 
                         datum.setCreateTime(ctime);
 
-                        List<OutboundTaskDetailD> details = datum.getDetails();
+                        List<OutboundTaskDetailDto> details = datum.getDetails();
                         List<String> containerCodes = checkContainerTaskService.findByContainerCode(details);
                         if (containerCodes.size() == 0) {
-                            for (OutboundTaskDetailD detail : details) {
+                            for (OutboundTaskDetailDto detail : details) {
                                 String billno = datum.getBillNo();
                                 detail.setCtReq(1);
                                 detail.setFinishQty(BigDecimal.ZERO);
@@ -360,8 +358,8 @@ public class OutboundDataController {
 
                         outboundDataService.insertMoveTask(datum);
 
-                        List<OutboundTaskDetailD> details = datum.getDetails();
-                        for (OutboundTaskDetailD detail : details) {
+                        List<OutboundTaskDetailDto> details = datum.getDetails();
+                        for (OutboundTaskDetailDto detail : details) {
 
                             String billno = datum.getBillNo();
                             detail.setBillNo(billno);

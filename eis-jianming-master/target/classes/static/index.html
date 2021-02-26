@@ -1,0 +1,72 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <title>Eis调试界面</title>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.alerts.js"></script>
+    <script src="js/jquery.ui.draggable.js"></script>
+    <link href="css/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen"/>
+     <link href="css/index.css" rel="stylesheet" type="text/css"/>
+    <script src="js/eis.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body>
+<div id="eis">
+    <a href="main.html" target="_Blank">打开库存监控</a>
+    <a href="mcs.html" target="_Blank">MCS监控</a>
+    <a href="rcs.html" target="_Blank">RCS监控</a>
+    <a href="kucun.html" target="_Blank">库存查询</a>
+    </br>
+    <div style="width: 100%;float: left;">
+        <textarea class="tl-price-input" rows='10' id="inputResult" type="text" placeholder="执行结果" style="height: 30%"></textarea>
+    </div>
+    </br></br></br>
+    <button onclick="queryPickStation()" class="ant-btn ant-btn-primary" style="float: left">查询所有未锁定的拣选站</button>
+    <div style="width: 10%;float: left;">
+        <input class="tl-price-input" type="text" placeholder="输入层号" id="getLayer">
+    </div>
+    <button onclick="getSxStoreViewDtoSimple()" class="ant-btn ant-btn-red">查询指定层库存</button>
+    <button onclick="getSxStoreViewDto()" class="ant-btn ant-btn-primary">查询指定层库存详情</button>
+    </br></br>
+    <div style="width: 20px;float: left;text-align: center"></div>
+    <button onclick="btnClick(1,1)" class="ant-btn ant-btn-red">锁1层货位</button>
+    <button onclick="btnClick(1,0)" class="ant-btn ant-btn-primary">解锁1层货位</button>
+    <button onclick="btnClick(2,1)" class="ant-btn ant-btn-red">锁2层货位</button>
+    <button onclick="btnClick(2,0)" class="ant-btn ant-btn-primary">解锁2层货位</button>
+    <button onclick="btnClick(3,1)" class="ant-btn ant-btn-red">锁3层货位</button>
+    <button onclick="btnClick(3,0)" class="ant-btn ant-btn-primary">解锁3层货位</button>
+    </br></br>
+    <button onclick="inPut4Empty()" class="ant-btn ant-btn-red">4楼碟盘机入库口给前进</button>
+    <button onclick="foldInBoundMove()" class="ant-btn ant-btn-primary">4楼碟盘机入库失败给前进</button>
+    </br></br></br>
+    <div style="width: 10%;float: left;">
+        <input class="tl-price-input" type="text" placeholder="输入托盘号" id="inPut3inPut4Task" ref="inPut3inPut4Task">
+    </div>
+    <button onclick="inPut3()" class="ant-btn ant-btn-primary" ref="inPut3">3楼入库口给前进</button>
+    <button onclick="inPut4Task()" class="ant-btn ant-btn-red" ref="inPut4Task">4楼入库口给前进</button>
+    </br></br></br>
+    <div style="width: 10%;float: left;">
+        <input class="tl-price-input" type="text" placeholder="输入托盘号" id="deletestore">
+    </div>
+    <button onclick="updateInBound()" class="ant-btn ant-btn-primary">更新库存为已上架</button>
+    <button onclick="deletestore()" class="ant-btn ant-btn-red">删除库存</button>
+    </br></br></br>
+    <div style="width: 10%;float: left;">
+        <input class="tl-price-input" type="text" placeholder="起点" id="startP">
+        <select class="tl-price-input" id="startS" onchange="startOnchange(this.value)" >
+            <option value="">选择起点</option>
+        </select>
+    </div>
+    <div style="width: 10%;float: left;">
+        <input class="tl-price-input" type="text" placeholder="终点" id="endP">
+        <select class="tl-price-input" id="endS" onchange="endOnchange(this.value)" >
+            <option value="">选择终点</option>
+         </select>
+    </div>
+    <button onclick="agvMove()" class="ant-btn ant-btn-primary">AGV搬运</button>
+</div>
+
+
+</body>
+</html>

@@ -10,7 +10,6 @@ import com.prolog.eis.model.sxk.SxStore;
 import com.prolog.eis.model.sxk.SxStoreLocation;
 import com.prolog.eis.model.sxk.SxStoreLocationGroup;
 import com.prolog.eis.service.sxk.SxInStoreService;
-import com.prolog.eis.util.FileLogHelper;
 import com.prolog.eis.util.ListHelper;
 import com.prolog.framework.utils.MapUtils;
 import org.apache.commons.lang.StringUtils;
